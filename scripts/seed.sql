@@ -1,13 +1,13 @@
 -- Seed script: scripts/seed.sql
--- Realistic sample grassroots cricket data for CricHeroes clone
+-- Realistic sample grassroots cricket data for TallyPitch
 
 -- 1. Sample Users (Scorers & Organizers)
 insert into users (id, phone, email, full_name, role)
 values
-  ('11111111-1111-1111-1111-111111111111', '+919876543210', 'scorer@cricheroes.local', 'Aditya Verma', 'scorer'),
-  ('22222222-2222-2222-2222-222222222222', '+919876543211', 'organizer@cricheroes.local', 'Rajesh Patel', 'organizer'),
-  ('33333333-3333-3333-3333-333333333333', '+919876543212', 'rohit@cricheroes.local', 'Rohit Sharma', 'player'),
-  ('44444444-4444-4444-4444-444444444444', '+919876543213', 'virat@cricheroes.local', 'Virat Kohli', 'player')
+  ('11111111-1111-1111-1111-111111111111', '+919876543210', 'scorer@tallypitch.local', 'Aditya Verma', 'scorer'),
+  ('22222222-2222-2222-2222-222222222222', '+919876543211', 'organizer@tallypitch.local', 'Rajesh Patel', 'organizer'),
+  ('33333333-3333-3333-3333-333333333333', '+919876543212', 'rohit@tallypitch.local', 'Rohit Sharma', 'player'),
+  ('44444444-4444-4444-4444-444444444444', '+919876543213', 'virat@tallypitch.local', 'Virat Kohli', 'player')
 on conflict (id) do nothing;
 
 -- 2. Sample Players

@@ -1,5 +1,5 @@
 // server/api.js
-// Node.js REST API & Cricket Rules State Machine Server for CricHeroes Replica
+// Node.js REST API & Cricket Rules State Machine Server for TallyPitch
 
 const http = require('http');
 const { parse } = require('url');
@@ -250,8 +250,8 @@ async function requestHandler(req, res) {
         userId: user_id,
         userEmail: email,
         plan: plan || 'pro_monthly',
-        successUrl: success_url || 'https://cricheroes.local/pro/success',
-        cancelUrl: cancel_url || 'https://cricheroes.local/pro/cancel',
+        successUrl: success_url || 'https://tallypitch.app/pro/success',
+        cancelUrl: cancel_url || 'https://tallypitch.app/pro/cancel',
       });
       return sendJSON(res, 200, { sessionUrl: session.url, sessionId: session.id });
     }
@@ -270,7 +270,7 @@ setupRealtimeServer(server);
 
 if (require.main === module) {
   server.listen(PORT, () => {
-    console.log(`🏏 CricHeroes Replica Backend API running on port ${PORT}`);
+    console.log(`🏏 TallyPitch Backend API running on port ${PORT}`);
     console.log(`⚡ WebSocket Live Score feed: ws://localhost:${PORT}/ws/live?matchId=<ID>`);
   });
 }

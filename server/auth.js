@@ -1,5 +1,5 @@
 // server/auth.js
-// Supabase Authentication & Session Management for CricHeroes Replica
+// Supabase Authentication & Session Management for TallyPitch
 
 const { supabase, supabaseAdmin } = require('./db');
 

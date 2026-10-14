@@ -1,4 +1,4 @@
--- Migration: 20261014000000_init_cricheroes.sql
+-- Migration: 20261014000000_init_tallypitch.sql
 -- Description: Core database schema, tables, foreign keys, constraints, and Row Level Security (RLS)
 
 -- Extensions

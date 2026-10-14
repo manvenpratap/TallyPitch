@@ -17,7 +17,7 @@ module.exports = {
         'text-muted': 'var(--color-text-muted)',
         accent: {
           DEFAULT: 'var(--color-accent)',
-          hover: '#08582d',
+          hover: '#1e40af',
         },
         'on-accent': 'var(--color-on-accent)',
         danger: 'var(--color-danger)',

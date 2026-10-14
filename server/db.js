@@ -1,9 +1,9 @@
 // server/db.js
-// PostgreSQL & Supabase Database Client Layer for CricHeroes Replica
+// PostgreSQL & Supabase Database Client Layer for TallyPitch
 
 const { createClient } = require('@supabase/supabase-js');
 
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://cricheroes-demo.supabase.co';
+const SUPABASE_URL = process.env.SUPABASE_URL || 'https://tallypitch-demo.supabase.co';
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy_anon_key';
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 

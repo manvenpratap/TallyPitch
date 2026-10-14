@@ -1,5 +1,5 @@
 # tests/test_cricket_engine.py
-# End-to-end Playwright tests for CricHeroes Replica core flows & edge cases
+# End-to-end Playwright tests for TallyPitch core flows & edge cases
 
 import os
 import unittest
@@ -7,7 +7,7 @@ from playwright.sync_api import sync_playwright
 
 APP_URL = "file://" + os.path.abspath("index.html")
 
-class TestCricHeroesFlows(unittest.TestCase):
+class TestTallyPitchFlows(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.playwright = sync_playwright().start()

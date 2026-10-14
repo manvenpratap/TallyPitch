@@ -1,5 +1,5 @@
 // server/stripe.js
-// Stripe Checkout & Webhook Integration for CricHeroes Pro Subscriptions
+// Stripe Checkout & Webhook Integration for TallyPitch Pro Subscriptions
 
 const stripe = process.env.STRIPE_SECRET_KEY ? require('stripe')(process.env.STRIPE_SECRET_KEY) : null;
 const { supabaseAdmin } = require('./db');
@@ -8,7 +8,7 @@ const PRO_MONTHLY_PRICE_ID = process.env.STRIPE_PRO_MONTHLY_PRICE_ID || 'price_p
 const PRO_ANNUAL_PRICE_ID = process.env.STRIPE_PRO_ANNUAL_PRICE_ID || 'price_pro_annual_test';
 
 /**
- * Creates a Stripe Checkout session for a user upgrading to CricHeroes Pro
+ * Creates a Stripe Checkout session for a user upgrading to TallyPitch Pro
  * @param {string} userId - User ID
  * @param {string} userEmail - User's email
  * @param {string} plan - 'pro_monthly' | 'pro_annual'

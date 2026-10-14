@@ -1,5 +1,5 @@
 // server/realtime.js
-// WebSocket Live Score Broadcasting & OBS Overlay Sync for CricHeroes Replica
+// WebSocket Live Score Broadcasting & OBS Overlay Sync for TallyPitch
 
 const http = require('http');
 const { WebSocketServer, WebSocket } = require('ws');
