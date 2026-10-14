@@ -1,0 +1,22 @@
+{
+  "avoid": [
+    "CricHeroes",
+    "Cric Heroes",
+    "CricHeroes Pvt Ltd",
+    "CricHeroes Clone",
+    "cricheroes"
+  ],
+  "app_store": {
+    "name": "TallyPitch: Cricket Scorer",
+    "subtitle": "Club Leagues & Live Scoring",
+    "promotional_text": "Score club cricket matches ball-by-ball with instant rollback, automated Net Run Rate tables, and broadcast overlays. Built for grassroots cricket without popup ads.",
+    "description": "TallyPitch is the grassroots cricket scoring and league platform built for club scorers, tournament organizers, and local players.\n\nNever miss another delivery on the field. TallyPitch gives you a fast, distraction-free scoring keypad with zero full-screen pop-up ads between overs, offline-first reliability when ground signals drop, and instant in-memory rollback undo.\n\nWHAT YOU GET:\n- Live Ball-by-Ball Scoring: High-contrast keypad with automatic odd-run strike rotation, over-end strike flip, and dismissal tracking.\n- 0ms Rollback Undo: Miskeyed a delivery under pressure? Restore exact previous match states, scores, and striker strike with one tap.\n- Offline-First Resilience: Scores save locally in memory so rural grounds with spotty cellular coverage never lose an innings.\n- Automated ICC Net Run Rate (NRR): Dynamic league standings calculate runs and overs scored versus conceded in real time.\n- Tournament Scheduling: Multi-stage pool formats (Group A/B) and automated round-robin fixture generation.\n- Free Broadcast Overlays: Built-in OBS and vMix lower-third ticker URL included for community live streams.\n- Digital Scorecards: ICC-standard scorecards with batting strike rates, bowling economy, fall-of-wickets timeline, and live commentary.\n- Player Career Records: Digital player profiles tracking career runs, averages, wickets, best bowling, and milestone badges.\n\nBuilt for clubs and tournaments who value speed, accuracy, and transparent cricket.",
+    "keywords": "scorecard,tournament,fixtures,standings,overs,toss,batter,bowler,wickets,pitch,umpire",
+    "whats_new": "Initial release of TallyPitch: live ball-by-ball scoring, instant rollback undo, multi-stage tournament scheduling, and automated ICC Net Run Rate standings."
+  },
+  "google_play": {
+    "title": "TallyPitch: Cricket Scorer",
+    "short_description": "Ball-by-ball cricket scoring, league tables, and live broadcast stream ticker",
+    "full_description": "TallyPitch is the grassroots cricket scoring and league platform built for club scorers, tournament organizers, and local players.\n\nNever miss another delivery on the field. TallyPitch gives you a fast, distraction-free scoring keypad with zero full-screen pop-up ads between overs, offline-first reliability when ground signals drop, and instant in-memory rollback undo.\n\nKEY CAPABILITIES:\n- Live Ball-by-Ball Scoring: Single-tap score entry with automatic odd-run strike rotation, extras accounting, and dismissal modals.\n- Instant Rollback Stack: Restore previous match scores, overs, and striker figures with zero latency.\n- Offline Reliability: Local memory persistence protects every delivery against sudden cellular drops.\n- Automated Tournament Standings: ICC Net Run Rate tables update automatically after every fixture.\n- Tournament Engine: Configure club leagues, corporate cups, pool groups, and round-robin schedules.\n- Free Broadcast Streaming Overlay: Clean OBS and vMix lower-third URL included with no per-match surcharges.\n- Professional Scorecards: ICC-standard digital scorecards with batting strike rates, bowling figures, and text commentary.\n- Digital Career Records: Track player statistics across matches, including runs, averages, wickets, and milestone achievements.\n\nDownload TallyPitch and experience transparent, distraction-free grassroots cricket management."
+  }
+}
