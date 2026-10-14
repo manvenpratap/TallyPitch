@@ -757,6 +757,8 @@
         <button class="nav-tab-btn" id="tab-S06" onclick="navigate('S06')">3. Openers (S06)</button>
         <button class="nav-tab-btn active" id="tab-S07" onclick="navigate('S07')">4. Scoring Console (S07)</button>
         <button class="nav-tab-btn" id="tab-S13" onclick="navigate('S13')">5. Scorecard (S13)</button>
+        <button class="nav-tab-btn" id="tab-tournaments" onclick="navigate('tournaments')">6. Tournaments (S15-S19)</button>
+        <button class="nav-tab-btn" id="tab-teams-profiles" onclick="navigate('teams-profiles')">7. Teams & Profiles (S20, S21)</button>
       </nav>
     </div>
   </header>
@@ -1093,6 +1095,287 @@
         <!-- Commentary Stream -->
         <h3 style="font-size: 15px; font-weight: 800; margin: 24px 0 10px;">Ball-by-Ball Commentary</h3>
         <div id="commentary-list"></div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         SCREENS S15-S19: TOURNAMENT WIZARD, FORMAT, FIXTURES, STANDINGS, LEADERS
+         ===================================================================== -->
+    <div id="screen-tournaments" class="screen-view">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Tournament Management Hub (S15–S19)</h2>
+            <p class="card-subtitle">Organize leagues, configure groups, generate fixtures, and view live NRR standings</p>
+          </div>
+          <button class="btn btn-secondary" onclick="toggleTournamentSubview()" id="btn-toggle-tournament-mode" style="font-size: 13px;">
+            + Create New Tournament (S15)
+          </button>
+        </div>
+
+        <!-- S15: Create Tournament Form -->
+        <div id="tournament-create-panel" style="display: none; padding: 16px; background: var(--color-surface); border-radius: var(--radius-md); margin-bottom: 20px; border: 1px solid var(--color-border);">
+          <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 12px;">Create Tournament (S15)</h3>
+          <form onsubmit="handleCreateTournament(event)">
+            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+              <div>
+                <label class="form-label" for="tourn-name-input">Tournament Name</label>
+                <input type="text" id="tourn-name-input" class="form-input" placeholder="e.g. Champions Cricket League" required>
+              </div>
+              <div>
+                <label class="form-label" for="tourn-category-select">Category</label>
+                <select id="tourn-category-select" class="form-select">
+                  <option value="Club" selected>Club League</option>
+                  <option value="Corporate">Corporate Cup</option>
+                  <option value="School">School / College</option>
+                  <option value="Box">Box Cricket</option>
+                  <option value="Open">Open Championship</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label" for="tourn-ball-select">Ball Type</label>
+                <select id="tourn-ball-select" class="form-select">
+                  <option value="tennis" selected>Tennis Ball</option>
+                  <option value="leather">Leather Ball</option>
+                  <option value="tape">Tape Ball</option>
+                </select>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: flex-end;">
+              <div>
+                <label class="form-label" for="tourn-start-date">Start Date</label>
+                <input type="date" id="tourn-start-date" class="form-input" required>
+              </div>
+              <div>
+                <label class="form-label" for="tourn-end-date">End Date</label>
+                <input type="date" id="tourn-end-date" class="form-input" required>
+              </div>
+              <button type="submit" class="btn btn-primary" style="height: 42px;">Save Tournament</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- S16: Multi-Stage Format & Groups -->
+        <div style="margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <h3 style="font-size: 16px; font-weight: 800;">Tournament Format & Groups (S16)</h3>
+            <span style="font-size: 12px; background: #f0fdf4; color: #166534; font-weight: 700; padding: 4px 8px; border-radius: var(--radius-pill);">
+              Stage 1: Round-Robin Pools • Stage 2: Knockouts
+            </span>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div style="background: var(--color-surface); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+              <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--color-accent);">Group A (Pool 1)</h4>
+              <ul style="list-style: none; font-size: 13px;" id="group-a-teams-list">
+                <li style="padding: 4px 0;">🏏 Mumbai Strikers (Seeded 1)</li>
+                <li style="padding: 4px 0;">🏏 Pune Warriors</li>
+                <li style="padding: 4px 0;">🏏 Ahmedabad Lions</li>
+              </ul>
+            </div>
+            <div style="background: var(--color-surface); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+              <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--color-accent);">Group B (Pool 2)</h4>
+              <ul style="list-style: none; font-size: 13px;" id="group-b-teams-list">
+                <li style="padding: 4px 0;">🏏 Bangalore Blasters (Seeded 2)</li>
+                <li style="padding: 4px 0;">🏏 Chennai Challengers</li>
+                <li style="padding: 4px 0;">🏏 Delhi Dynamos</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- S17: Auto Fixtures Generator -->
+        <div style="margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <h3 style="font-size: 16px; font-weight: 800;">Tournament Fixtures & Schedule (S17)</h3>
+            <button class="btn btn-secondary" onclick="generateRoundRobinFixtures()" style="font-size: 12px; padding: 6px 12px;">
+              ⚡ Re-Generate Fixtures
+            </button>
+          </div>
+          <div id="tournament-fixtures-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;"></div>
+        </div>
+
+        <!-- S18: Dynamic Points Table with Net Run Rate (NRR) -->
+        <div style="margin-bottom: 24px;">
+          <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 8px;">Dynamic Points Table & ICC Net Run Rate (S18)</h3>
+          <p style="font-size: 12px; color: var(--color-text-muted); margin-bottom: 12px;">Top 2 teams advance to Semi-Finals. Tie-breaker sorted by automated Net Run Rate (NRR).</p>
+          <table class="scorecard-table">
+            <thead>
+              <tr>
+                <th>Pos</th>
+                <th>Team</th>
+                <th class="num">P</th>
+                <th class="num">W</th>
+                <th class="num">L</th>
+                <th class="num">T</th>
+                <th class="num">NR</th>
+                <th class="num">Pts</th>
+                <th class="num">NRR</th>
+              </tr>
+            </thead>
+            <tbody id="tournament-standings-tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- S19: Tournament Leaderboard -->
+        <div>
+          <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 12px;">Tournament Leaderboards (S19)</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+            <!-- Orange Cap -->
+            <div style="background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%); border: 1px solid #fdba74; border-radius: var(--radius-md); padding: 16px;">
+              <div style="font-size: 11px; font-weight: 800; color: #c2410c; text-transform: uppercase;">Orange Cap (Most Runs)</div>
+              <div style="font-size: 18px; font-weight: 800; margin: 6px 0;" id="leader-orange-name">Rohit Sharma</div>
+              <div style="font-size: 13px; color: #7c2d12; font-family: var(--font-mono); font-weight: 600;" id="leader-orange-stats">184 runs • SR 152.4</div>
+            </div>
+            <!-- Purple Cap -->
+            <div style="background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%); border: 1px solid #d8b4fe; border-radius: var(--radius-md); padding: 16px;">
+              <div style="font-size: 11px; font-weight: 800; color: #7e22ce; text-transform: uppercase;">Purple Cap (Most Wickets)</div>
+              <div style="font-size: 18px; font-weight: 800; margin: 6px 0;" id="leader-purple-name">Jasprit Bumrah</div>
+              <div style="font-size: 13px; color: #581c87; font-family: var(--font-mono); font-weight: 600;" id="leader-purple-stats">8 wkts • Eco 5.40</div>
+            </div>
+            <!-- MVP -->
+            <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 1px solid #86efac; border-radius: var(--radius-md); padding: 16px;">
+              <div style="font-size: 11px; font-weight: 800; color: #15803d; text-transform: uppercase;">Tournament MVP</div>
+              <div style="font-size: 18px; font-weight: 800; margin: 6px 0;" id="leader-mvp-name">Hardik Pandya</div>
+              <div style="font-size: 13px; color: #14532d; font-family: var(--font-mono); font-weight: 600;" id="leader-mvp-stats">112 pts • All-round</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================================
+         SCREENS S20, S21: TEAM ROSTERS & PLAYER CAREER PROFILES
+         ===================================================================== -->
+    <div id="screen-teams-profiles" class="screen-view">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Teams & Player Profiles (S20, S21)</h2>
+            <p class="card-subtitle">Manage squad rosters, assign player role badges, and view digital career records</p>
+          </div>
+        </div>
+
+        <!-- S21: Team Roster Manager & S01 Role Selector -->
+        <div style="margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--color-border);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <h3 style="font-size: 16px; font-weight: 800;">Team Squad Management (S21)</h3>
+            <select id="team-roster-switch" class="form-select" style="width: auto;" onchange="renderTeamRosterTable()">
+              <option value="A">Mumbai Strikers (11 Players)</option>
+              <option value="B">Bangalore Blasters (11 Players)</option>
+            </select>
+          </div>
+
+          <!-- Add Player Form with S01 Role Tags -->
+          <form onsubmit="handleAddPlayerToRoster(event)" style="background: var(--color-surface); padding: 16px; border-radius: var(--radius-md); margin-bottom: 16px; border: 1px solid var(--color-border);">
+            <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 10px;">Add New Player & Assign Role (S01 / S21)</h4>
+            <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 10px; align-items: flex-end;">
+              <div>
+                <label class="form-label" for="new-player-name">Player Name</label>
+                <input type="text" id="new-player-name" class="form-input" placeholder="e.g. Shubman Gill" required>
+              </div>
+              <div>
+                <label class="form-label" for="new-player-phone">Phone / ID</label>
+                <input type="text" id="new-player-phone" class="form-input" placeholder="+91..." required>
+              </div>
+              <div>
+                <label class="form-label" for="new-player-role">Player Role (S01)</label>
+                <select id="new-player-role" class="form-select">
+                  <option value="Batter">Batter</option>
+                  <option value="Bowler">Bowler</option>
+                  <option value="All-Rounder" selected>All-Rounder</option>
+                  <option value="Keeper">Wicket-Keeper</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label" for="new-player-flag">Designation</label>
+                <select id="new-player-flag" class="form-select">
+                  <option value="none">Player</option>
+                  <option value="C">Captain (C)</option>
+                  <option value="WK">Wicket-Keeper (WK)</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary" style="height: 42px;">Add Player</button>
+            </div>
+          </form>
+
+          <table class="scorecard-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Player Name</th>
+                <th>Primary Role</th>
+                <th>Batting / Bowling</th>
+                <th>Designation</th>
+              </tr>
+            </thead>
+            <tbody id="team-roster-tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- S20: Player Career Profile Viewer -->
+        <div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+            <h3 style="font-size: 16px; font-weight: 800;">Digital Player Career Record (S20)</h3>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <label class="form-label" style="margin: 0;" for="profile-player-select">Select Player:</label>
+              <select id="profile-player-select" class="form-select" style="width: auto;" onchange="renderSelectedPlayerCareer()"></select>
+            </div>
+          </div>
+
+          <!-- Career Summary Card -->
+          <div id="player-career-card" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 20px;">
+            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
+              <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--color-accent); color: #fff; font-size: 24px; font-weight: 800; display: flex; align-items: center; justify-content: center;" id="profile-avatar">
+                R
+              </div>
+              <div>
+                <h4 style="font-size: 20px; font-weight: 800;" id="profile-name">Rohit Sharma</h4>
+                <div style="font-size: 13px; color: var(--color-text-muted);" id="profile-sub">Opening Batter • Right-hand bat • Mumbai</div>
+              </div>
+            </div>
+
+            <!-- Batting Stats Grid -->
+            <div style="margin-bottom: 16px;">
+              <div style="font-size: 12px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 8px;">Career Batting Statistics</div>
+              <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; text-align: center;">
+                <div style="background: var(--color-bg); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+                  <div style="font-size: 11px; color: var(--color-text-muted);">Matches</div>
+                  <strong style="font-size: 16px; font-family: var(--font-mono);" id="prof-bat-matches">42</strong>
+                </div>
+                <div style="background: var(--color-bg); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+                  <div style="font-size: 11px; color: var(--color-text-muted);">Innings</div>
+                  <strong style="font-size: 16px; font-family: var(--font-mono);" id="prof-bat-inns">39</strong>
+                </div>
+                <div style="background: var(--color-bg); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+                  <div style="font-size: 11px; color: var(--color-text-muted);">Runs</div>
+                  <strong style="font-size: 16px; font-family: var(--font-mono); color: var(--color-accent);" id="prof-bat-runs">1,480</strong>
+                </div>
+                <div style="background: var(--color-bg); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+                  <div style="font-size: 11px; color: var(--color-text-muted);">Highest</div>
+                  <strong style="font-size: 16px; font-family: var(--font-mono);" id="prof-bat-hs">108*</strong>
+                </div>
+                <div style="background: var(--color-bg); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+                  <div style="font-size: 11px; color: var(--color-text-muted);">Average</div>
+                  <strong style="font-size: 16px; font-family: var(--font-mono);" id="prof-bat-avg">44.8</strong>
+                </div>
+                <div style="background: var(--color-bg); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+                  <div style="font-size: 11px; color: var(--color-text-muted);">Strike Rate</div>
+                  <strong style="font-size: 16px; font-family: var(--font-mono);" id="prof-bat-sr">146.2</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Badges & Achievements -->
+            <div>
+              <div style="font-size: 12px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 8px;">Badges & Milestones</div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="profile-badges-wrap">
+                <span style="background: #fef08a; color: #854d0e; padding: 4px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700;">🎖️ Centurion (108*)</span>
+                <span style="background: #bfdbfe; color: #1e40af; padding: 4px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700;">🏏 5x Half-Centuries</span>
+                <span style="background: #bbf7d0; color: #166534; padding: 4px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 700;">🌟 6x Match MVP</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -2195,8 +2478,217 @@
       }
     }
 
+    // ------------------------------------------------------------------------
+    // TOURNAMENT ENGINE (S15-S19) & TEAM/PROFILE MANAGERS (S20, S21)
+    // ------------------------------------------------------------------------
+    const tournamentState = {
+      tournaments: [
+        {
+          id: "tourn_1",
+          name: "Premier Grassroots Cup 2026",
+          category: "Club",
+          ballType: "tennis",
+          startDate: "2026-10-14",
+          endDate: "2026-10-28",
+          groupA: ["Mumbai Strikers", "Pune Warriors", "Ahmedabad Lions"],
+          groupB: ["Bangalore Blasters", "Chennai Challengers", "Delhi Dynamos"],
+          standings: [
+            { pos: 1, team: "Mumbai Strikers", p: 2, w: 2, l: 0, t: 0, nr: 0, pts: 4, nrr: "+1.650" },
+            { pos: 2, team: "Pune Warriors", p: 2, w: 1, l: 1, t: 0, nr: 0, pts: 2, nrr: "+0.420" },
+            { pos: 3, team: "Ahmedabad Lions", p: 2, w: 0, l: 2, t: 0, nr: 0, pts: 0, nrr: "-2.070" }
+          ],
+          fixtures: [
+            { id: "f1", match: "Mumbai Strikers vs Pune Warriors", date: "Oct 15, 09:30 AM", ground: "Oval Ground, Mumbai", status: "Completed" },
+            { id: "f2", match: "Bangalore Blasters vs Chennai Challengers", date: "Oct 16, 02:00 PM", ground: "Gymkhana, Bengaluru", status: "Upcoming" },
+            { id: "f3", match: "Ahmedabad Lions vs Mumbai Strikers", date: "Oct 18, 09:30 AM", ground: "Sardar Ground, Ahmedabad", status: "Upcoming" },
+            { id: "f4", match: "Delhi Dynamos vs Bangalore Blasters", date: "Oct 19, 02:00 PM", ground: "Feroz Shah Ground, Delhi", status: "Upcoming" }
+          ]
+        }
+      ]
+    };
+
+    function toggleTournamentSubview() {
+      const p = document.getElementById('tournament-create-panel');
+      const btn = document.getElementById('btn-toggle-tournament-mode');
+      if (p.style.display === 'none') {
+        p.style.display = 'block';
+        btn.textContent = '✕ Close Create Panel';
+      } else {
+        p.style.display = 'none';
+        btn.textContent = '+ Create New Tournament (S15)';
+      }
+    }
+
+    function handleCreateTournament(e) {
+      e.preventDefault();
+      const name = document.getElementById('tourn-name-input').value.trim();
+      const cat = document.getElementById('tourn-category-select').value;
+      const ball = document.getElementById('tourn-ball-select').value;
+      const start = document.getElementById('tourn-start-date').value;
+      const end = document.getElementById('tourn-end-date').value;
+
+      tournamentState.tournaments.unshift({
+        id: "tourn_" + Date.now(),
+        name,
+        category: cat,
+        ballType: ball,
+        startDate: start,
+        endDate: end,
+        groupA: ["Team Alpha", "Team Beta", "Team Gamma"],
+        groupB: ["Team Delta", "Team Epsilon", "Team Zeta"],
+        standings: [
+          { pos: 1, team: "Team Alpha", p: 0, w: 0, l: 0, t: 0, nr: 0, pts: 0, nrr: "0.000" },
+          { pos: 2, team: "Team Beta", p: 0, w: 0, l: 0, t: 0, nr: 0, pts: 0, nrr: "0.000" }
+        ],
+        fixtures: [
+          { id: "f_new", match: "Team Alpha vs Team Beta", date: `${start} 10:00 AM`, ground: "Main Stadium", status: "Scheduled" }
+        ]
+      });
+
+      toggleTournamentSubview();
+      renderTournamentView();
+      showToast("Tournament created successfully!");
+    }
+
+    function generateRoundRobinFixtures() {
+      const t = tournamentState.tournaments[0];
+      t.fixtures = [
+        { id: "f1", match: `${t.groupA[0]} vs ${t.groupA[1]}`, date: "Matchday 1 • 09:30 AM", ground: "Pitch 1", status: "Scheduled" },
+        { id: "f2", match: `${t.groupB[0]} vs ${t.groupB[1]}`, date: "Matchday 1 • 01:30 PM", ground: "Pitch 2", status: "Scheduled" },
+        { id: "f3", match: `${t.groupA[1]} vs ${t.groupA[2]}`, date: "Matchday 2 • 09:30 AM", ground: "Pitch 1", status: "Scheduled" },
+        { id: "f4", match: `${t.groupB[1]} vs ${t.groupB[2]}`, date: "Matchday 2 • 01:30 PM", ground: "Pitch 2", status: "Scheduled" }
+      ];
+      renderTournamentFixtures();
+      showToast("Round-robin fixtures generated!");
+    }
+
+    function renderTournamentView() {
+      renderTournamentFixtures();
+      renderTournamentStandings();
+    }
+
+    function renderTournamentFixtures() {
+      const container = document.getElementById('tournament-fixtures-container');
+      const t = tournamentState.tournaments[0];
+      container.innerHTML = '';
+      t.fixtures.forEach(f => {
+        container.innerHTML += `
+          <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px;">
+            <div style="font-size: 11px; font-weight: 700; color: var(--color-accent);">${f.date} • ${f.ground}</div>
+            <div style="font-size: 14px; font-weight: 800; margin: 4px 0;">${f.match}</div>
+            <span style="font-size: 11px; background: ${f.status === 'Completed' ? '#bbf7d0' : '#e2e8f0'}; color: ${f.status === 'Completed' ? '#166534' : '#334155'}; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill);">${f.status}</span>
+          </div>
+        `;
+      });
+    }
+
+    function renderTournamentStandings() {
+      const tbody = document.getElementById('tournament-standings-tbody');
+      const t = tournamentState.tournaments[0];
+      tbody.innerHTML = '';
+      t.standings.forEach(s => {
+        const isQualified = s.pos <= 2;
+        tbody.innerHTML += `
+          <tr style="${isQualified ? 'border-left: 3px solid var(--color-accent);' : ''}">
+            <td><strong>${s.pos}</strong></td>
+            <td><strong>${s.team}</strong> ${isQualified ? '<span style="font-size: 10px; color: var(--color-accent);">[Q]</span>' : ''}</td>
+            <td class="num">${s.p}</td>
+            <td class="num">${s.w}</td>
+            <td class="num">${s.l}</td>
+            <td class="num">${s.t}</td>
+            <td class="num">${s.nr}</td>
+            <td class="num"><strong>${s.pts}</strong></td>
+            <td class="num" style="color: ${s.nrr.startsWith('+') ? 'var(--color-accent)' : 'var(--color-danger)'}; font-weight: 700;">${s.nrr}</td>
+          </tr>
+        `;
+      });
+    }
+
+    // ------------------------------------------------------------------------
+    // TEAMS & ROSTERS (S21, S01) & PLAYER PROFILES (S20)
+    // ------------------------------------------------------------------------
+    function renderTeamRosterTable() {
+      const teamKey = document.getElementById('team-roster-switch').value;
+      const tbody = document.getElementById('team-roster-tbody');
+      tbody.innerHTML = '';
+
+      state.squads[teamKey].forEach((p, idx) => {
+        tbody.innerHTML += `
+          <tr>
+            <td>${idx + 1}</td>
+            <td><strong>${p.name}</strong></td>
+            <td><span style="font-size: 11px; background: var(--color-surface); padding: 3px 8px; border-radius: var(--radius-pill); border: 1px solid var(--color-border);">${p.role}</span></td>
+            <td>Right-hand bat • ${p.role === 'Bowler' ? 'Fast' : 'Medium'}</td>
+            <td>
+              ${p.isCaptain ? '<span style="background: #fef08a; color: #854d0e; font-size: 11px; font-weight: 800; padding: 2px 6px; border-radius: var(--radius-pill);">C</span>' : ''}
+              ${p.isKeeper ? '<span style="background: #bfdbfe; color: #1e40af; font-size: 11px; font-weight: 800; padding: 2px 6px; border-radius: var(--radius-pill);">WK</span>' : ''}
+              ${!p.isCaptain && !p.isKeeper ? '<span style="color: var(--color-text-muted); font-size: 12px;">Player</span>' : ''}
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function handleAddPlayerToRoster(e) {
+      e.preventDefault();
+      const teamKey = document.getElementById('team-roster-switch').value;
+      const name = document.getElementById('new-player-name').value.trim();
+      const role = document.getElementById('new-player-role').value;
+      const flag = document.getElementById('new-player-flag').value;
+
+      const newId = `${teamKey}_${Date.now()}`;
+      state.squads[teamKey].push({
+        id: newId,
+        name,
+        role,
+        isCaptain: flag === 'C',
+        isKeeper: flag === 'WK'
+      });
+
+      document.getElementById('new-player-name').value = '';
+      document.getElementById('new-player-phone').value = '';
+      renderTeamRosterTable();
+      populateProfilePlayerDropdown();
+      showToast(`Added ${name} (${role}) to team roster!`);
+    }
+
+    function populateProfilePlayerDropdown() {
+      const select = document.getElementById('profile-player-select');
+      select.innerHTML = '';
+      [...state.squads.A, ...state.squads.B].forEach(p => {
+        select.innerHTML += `<option value="${p.id}">${p.name} (${p.role})</option>`;
+      });
+      renderSelectedPlayerCareer();
+    }
+
+    function renderSelectedPlayerCareer() {
+      const pId = document.getElementById('profile-player-select').value;
+      const allPlayers = [...state.squads.A, ...state.squads.B];
+      const p = allPlayers.find(item => item.id === pId) || allPlayers[0];
+
+      if (!p) return;
+
+      document.getElementById('profile-avatar').textContent = p.name.charAt(0);
+      document.getElementById('profile-name').textContent = p.name;
+      document.getElementById('profile-sub').textContent = `${p.role} • ${p.isCaptain ? 'Captain • ' : ''}Professional Grassroots Player`;
+
+      // Dynamic Career Mock Data scaled by role
+      const isBatter = p.role === 'Batter' || p.role === 'Keeper';
+      document.getElementById('prof-bat-matches').textContent = isBatter ? '42' : '36';
+      document.getElementById('prof-bat-inns').textContent = isBatter ? '39' : '22';
+      document.getElementById('prof-bat-runs').textContent = isBatter ? '1,480' : '285';
+      document.getElementById('prof-bat-hs').textContent = isBatter ? '108*' : '34*';
+      document.getElementById('prof-bat-avg').textContent = isBatter ? '44.8' : '17.8';
+      document.getElementById('prof-bat-sr').textContent = isBatter ? '146.2' : '112.5';
+    }
+
     // Initialize on load
-    window.addEventListener('DOMContentLoaded', initApp);
+    window.addEventListener('DOMContentLoaded', () => {
+      initApp();
+      renderTournamentView();
+      renderTeamRosterTable();
+      populateProfilePlayerDropdown();
+    });
   </script>
 </body>
 </html>
