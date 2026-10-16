@@ -26,3 +26,7 @@ pytest -v tests/test_cricket_engine.py
 ## Test Harness Helpers
 - `conftest.py`: Playwright browser session fixtures and local screenshot capturing.
 - `helpers.py`: Bounding-box collision detection, viewport overflow checking, and zero console error assertion.
+
+
+---
+**Total Active Test Modules:** 1

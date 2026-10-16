@@ -47,8 +47,14 @@ TallyPitch/
 │   ├── parity.md         # Parity comparison and validation report
 │   ├── design/           # Design tokens (tokens.css, tokens.json, tailwind.config.js)
 │   └── launch/           # Landing page specs, store listing metadata, and pricing
+├── dist/                 # Production distribution build (synced with index.html)
+├── pipeline.sh           # Standalone self-analyzing & self-healing pipeline runner
 ├── tests/
+│   ├── conftest.py       # Playwright browser fixtures
+│   ├── helpers.py        # Collision detection & assertion helpers
+│   ├── README.md         # Test suite inventory
 │   └── test_cricket_engine.py  # Playwright E2E test suite covering core scoring flows
+├── package.json          # Node backend dependencies & npm scripts
 ├── .env.example          # Environment variable template
 └── LICENSE               # MIT License
 ```
