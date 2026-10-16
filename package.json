@@ -1,0 +1,17 @@
+{
+  "name": "tallypitch",
+  "version": "1.0.0",
+  "description": "Grassroots Cricket Scoring & Tournament Management Platform",
+  "main": "server/api.js",
+  "scripts": {
+    "start": "node server/api.js",
+    "test": "python3 -m unittest tests/test_cricket_engine.py"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "stripe": "^16.0.0",
+    "ws": "^8.18.0"
+  },
+  "author": "Manvendra Pratap Singh <manvenpratapsingh@gmail.com>",
+  "license": "MIT"
+}
