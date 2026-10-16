@@ -9,6 +9,8 @@
 
 **TallyPitch** is an independent, production-grade cricket scoring and tournament management platform designed specifically for grassroots clubs, weekend leagues, and local tournament organizers. Built to overcome the invasive video popups, locked basic stats, and expensive paywalls of legacy scoring apps, TallyPitch provides an uncompromised matchday experience.
 
+> 📚 **Complete Documentation**: Explore the [**TallyPitch GitHub Wiki**](https://github.com/manvenpratap/TallyPitch/wiki) for matchday scoring guides, OBS streaming setups, tournament NRR mathematics, and database specifications.
+
 ### Key Features
 
 - **Zero-Ad Scoring Console**: 100% ad-free scoring interface so scorers never miss a ball to an unskippable video popup.
@@ -47,6 +49,7 @@ TallyPitch/
 │   ├── parity.md         # Parity comparison and validation report
 │   ├── design/           # Design tokens (tokens.css, tokens.json, tailwind.config.js)
 │   └── launch/           # Landing page specs, store listing metadata, and pricing
+├── wiki/                 # Comprehensive documentation pages mirroring GitHub Wiki
 ├── dist/                 # Production distribution build (synced with index.html)
 ├── pipeline.sh           # Standalone self-analyzing & self-healing pipeline runner
 ├── tests/
