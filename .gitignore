@@ -1,12 +1,77 @@
-.DS_Store
-__pycache__/
-*.pyc
-.venv/
-*.tmp
-node_modules/
-.env
+# ==============================================================================
+# TallyPitch .gitignore
+# ==============================================================================
 
-# Universal Pipeline local resources
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Node.js & Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment & Local Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Python Artifacts & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist-python/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Testing, Playwright & Visual Regression Caches
+.pytest_cache/
 tests/screenshots/
 e2e-tests/screenshots/
-.pytest_cache/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+.coverage
+htmlcov/
+.tox/
+
+# IDE & Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# Temporary Files
+*.tmp
+*.temp
+*.bak
