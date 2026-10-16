@@ -3,3 +3,8 @@ __pycache__/
 *.pyc
 .venv/
 *.tmp
+
+# Universal Pipeline local resources
+tests/screenshots/
+e2e-tests/screenshots/
+.pytest_cache/
