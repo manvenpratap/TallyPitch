@@ -225,6 +225,29 @@ async function requestHandler(req, res) {
       return sendJSON(res, 200, { match });
     }
 
+    // 8b. Match Live Stream OBS Overlay Metadata & MQTT Topics
+    if (req.method === 'GET' && pathname.match(/^\/api\/matches\/([^/]+)\/overlay$/)) {
+      const matchId = pathname.split('/')[3];
+      return sendJSON(res, 200, {
+        matchId,
+        overlayUrl: `/index.html?overlay=true&matchId=${matchId}`,
+        mqttEndpoint: `ws://${req.headers.host || 'localhost:4000'}/mqtt`,
+        topics: {
+          score: `cricheroes/matches/${matchId}/score`,
+          ball: `cricheroes/matches/${matchId}/ball`,
+          overlay: `cricheroes/matches/${matchId}/overlay`,
+        },
+      });
+    }
+
+    // 8c. Live Stream Broadcast Event Push (custom overlay triggers)
+    if (req.method === 'POST' && pathname.match(/^\/api\/matches\/([^/]+)\/broadcast$/)) {
+      const matchId = pathname.split('/')[3];
+      const payload = await readBody(req);
+      broadcastMatchEvent(matchId, payload);
+      return sendJSON(res, 200, { success: true, message: 'Broadcast event dispatched' });
+    }
+
     // 9. Tournament Dynamic Points Table with Automated NRR (S18)
     if (req.method === 'GET' && pathname.match(/^\/api\/tournaments\/([^/]+)\/standings$/)) {
       const tournamentId = pathname.split('/')[3];

@@ -75,3 +75,7 @@ htmlcov/
 *.tmp
 *.temp
 *.bak
+
+# Android Packages & REA Binaries
+*.xapk
+*.apk

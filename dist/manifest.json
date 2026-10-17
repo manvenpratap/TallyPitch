@@ -1,0 +1,25 @@
+{
+  "name": "TallyPitch - Grassroots Cricket Scoring & Stream",
+  "short_name": "TallyPitch",
+  "description": "Ad-free grassroots cricket scoring, ICC net run rate, and live broadcast overlay",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "categories": ["sports", "utilities"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
