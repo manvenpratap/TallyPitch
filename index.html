@@ -1340,6 +1340,26 @@
       color: #0369a1;
       text-transform: uppercase;
     }
+
+    /* Social Match Graphic Exporter (S16) */
+    .social-mode-tab {
+      flex: 1;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      color: var(--color-text-muted);
+      transition: all 150ms ease;
+    }
+    .social-mode-tab.active {
+      background: var(--color-accent);
+      color: #fff;
+      border-color: var(--color-accent);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+    }
   </style>
 </head>
 <body>
@@ -1544,6 +1564,9 @@
             <button class="btn btn-secondary" id="btn-stream-overlay" style="background: rgba(56,189,248,0.25); border: 1px solid rgba(56,189,248,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openBroadcastModal()" data-tooltip="Live streaming OBS overlay & CricHeroes MQTT bridge">
               📡 OBS Stream
             </button>
+            <button class="btn btn-secondary" id="btn-social-card-s07" style="background: rgba(16,185,129,0.25); border: 1px solid rgba(16,185,129,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openSocialCardModal('summary')" data-tooltip="Export 1080x1080 social match card for WhatsApp and Instagram">
+              📸 Match Card
+            </button>
           </div>
         </div>
 
@@ -1678,9 +1701,14 @@
             <h2 class="card-title">Match Scorecard (S13)</h2>
             <p class="card-subtitle" id="scorecard-header-sub">Mumbai Strikers vs Bangalore Blasters</p>
           </div>
-          <button class="btn btn-primary" onclick="navigate('S07')" style="font-size: 13px; padding: 6px 12px;">
-            ← Return to Live Scoring
-          </button>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <button class="btn btn-secondary" id="btn-open-social-s13" onclick="openSocialCardModal('summary')" style="font-size: 13px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 6px;" data-tooltip="Export high-resolution 1080x1080 match graphic for WhatsApp and Instagram">
+              📸 Social Card (S16)
+            </button>
+            <button class="btn btn-primary" onclick="navigate('S07')" style="font-size: 13px; padding: 6px 12px;">
+              ← Return to Live Scoring
+            </button>
+          </div>
         </div>
 
         <!-- Innings 1 Batting -->
@@ -2165,9 +2193,14 @@
                 <div style="font-size: 12px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">
                   Milestone Badges & Honors (S21)
                 </div>
-                <span style="font-size: 11px; color: var(--color-accent); font-weight: 700;" id="player-badge-count-pill">
-                  0 Unlocked
-                </span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <button type="button" class="btn btn-secondary" id="btn-share-player-award" onclick="openPlayerAwardCardFromProfile()" style="padding: 3px 8px; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Generate and share 1080x1080 Player Award Certificate">
+                    <span>🏅</span> Award Card
+                  </button>
+                  <span style="font-size: 11px; color: var(--color-accent); font-weight: 700;" id="player-badge-count-pill">
+                    0 Unlocked
+                  </span>
+                </div>
               </div>
               <div class="badges-grid" id="profile-badges-wrap"></div>
             </div>
@@ -2401,10 +2434,13 @@
         <div style="font-size: 13px; color: var(--color-text-muted);" id="mvp-player-stats">58 runs (32b), 2 catches • MVP: 84.5 pts</div>
       </div>
 
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
         <button type="button" class="btn btn-secondary" onclick="closeModal('match-result-modal'); navigate('S13');">View Scorecard</button>
         <button type="button" class="btn btn-primary" onclick="restartMatch()">New Match</button>
       </div>
+      <button type="button" class="btn" id="btn-open-social-modal-result" style="width: 100%; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-weight: 700; padding: 9px 14px; display: flex; justify-content: center; align-items: center; gap: 8px;" onclick="openSocialCardModal('summary')" data-tooltip="Generate and share 1080x1080 match summary graphic">
+        <span>📸</span> Share Match Graphic (S16)
+      </button>
     </div>
   </div>
 
@@ -2638,6 +2674,61 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 8: SOCIAL MATCH GRAPHIC EXPORTER (S16)
+       ======================================================================= -->
+  <div id="social-card-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('social-card-modal')">
+    <div class="modal-dialog" style="max-width: 560px; text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h3 class="modal-title" style="color: var(--color-accent); font-size: 18px; margin: 0; display: flex; align-items: center; gap: 8px;">
+          <span>🎨</span> Match Graphic Exporter (S16)
+        </h3>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('social-card-modal')" style="padding: 4px 10px; font-size: 12px;" data-tooltip="Close modal (Esc)">✕</button>
+      </div>
+      <p class="modal-desc" style="margin-bottom: 14px; font-size: 13px;">
+        Export publication-ready 1080×1080 social media graphics for WhatsApp, Instagram, and Twitter.
+      </p>
+
+      <!-- Mode selection tabs -->
+      <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+        <button type="button" class="social-mode-tab active" id="tab-social-summary" onclick="switchSocialCardMode('summary')" data-tooltip="Generate complete two-innings match scorecard graphic">
+          🏆 Match Summary
+        </button>
+        <button type="button" class="social-mode-tab" id="tab-social-player" onclick="switchSocialCardMode('player')" data-tooltip="Generate Player of the Match or personal milestone award certificate">
+          ⭐ Player Award / MVP
+        </button>
+      </div>
+
+      <!-- Player Selector (Visible only in player award mode) -->
+      <div id="social-player-select-wrap" style="display: none; margin-bottom: 14px;">
+        <label class="form-label" for="social-card-player-select">Select Award Winner</label>
+        <select id="social-card-player-select" class="form-select" onchange="renderSocialCardFromUI()" style="font-size: 13px;">
+          <!-- Dynamically populated with match squad players -->
+        </select>
+      </div>
+
+      <!-- Preview container -->
+      <div style="text-align: center; margin-bottom: 16px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+        <img id="social-card-preview-img" alt="Match Graphic Preview" style="max-width: 100%; height: auto; aspect-ratio: 1/1; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); display: inline-block;" />
+        <!-- Hidden 1080x1080 rendering canvas -->
+        <canvas id="social-card-canvas" width="1080" height="1080" style="display: none;"></canvas>
+      </div>
+
+      <!-- Action buttons -->
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button type="button" class="btn btn-primary" id="btn-download-social-card" onclick="downloadSocialCard()" style="flex: 1; min-width: 140px; display: inline-flex; justify-content: center; align-items: center; gap: 6px;" data-tooltip="Save 1080x1080 high-res PNG image to your device">
+          <span>📥</span> Download PNG
+        </button>
+        <button type="button" class="btn btn-secondary" id="btn-copy-social-card" onclick="copySocialCardImage()" style="flex: 1; min-width: 140px; display: inline-flex; justify-content: center; align-items: center; gap: 6px;" data-tooltip="Copy 1080x1080 image to clipboard (paste in WhatsApp/Slack)">
+          <span>📋</span> Copy Image
+        </button>
+        <button type="button" class="btn btn-secondary" id="btn-share-social-card-api" onclick="shareSocialCardWebAPI()" style="padding: 8px 14px; display: inline-flex; align-items: center; gap: 6px;" data-tooltip="Share via system share sheet (Mobile / Web Share API)">
+          <span>📲</span> Share
+        </button>
+      </div>
     </div>
   </div>
 
@@ -5311,6 +5402,626 @@
       if (ec) ec.value = '';
       filterScoutedPlayers();
     }
+
+    // ========================================================================
+    // SECTION: SOCIAL MATCH GRAPHIC & AWARD CARD EXPORTER (S16)
+    // ========================================================================
+    let currentSocialMode = 'summary';
+
+    function openSocialCardModal(mode = 'summary', targetPlayerId = null) {
+      currentSocialMode = mode;
+      populateSocialPlayerDropdown(targetPlayerId);
+      updateSocialModalUI();
+      renderSocialCardFromUI();
+      const modal = document.getElementById('social-card-modal');
+      if (modal) modal.classList.add('open');
+    }
+
+    function switchSocialCardMode(mode) {
+      currentSocialMode = mode;
+      updateSocialModalUI();
+      renderSocialCardFromUI();
+    }
+
+    function updateSocialModalUI() {
+      const tabSummary = document.getElementById('tab-social-summary');
+      const tabPlayer = document.getElementById('tab-social-player');
+      const playerWrap = document.getElementById('social-player-select-wrap');
+      
+      if (tabSummary) {
+        if (currentSocialMode === 'summary') {
+          tabSummary.classList.add('active');
+        } else {
+          tabSummary.classList.remove('active');
+        }
+      }
+      if (tabPlayer) {
+        if (currentSocialMode === 'player') {
+          tabPlayer.classList.add('active');
+        } else {
+          tabPlayer.classList.remove('active');
+        }
+      }
+      if (playerWrap) {
+        playerWrap.style.display = currentSocialMode === 'player' ? 'block' : 'none';
+      }
+    }
+
+    function populateSocialPlayerDropdown(targetId = null) {
+      const select = document.getElementById('social-card-player-select');
+      if (!select) return;
+      select.innerHTML = '';
+
+      const teamAName = state.match.teamA || "Mumbai Strikers";
+      const teamBName = state.match.teamB || "Bangalore Blasters";
+      const allPlayers = [];
+
+      (state.squads.A || []).forEach(p => allPlayers.push({ ...p, team: teamAName }));
+      (state.squads.B || []).forEach(p => allPlayers.push({ ...p, team: teamBName }));
+
+      allPlayers.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = `${p.name} (${p.team} • ${p.role})`;
+        select.appendChild(opt);
+      });
+
+      if (targetId && allPlayers.some(p => p.id === targetId)) {
+        select.value = targetId;
+      } else {
+        const mvpEl = document.getElementById('mvp-player-name');
+        const mvpName = mvpEl ? mvpEl.textContent.trim() : "";
+        const mvpMatch = allPlayers.find(p => p.name === mvpName);
+        if (mvpMatch) {
+          select.value = mvpMatch.id;
+        } else if (allPlayers.length > 0) {
+          select.value = allPlayers[0].id;
+        }
+      }
+    }
+
+    function renderSocialCardFromUI() {
+      const select = document.getElementById('social-card-player-select');
+      const playerId = select ? select.value : 'A1';
+      drawSocialCard(currentSocialMode, { playerId });
+    }
+
+    function openPlayerAwardCardFromProfile() {
+      const select = document.getElementById('profile-player-select');
+      const selectedId = select ? select.value : 'A1';
+      openSocialCardModal('player', selectedId);
+    }
+
+    function drawRoundRect(ctx, x, y, width, height, radius, fillStyle, strokeStyle, lineWidth = 1) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
+      if (fillStyle) {
+        ctx.fillStyle = fillStyle;
+        ctx.fill();
+      }
+      if (strokeStyle) {
+        ctx.strokeStyle = strokeStyle;
+        ctx.lineWidth = lineWidth;
+        ctx.stroke();
+      }
+    }
+
+    function getMatchSummaryData() {
+      const inn1 = state.innings1;
+      const inn2 = state.innings2;
+      const team1Name = state.match.teamA || "Mumbai Strikers";
+      const team2Name = state.match.teamB || "Bangalore Blasters";
+
+      let topBat1 = { name: "No Batter", runs: 0, balls: 0, fours: 0, sixes: 0 };
+      Object.values(inn1.batters || {}).forEach(b => {
+        if (b.runs > topBat1.runs || (b.runs === topBat1.runs && b.runs > 0 && b.balls <= topBat1.balls)) {
+          topBat1 = b;
+        }
+      });
+      if (topBat1.runs === 0 && Object.values(inn1.batters || {}).length > 0) {
+        topBat1 = Object.values(inn1.batters)[0];
+      }
+
+      let topBowl1 = { name: "No Bowler", wickets: 0, runsConceded: 0, overs: 0 };
+      Object.values(inn1.bowlers || {}).forEach(bw => {
+        if (bw.wickets > topBowl1.wickets || (bw.wickets === topBowl1.wickets && bw.overs > 0 && bw.runsConceded < topBowl1.runsConceded)) {
+          topBowl1 = bw;
+        }
+      });
+      if (topBowl1.overs === 0 && Object.values(inn1.bowlers || {}).length > 0) {
+        topBowl1 = Object.values(inn1.bowlers)[0];
+      }
+
+      let topBat2 = { name: "No Batter", runs: 0, balls: 0, fours: 0, sixes: 0 };
+      Object.values(inn2.batters || {}).forEach(b => {
+        if (b.runs > topBat2.runs || (b.runs === topBat2.runs && b.runs > 0 && b.balls <= topBat2.balls)) {
+          topBat2 = b;
+        }
+      });
+      if (topBat2.runs === 0 && Object.values(inn2.batters || {}).length > 0) {
+        topBat2 = Object.values(inn2.batters)[0];
+      }
+
+      let topBowl2 = { name: "No Bowler", wickets: 0, runsConceded: 0, overs: 0 };
+      Object.values(inn2.bowlers || {}).forEach(bw => {
+        if (bw.wickets > topBowl2.wickets || (bw.wickets === topBowl2.wickets && bw.overs > 0 && bw.runsConceded < topBowl2.runsConceded)) {
+          topBowl2 = bw;
+        }
+      });
+      if (topBowl2.overs === 0 && Object.values(inn2.bowlers || {}).length > 0) {
+        topBowl2 = Object.values(inn2.bowlers)[0];
+      }
+
+      let mvp = { name: "Rohit Sharma", team: team1Name, points: 84.5, text: "58 runs (32b), 2 catches • MVP: 84.5 pts" };
+      const mvpEl = document.getElementById('mvp-player-name');
+      const mvpStatsEl = document.getElementById('mvp-player-stats');
+      if (mvpEl && mvpEl.textContent) {
+        mvp.name = mvpEl.textContent.trim();
+        mvp.text = mvpStatsEl ? mvpStatsEl.textContent.trim() : "58 runs (32b), 2 catches • MVP: 84.5 pts";
+      }
+
+      let resultText = "Match In Progress";
+      const winnerDesc = document.getElementById('winner-modal-desc');
+      if (winnerDesc && winnerDesc.textContent && state.match.status === "COMPLETED") {
+        resultText = winnerDesc.textContent.trim();
+      } else if (state.match.currentInningsNumber === 2) {
+        const target = inn1.totalRuns + 1;
+        const needed = target - inn2.totalRuns;
+        const remainingBalls = (state.match.totalOvers * 6) - inn2.legalBalls;
+        resultText = needed > 0 ? `${team2Name} need ${needed} runs from ${remainingBalls} balls` : `${team2Name} won by ${10 - inn2.wickets} wickets`;
+      } else {
+        resultText = `${team1Name} 1st Innings: ${inn1.totalRuns}/${inn1.wickets} (${formatOvers(inn1.legalBalls)} ov)`;
+      }
+
+      const groundName = state.match.ground || "Oval Maidan, Mumbai";
+      const matchDate = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+      return {
+        team1Name,
+        team2Name,
+        inn1Score: `${inn1.totalRuns}/${inn1.wickets}`,
+        inn1Overs: `${formatOvers(inn1.legalBalls)} / ${state.match.totalOvers} ov`,
+        inn2Score: `${inn2.totalRuns}/${inn2.wickets}`,
+        inn2Overs: `${formatOvers(inn2.legalBalls)} / ${state.match.totalOvers} ov`,
+        topBat1,
+        topBowl1,
+        topBat2,
+        topBowl2,
+        resultText,
+        mvp,
+        groundName,
+        matchDate,
+        totalOvers: state.match.totalOvers
+      };
+    }
+
+    function drawSocialCard(mode = 'summary', options = {}) {
+      const canvas = document.getElementById('social-card-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const W = 1080;
+      const H = 1080;
+      canvas.width = W;
+      canvas.height = H;
+
+      // Background gradient
+      const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+      bgGrad.addColorStop(0, '#090d16');
+      bgGrad.addColorStop(0.5, '#0f172a');
+      bgGrad.addColorStop(1, '#070a13');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, W, H);
+
+      // Radial lighting accents
+      const rad1 = ctx.createRadialGradient(260, 220, 20, 260, 220, 480);
+      rad1.addColorStop(0, 'rgba(16, 185, 129, 0.16)');
+      rad1.addColorStop(1, 'rgba(16, 185, 129, 0)');
+      ctx.fillStyle = rad1;
+      ctx.fillRect(0, 0, W, H);
+
+      const rad2 = ctx.createRadialGradient(840, 820, 20, 840, 820, 500);
+      rad2.addColorStop(0, 'rgba(245, 158, 11, 0.14)');
+      rad2.addColorStop(1, 'rgba(245, 158, 11, 0)');
+      ctx.fillStyle = rad2;
+      ctx.fillRect(0, 0, W, H);
+
+      // Outer border & frame
+      drawRoundRect(ctx, 36, 36, W - 72, H - 72, 28, null, 'rgba(255, 255, 255, 0.12)', 2);
+      drawRoundRect(ctx, 44, 44, W - 88, H - 88, 22, null, 'rgba(56, 189, 248, 0.18)', 1);
+
+      const summaryData = getMatchSummaryData();
+
+      if (mode === 'summary') {
+        drawMatchSummaryMode(ctx, W, H, summaryData);
+      } else {
+        drawPlayerAwardMode(ctx, W, H, summaryData, options.playerId);
+      }
+
+      const previewImg = document.getElementById('social-card-preview-img');
+      if (previewImg) {
+        previewImg.src = canvas.toDataURL('image/png');
+      }
+    }
+
+    function drawMatchSummaryMode(ctx, W, H, data) {
+      // Header Tag
+      drawRoundRect(ctx, (W / 2) - 170, 65, 340, 36, 18, 'rgba(16, 185, 129, 0.2)', '#10b981', 1.5);
+      ctx.font = 'bold 13px system-ui, sans-serif';
+      ctx.fillStyle = '#34d399';
+      ctx.textAlign = 'center';
+      ctx.fillText('⚡ TALLYPITCH MATCHDAY • ZERO ADS', W / 2, 88);
+
+      // Tournament Headline
+      ctx.font = 'bold 34px system-ui, sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText('T20 PREMIER TROPHY • MATCH SUMMARY', W / 2, 140);
+
+      // Metadata
+      ctx.font = '17px system-ui, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText(`📍 ${data.groundName}  •  ${data.matchDate}  •  ${data.totalOvers} Overs`, W / 2, 175);
+
+      // Innings 1 Card
+      drawRoundRect(ctx, 80, 205, 920, 180, 20, 'rgba(30, 41, 59, 0.75)', 'rgba(255, 255, 255, 0.12)', 1.5);
+      drawRoundRect(ctx, 105, 225, 12, 50, 6, '#10b981', null);
+      
+      ctx.textAlign = 'left';
+      ctx.font = 'bold 30px system-ui, sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(data.team1Name, 132, 260);
+
+      ctx.textAlign = 'right';
+      ctx.font = 'bold 48px system-ui, sans-serif';
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText(data.inn1Score, 840, 262);
+
+      ctx.font = '20px system-ui, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText(`(${data.inn1Overs})`, 970, 262);
+
+      // Innings 1 Divider & Performers
+      ctx.beginPath();
+      ctx.moveTo(105, 295);
+      ctx.lineTo(975, 295);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.textAlign = 'left';
+      ctx.font = '18px system-ui, sans-serif';
+      ctx.fillStyle = '#e2e8f0';
+      const bat1Text = `🏏 ${data.topBat1.name}: ${data.topBat1.runs} (${data.topBat1.balls}b, ${data.topBat1.fours}x4, ${data.topBat1.sixes}x6)`;
+      ctx.fillText(bat1Text, 105, 335);
+
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#94a3b8';
+      const bowl1Text = `⚾ ${data.topBowl1.name}: ${data.topBowl1.wickets}/${data.topBowl1.runsConceded} (${formatOvers(data.topBowl1.overs * 6 || 0)} ov)`;
+      ctx.fillText(bowl1Text, 975, 335);
+
+      // Innings 2 Card
+      drawRoundRect(ctx, 80, 410, 920, 180, 20, 'rgba(30, 41, 59, 0.75)', 'rgba(255, 255, 255, 0.12)', 1.5);
+      drawRoundRect(ctx, 105, 430, 12, 50, 6, '#f59e0b', null);
+
+      ctx.textAlign = 'left';
+      ctx.font = 'bold 30px system-ui, sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(data.team2Name, 132, 465);
+
+      ctx.textAlign = 'right';
+      ctx.font = 'bold 48px system-ui, sans-serif';
+      ctx.fillStyle = '#fbbf24';
+      ctx.fillText(data.inn2Score, 840, 467);
+
+      ctx.font = '20px system-ui, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText(`(${data.inn2Overs})`, 970, 467);
+
+      // Innings 2 Divider & Performers
+      ctx.beginPath();
+      ctx.moveTo(105, 500);
+      ctx.lineTo(975, 500);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.textAlign = 'left';
+      ctx.font = '18px system-ui, sans-serif';
+      ctx.fillStyle = '#e2e8f0';
+      const bat2Text = `🏏 ${data.topBat2.name}: ${data.topBat2.runs} (${data.topBat2.balls}b, ${data.topBat2.fours}x4, ${data.topBat2.sixes}x6)`;
+      ctx.fillText(bat2Text, 105, 540);
+
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#94a3b8';
+      const bowl2Text = `⚾ ${data.topBowl2.name}: ${data.topBowl2.wickets}/${data.topBowl2.runsConceded} (${formatOvers(data.topBowl2.overs * 6 || 0)} ov)`;
+      ctx.fillText(bowl2Text, 975, 540);
+
+      // Result Banner
+      drawRoundRect(ctx, 80, 615, 920, 72, 18, 'rgba(16, 185, 129, 0.22)', 'rgba(16, 185, 129, 0.6)', 1.5);
+      ctx.textAlign = 'center';
+      ctx.font = 'bold 24px system-ui, sans-serif';
+      ctx.fillStyle = '#fbbf24';
+      ctx.fillText(`🏆 ${data.resultText.toUpperCase()}`, W / 2, 658);
+
+      // Player of the Match / MVP Spotlight
+      drawRoundRect(ctx, 80, 715, 920, 195, 20, 'rgba(15, 23, 42, 0.95)', 'rgba(245, 158, 11, 0.5)', 1.5);
+      
+      // Star badge
+      drawRoundRect(ctx, 110, 745, 54, 54, 27, 'rgba(245, 158, 11, 0.2)', '#f59e0b', 1.5);
+      ctx.font = '26px system-ui, sans-serif';
+      ctx.fillText('⭐', 137, 782);
+
+      ctx.textAlign = 'left';
+      ctx.font = 'bold 15px system-ui, sans-serif';
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillText('PLAYER OF THE MATCH (MVP)', 180, 762);
+
+      ctx.font = 'bold 34px system-ui, sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(data.mvp.name, 180, 802);
+
+      ctx.font = '19px system-ui, sans-serif';
+      ctx.fillStyle = '#cbd5e1';
+      ctx.fillText(data.mvp.text, 180, 842);
+
+      ctx.font = 'bold 13px system-ui, sans-serif';
+      ctx.fillStyle = '#34d399';
+      ctx.fillText('⚡ TallyPitch Official Impact Rating • Zero-Ad Certified', 180, 878);
+
+      // Footer
+      ctx.beginPath();
+      ctx.moveTo(80, 940);
+      ctx.lineTo(1000, 940);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.textAlign = 'left';
+      ctx.font = '15px system-ui, sans-serif';
+      ctx.fillStyle = '#64748b';
+      ctx.fillText('⚡ 0ms Atomic Rollback • 100% Offline PWA • Zero Ads in the Box', 80, 975);
+
+      ctx.textAlign = 'right';
+      ctx.font = 'bold 17px system-ui, sans-serif';
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText('TallyPitch • tallypitch.app', 1000, 975);
+    }
+
+    function drawPlayerAwardMode(ctx, W, H, data, playerId) {
+      let player = null;
+      const teamAName = state.match.teamA || "Mumbai Strikers";
+      const teamBName = state.match.teamB || "Bangalore Blasters";
+
+      (state.squads.A || []).forEach(p => {
+        if (p.id === playerId) player = { ...p, team: teamAName, opponent: teamBName };
+      });
+      if (!player) {
+        (state.squads.B || []).forEach(p => {
+          if (p.id === playerId) player = { ...p, team: teamBName, opponent: teamAName };
+        });
+      }
+      if (!player) {
+        player = { id: "A1", name: "Rohit Sharma", role: "Batter", team: teamAName, opponent: teamBName };
+      }
+
+      // Check current match performance
+      const b1 = (state.innings1.batters || {})[player.id];
+      const b2 = (state.innings2.batters || {})[player.id];
+      const matchBat = b1 || b2 || { runs: 58, balls: 32, fours: 6, sixes: 3 };
+
+      const bw1 = (state.innings1.bowlers || {})[player.id];
+      const bw2 = (state.innings2.bowlers || {})[player.id];
+      const matchBowl = bw1 || bw2 || { overs: 0, maidens: 0, runsConceded: 0, wickets: 0 };
+
+      const sr = matchBat.balls > 0 ? ((matchBat.runs / matchBat.balls) * 100).toFixed(1) : "0.0";
+      const econ = matchBowl.overs > 0 ? (matchBowl.runsConceded / matchBowl.overs).toFixed(1) : "0.0";
+      const mvpPts = (matchBat.runs * 1) + (matchBat.fours * 2) + (matchBat.sixes * 4) + (matchBowl.wickets * 25);
+
+      // Gold Certificate Double Frame
+      drawRoundRect(ctx, 48, 48, W - 96, H - 96, 26, null, 'rgba(245, 158, 11, 0.45)', 2);
+      drawRoundRect(ctx, 58, 58, W - 116, H - 116, 20, null, 'rgba(255, 255, 255, 0.08)', 1);
+
+      // Header Tag
+      drawRoundRect(ctx, (W / 2) - 180, 75, 360, 36, 18, 'rgba(245, 158, 11, 0.2)', '#f59e0b', 1.5);
+      ctx.font = 'bold 13px system-ui, sans-serif';
+      ctx.fillStyle = '#fbbf24';
+      ctx.textAlign = 'center';
+      ctx.fillText('🏅 OFFICIAL MATCHDAY RECOGNITION', W / 2, 98);
+
+      // Main Award Title
+      const titleGrad = ctx.createLinearGradient((W / 2) - 200, 0, (W / 2) + 200, 0);
+      titleGrad.addColorStop(0, '#fde68a');
+      titleGrad.addColorStop(1, '#f59e0b');
+      ctx.fillStyle = titleGrad;
+      ctx.font = 'bold 44px system-ui, sans-serif';
+      ctx.fillText('PLAYER OF THE MATCH', W / 2, 160);
+
+      ctx.font = '18px system-ui, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('Presented by TallyPitch Grassroots Cricket System', W / 2, 195);
+
+      // Proudly Presented To
+      ctx.font = 'bold 15px system-ui, sans-serif';
+      ctx.fillStyle = '#64748b';
+      ctx.fillText('PROUDLY PRESENTED TO', W / 2, 275);
+
+      // Player Name
+      ctx.font = 'bold 60px system-ui, sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(player.name.toUpperCase(), W / 2, 345);
+
+      // Team & Role
+      ctx.font = 'bold 24px system-ui, sans-serif';
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText(`${player.team}  •  ${player.role}`, W / 2, 390);
+
+      // Match Context
+      ctx.font = '18px system-ui, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText(`vs ${player.opponent}  •  ${data.groundName}  •  ${data.matchDate}`, W / 2, 425);
+
+      // 4 Metric Highlight Cards at Y = 490
+      const cardW = 210;
+      const cardH = 160;
+      const startX = 85;
+      const gap = 26;
+
+      // Card 1: Runs
+      drawRoundRect(ctx, startX, 490, cardW, cardH, 16, 'rgba(30, 41, 59, 0.8)', 'rgba(255, 255, 255, 0.1)', 1);
+      ctx.textAlign = 'center';
+      ctx.font = '13px system-ui, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('BATTING TOTAL', startX + (cardW / 2), 525);
+      ctx.font = 'bold 46px system-ui, sans-serif';
+      ctx.fillStyle = '#10b981';
+      ctx.fillText(`${matchBat.runs}`, startX + (cardW / 2), 580);
+      ctx.font = '15px system-ui, sans-serif';
+      ctx.fillStyle = '#e2e8f0';
+      ctx.fillText(`${matchBat.balls} Balls Faced`, startX + (cardW / 2), 615);
+
+      // Card 2: Strike Rate
+      drawRoundRect(ctx, startX + (cardW + gap), 490, cardW, cardH, 16, 'rgba(30, 41, 59, 0.8)', 'rgba(255, 255, 255, 0.1)', 1);
+      ctx.font = '13px system-ui, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('STRIKE RATE', startX + (cardW + gap) + (cardW / 2), 525);
+      ctx.font = 'bold 46px system-ui, sans-serif';
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText(`${sr}`, startX + (cardW + gap) + (cardW / 2), 580);
+      ctx.font = '15px system-ui, sans-serif';
+      ctx.fillStyle = '#e2e8f0';
+      ctx.fillText(`${matchBat.fours}x4, ${matchBat.sixes}x6`, startX + (cardW + gap) + (cardW / 2), 615);
+
+      // Card 3: Bowling
+      drawRoundRect(ctx, startX + ((cardW + gap) * 2), 490, cardW, cardH, 16, 'rgba(30, 41, 59, 0.8)', 'rgba(255, 255, 255, 0.1)', 1);
+      ctx.font = '13px system-ui, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('BOWLING FIGURES', startX + ((cardW + gap) * 2) + (cardW / 2), 525);
+      ctx.font = 'bold 46px system-ui, sans-serif';
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillText(`${matchBowl.wickets}/${matchBowl.runsConceded}`, startX + ((cardW + gap) * 2) + (cardW / 2), 580);
+      ctx.font = '15px system-ui, sans-serif';
+      ctx.fillStyle = '#e2e8f0';
+      ctx.fillText(`${matchBowl.overs || 0} Overs (${econ} Eco)`, startX + ((cardW + gap) * 2) + (cardW / 2), 615);
+
+      // Card 4: MVP Score
+      drawRoundRect(ctx, startX + ((cardW + gap) * 3), 490, cardW, cardH, 16, 'rgba(30, 41, 59, 0.8)', 'rgba(255, 255, 255, 0.1)', 1);
+      ctx.font = '13px system-ui, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('MATCH IMPACT', startX + ((cardW + gap) * 3) + (cardW / 2), 525);
+      ctx.font = 'bold 46px system-ui, sans-serif';
+      ctx.fillStyle = '#a855f7';
+      ctx.fillText(`${mvpPts || 84.5}`, startX + ((cardW + gap) * 3) + (cardW / 2), 580);
+      ctx.font = '15px system-ui, sans-serif';
+      ctx.fillStyle = '#e2e8f0';
+      ctx.fillText('MVP Points', startX + ((cardW + gap) * 3) + (cardW / 2), 615);
+
+      // Award Certificate Stamp Banner
+      drawRoundRect(ctx, 85, 700, 910, 85, 18, 'rgba(245, 158, 11, 0.12)', 'rgba(245, 158, 11, 0.4)', 1.5);
+      ctx.font = 'bold 20px system-ui, sans-serif';
+      ctx.fillStyle = '#fbbf24';
+      ctx.fillText('🏆 AUTHENTIC MATCHDAY HONORS • VERIFIED ON TALLYPITCH', W / 2, 742);
+      ctx.font = '14px system-ui, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText('100% Free Grassroots Cricket Scoring • Zero Ads • Instant Rollback', W / 2, 767);
+
+      // Verification seal
+      ctx.font = '14px system-ui, sans-serif';
+      ctx.fillStyle = '#64748b';
+      ctx.fillText(`Certificate ID: TP-AWARD-${player.id}-${Date.now().toString(36).toUpperCase()}`, W / 2, 850);
+
+      // Footer
+      ctx.beginPath();
+      ctx.moveTo(85, 930);
+      ctx.lineTo(995, 930);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.textAlign = 'left';
+      ctx.font = '15px system-ui, sans-serif';
+      ctx.fillStyle = '#64748b';
+      ctx.fillText('⚡ Generated offline via TallyPitch Native Canvas Engine', 85, 970);
+
+      ctx.textAlign = 'right';
+      ctx.font = 'bold 17px system-ui, sans-serif';
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText('TallyPitch • tallypitch.app', 995, 970);
+    }
+
+    function downloadSocialCard() {
+      const canvas = document.getElementById('social-card-canvas');
+      if (!canvas) return;
+      const link = document.createElement('a');
+      link.download = `tallypitch-${currentSocialMode}-${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast('📥 1080×1080 Graphic downloaded successfully!');
+    }
+
+    async function copySocialCardImage() {
+      const canvas = document.getElementById('social-card-canvas');
+      if (!canvas) return;
+      try {
+        canvas.toBlob(async (blob) => {
+          if (!blob) {
+            downloadSocialCard();
+            return;
+          }
+          if (navigator.clipboard && navigator.clipboard.write) {
+            await navigator.clipboard.write([
+              new ClipboardItem({ 'image/png': blob })
+            ]);
+            showToast('📋 Image copied to clipboard! Paste directly in WhatsApp or Slack.');
+          } else {
+            downloadSocialCard();
+          }
+        }, 'image/png');
+      } catch (err) {
+        downloadSocialCard();
+      }
+    }
+
+    async function shareSocialCardWebAPI() {
+      const canvas = document.getElementById('social-card-canvas');
+      if (!canvas) return;
+      try {
+        canvas.toBlob(async (blob) => {
+          if (!blob) {
+            downloadSocialCard();
+            return;
+          }
+          const file = new File([blob], `tallypitch-${currentSocialMode}-${Date.now()}.png`, { type: 'image/png' });
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: 'TallyPitch Matchday Recognition',
+              text: 'Check out our match scorecard and honors on TallyPitch!'
+            });
+            showToast('Shared successfully!');
+          } else {
+            downloadSocialCard();
+          }
+        }, 'image/png');
+      } catch (err) {
+        downloadSocialCard();
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-backdrop.open').forEach(el => el.classList.remove('open'));
+      }
+    });
 
     // ------------------------------------------------------------------------
     // SECTION: PWA OFFLINE-READY STATUS & SERVICE WORKER
