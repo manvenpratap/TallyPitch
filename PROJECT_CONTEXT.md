@@ -1,20 +1,21 @@
 # Project Context & Working Memory
 
-**Last Updated:** 2026-10-18 12:54:49
-**Version:** 1.9.0  
+**Last Updated:** 2026-10-19 00:33:59
+**Version:** 2.0.0  
 **Stack:** Single-File Web (SPA) / Progressive Web App (PWA) / Node.js Backend / Supabase PostgreSQL / Playwright / MQTT 3.1.1 Bridge / Android TWA / Web Speech Synthesis API  
 
 ---
 
 ## 1. Current Status & Milestone
-- **Active Phase**: Milestone 17 Completed — Real-time Audio Voice & Speech Commentary Synthesizer (Track 4) Live & Verified!
-- **Test Health**: 100% Passing (45 e2e Playwright tests passing across 11 modules: `test_cricket_engine.py`, `test_wagon_wheel_and_charts.py`, `test_realtime_bridge.py`, `test_community_and_badges.py`, `test_ground_and_insights.py`, `test_pwa_offline.py`, `test_social_card_exporter.py`, `test_dls_engine.py`, `test_tournament_realtime.py`, `test_android_packaging.py`, and `test_voice_commentary.py`)
+- **Active Phase**: Milestone 18 Completed — Dynamic Tournament Leaderboards & Cap Honors Engine (Track 5 / S19) Live & Verified!
+- **Test Health**: 100% Passing (48 e2e Playwright tests passing across 12 modules: `test_cricket_engine.py`, `test_wagon_wheel_and_charts.py`, `test_realtime_bridge.py`, `test_community_and_badges.py`, `test_ground_and_insights.py`, `test_pwa_offline.py`, `test_social_card_exporter.py`, `test_dls_engine.py`, `test_tournament_realtime.py`, `test_android_packaging.py`, `test_voice_commentary.py`, and `test_tournament_leaderboards.py`)
 - **Distribution Health**: Synced (`dist/index.html`, `dist/manifest.json`, `dist/sw.js`, `dist/.well-known/assetlinks.json`, `dist/icon-*.png` byte-for-byte in parity)
-- **Feature Parity**: 100.0% against CricHeroes (33/33 core features completed) + Advanced Intelligence + Social Media Graphics Engine (S16) + DLS Standard Edition Engine (S07) + Real-time Tournament Stream (S18) + Android TWA Packaging + Voice Commentary Synthesizer
+- **Feature Parity**: 100.0% against CricHeroes (33/33 core features completed) + Advanced Intelligence + Social Media Graphics Engine (S16) + DLS Standard Edition Engine (S07) + Real-time Tournament Stream (S18) + Android TWA Packaging + Voice Commentary Synthesizer + Dynamic Tournament Leaderboards & Cap Honors Engine (Track 5 / S19)
 
 ---
 
 ## 2. Implemented Features
+- [x] **Dynamic Tournament Leaderboards & Cap Honors Engine (Track 5 & S19)**: Automated statistical aggregation engine across all tournament matches computing runs, innings, strike rate, wickets, bowling economy, and the official CricHeroes MVP rating formula `(Runs*1) + (4s*1) + (6s*2) + (Wickets*20) + (Maidens*10) + (Catches*10)`. Screen S19 dynamic 4-cap podium honors cards (🧢 Orange Cap for Runs, 🧢 Purple Cap for Wickets, 🏆 Tournament MVP, and 🚀 Maximum Sixes) with leader avatars and live stat badges. Interactive Top-5 Batting and Bowling leaderboards with accessible tooltips, tab switcher (`#tab-batting-leaderboard`, `#tab-bowling-leaderboard`), dynamic in-match overtaking on ball scoring without refreshing, and match-conclusion player stats consolidation.
 - [x] **Real-time Audio Voice & Speech Commentary Synthesizer (Track 4 & S07 / S13)**: Zero-dependency native speech synthesis engine powered by `window.speechSynthesis` and `SpeechSynthesisUtterance`. Rich natural language delivery commentary generator (`generateBallCommentary`) incorporating batter, bowler, boundaries with 8-zone wagon wheel descriptions (e.g. "through Extra Cover", "over Mid-Wicket"), wicket dismissals, and extras. Real-time automatic delivery speech triggers on ball/extra/wicket scoring, live S07 HUD audio voice toggle button (`#btn-voice-commentary-toggle`), S13 scorecard commentary feed integration, and 1-tap Over Audio Recap (`#btn-speak-over-recap`) summarizing over runs, wickets, and ball-by-ball actions.
 - [x] **Android TWA & Native APK Packaging (Track 3 & Modal 10)**: Google Trusted Web Activity (TWA) architecture (`app.tallypitch.twa`) wrapping TallyPitch with zero URL browser chrome, full-screen viewport, Min SDK 21, and Target SDK 34 (Android 14). Includes complete Gradle project structure (`android/app/build.gradle`, `AndroidManifest.xml`, `twa-manifest.json`), Google Digital Asset Links (`.well-known/assetlinks.json`), launcher mipmap drawables, Modal 10 UI with direct PWA install prompt, Bubblewrap/Gradle build instructions, and standalone validation engine (`scripts/build_android_twa.py`).
 - [x] **Real-time Tournament Standings Stream (Track 2 & S18)**: Native pub/sub streaming integration for tournament tables via CricHeroes topic architecture (`cricheroes/tournaments/{tournament_id}/standings`). Node.js binary MQTT 3.1.1 packet encoding/decoding, dual WebSocket broadcast, S18 live stream telemetry badge, manual push trigger button, cross-tab BroadcastChannel and storage listeners, and automated standings recalculation (played, won, lost, points, NRR) on match conclusion.
@@ -72,3 +73,4 @@
 - [x] Milestone 15 (Track 2): Implement Real-time Tournament Standings Stream (`cricheroes/tournaments/{id}/standings`) with Node.js MQTT pub/sub, S18 live telemetry badge, automated match conclusion standings recalculation, and cross-tab synchronization (39 passing tests).
 - [x] Milestone 16 (Track 3): Build Android TWA & Native APK Packaging (`app.tallypitch.twa`) with Gradle project structure, Google Digital Asset Links (`.well-known/assetlinks.json`), Modal 10 UI, and packaging verification suite (42 passing tests).
 - [x] Milestone 17 (Track 4): Implement Real-time Audio Voice & Speech Commentary Synthesizer with native Web Speech API (`window.speechSynthesis`), zone-aware delivery generation, S07 HUD voice toggle, S13 over audio recap, and zero console errors (45 passing tests).
+- [x] Milestone 18 (Track 5): Implement Dynamic Tournament Leaderboards & Cap Honors Engine (S19) with 4-cap podium cards (Orange Cap, Purple Cap, Tournament MVP, Maximum Sixes), interactive Top-5 Batting/Bowling leaderboards, live in-match overtaking, match conclusion consolidation, and zero console errors (48 passing tests).

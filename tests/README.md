@@ -17,6 +17,7 @@ Automated regression and end-to-end testing infrastructure powered by Playwright
 | `test_tournament_realtime.py` | Real-time Tournament Standings Stream (S18) | • CricHeroes topic architecture pub/sub (`cricheroes/tournaments/{id}/standings`)<br>• Node.js MQTT 3.1.1 binary packet encoding/decoding for tournament standings<br>• Screen S18 live MQTT telemetry badge and manual push trigger<br>• Live DOM auto-update on incoming standings stream without page refresh<br>• Automated match conclusion standings recalculation (points + NRR)<br>• Zero critical console errors verification |
 | `test_android_packaging.py` | Android TWA & Native APK Packaging | • Android project structure (`android/app/build.gradle`, `AndroidManifest.xml`, `twa-manifest.json`)<br>• Google Digital Asset Links specification (`.well-known/assetlinks.json`)<br>• Standalone Python packaging validator script (`scripts/build_android_twa.py`)<br>• Modal 10 UI interaction, header CTA, AssetLinks drawer toggle, and Escape dismissal<br>• Zero critical console errors verification |
 | `test_voice_commentary.py` | Real-time Audio Voice & Speech Commentary Synthesizer (Track 4) | • Zone-aware natural language commentary generator (`generateBallCommentary`)<br>• S07 HUD live voice commentary toggle button (`#btn-voice-commentary-toggle`)<br>• S13 scorecard commentary feed integration and over audio recap (`#btn-speak-over-recap`)<br>• Native `window.speechSynthesis` real-time delivery execution and over audio recap<br>• Zero critical console errors verification |
+| `test_tournament_leaderboards.py` | Dynamic Tournament Leaderboards & Cap Honors Engine (Track 5 / S19) | • S19 4-cap podium honors cards rendering (Orange Cap, Purple Cap, MVP, Maximum Sixes)<br>• Top-5 Batting and Bowling leaderboards tab toggle and rankings table<br>• Dynamic live in-match cap overtaking on ball scoring (Orange Cap & Purple Cap)<br>• Match conclusion player stats consolidation into tournament baseline<br>• Zero critical console errors verification |
 
 ## Running Tests
 
@@ -38,5 +39,5 @@ pytest -v tests/
 - `helpers.py`: Bounding-box collision detection, viewport overflow checking, and zero console error assertion.
 
 ---
-**Total Active Test Modules:** 11
-**Total Passing E2E Tests:** 45 (100% passing)
+**Total Active Test Modules:** 12
+**Total Passing E2E Tests:** 48 (100% passing)

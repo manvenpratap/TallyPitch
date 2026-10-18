@@ -2084,27 +2084,113 @@
           </table>
         </div>
 
-        <!-- S19: Tournament Leaderboard -->
-        <div>
-          <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 12px;">Tournament Leaderboards (S19)</h3>
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+        <!-- S19: Tournament Leaderboard & Cap Honors Engine -->
+        <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--color-border);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <h3 style="font-size: 16px; font-weight: 800; margin: 0;">Tournament Leaderboards & Cap Honors (S19)</h3>
+              <p style="font-size: 12px; color: var(--color-text-muted); margin: 2px 0 0;">Live statistical awards, cap leaders, and top-5 rankings aggregated across all matches</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button type="button" class="btn btn-secondary" id="btn-refresh-leaderboard" onclick="refreshTournamentLeaderboards()" style="font-size: 11px; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Recalculate tournament player statistics and rankings">
+                🔄 Recalculate Honors
+              </button>
+            </div>
+          </div>
+
+          <!-- 4 Cap Honors Podium Cards -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 20px;">
             <!-- Orange Cap -->
-            <div style="background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%); border: 1px solid #fdba74; border-radius: var(--radius-md); padding: 16px;">
-              <div style="font-size: 11px; font-weight: 800; color: #c2410c; text-transform: uppercase;">Orange Cap (Most Runs)</div>
-              <div style="font-size: 18px; font-weight: 800; margin: 6px 0;" id="leader-orange-name">Rohit Sharma</div>
-              <div style="font-size: 13px; color: #7c2d12; font-family: var(--font-mono); font-weight: 600;" id="leader-orange-stats">184 runs • SR 152.4</div>
+            <div style="background: linear-gradient(135deg, rgba(251, 146, 60, 0.15) 0%, rgba(254, 215, 170, 0.25) 100%); border: 1px solid #fdba74; border-radius: var(--radius-md); padding: 14px; position: relative;" data-tooltip="Orange Cap awarded to the leading run scorer of the tournament">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 11px; font-weight: 800; color: #c2410c; text-transform: uppercase; letter-spacing: 0.5px;">🧢 Orange Cap</span>
+                <span style="font-size: 10px; background: #ea580c; color: #fff; font-weight: 800; padding: 2px 6px; border-radius: var(--radius-pill);">RUNS LEADER</span>
+              </div>
+              <div style="font-size: 18px; font-weight: 800; margin: 8px 0 2px;" id="leader-orange-name">Rohit Sharma</div>
+              <div style="font-size: 12px; color: #9a3412; font-family: var(--font-mono); font-weight: 600;" id="leader-orange-stats">184 runs • SR 152.1 • Mumbai Strikers</div>
             </div>
+
             <!-- Purple Cap -->
-            <div style="background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%); border: 1px solid #d8b4fe; border-radius: var(--radius-md); padding: 16px;">
-              <div style="font-size: 11px; font-weight: 800; color: #7e22ce; text-transform: uppercase;">Purple Cap (Most Wickets)</div>
-              <div style="font-size: 18px; font-weight: 800; margin: 6px 0;" id="leader-purple-name">Jasprit Bumrah</div>
-              <div style="font-size: 13px; color: #581c87; font-family: var(--font-mono); font-weight: 600;" id="leader-purple-stats">8 wkts • Eco 5.40</div>
+            <div style="background: linear-gradient(135deg, rgba(192, 132, 252, 0.15) 0%, rgba(233, 213, 255, 0.25) 100%); border: 1px solid #d8b4fe; border-radius: var(--radius-md); padding: 14px; position: relative;" data-tooltip="Purple Cap awarded to the leading wicket taker of the tournament">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 11px; font-weight: 800; color: #7e22ce; text-transform: uppercase; letter-spacing: 0.5px;">🧢 Purple Cap</span>
+                <span style="font-size: 10px; background: #9333ea; color: #fff; font-weight: 800; padding: 2px 6px; border-radius: var(--radius-pill);">WKTS LEADER</span>
+              </div>
+              <div style="font-size: 18px; font-weight: 800; margin: 8px 0 2px;" id="leader-purple-name">Jasprit Bumrah</div>
+              <div style="font-size: 12px; color: #6b21a8; font-family: var(--font-mono); font-weight: 600;" id="leader-purple-stats">8 wkts • Eco 5.38 • Mumbai Strikers</div>
             </div>
+
             <!-- MVP -->
-            <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 1px solid #86efac; border-radius: var(--radius-md); padding: 16px;">
-              <div style="font-size: 11px; font-weight: 800; color: #15803d; text-transform: uppercase;">Tournament MVP</div>
-              <div style="font-size: 18px; font-weight: 800; margin: 6px 0;" id="leader-mvp-name">Hardik Pandya</div>
-              <div style="font-size: 13px; color: #14532d; font-family: var(--font-mono); font-weight: 600;" id="leader-mvp-stats">112 pts • All-round</div>
+            <div style="background: linear-gradient(135deg, rgba(74, 222, 128, 0.15) 0%, rgba(187, 247, 208, 0.25) 100%); border: 1px solid #86efac; border-radius: var(--radius-md); padding: 14px; position: relative;" data-tooltip="Tournament MVP calculated from runs, boundaries, wickets, and catches">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 11px; font-weight: 800; color: #15803d; text-transform: uppercase; letter-spacing: 0.5px;">🏆 Tournament MVP</span>
+                <span style="font-size: 10px; background: #16a34a; color: #fff; font-weight: 800; padding: 2px 6px; border-radius: var(--radius-pill);">ALL-ROUND</span>
+              </div>
+              <div style="font-size: 18px; font-weight: 800; margin: 8px 0 2px;" id="leader-mvp-name">Hardik Pandya</div>
+              <div style="font-size: 12px; color: #166534; font-family: var(--font-mono); font-weight: 600;" id="leader-mvp-stats">252 pts • 112r & 5w • Mumbai Strikers</div>
+            </div>
+
+            <!-- Maximum Sixes -->
+            <div style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(186, 230, 253, 0.25) 100%); border: 1px solid #7dd3fc; border-radius: var(--radius-md); padding: 14px; position: relative;" data-tooltip="Awarded to player with most sixes hit in the tournament">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 11px; font-weight: 800; color: #0369a1; text-transform: uppercase; letter-spacing: 0.5px;">🚀 Maximum Sixes</span>
+                <span style="font-size: 10px; background: #0284c7; color: #fff; font-weight: 800; padding: 2px 6px; border-radius: var(--radius-pill);">SIXES KING</span>
+              </div>
+              <div style="font-size: 18px; font-weight: 800; margin: 8px 0 2px;" id="leader-sixes-name">Rohit Sharma</div>
+              <div style="font-size: 12px; color: #075985; font-family: var(--font-mono); font-weight: 600;" id="leader-sixes-stats">9 sixes • SR 152.1 • Mumbai Strikers</div>
+            </div>
+          </div>
+
+          <!-- Top-5 Rankings Table Section -->
+          <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+              <h4 style="font-size: 14px; font-weight: 800; margin: 0;">Statistical Leaderboards (Top 5)</h4>
+              <div style="display: flex; gap: 6px;">
+                <button type="button" class="btn btn-secondary active" id="btn-tab-leader-batting" onclick="switchLeaderboardTab('batting')" style="font-size: 11px; padding: 4px 10px; font-weight: 700;" data-tooltip="View top 5 tournament run scorers and strike rates">
+                  🏏 Batting Top 5
+                </button>
+                <button type="button" class="btn btn-secondary" id="btn-tab-leader-bowling" onclick="switchLeaderboardTab('bowling')" style="font-size: 11px; padding: 4px 10px; font-weight: 700;" data-tooltip="View top 5 tournament wicket takers and economy rates">
+                  🎯 Bowling Top 5
+                </button>
+              </div>
+            </div>
+
+            <!-- Batting View -->
+            <div id="leader-view-batting">
+              <table class="data-table" style="width: 100%;">
+                <thead>
+                  <tr>
+                    <th class="num" style="width: 40px;">Rank</th>
+                    <th>Player</th>
+                    <th>Team</th>
+                    <th class="num">Runs</th>
+                    <th class="num">Balls</th>
+                    <th class="num">4s</th>
+                    <th class="num">6s</th>
+                    <th class="num">Strike Rate</th>
+                  </tr>
+                </thead>
+                <tbody id="tournament-batting-leaderboard-tbody"></tbody>
+              </table>
+            </div>
+
+            <!-- Bowling View -->
+            <div id="leader-view-bowling" style="display: none;">
+              <table class="data-table" style="width: 100%;">
+                <thead>
+                  <tr>
+                    <th class="num" style="width: 40px;">Rank</th>
+                    <th>Player</th>
+                    <th>Team</th>
+                    <th class="num">Wickets</th>
+                    <th class="num">Overs</th>
+                    <th class="num">Runs Conc.</th>
+                    <th class="num">Economy</th>
+                    <th class="num">Maidens</th>
+                  </tr>
+                </thead>
+                <tbody id="tournament-bowling-leaderboard-tbody"></tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -3860,6 +3946,10 @@
         updateTournamentStandingsFromMatchResult(winnerName, loserName, false);
       }
 
+      // Auto-update Tournament Leaderboards
+      commitMatchPlayerStatsToTournament();
+      renderTournamentLeaderboards();
+
       // MVP Calculation
       computeMVP();
       document.getElementById('match-result-modal').classList.add('open');
@@ -4751,6 +4841,18 @@
             { id: "f2", match: "Bangalore Blasters vs Chennai Challengers", date: "Oct 16, 02:00 PM", ground: "Gymkhana, Bengaluru", status: "Upcoming" },
             { id: "f3", match: "Ahmedabad Lions vs Mumbai Strikers", date: "Oct 18, 09:30 AM", ground: "Sardar Ground, Ahmedabad", status: "Upcoming" },
             { id: "f4", match: "Delhi Dynamos vs Bangalore Blasters", date: "Oct 19, 02:00 PM", ground: "Feroz Shah Ground, Delhi", status: "Upcoming" }
+          ],
+          playerStats: [
+            { id: "A1", name: "Rohit Sharma", team: "Mumbai Strikers", runs: 184, balls: 121, fours: 22, sixes: 9, wickets: 0, overs: "0.0", runsConceded: 0, maidens: 0, catches: 2 },
+            { id: "B1", name: "Virat Kohli", team: "Bangalore Blasters", runs: 168, balls: 118, fours: 19, sixes: 6, wickets: 0, overs: "0.0", runsConceded: 0, maidens: 0, catches: 3 },
+            { id: "A3", name: "Suryakumar Yadav", team: "Mumbai Strikers", runs: 142, balls: 88, fours: 14, sixes: 8, wickets: 0, overs: "0.0", runsConceded: 0, maidens: 0, catches: 1 },
+            { id: "A4", name: "Hardik Pandya", team: "Mumbai Strikers", runs: 112, balls: 68, fours: 10, sixes: 5, wickets: 5, overs: "8.0", runsConceded: 58, maidens: 1, catches: 2 },
+            { id: "B2", name: "Faf du Plessis", team: "Bangalore Blasters", runs: 105, balls: 72, fours: 11, sixes: 4, wickets: 0, overs: "0.0", runsConceded: 0, maidens: 0, catches: 2 },
+            { id: "B4", name: "Glenn Maxwell", team: "Bangalore Blasters", runs: 94, balls: 54, fours: 8, sixes: 6, wickets: 3, overs: "6.0", runsConceded: 44, maidens: 0, catches: 2 },
+            { id: "A8", name: "Jasprit Bumrah", team: "Mumbai Strikers", runs: 8, balls: 6, fours: 1, sixes: 0, wickets: 8, overs: "8.0", runsConceded: 43, maidens: 2, catches: 1 },
+            { id: "B8", name: "Mohammed Siraj", team: "Bangalore Blasters", runs: 4, balls: 5, fours: 0, sixes: 0, wickets: 6, overs: "7.4", runsConceded: 52, maidens: 0, catches: 0 },
+            { id: "B9", name: "Yuzvendra Chahal", team: "Bangalore Blasters", runs: 2, balls: 3, fours: 0, sixes: 0, wickets: 5, overs: "8.0", runsConceded: 48, maidens: 1, catches: 1 },
+            { id: "A11", name: "Trent Boult", team: "Mumbai Strikers", runs: 6, balls: 4, fours: 1, sixes: 0, wickets: 5, overs: "8.0", runsConceded: 54, maidens: 1, catches: 1 }
           ]
         }
       ]
@@ -4814,6 +4916,7 @@
     function renderTournamentView() {
       renderTournamentFixtures();
       renderTournamentStandings();
+      renderTournamentLeaderboards();
     }
 
     function renderTournamentFixtures() {
@@ -4964,6 +5067,241 @@
       // Re-render table & broadcast stream
       renderTournamentStandings();
       broadcastTournamentStandingsStream(1045);
+      commitMatchPlayerStatsToTournament();
+      renderTournamentLeaderboards();
+    }
+
+    // ------------------------------------------------------------------------
+    // TOURNAMENT LEADERBOARDS & CAP HONORS ENGINE (Track 5 / S19)
+    // ------------------------------------------------------------------------
+    function getAggregatedTournamentPlayerStats() {
+      const t = tournamentState.tournaments[0];
+      if (!t) return [];
+      const baseStats = t.playerStats ? JSON.parse(JSON.stringify(t.playerStats)) : [];
+      const statsMap = {};
+      baseStats.forEach(p => {
+        statsMap[p.id] = { ...p };
+      });
+
+      // Merge active match stats from innings 1 & innings 2
+      const teamAName = state.match.teamA || "Mumbai Strikers";
+      const teamBName = state.match.teamB || "Bangalore Blasters";
+
+      const processInnings = (inn) => {
+        if (!inn) return;
+        const batTeamName = inn.battingTeam === 'A' ? teamAName : teamBName;
+        const bowlTeamName = inn.bowlingTeam === 'A' ? teamAName : teamBName;
+
+        // Process Batters
+        if (inn.batters) {
+          Object.values(inn.batters).forEach(b => {
+            if (!b || (!b.runs && !b.balls)) return;
+            if (!statsMap[b.id]) {
+              statsMap[b.id] = {
+                id: b.id,
+                name: b.name,
+                team: batTeamName,
+                runs: 0,
+                balls: 0,
+                fours: 0,
+                sixes: 0,
+                wickets: 0,
+                overs: "0.0",
+                runsConceded: 0,
+                maidens: 0,
+                catches: 0
+              };
+            }
+            statsMap[b.id].runs += (b.runs || 0);
+            statsMap[b.id].balls += (b.balls || 0);
+            statsMap[b.id].fours += (b.fours || 0);
+            statsMap[b.id].sixes += (b.sixes || 0);
+          });
+        }
+
+        // Process Bowlers
+        if (inn.bowlers) {
+          Object.values(inn.bowlers).forEach(bw => {
+            if (!bw || (!bw.legalBalls && !bw.runsConceded && !bw.wickets)) return;
+            if (!statsMap[bw.id]) {
+              statsMap[bw.id] = {
+                id: bw.id,
+                name: bw.name,
+                team: bowlTeamName,
+                runs: 0,
+                balls: 0,
+                fours: 0,
+                sixes: 0,
+                wickets: 0,
+                overs: "0.0",
+                runsConceded: 0,
+                maidens: 0,
+                catches: 0
+              };
+            }
+            statsMap[bw.id].wickets += (bw.wickets || 0);
+            statsMap[bw.id].runsConceded += (bw.runsConceded || 0);
+            statsMap[bw.id].maidens += (bw.maidens || 0);
+            const prevOversVal = parseFloat(statsMap[bw.id].overs) || 0;
+            const prevBalls = Math.floor(prevOversVal) * 6 + Math.round((prevOversVal % 1) * 10);
+            const totalBalls = prevBalls + (bw.legalBalls || 0);
+            const newOvers = Math.floor(totalBalls / 6) + ((totalBalls % 6) / 10);
+            statsMap[bw.id].overs = newOvers.toFixed(1);
+          });
+        }
+      };
+
+      processInnings(state.innings1);
+      processInnings(state.innings2);
+
+      // Compute derived metrics
+      return Object.values(statsMap).map(p => {
+        const sr = p.balls > 0 ? ((p.runs / p.balls) * 100).toFixed(1) : "0.0";
+        const oversFloat = parseFloat(p.overs) || 0;
+        const eco = oversFloat > 0 ? (p.runsConceded / oversFloat).toFixed(2) : "0.00";
+        const mvp = (p.runs * 1.0) + (p.fours * 1.0) + (p.sixes * 2.0) + (p.wickets * 20.0) + (p.maidens * 10.0) + ((p.catches || 0) * 10.0);
+        return {
+          ...p,
+          strikeRate: sr,
+          economy: eco,
+          mvpPoints: Math.round(mvp)
+        };
+      });
+    }
+
+    function renderTournamentLeaderboards() {
+      const stats = getAggregatedTournamentPlayerStats();
+      if (!stats.length) return;
+
+      // 1. Calculate Cap Honors
+      // Orange Cap: Highest runs (tiebreaker: higher strike rate)
+      const battingRanked = [...stats].sort((a, b) => {
+        if (b.runs !== a.runs) return b.runs - a.runs;
+        return parseFloat(b.strikeRate) - parseFloat(a.strikeRate);
+      });
+      const orangeCap = battingRanked[0];
+
+      // Purple Cap: Highest wickets (tiebreaker: lower economy rate)
+      const bowlingRanked = [...stats].filter(p => p.wickets > 0 || parseFloat(p.overs) > 0).sort((a, b) => {
+        if (b.wickets !== a.wickets) return b.wickets - a.wickets;
+        return parseFloat(a.economy) - parseFloat(b.economy);
+      });
+      const purpleCap = bowlingRanked[0] || stats[0];
+
+      // MVP: Highest MVP Points
+      const mvpRanked = [...stats].sort((a, b) => b.mvpPoints - a.mvpPoints);
+      const mvpLeader = mvpRanked[0];
+
+      // Maximum Sixes King
+      const sixesRanked = [...stats].sort((a, b) => b.sixes - a.sixes);
+      const sixesLeader = sixesRanked[0];
+
+      // Update Podium Card DOM Elements
+      const orangeName = document.getElementById('leader-orange-name');
+      const orangeStats = document.getElementById('leader-orange-stats');
+      if (orangeName && orangeCap) {
+        orangeName.textContent = orangeCap.name;
+        orangeStats.textContent = `${orangeCap.runs} runs • SR ${orangeCap.strikeRate} • ${orangeCap.team}`;
+      }
+
+      const purpleName = document.getElementById('leader-purple-name');
+      const purpleStats = document.getElementById('leader-purple-stats');
+      if (purpleName && purpleCap) {
+        purpleName.textContent = purpleCap.name;
+        purpleStats.textContent = `${purpleCap.wickets} wkts • Eco ${purpleCap.economy} • ${purpleCap.team}`;
+      }
+
+      const mvpName = document.getElementById('leader-mvp-name');
+      const mvpStats = document.getElementById('leader-mvp-stats');
+      if (mvpName && mvpLeader) {
+        mvpName.textContent = mvpLeader.name;
+        mvpStats.textContent = `${mvpLeader.mvpPoints} pts • ${mvpLeader.runs}r & ${mvpLeader.wickets}w • ${mvpLeader.team}`;
+      }
+
+      const sixesName = document.getElementById('leader-sixes-name');
+      const sixesStats = document.getElementById('leader-sixes-stats');
+      if (sixesName && sixesLeader) {
+        sixesName.textContent = sixesLeader.name;
+        sixesStats.textContent = `${sixesLeader.sixes} sixes • SR ${sixesLeader.strikeRate} • ${sixesLeader.team}`;
+      }
+
+      // 2. Render Top 5 Tables
+      const batTbody = document.getElementById('tournament-batting-leaderboard-tbody');
+      if (batTbody) {
+        batTbody.innerHTML = '';
+        battingRanked.slice(0, 5).forEach((p, idx) => {
+          const isOrange = idx === 0;
+          batTbody.innerHTML += `
+            <tr style="${isOrange ? 'background: rgba(251, 146, 60, 0.1); font-weight: 700;' : ''}">
+              <td class="num">${isOrange ? '🧢 1' : idx + 1}</td>
+              <td><strong>${p.name}</strong> ${isOrange ? '<span style="font-size: 10px; color: #ea580c; font-weight: 800;">[ORANGE CAP]</span>' : ''}</td>
+              <td><span style="font-size: 11px; color: var(--color-text-muted);">${p.team}</span></td>
+              <td class="num"><strong>${p.runs}</strong></td>
+              <td class="num">${p.balls}</td>
+              <td class="num">${p.fours}</td>
+              <td class="num">${p.sixes}</td>
+              <td class="num" style="color: var(--color-accent); font-weight: 700;">${p.strikeRate}</td>
+            </tr>
+          `;
+        });
+      }
+
+      const bowlTbody = document.getElementById('tournament-bowling-leaderboard-tbody');
+      if (bowlTbody) {
+        bowlTbody.innerHTML = '';
+        bowlingRanked.slice(0, 5).forEach((p, idx) => {
+          const isPurple = idx === 0;
+          bowlTbody.innerHTML += `
+            <tr style="${isPurple ? 'background: rgba(168, 85, 247, 0.1); font-weight: 700;' : ''}">
+              <td class="num">${isPurple ? '🧢 1' : idx + 1}</td>
+              <td><strong>${p.name}</strong> ${isPurple ? '<span style="font-size: 10px; color: #7e22ce; font-weight: 800;">[PURPLE CAP]</span>' : ''}</td>
+              <td><span style="font-size: 11px; color: var(--color-text-muted);">${p.team}</span></td>
+              <td class="num"><strong>${p.wickets}</strong></td>
+              <td class="num">${p.overs}</td>
+              <td class="num">${p.runsConceded}</td>
+              <td class="num" style="color: var(--color-primary); font-weight: 700;">${p.economy}</td>
+              <td class="num">${p.maidens || 0}</td>
+            </tr>
+          `;
+        });
+      }
+    }
+
+    function switchLeaderboardTab(tab) {
+      const btnBat = document.getElementById('btn-tab-leader-batting');
+      const btnBowl = document.getElementById('btn-tab-leader-bowling');
+      const viewBat = document.getElementById('leader-view-batting');
+      const viewBowl = document.getElementById('leader-view-bowling');
+
+      if (btnBat) btnBat.classList.toggle('active', tab === 'batting');
+      if (btnBowl) btnBowl.classList.toggle('active', tab === 'bowling');
+      if (viewBat) viewBat.style.display = (tab === 'batting') ? 'block' : 'none';
+      if (viewBowl) viewBowl.style.display = (tab === 'bowling') ? 'block' : 'none';
+    }
+
+    function refreshTournamentLeaderboards() {
+      renderTournamentLeaderboards();
+      showToast("🏆 Tournament Leaderboards & Cap Honors updated!");
+    }
+
+    function commitMatchPlayerStatsToTournament() {
+      const t = tournamentState.tournaments[0];
+      if (!t) return;
+      const aggregated = getAggregatedTournamentPlayerStats();
+      t.playerStats = aggregated.map(p => ({
+        id: p.id,
+        name: p.name,
+        team: p.team,
+        runs: p.runs,
+        balls: p.balls,
+        fours: p.fours,
+        sixes: p.sixes,
+        wickets: p.wickets,
+        overs: String(p.overs),
+        runsConceded: p.runsConceded,
+        maidens: p.maidens,
+        catches: p.catches || 0
+      }));
     }
 
     // ------------------------------------------------------------------------
