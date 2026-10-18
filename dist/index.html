@@ -1573,6 +1573,9 @@
             <button class="btn btn-secondary" id="btn-dls-modal" style="background: rgba(14,165,233,0.25); border: 1px solid rgba(14,165,233,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openDlsModal()" data-tooltip="Duckworth-Lewis-Stern (DLS) rain rule & revised target calculator">
               🌧️ Rain / DLS
             </button>
+            <button class="btn btn-secondary" id="btn-voice-commentary-toggle" style="background: rgba(168,85,247,0.25); border: 1px solid rgba(168,85,247,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="toggleVoiceCommentary()" data-tooltip="Toggle live audio speech synthesis commentary for balls and wickets">
+              🔇 Voice: OFF
+            </button>
           </div>
         </div>
 
@@ -1931,8 +1934,18 @@
           </div>
         </div>
 
-        <!-- Commentary Stream -->
-        <h3 style="font-size: 15px; font-weight: 800; margin: 24px 0 10px;">Ball-by-Ball Commentary</h3>
+        <!-- Commentary Stream Header & Audio Recap -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin: 24px 0 10px; flex-wrap: wrap; gap: 8px;">
+          <h3 style="font-size: 15px; font-weight: 800; margin: 0;">Ball-by-Ball Commentary</h3>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button type="button" class="btn btn-secondary" id="btn-speak-over-recap" onclick="speakOverAudioRecap()" style="font-size: 11px; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Listen to live audio speech commentary recap of the latest over">
+              🎧 Audio Over Recap
+            </button>
+            <button type="button" class="btn btn-secondary" id="btn-voice-commentary-s13" onclick="toggleVoiceCommentary()" style="font-size: 11px; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-pill);" data-tooltip="Toggle live audio speech synthesis">
+              🔇 Voice: OFF
+            </button>
+          </div>
+        </div>
         <div id="commentary-list"></div>
       </div>
     </div>
@@ -3185,7 +3198,13 @@
           contactName: "Sameer Khan",
           contactPhone: "+91 97690 99887"
         }
-      ]
+      ],
+      audioCommentary: {
+        enabled: false,
+        rate: 1.05,
+        pitch: 1.0,
+        volume: 1.0
+      }
     };
 
     // ------------------------------------------------------------------------
@@ -3448,6 +3467,7 @@
       state.currentLive.pendingWagonWheel = null;
       inn.deliveries.push(deliveryRecord);
       state.currentLive.currentOverDeliveries.push(deliveryRecord);
+      speakDeliveryCommentary(deliveryRecord);
 
       // Reset Free Hit on next legal ball
       state.currentLive.freeHitActive = false;
@@ -3521,6 +3541,7 @@
       };
       inn.deliveries.push(deliveryRecord);
       state.currentLive.currentOverDeliveries.push(deliveryRecord);
+      speakDeliveryCommentary(deliveryRecord);
 
       if (isLegal) {
         checkInningsOrOverCompletion();
@@ -3639,6 +3660,7 @@
       };
       inn.deliveries.push(deliveryRecord);
       state.currentLive.currentOverDeliveries.push(deliveryRecord);
+      speakDeliveryCommentary(deliveryRecord);
 
       // Assign incoming batter
       if (nextId) {
@@ -3999,9 +4021,231 @@
       // Update Live Match Win Predictor HUD
       updateWinPredictor();
 
+      // Update Live Voice Commentary HUD State
+      updateVoiceCommentaryUI();
+
       // Sync with OBS live overlay & CricHeroes MQTT bridge
       if (typeof broadcastLiveState === 'function') {
         broadcastLiveState();
+      }
+    }
+
+    // ------------------------------------------------------------------------
+    // CRICKET FIELD ZONES & REAL-TIME VOICE COMMENTARY SYNTHESIZER (Track 4)
+    // ------------------------------------------------------------------------
+    const CRIC_ZONES = [
+      { id: "1", name: "Fine Leg", minDeg: 0, maxDeg: 45 },
+      { id: "2", name: "Square Leg", minDeg: 45, maxDeg: 90 },
+      { id: "3", name: "Mid-Wicket", minDeg: 90, maxDeg: 135 },
+      { id: "4", name: "Long-On", minDeg: 135, maxDeg: 180 },
+      { id: "5", name: "Long-Off", minDeg: 180, maxDeg: 225 },
+      { id: "6", name: "Extra Cover", minDeg: 225, maxDeg: 270 },
+      { id: "7", name: "Cover", minDeg: 270, maxDeg: 315 },
+      { id: "8", name: "Point / 3rd Man", minDeg: 315, maxDeg: 360 }
+    ];
+
+    const CRICKET_ZONE_NAMES = {
+      "1": "Fine Leg",
+      "2": "Square Leg",
+      "3": "Mid-Wicket",
+      "4": "Long-On",
+      "5": "Long-Off",
+      "6": "Extra Cover",
+      "7": "Cover",
+      "8": "Point / 3rd Man"
+    };
+
+    function getZoneFromAngle(deg) {
+      const normalized = ((deg % 360) + 360) % 360;
+      for (const z of CRIC_ZONES) {
+        if (normalized >= z.minDeg && normalized < z.maxDeg) return z;
+      }
+      return CRIC_ZONES[0];
+    }
+
+    function getDefaultWagonWheel(runs) {
+      let zoneId = "4";
+      let deg = 154;
+      let pct = runs >= 6 ? 115 : runs === 4 ? 105 : runs > 0 ? 55 : 20;
+      if (runs === 4) { zoneId = "6"; deg = 248; }
+      else if (runs === 6) { zoneId = "3"; deg = 112; }
+      else if (runs === 1) { zoneId = "7"; deg = 292; }
+      else if (runs === 2) { zoneId = "2"; deg = 68; }
+      const zone = CRIC_ZONES.find(z => z.id === zoneId) || CRIC_ZONES[3];
+      return {
+        wagon_part: zoneId,
+        wagon_degrees: String(deg),
+        wagon_percentage: String(pct),
+        wagon_height: runs >= 6 ? "air" : "ground",
+        zone_name: zone.name,
+        runs: runs
+      };
+    }
+
+    function generateBallCommentary(d, inn) {
+      if (!d) return "";
+      inn = inn || getCurrentInnings();
+      const striker = (inn && inn.batters && inn.batters[d.strikerId]) ? inn.batters[d.strikerId].name : 'Batter';
+      const bowler = (inn && inn.bowlers && inn.bowlers[d.bowlerId]) ? inn.bowlers[d.bowlerId].name : 'Bowler';
+
+      let zoneName = "";
+      if (d.wagonWheel) {
+        if (d.wagonWheel.zone_name) {
+          zoneName = d.wagonWheel.zone_name;
+        } else if (d.wagonWheel.wagon_part) {
+          const z = CRIC_ZONES.find(item => item.id === String(d.wagonWheel.wagon_part));
+          if (z) zoneName = z.name;
+        }
+      }
+
+      if (d.isWicket) {
+        return `OUT! Wicket falls! ${striker} has to depart. Great delivery by ${bowler}!`;
+      }
+      if (d.isExtra) {
+        if (d.extraType === 'wide') {
+          return `Wide ball called against ${bowler}. One extra run added to the score.`;
+        }
+        if (d.extraType === 'no_ball') {
+          return `No ball called against ${bowler}! Free hit awarded to ${striker}.`;
+        }
+        if (d.extraType === 'bye') {
+          return `Bye taken. Good alertness by ${striker} and the batting pair.`;
+        }
+        if (d.extraType === 'leg_bye') {
+          return `Leg bye taken off the pads. Deflected away safely.`;
+        }
+        return `Extra conceded (${d.extraType}). Run added to the total.`;
+      }
+      if (d.runs === 4) {
+        return zoneName
+          ? `FOUR! Beautifully timed by ${striker} through ${zoneName}, races away to the boundary rope!`
+          : `FOUR! Beautifully timed by ${striker}, races across the turf to the boundary rope!`;
+      }
+      if (d.runs === 6) {
+        return zoneName
+          ? `SIX! Smashed high and handsome over ${zoneName} by ${striker} for a maximum!`
+          : `SIX! Smashed high and handsome over deep mid-wicket by ${striker} for a maximum!`;
+      }
+      if (d.runs === 0) {
+        return `No run. Solid defensive stroke by ${striker}, gathered cleanly by the fielder.`;
+      }
+      if (d.runs === 1) {
+        return zoneName
+          ? `Single taken by ${striker} pushed towards ${zoneName}. Strike rotated.`
+          : `Single taken. Good running between the wickets by ${striker}.`;
+      }
+      return `${d.runs} runs taken. Nicely placed into the gap by ${striker}.`;
+    }
+
+    function speakCommentary(text) {
+      if (!text || typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.rate = (state.audioCommentary && state.audioCommentary.rate) || 1.05;
+        utter.pitch = (state.audioCommentary && state.audioCommentary.pitch) || 1.0;
+        utter.volume = (state.audioCommentary && state.audioCommentary.volume) || 1.0;
+        utter.lang = 'en-US';
+        window.speechSynthesis.speak(utter);
+      } catch (err) {
+        console.warn("Speech synthesis error:", err);
+      }
+    }
+
+    function speakDeliveryCommentary(deliveryRecord) {
+      if (!state.audioCommentary || !state.audioCommentary.enabled) return;
+      const inn = getCurrentInnings();
+      const text = generateBallCommentary(deliveryRecord, inn);
+      if (text) {
+        speakCommentary(text);
+      }
+    }
+
+    function speakOverAudioRecap() {
+      const inn = getCurrentInnings();
+      if (!inn || !inn.deliveries || inn.deliveries.length === 0) {
+        showToast("No deliveries in current innings to recap.");
+        speakCommentary("No deliveries recorded yet.");
+        return;
+      }
+
+      let overDeliveries = state.currentLive.currentOverDeliveries;
+      if (!overDeliveries || overDeliveries.length === 0) {
+        overDeliveries = inn.deliveries.slice(-6);
+      }
+      if (!overDeliveries.length) {
+        showToast("No deliveries found for over recap.");
+        return;
+      }
+
+      const lastBall = overDeliveries[overDeliveries.length - 1];
+      const overNumber = lastBall.overNum + 1;
+
+      let runsInOver = 0;
+      let wicketsInOver = 0;
+      const ballSummaries = [];
+
+      overDeliveries.forEach(d => {
+        runsInOver += d.runs || 0;
+        if (d.isExtra) {
+          if (d.extraType === 'wide' || d.extraType === 'no_ball') runsInOver += 1;
+          ballSummaries.push(d.extraType === 'wide' ? 'wide' : d.extraType === 'no_ball' ? 'no ball' : 'bye');
+        } else if (d.isWicket) {
+          wicketsInOver += 1;
+          ballSummaries.push('wicket');
+        } else if (d.runs === 0) {
+          ballSummaries.push('dot ball');
+        } else if (d.runs === 4) {
+          const zName = d.wagonWheel?.zone_name || (d.wagonWheel?.wagon_part && CRICKET_ZONE_NAMES[d.wagonWheel.wagon_part]);
+          ballSummaries.push(zName ? `four through ${zName}` : 'boundary four');
+        } else if (d.runs === 6) {
+          const zName = d.wagonWheel?.zone_name || (d.wagonWheel?.wagon_part && CRICKET_ZONE_NAMES[d.wagonWheel.wagon_part]);
+          ballSummaries.push(zName ? `six over ${zName}` : 'maximum six');
+        } else {
+          ballSummaries.push(`${d.runs} ${d.runs === 1 ? 'run' : 'runs'}`);
+        }
+      });
+
+      const recapText = `Over ${overNumber} recap. ${runsInOver} runs and ${wicketsInOver} ${wicketsInOver === 1 ? 'wicket' : 'wickets'}. Balls: ${ballSummaries.join(', ')}. Total score: ${inn.totalRuns} for ${inn.wickets} in ${formatOvers(inn.legalBalls)} overs.`;
+
+      showToast("Playing Audio Over Recap 🎧");
+      speakCommentary(recapText);
+    }
+
+    function updateVoiceCommentaryUI() {
+      const isEnabled = !!(state.audioCommentary && state.audioCommentary.enabled);
+      const btnHud = document.getElementById('btn-voice-commentary-toggle');
+      const btnS13 = document.getElementById('btn-voice-commentary-s13');
+      const text = isEnabled ? '🔊 Voice: ON' : '🔇 Voice: OFF';
+      const bg = isEnabled ? 'rgba(34, 197, 94, 0.25)' : 'rgba(168, 85, 247, 0.25)';
+      const border = isEnabled ? '1px solid rgba(34, 197, 94, 0.5)' : '1px solid rgba(168, 85, 247, 0.4)';
+
+      if (btnHud) {
+        btnHud.textContent = text;
+        btnHud.style.background = bg;
+        btnHud.style.border = border;
+      }
+      if (btnS13) {
+        btnS13.textContent = text;
+        btnS13.style.background = bg;
+        btnS13.style.border = border;
+      }
+    }
+
+    function toggleVoiceCommentary() {
+      if (!state.audioCommentary) {
+        state.audioCommentary = { enabled: false, rate: 1.05, pitch: 1.0, volume: 1.0 };
+      }
+      state.audioCommentary.enabled = !state.audioCommentary.enabled;
+      updateVoiceCommentaryUI();
+      if (!state.audioCommentary.enabled) {
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+        }
+        showToast("Voice commentary muted 🔇");
+      } else {
+        showToast("Voice commentary enabled 🔊");
+        speakCommentary("Live voice commentary active.");
       }
     }
 
@@ -4080,23 +4324,7 @@
         comList.innerHTML = '<div style="font-size: 13px; color: var(--color-text-muted); font-style: italic;">No commentary available yet.</div>';
       } else {
         revDeliveries.slice(0, 15).forEach(d => {
-          const btr = inn.batters[d.strikerId];
-          const bwl = inn.bowlers[d.bowlerId];
-          let desc = "";
-          if (d.isWicket) {
-            desc = `OUT! Wicket falls! ${btr ? btr.name : 'Batter'} has to depart. Great delivery by ${bwl ? bwl.name : 'bowler'}!`;
-          } else if (d.isExtra) {
-            desc = `Extra conceded (${d.extraType}). Run added to the total.`;
-          } else if (d.runs === 4) {
-            desc = `FOUR! Beautifully timed by ${btr ? btr.name : 'Batter'}, races across the turf to the boundary rope!`;
-          } else if (d.runs === 6) {
-            desc = `SIX! Smashed high and handsome over deep mid-wicket for a maximum!`;
-          } else if (d.runs === 0) {
-            desc = `No run. Solid defensive stroke, fielders gather cleanly.`;
-          } else {
-            desc = `${d.runs} run(s) taken. Good running between the wickets.`;
-          }
-
+          const desc = generateBallCommentary(d, inn);
           comList.innerHTML += `
             <div class="commentary-item">
               <div class="commentary-header">
@@ -4119,44 +4347,6 @@
     // ------------------------------------------------------------------------
     // WAGON WHEEL (S09) & VISUAL CHARTS ENGINE (S14)
     // ------------------------------------------------------------------------
-    const CRIC_ZONES = [
-      { id: "1", name: "Fine Leg", minDeg: 0, maxDeg: 45 },
-      { id: "2", name: "Square Leg", minDeg: 45, maxDeg: 90 },
-      { id: "3", name: "Mid-Wicket", minDeg: 90, maxDeg: 135 },
-      { id: "4", name: "Long-On", minDeg: 135, maxDeg: 180 },
-      { id: "5", name: "Long-Off", minDeg: 180, maxDeg: 225 },
-      { id: "6", name: "Extra Cover", minDeg: 225, maxDeg: 270 },
-      { id: "7", name: "Cover", minDeg: 270, maxDeg: 315 },
-      { id: "8", name: "Point / 3rd Man", minDeg: 315, maxDeg: 360 }
-    ];
-
-    function getZoneFromAngle(deg) {
-      const normalized = ((deg % 360) + 360) % 360;
-      for (const z of CRIC_ZONES) {
-        if (normalized >= z.minDeg && normalized < z.maxDeg) return z;
-      }
-      return CRIC_ZONES[0];
-    }
-
-    function getDefaultWagonWheel(runs) {
-      let zoneId = "4";
-      let deg = 154;
-      let pct = runs >= 6 ? 115 : runs === 4 ? 105 : runs > 0 ? 55 : 20;
-      if (runs === 4) { zoneId = "6"; deg = 248; }
-      else if (runs === 6) { zoneId = "3"; deg = 112; }
-      else if (runs === 1) { zoneId = "7"; deg = 292; }
-      else if (runs === 2) { zoneId = "2"; deg = 68; }
-      const zone = CRIC_ZONES.find(z => z.id === zoneId) || CRIC_ZONES[3];
-      return {
-        wagon_part: zoneId,
-        wagon_degrees: String(deg),
-        wagon_percentage: String(pct),
-        wagon_height: runs >= 6 ? "air" : "ground",
-        zone_name: zone.name,
-        runs: runs
-      };
-    }
-
     let wagonPlacement = {
       zoneId: "4",
       zoneName: "Long-On",

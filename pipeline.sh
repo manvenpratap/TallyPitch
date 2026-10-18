@@ -127,7 +127,7 @@ EOF
             exit 1
         fi
         "$0" package
-        git add -u
+        git add -A
         git commit -m "$MSG"
         git push origin "$(git rev-parse --abbrev-ref HEAD)"
         ;;
