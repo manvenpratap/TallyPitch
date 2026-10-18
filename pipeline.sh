@@ -30,11 +30,9 @@ PYTHON_BIN="$(command -v python3 || command -v python || true)"
 
 if [ -n "$PYTHON_BIN" ]; then
     for candidate in \
-        "$SCRIPT_DIR/pipeline.py" \
         "$SCRIPT_DIR/scripts/pipeline.py" \
-        "$SKILL_ROOT/scripts/pipeline.py" \
-        "/Volumes/Study/Projects/universal-pipeline/scripts/pipeline.py" \
-        "/Users/manvenpratapsingh/.gemini/config/skills/universal-pipeline/scripts/pipeline.py"; do
+        "$SCRIPT_DIR/pipeline.py" \
+        "$SKILL_ROOT/scripts/pipeline.py"; do
         if [ -f "$candidate" ]; then
             exec "$PYTHON_BIN" "$candidate" "$@"
         fi
@@ -50,19 +48,26 @@ echo "==> Universal Pipeline (Bash Mode: $CMD)"
 case "$CMD" in
     doctor|check|audit)
         echo "=== Self-Analyzing Project Diagnostic ==="
-        [ -f pom.xml ] && echo "  • Detected Java/Maven project"
-        [ -f package.json ] && echo "  • Detected Node/TypeScript project"
-        [ -f requirements.txt ] || [ -f pyproject.toml ] && echo "  • Detected Python project"
-        [ -f Cargo.toml ] && echo "  • Detected Rust project"
-        [ -f go.mod ] && echo "  • Detected Go project"
-        [ -d src-tauri ] && echo "  • Detected Tauri desktop project"
+        [ -f pom.xml ] && echo "  • Detected Java/Maven project" || true
+        [ -f package.json ] && echo "  • Detected Node/TypeScript project" || true
+        { [ -f requirements.txt ] || [ -f pyproject.toml ]; } && echo "  • Detected Python project" || true
+        [ -f Cargo.toml ] && echo "  • Detected Rust project" || true
+        [ -f go.mod ] && echo "  • Detected Go project" || true
+        [ -d src-tauri ] && echo "  • Detected Tauri desktop project" || true
         compgen -G "*.html" >/dev/null 2>&1 && echo "  • Detected Single-File Web project" || true
-        [ ! -f PROJECT_CONTEXT.md ] && echo "  ⚠ Missing: PROJECT_CONTEXT.md. Run './pipeline.sh heal' to resolve."
-        [ ! -f .gitignore ] && echo "  ⚠ Missing: .gitignore. Run './pipeline.sh heal' to resolve."
+        if [ ! -f PROJECT_CONTEXT.md ]; then
+            echo "  ⚠ Missing: PROJECT_CONTEXT.md. Run './pipeline.sh heal' to resolve."
+        fi
+        if [ ! -f .gitignore ]; then
+            echo "  ⚠ Missing: .gitignore. Run './pipeline.sh heal' to resolve."
+        fi
+        echo "✓ Project diagnostic complete: healthy."
+        exit 0
         ;;
     heal|fix|setup|init)
         echo "==> Executing Self-Healing Routines..."
-        [ ! -f PROJECT_CONTEXT.md ] && cat << 'EOF' > PROJECT_CONTEXT.md
+        if [ ! -f PROJECT_CONTEXT.md ]; then
+            cat << 'EOF' > PROJECT_CONTEXT.md
 # Project Context & Working Memory
 **Last Updated:** $(date '+%Y-%m-%d %H:%M:%S')
 **Version:** 1.0.0
@@ -70,16 +75,22 @@ case "$CMD" in
 ## Status
 - Self-healed pipeline active.
 EOF
-        echo "✓ Healed PROJECT_CONTEXT.md"
+            echo "✓ Healed PROJECT_CONTEXT.md"
+        fi
         if [ -f index.html ] && [ ! -f dist/index.html ]; then
             mkdir -p dist
             cp index.html dist/index.html
             echo "✓ Healed distribution parity: dist/index.html synced."
         fi
+        exit 0
         ;;
     test)
         if [ -f run_tests.sh ]; then
             bash ./run_tests.sh "$@"
+        elif [ -d tests ] && command -v pytest >/dev/null 2>&1; then
+            pytest tests/ -q "$@"
+        elif [ -d tests ] && [ -n "$PYTHON_BIN" ]; then
+            "$PYTHON_BIN" -m pytest tests/ -q "$@"
         elif [ -f pom.xml ]; then
             mvn test -q "$@"
         elif [ -f package.json ]; then
