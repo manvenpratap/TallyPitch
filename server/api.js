@@ -5,7 +5,7 @@ const http = require('http');
 const { parse } = require('url');
 const { supabaseAdmin } = require('./db');
 const { sendPhoneOTP, verifyPhoneOTP } = require('./auth');
-const { setupRealtimeServer, broadcastMatchEvent } = require('./realtime');
+const { setupRealtimeServer, broadcastMatchEvent, broadcastTournamentStandings } = require('./realtime');
 const { createProCheckoutSession, handleStripeWebhook } = require('./stripe');
 
 const PORT = process.env.PORT || 4000;
@@ -263,7 +263,26 @@ async function requestHandler(req, res) {
         .order('net_run_rate', { ascending: false });
 
       if (error) throw error;
-      return sendJSON(res, 200, { tournamentId, standings });
+      return sendJSON(res, 200, {
+        tournamentId,
+        standings,
+        stream: {
+          mqttTopic: `cricheroes/tournaments/${tournamentId}/standings`,
+          wsEndpoint: `ws://${req.headers.host || 'localhost:4000'}/mqtt`,
+        },
+      });
+    }
+
+    // 9b. Tournament Standings Live Stream Broadcast Event Push (MQTT Stream)
+    if (req.method === 'POST' && pathname.match(/^\/api\/tournaments\/([^/]+)\/standings\/broadcast$/)) {
+      const tournamentId = pathname.split('/')[3];
+      const body = await readBody(req);
+      const broadcasted = broadcastTournamentStandings(tournamentId, body);
+      return sendJSON(res, 200, {
+        success: true,
+        topic: `cricheroes/tournaments/${tournamentId}/standings`,
+        broadcasted,
+      });
     }
 
     // 10. Stripe Pro Checkout Session

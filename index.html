@@ -2032,8 +2032,24 @@
 
         <!-- S18: Dynamic Points Table with Net Run Rate (NRR) -->
         <div style="margin-bottom: 24px;">
-          <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 8px;">Dynamic Points Table & ICC Net Run Rate (S18)</h3>
-          <p style="font-size: 12px; color: var(--color-text-muted); margin-bottom: 12px;">Top 2 teams advance to Semi-Finals. Tie-breaker sorted by automated Net Run Rate (NRR).</p>
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
+            <div>
+              <h3 style="font-size: 16px; font-weight: 800; margin: 0;">Dynamic Points Table & ICC Net Run Rate (S18)</h3>
+              <p style="font-size: 12px; color: var(--color-text-muted); margin: 4px 0 0 0;">Top 2 teams advance to Semi-Finals. Tie-breaker sorted by automated Net Run Rate (NRR).</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div id="tournament-stream-badge" class="badge-status-online" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; font-size: 11px; font-weight: 700;" data-tooltip="Live tournament standings stream: cricheroes/tournaments/1045/standings">
+                <span class="live-pulse" style="width: 7px; height: 7px; border-radius: 50%; background: #22c55e; display: inline-block;"></span>
+                <span>MQTT Stream: <code style="font-size: 10px; color: inherit;">cricheroes/.../standings</code></span>
+              </div>
+              <button type="button" class="btn btn-secondary" id="btn-sync-standings-stream" onclick="pushManualTournamentStandingsBroadcast()" style="font-size: 11px; padding: 4px 8px; font-weight: 700;" data-tooltip="Push current standings to CricHeroes MQTT stream">
+                📡 Push Stream
+              </button>
+            </div>
+          </div>
+          <div id="tournament-stream-status" style="font-size: 11px; color: var(--color-text-muted); margin-bottom: 8px; font-family: var(--font-mono);">
+            Topic: <code>cricheroes/tournaments/1045/standings</code> • Status: Connected (0ms sync)
+          </div>
           <table class="scorecard-table">
             <thead>
               <tr>
@@ -3172,6 +3188,8 @@
         renderCommunityBoard();
       } else if (screenId === 'teams-profiles') {
         renderSelectedPlayerCareer();
+      } else if (screenId === 'tournaments') {
+        renderTournamentView();
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -3726,6 +3744,14 @@
 
       document.getElementById('winner-modal-title').textContent = winnerName === "Match Tied" ? "Match Tied!" : `${winnerName} Victory!`;
       document.getElementById('winner-modal-desc').textContent = `${winnerName} ${margin}`;
+
+      // Auto-update Tournament Standings & Broadcast stream
+      if (winnerName === "Match Tied") {
+        updateTournamentStandingsFromMatchResult(teamAName, teamBName, true);
+      } else {
+        const loserName = winnerName === teamAName ? teamBName : teamAName;
+        updateTournamentStandingsFromMatchResult(winnerName, loserName, false);
+      }
 
       // MVP Calculation
       computeMVP();
@@ -4532,12 +4558,15 @@
 
     function renderTournamentStandings() {
       const tbody = document.getElementById('tournament-standings-tbody');
+      if (!tbody) return;
       const t = tournamentState.tournaments[0];
+      if (!t || !Array.isArray(t.standings)) return;
       tbody.innerHTML = '';
       t.standings.forEach(s => {
         const isQualified = s.pos <= 2;
+        const rowId = `standing-row-${s.team.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`;
         tbody.innerHTML += `
-          <tr style="${isQualified ? 'border-left: 3px solid var(--color-accent);' : ''}">
+          <tr id="${rowId}" style="${isQualified ? 'border-left: 3px solid var(--color-accent);' : ''}">
             <td><strong>${s.pos}</strong></td>
             <td><strong>${s.team}</strong> ${isQualified ? '<span style="font-size: 10px; color: var(--color-accent);">[Q]</span>' : ''}</td>
             <td class="num">${s.p}</td>
@@ -4546,10 +4575,120 @@
             <td class="num">${s.t}</td>
             <td class="num">${s.nr}</td>
             <td class="num"><strong>${s.pts}</strong></td>
-            <td class="num" style="color: ${s.nrr.startsWith('+') ? 'var(--color-accent)' : 'var(--color-danger)'}; font-weight: 700;">${s.nrr}</td>
+            <td class="num" style="color: ${s.nrr && s.nrr.startsWith('+') ? 'var(--color-accent)' : 'var(--color-danger)'}; font-weight: 700;">${s.nrr}</td>
           </tr>
         `;
       });
+    }
+
+    function broadcastTournamentStandingsStream(tournId = 1045) {
+      const t = tournamentState.tournaments[0];
+      if (!t) return;
+      const idStr = String(tournId);
+      const payload = {
+        type: 'TOURNAMENT_STANDINGS_UPDATE',
+        event_type: 'STANDINGS_UPDATE',
+        tournament_id: idStr,
+        tournament_name: t.name || 'TallyPitch Championship',
+        timestamp: new Date().toISOString(),
+        total_teams: t.standings.length,
+        standings: t.standings
+      };
+
+      // 1. Cross-tab BroadcastChannel
+      if (liveBroadcastChannel) {
+        try {
+          liveBroadcastChannel.postMessage(payload);
+        } catch (_) {}
+      }
+
+      // 2. LocalStorage fallback
+      try {
+        localStorage.setItem('tallypitch_tournament_standings', JSON.stringify(payload));
+      } catch (_) {}
+
+      // 3. WebSocket / MQTT push if connected
+      if (liveRealtimeWs && liveRealtimeWs.readyState === 1) {
+        try {
+          liveRealtimeWs.send(JSON.stringify({
+            action: 'publish',
+            topic: `cricheroes/tournaments/${idStr}/standings`,
+            payload: payload
+          }));
+        } catch (_) {}
+      }
+
+      const statusEl = document.getElementById('tournament-stream-status');
+      if (statusEl) {
+        statusEl.innerHTML = `Topic: <code>cricheroes/tournaments/${idStr}/standings</code> • Status: Dispatched (${new Date().toLocaleTimeString()})`;
+      }
+    }
+
+    function pushManualTournamentStandingsBroadcast() {
+      broadcastTournamentStandingsStream(1045);
+      showToast("📡 Standings broadcast dispatched to CricHeroes MQTT stream!");
+    }
+
+    function applyTournamentStandingsUpdate(data) {
+      if (!data || !Array.isArray(data.standings)) return;
+      const t = tournamentState.tournaments[0];
+      if (!t) return;
+
+      t.standings = data.standings;
+      renderTournamentStandings();
+
+      const statusEl = document.getElementById('tournament-stream-status');
+      if (statusEl) {
+        statusEl.innerHTML = `Topic: <code>cricheroes/tournaments/${data.tournament_id || '1045'}/standings</code> • Status: Stream Updated Live (${new Date().toLocaleTimeString()})`;
+      }
+    }
+
+    function updateTournamentStandingsFromMatchResult(winnerName, loserName, isTie) {
+      const t = tournamentState.tournaments[0];
+      if (!t || !Array.isArray(t.standings)) return;
+
+      const findTeamStanding = (name) => {
+        if (!name) return null;
+        const clean = name.toLowerCase().trim();
+        return t.standings.find(s => s.team.toLowerCase().trim() === clean || clean.includes(s.team.toLowerCase().trim()) || s.team.toLowerCase().trim().includes(clean));
+      };
+
+      const winStanding = findTeamStanding(winnerName);
+      const loseStanding = findTeamStanding(loserName);
+
+      if (isTie) {
+        if (winStanding) { winStanding.p++; winStanding.t++; winStanding.pts += 1; }
+        if (loseStanding) { loseStanding.p++; loseStanding.t++; loseStanding.pts += 1; }
+      } else {
+        if (winStanding) {
+          winStanding.p++;
+          winStanding.w++;
+          winStanding.pts += 2;
+          const currentNrr = parseFloat(winStanding.nrr) || 0;
+          const newNrr = currentNrr + 0.150;
+          winStanding.nrr = (newNrr >= 0 ? '+' : '') + newNrr.toFixed(3);
+        }
+        if (loseStanding) {
+          loseStanding.p++;
+          loseStanding.l++;
+          const currentNrr = parseFloat(loseStanding.nrr) || 0;
+          const newNrr = currentNrr - 0.150;
+          loseStanding.nrr = (newNrr >= 0 ? '+' : '') + newNrr.toFixed(3);
+        }
+      }
+
+      // Sort: points DESC, then NRR DESC
+      t.standings.sort((a, b) => {
+        if (b.pts !== a.pts) return b.pts - a.pts;
+        return (parseFloat(b.nrr) || 0) - (parseFloat(a.nrr) || 0);
+      });
+
+      // Re-assign positions
+      t.standings.forEach((s, idx) => { s.pos = idx + 1; });
+
+      // Re-render table & broadcast stream
+      renderTournamentStandings();
+      broadcastTournamentStandingsStream(1045);
     }
 
     // ------------------------------------------------------------------------
@@ -4834,6 +4973,9 @@
             if (isOverlayActive && event.data) {
               updateObsOverlayUI(event.data);
             }
+            if (event.data && (event.data.type === 'TOURNAMENT_STANDINGS_UPDATE' || event.data.event_type === 'STANDINGS_UPDATE')) {
+              applyTournamentStandingsUpdate(event.data);
+            }
           };
         }
       } catch (err) {
@@ -4846,6 +4988,12 @@
           try {
             const data = JSON.parse(event.newValue);
             updateObsOverlayUI(data);
+          } catch (_) {}
+        }
+        if (event.key === 'tallypitch_tournament_standings' && event.newValue) {
+          try {
+            const data = JSON.parse(event.newValue);
+            applyTournamentStandingsUpdate(data);
           } catch (_) {}
         }
       });
@@ -4881,6 +5029,10 @@
             action: 'subscribe',
             topic: `cricheroes/matches/${liveMatchId}/#`
           }));
+          liveRealtimeWs.send(JSON.stringify({
+            action: 'subscribe',
+            topic: `cricheroes/tournaments/#`
+          }));
         };
 
         liveRealtimeWs.onmessage = (event) => {
@@ -4892,6 +5044,9 @@
               } else if (msg.payload.overlay) {
                 updateObsOverlayUI(msg.payload.overlay);
               }
+            }
+            if ((msg.topic && msg.topic.includes('/standings')) || (msg.payload && msg.payload.event_type === 'STANDINGS_UPDATE') || msg.event_type === 'STANDINGS_UPDATE') {
+              applyTournamentStandingsUpdate(msg.payload || msg);
             }
           } catch (_) {}
         };
@@ -6386,6 +6541,16 @@
 
       const resultModal = document.getElementById('match-result-modal');
       if (resultModal) resultModal.classList.add('open');
+
+      // Auto-update Tournament Standings & Broadcast stream
+      const dlsWinner = diff > 0 ? teamB : (diff < 0 ? teamA : null);
+      if (!dlsWinner) {
+        updateTournamentStandingsFromMatchResult(teamA, teamB, true);
+      } else {
+        const dlsLoser = dlsWinner === teamA ? teamB : teamA;
+        updateTournamentStandingsFromMatchResult(dlsWinner, dlsLoser, false);
+      }
+
       showToast(`🏆 ${winnerText}`);
     }
 

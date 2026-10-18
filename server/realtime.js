@@ -263,6 +263,33 @@ function broadcastCricHeroesMatch(matchId, eventData) {
 }
 
 /**
+ * Broadcasts CricHeroes-compatible tournament standings stream
+ * Topic: cricheroes/tournaments/{tournament_id}/standings
+ * @param {string|number} tournamentId
+ * @param {object} standingsPayload
+ * @returns {object} formatted broadcast payload
+ */
+function broadcastTournamentStandings(tournamentId, standingsPayload = {}) {
+  const idStr = String(tournamentId);
+  const topic = `cricheroes/tournaments/${idStr}/standings`;
+  const tallyTopic = `tallypitch/tournaments/${idStr}/standings`;
+
+  const payload = {
+    tournament_id: idStr,
+    tournament_name: standingsPayload.tournament_name || `Tournament #${idStr}`,
+    timestamp: new Date().toISOString(),
+    event_type: 'STANDINGS_UPDATE',
+    total_teams: Array.isArray(standingsPayload.standings) ? standingsPayload.standings.length : 0,
+    standings: standingsPayload.standings || [],
+    ...standingsPayload,
+  };
+
+  publishToTopic(topic, payload);
+  publishToTopic(tallyTopic, payload);
+  return payload;
+}
+
+/**
  * Legacy broadcast helper for existing API routes
  * @param {string} matchId
  * @param {object} payload
@@ -518,6 +545,7 @@ module.exports = {
   setupRealtimeServer,
   broadcastMatchEvent,
   broadcastCricHeroesMatch,
+  broadcastTournamentStandings,
   publishToTopic,
   encodeMqttPublish,
   decodeMqttPacket,
