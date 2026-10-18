@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.tallypitch.twa",
+      "sha256_cert_fingerprints": [
+        "14:6D:E9:7D:0C:50:8A:73:96:AC:70:C7:E2:C9:4A:27:01:A2:AE:34:77:E5:C9:E3:6C:8F:D6:3E:9B:4D:2C:99"
+      ]
+    }
+  }
+]

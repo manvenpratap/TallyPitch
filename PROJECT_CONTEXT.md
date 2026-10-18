@@ -1,20 +1,21 @@
 # Project Context & Working Memory
 
-**Last Updated:** 2026-10-18 11:33:14
-**Version:** 1.7.0  
-**Stack:** Single-File Web (SPA) / Progressive Web App (PWA) / Node.js Backend / Supabase PostgreSQL / Playwright / MQTT 3.1.1 Bridge  
+**Last Updated:** 2026-10-18 12:01:34
+**Version:** 1.8.0  
+**Stack:** Single-File Web (SPA) / Progressive Web App (PWA) / Node.js Backend / Supabase PostgreSQL / Playwright / MQTT 3.1.1 Bridge / Android TWA  
 
 ---
 
 ## 1. Current Status & Milestone
-- **Active Phase**: Milestone 15 Completed — Real-time Tournament Standings Stream (`cricheroes/tournaments/{id}/standings`) Live & Verified!
-- **Test Health**: 100% Passing (39 e2e Playwright tests passing across 9 modules: `test_cricket_engine.py`, `test_wagon_wheel_and_charts.py`, `test_realtime_bridge.py`, `test_community_and_badges.py`, `test_ground_and_insights.py`, `test_pwa_offline.py`, `test_social_card_exporter.py`, `test_dls_engine.py`, and `test_tournament_realtime.py`)
-- **Distribution Health**: Synced (`dist/index.html`, `dist/manifest.json`, `dist/sw.js`, `dist/icon-*.png` byte-for-byte in parity)
-- **Feature Parity**: 100.0% against CricHeroes (33/33 core features completed) + Advanced Intelligence + Social Media Graphics Engine (S16) + DLS Standard Edition Engine (S07) + Real-time Tournament Stream (S18)
+- **Active Phase**: Milestone 16 Completed — Android TWA & Native APK Packaging (`app.tallypitch.twa`) Live & Verified!
+- **Test Health**: 100% Passing (42 e2e Playwright tests passing across 10 modules: `test_cricket_engine.py`, `test_wagon_wheel_and_charts.py`, `test_realtime_bridge.py`, `test_community_and_badges.py`, `test_ground_and_insights.py`, `test_pwa_offline.py`, `test_social_card_exporter.py`, `test_dls_engine.py`, `test_tournament_realtime.py`, and `test_android_packaging.py`)
+- **Distribution Health**: Synced (`dist/index.html`, `dist/manifest.json`, `dist/sw.js`, `dist/.well-known/assetlinks.json`, `dist/icon-*.png` byte-for-byte in parity)
+- **Feature Parity**: 100.0% against CricHeroes (33/33 core features completed) + Advanced Intelligence + Social Media Graphics Engine (S16) + DLS Standard Edition Engine (S07) + Real-time Tournament Stream (S18) + Android TWA Packaging
 
 ---
 
 ## 2. Implemented Features
+- [x] **Android TWA & Native APK Packaging (Track 3 & Modal 10)**: Google Trusted Web Activity (TWA) architecture (`app.tallypitch.twa`) wrapping TallyPitch with zero URL browser chrome, full-screen viewport, Min SDK 21, and Target SDK 34 (Android 14). Includes complete Gradle project structure (`android/app/build.gradle`, `AndroidManifest.xml`, `twa-manifest.json`), Google Digital Asset Links (`.well-known/assetlinks.json`), launcher mipmap drawables, Modal 10 UI with direct PWA install prompt, Bubblewrap/Gradle build instructions, and standalone validation engine (`scripts/build_android_twa.py`).
 - [x] **Real-time Tournament Standings Stream (Track 2 & S18)**: Native pub/sub streaming integration for tournament tables via CricHeroes topic architecture (`cricheroes/tournaments/{tournament_id}/standings`). Node.js binary MQTT 3.1.1 packet encoding/decoding, dual WebSocket broadcast, S18 live stream telemetry badge, manual push trigger button, cross-tab BroadcastChannel and storage listeners, and automated standings recalculation (played, won, lost, points, NRR) on match conclusion.
 - [x] **Duckworth-Lewis-Stern (DLS) Standard Edition Engine (S07)**: Full client-side ICC Standard Edition DLS rain rule engine. Embedded 20-over resource matrix (`DLS_RESOURCES_T20` across 0..20 overs remaining and 0..9 wickets lost), mathematical target revision calculator (`R2 / R1 * S`), live DLS Par Score HUD on S07 with dynamic ahead/behind badge (`+X (Ahead)`, `-X (Behind)`, `Par Tied`), and Modal 9 (`#dls-modal`) with target revision calculator, live par score matrix, and official DLS match stoppage decision handler.
 - [x] **Social Match Graphic & Award Card Exporter (S16)**: Native client-side HTML5 Canvas (1080x1080) high-resolution graphic exporter for WhatsApp and Instagram. Dual-mode generator supporting two-innings match scorecards with top performers, result banner, and MVP spotlight, or individual Player of the Match certificate award cards. Includes 1-click PNG download, image clipboard copy, Web Share API integration, and trigger buttons across S07, S13, S21, and the match result modal.
@@ -68,3 +69,4 @@
 - [x] Milestone 13: Build Social Match Summary & Award Card Exporter (S16) via HTML5 Canvas 1080x1080 generator for WhatsApp & Instagram (31 passing tests).
 - [x] Milestone 14 (Track 1): Implement Duckworth-Lewis-Stern (DLS) Standard Edition Rain Rule & Target Revision Engine (S07) with Modal 9, live ahead/behind HUD, and stoppage decision handling (35 passing tests).
 - [x] Milestone 15 (Track 2): Implement Real-time Tournament Standings Stream (`cricheroes/tournaments/{id}/standings`) with Node.js MQTT pub/sub, S18 live telemetry badge, automated match conclusion standings recalculation, and cross-tab synchronization (39 passing tests).
+- [x] Milestone 16 (Track 3): Build Android TWA & Native APK Packaging (`app.tallypitch.twa`) with Gradle project structure, Google Digital Asset Links (`.well-known/assetlinks.json`), Modal 10 UI, and packaging verification suite (42 passing tests).

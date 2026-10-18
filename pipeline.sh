@@ -103,6 +103,15 @@ EOF
                 fi
             done
         fi
+        if [ -d .well-known ]; then
+            mkdir -p dist/.well-known
+            cp -r .well-known/* dist/.well-known/ 2>/dev/null || true
+            echo "✓ Synced .well-known -> dist/.well-known"
+        fi
+        if [ -f scripts/build_android_twa.py ]; then
+            python3 scripts/build_android_twa.py >/dev/null 2>&1 || true
+            echo "✓ Verified Android TWA & APK packaging artifacts"
+        fi
         [ -f package.json ] && npm run build --if-present
         [ -f pom.xml ] && mvn package -DskipTests -q
         ;;

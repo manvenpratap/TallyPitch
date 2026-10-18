@@ -15,6 +15,7 @@ Automated regression and end-to-end testing infrastructure powered by Playwright
 | `test_social_card_exporter.py` | Social Match Graphic & Award Card Exporter (S16) | • S16: Publication-ready 1080x1080 Canvas graphic generation for WhatsApp & Instagram<br>• Dual mode switcher: Two-innings match summary vs. Player of the Match award certificate<br>• Squad player selector, high-res data URL preview rendering, and anchor download trigger<br>• Accessible tooltips, Escape key dismissal, and S07/S13/S21/Modal-4 CTA triggers<br>• Zero critical console errors verification |
 | `test_dls_engine.py` | Duckworth-Lewis-Stern (DLS) Standard Edition (S07) | • ICC Standard Edition DLS resource matrix (0..20 overs, 0..9 wickets lost)<br>• Target revision calculations for rain-interrupted chases<br>• Live DLS Par Score HUD updates and ahead/behind status badge<br>• Modal 9 Target Calculator, live par matrix, and official DLS stoppage decision<br>• Zero critical console errors verification |
 | `test_tournament_realtime.py` | Real-time Tournament Standings Stream (S18) | • CricHeroes topic architecture pub/sub (`cricheroes/tournaments/{id}/standings`)<br>• Node.js MQTT 3.1.1 binary packet encoding/decoding for tournament standings<br>• Screen S18 live MQTT telemetry badge and manual push trigger<br>• Live DOM auto-update on incoming standings stream without page refresh<br>• Automated match conclusion standings recalculation (points + NRR)<br>• Zero critical console errors verification |
+| `test_android_packaging.py` | Android TWA & Native APK Packaging | • Android project structure (`android/app/build.gradle`, `AndroidManifest.xml`, `twa-manifest.json`)<br>• Google Digital Asset Links specification (`.well-known/assetlinks.json`)<br>• Standalone Python packaging validator script (`scripts/build_android_twa.py`)<br>• Modal 10 UI interaction, header CTA, AssetLinks drawer toggle, and Escape dismissal<br>• Zero critical console errors verification |
 
 ## Running Tests
 
@@ -36,5 +37,5 @@ pytest -v tests/
 - `helpers.py`: Bounding-box collision detection, viewport overflow checking, and zero console error assertion.
 
 ---
-**Total Active Test Modules:** 9
-**Total Passing E2E Tests:** 39 (100% passing)
+**Total Active Test Modules:** 10
+**Total Passing E2E Tests:** 42 (100% passing)

@@ -1384,6 +1384,9 @@
       </nav>
       <div style="display: flex; align-items: center; gap: 8px; margin-left: 8px;">
         <span id="network-status-badge" class="badge-status-online" data-tooltip="Network Status: Connected to local/cloud services (Offline-Ready)">🟢 Online</span>
+        <button type="button" class="btn btn-secondary" id="btn-open-android-modal" onclick="openModal('android-apk-modal')" style="font-size: 11px; padding: 4px 8px; font-weight: 700; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Android TWA & Native APK Packaging (app.tallypitch.twa)">
+          📱 Android App
+        </button>
       </div>
     </div>
   </header>
@@ -2863,6 +2866,82 @@
   </div>
 
   <!-- =======================================================================
+       MODAL 10: ANDROID TWA & NATIVE APK PACKAGING (TRACK 3)
+       ======================================================================= -->
+  <div id="android-apk-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('android-apk-modal')">
+    <div class="modal-card" style="max-width: 640px; border: 1px solid rgba(59, 130, 246, 0.4); box-shadow: 0 20px 45px rgba(0,0,0,0.6);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);">
+            🤖
+          </div>
+          <div>
+            <h3 style="font-size: 18px; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 8px;">
+              Android TWA & Native APK
+              <span class="badge-status-online" style="font-size: 10px; padding: 2px 6px;">v1.0.0</span>
+            </h3>
+            <p style="font-size: 12px; color: var(--color-text-muted); margin: 3px 0 0 0;">
+              Package ID: <code style="font-size: 11px; color: #38bdf8;">app.tallypitch.twa</code> • 0ms Offline • Zero Ads
+            </p>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('android-apk-modal')" style="padding: 4px 8px; font-size: 14px;" data-tooltip="Close Android Packaging Modal (Esc)">✕</button>
+      </div>
+
+      <!-- Feature Grid -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px;">
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px;">
+          <div style="font-size: 11px; font-weight: 700; color: #38bdf8; text-transform: uppercase;">Architecture</div>
+          <div style="font-size: 13px; font-weight: 700; margin-top: 4px;">Google Trusted Web Activity</div>
+          <div style="font-size: 11px; color: var(--color-text-muted); margin-top: 2px;">No URL address bar • AndroidX Browser 1.8.0</div>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px;">
+          <div style="font-size: 11px; font-weight: 700; color: #22c55e; text-transform: uppercase;">Compatibility</div>
+          <div style="font-size: 13px; font-weight: 700; margin-top: 4px;">Android 5.0 to Android 14+</div>
+          <div style="font-size: 11px; color: var(--color-text-muted); margin-top: 2px;">Min SDK 21 • Target SDK 34 • 64-bit Ready</div>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px;">
+          <div style="font-size: 11px; font-weight: 700; color: #f59e0b; text-transform: uppercase;">Offline Resilience</div>
+          <div style="font-size: 13px; font-weight: 700; margin-top: 4px;">100% Ground Offline Mode</div>
+          <div style="font-size: 11px; color: var(--color-text-muted); margin-top: 2px;">Cache-first Service Worker + local state</div>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px;">
+          <div style="font-size: 11px; font-weight: 700; color: #a855f7; text-transform: uppercase;">Digital Asset Links</div>
+          <div style="font-size: 13px; font-weight: 700; margin-top: 4px;">Verified Domain Delegation</div>
+          <div style="font-size: 11px; color: var(--color-text-muted); margin-top: 2px;">.well-known/assetlinks.json active</div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;">
+        <button type="button" class="btn btn-primary" id="btn-pwa-install-app" onclick="triggerPwaInstallPrompt()" style="flex: 1; font-weight: 700; padding: 10px 14px; font-size: 13px;" data-tooltip="Install TallyPitch directly to Android home screen via Chrome PWA">
+          📲 Install to Android
+        </button>
+        <button type="button" class="btn btn-secondary" id="btn-download-apk-spec" onclick="downloadTwaSpecFile()" style="font-weight: 700; padding: 10px 14px; font-size: 13px;" data-tooltip="Download Android TWA manifest configuration file">
+          📦 Download TWA Manifest
+        </button>
+        <button type="button" class="btn btn-secondary" id="btn-toggle-assetlinks" onclick="toggleAssetLinksDrawer()" style="font-weight: 700; padding: 10px 14px; font-size: 13px;" data-tooltip="View Google Digital Asset Links JSON">
+          🔍 AssetLinks JSON
+        </button>
+      </div>
+
+      <!-- AssetLinks Collapsible Drawer -->
+      <div id="assetlinks-drawer" style="display: none; background: #020617; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span style="font-size: 11px; font-weight: 700; color: #38bdf8;">/.well-known/assetlinks.json</span>
+          <span style="font-size: 10px; color: var(--color-text-muted);">Verified SHA-256 Fingerprint</span>
+        </div>
+        <pre id="assetlinks-code-block" style="margin: 0; font-size: 11px; font-family: var(--font-mono); color: #cbd5e1; overflow-x: auto; max-height: 140px; padding: 8px; background: rgba(0,0,0,0.4); border-radius: 4px;"></pre>
+      </div>
+
+      <!-- Build Instructions -->
+      <div style="background: rgba(30, 41, 59, 0.4); border-radius: var(--radius-md); padding: 10px 12px; font-size: 11px; color: var(--color-text-muted);">
+        💡 <strong>Developers:</strong> Run <code>./gradlew assembleRelease</code> inside <code>android/</code> or compile via Bubblewrap CLI (<code>npx @bubblewrap/cli build</code>) to generate an unsigned or signed release <code>.apk</code>.
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
        OBS LOWER-THIRD LIVE STREAM OVERLAY (STANDALONE & EMBEDDABLE)
        ======================================================================= -->
   <div id="obs-overlay-container" style="display: none;">
@@ -3577,8 +3656,14 @@
       renderLiveConsole();
     }
 
+    function openModal(modalId) {
+      const el = document.getElementById(modalId);
+      if (el) el.classList.add('open');
+    }
+
     function closeModal(modalId) {
-      document.getElementById(modalId).classList.remove('open');
+      const el = document.getElementById(modalId);
+      if (el) el.classList.remove('open');
     }
 
     // ------------------------------------------------------------------------
@@ -6569,6 +6654,82 @@
         badge.textContent = '⚡ Ground Offline (Local Active)';
         badge.setAttribute('data-tooltip', 'Network Status: Offline on cricket ground. In-memory local storage active without interruption.');
       }
+    }
+
+    // ------------------------------------------------------------------------
+    // SECTION: ANDROID TWA & NATIVE APK PACKAGING (TRACK 3)
+    // ------------------------------------------------------------------------
+    let deferredPwaInstallPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPwaInstallPrompt = e;
+      const btn = document.getElementById('btn-pwa-install-app');
+      if (btn) btn.textContent = '📲 Install Native App Now';
+    });
+
+    function triggerPwaInstallPrompt() {
+      if (deferredPwaInstallPrompt) {
+        deferredPwaInstallPrompt.prompt();
+        deferredPwaInstallPrompt.userChoice.then((choice) => {
+          if (choice.outcome === 'accepted') {
+            showToast('🎉 TallyPitch installed successfully to Android!');
+          }
+          deferredPwaInstallPrompt = null;
+        });
+      } else {
+        showToast('📱 To install on Android: Tap Chrome Menu (⋮) → "Add to Home Screen" or "Install App"');
+      }
+    }
+
+    function toggleAssetLinksDrawer() {
+      const drawer = document.getElementById('assetlinks-drawer');
+      const block = document.getElementById('assetlinks-code-block');
+      if (!drawer || !block) return;
+      if (drawer.style.display === 'none') {
+        block.textContent = JSON.stringify([
+          {
+            "relation": ["delegate_permission/common.handle_all_urls"],
+            "target": {
+              "namespace": "android_app",
+              "package_name": "app.tallypitch.twa",
+              "sha256_cert_fingerprints": [
+                "14:6D:E9:7D:0C:50:8A:73:96:AC:70:C7:E2:C9:4A:27:01:A2:AE:34:77:E5:C9:E3:6C:8F:D6:3E:9B:4D:2C:99"
+              ]
+            }
+          }
+        ], null, 2);
+        drawer.style.display = 'block';
+      } else {
+        drawer.style.display = 'none';
+      }
+    }
+
+    function downloadTwaSpecFile() {
+      const twaSpec = {
+        packageId: "app.tallypitch.twa",
+        host: "tallypitch.app",
+        name: "TallyPitch",
+        launcherName: "TallyPitch",
+        themeColor: "#0f172a",
+        navigationColor: "#0f172a",
+        backgroundColor: "#0f172a",
+        enableNotifications: true,
+        startUrl: "/",
+        iconUrl: "https://tallypitch.app/icon-512.png",
+        appVersionName: "1.0.0",
+        appVersionCode: 1,
+        fallbackType: "customtabs"
+      };
+      const blob = new Blob([JSON.stringify(twaSpec, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'tallypitch-twa-manifest.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+      showToast('📦 Downloaded tallypitch-twa-manifest.json');
     }
 
     // Initialize on load
