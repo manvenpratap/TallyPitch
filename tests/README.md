@@ -13,6 +13,7 @@ Automated regression and end-to-end testing infrastructure powered by Playwright
 | `test_ground_and_insights.py` | Ground Intelligence & CricInsights PRO | • S14: Ground & pitch telemetry report rendering (win ratio, benchmarks, pace vs spin, dismissals)<br>• S03: Match setup venue selection & instant telemetry preview badge<br>• S07: Un-paywalled Live Match Win Predictor HUD with real-time probability updates<br>• S14: Wagon Wheel Field Vulnerability Heatmap toggle and hazard overlays<br>• S06: Multi-metric Player Scouting Engine filtering (role, strike rate, economy, search)<br>• Zero critical console errors verification |
 | `test_pwa_offline.py` | PWA & Offline Service Worker | • Web App Manifest validation (name, standalone display, icons 192x192 & 512x512)<br>• Offline Service Worker (`sw.js`) cache-first asset lifecycle verification<br>• Header network status badge and accessible tooltips (Online/Ground Offline)<br>• Zero critical console errors verification |
 | `test_social_card_exporter.py` | Social Match Graphic & Award Card Exporter (S16) | • S16: Publication-ready 1080x1080 Canvas graphic generation for WhatsApp & Instagram<br>• Dual mode switcher: Two-innings match summary vs. Player of the Match award certificate<br>• Squad player selector, high-res data URL preview rendering, and anchor download trigger<br>• Accessible tooltips, Escape key dismissal, and S07/S13/S21/Modal-4 CTA triggers<br>• Zero critical console errors verification |
+| `test_dls_engine.py` | Duckworth-Lewis-Stern (DLS) Standard Edition (S07) | • ICC Standard Edition DLS resource matrix (0..20 overs, 0..9 wickets lost)<br>• Target revision calculations for rain-interrupted chases<br>• Live DLS Par Score HUD updates and ahead/behind status badge<br>• Modal 9 Target Calculator, live par matrix, and official DLS stoppage decision<br>• Zero critical console errors verification |
 
 ## Running Tests
 
@@ -34,5 +35,5 @@ pytest -v tests/
 - `helpers.py`: Bounding-box collision detection, viewport overflow checking, and zero console error assertion.
 
 ---
-**Total Active Test Modules:** 7
-**Total Passing E2E Tests:** 31 (100% passing)
+**Total Active Test Modules:** 8
+**Total Passing E2E Tests:** 35 (100% passing)

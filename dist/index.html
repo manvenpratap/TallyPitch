@@ -1567,6 +1567,9 @@
             <button class="btn btn-secondary" id="btn-social-card-s07" style="background: rgba(16,185,129,0.25); border: 1px solid rgba(16,185,129,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openSocialCardModal('summary')" data-tooltip="Export 1080x1080 social match card for WhatsApp and Instagram">
               📸 Match Card
             </button>
+            <button class="btn btn-secondary" id="btn-dls-modal" style="background: rgba(14,165,233,0.25); border: 1px solid rgba(14,165,233,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openDlsModal()" data-tooltip="Duckworth-Lewis-Stern (DLS) rain rule & revised target calculator">
+              🌧️ Rain / DLS
+            </button>
           </div>
         </div>
 
@@ -1574,6 +1577,17 @@
           <div>CRR: <strong id="hero-crr">0.00</strong></div>
           <div id="hero-target-wrap" style="display: none;">Target: <strong id="hero-target">0</strong></div>
           <div id="hero-rrr-wrap" style="display: none;">RRR: <strong id="hero-rrr">0.00</strong></div>
+        </div>
+
+        <!-- DLS Par Score Live Status (Innings 2) -->
+        <div id="hero-dls-par-wrap" style="display: none; margin-top: 8px; font-size: 12px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: var(--radius-sm); padding: 5px 12px; align-items: center; justify-content: space-between;" data-tooltip="Live Duckworth-Lewis-Stern (DLS) par score at current ball and wickets lost">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-weight: 700; color: #38bdf8;">🌧️ DLS Par:</span>
+            <strong id="hero-dls-par-score" style="font-size: 14px; color: #fff;">0</strong>
+          </div>
+          <span id="hero-dls-diff-badge" style="font-size: 11px; padding: 2px 8px; border-radius: var(--radius-pill); font-weight: 700; background: rgba(56, 189, 248, 0.2); color: #38bdf8;">
+            Par Tied
+          </span>
         </div>
 
         <div id="hero-chase-banner" class="target-banner" style="display: none;">
@@ -2733,6 +2747,106 @@
   </div>
 
   <!-- =======================================================================
+       MODAL 9: DUCKWORTH-LEWIS-STERN (DLS) ENGINE (RAIN RULE)
+       ======================================================================= -->
+  <div id="dls-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('dls-modal')">
+    <div class="modal-dialog" style="max-width: 580px; text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h3 class="modal-title" style="color: var(--color-accent); font-size: 18px; margin: 0; display: flex; align-items: center; gap: 8px;">
+          <span>🌧️</span> Duckworth-Lewis-Stern (DLS) Engine
+        </h3>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('dls-modal')" style="padding: 4px 10px; font-size: 12px;" data-tooltip="Close modal (Esc)">✕</button>
+      </div>
+      <p class="modal-desc" style="margin-bottom: 14px; font-size: 13px;">
+        ICC Standard Edition target revision, resource calculation, and live rain-interruption par score engine.
+      </p>
+
+      <!-- Innings Baseline Info Card -->
+      <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 14px; font-size: 13px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span style="font-weight: 700; color: #fff;" id="dls-info-team-a">Team 1: Mumbai Strikers</span>
+          <span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight: 700;" id="dls-info-team-a-score">165/6 (20.0 ov)</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; color: var(--color-text-muted); font-size: 12px;">
+          <span>Match Format: <strong id="dls-info-match-overs">20 Overs</strong></span>
+          <span>1st Innings Resources: <strong>100.0%</strong></span>
+        </div>
+      </div>
+
+      <!-- Target Revision Form -->
+      <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 14px; margin-bottom: 14px;">
+        <h4 style="font-size: 14px; font-weight: 800; margin: 0 0 10px; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
+          <span>⚡</span> Revise 2nd Innings Target
+        </h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div>
+            <label class="form-label" for="dls-revised-overs-input" style="font-size: 12px;">Revised 2nd Innings Overs</label>
+            <input type="number" id="dls-revised-overs-input" class="form-input" min="5" max="20" value="14" oninput="calculateDlsTargetFromInput()" style="font-size: 14px; font-weight: 700;">
+          </div>
+          <div>
+            <label class="form-label" style="font-size: 12px;">2nd Innings Resource Available</label>
+            <div id="dls-resource-pct-display" style="padding: 10px; background: var(--color-surface); border-radius: var(--radius-sm); font-weight: 800; color: #10b981; font-size: 14px; border: 1px solid var(--color-border);">
+              82.3%
+            </div>
+          </div>
+        </div>
+
+        <!-- Calculated Target Box -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: var(--radius-sm); margin-bottom: 12px;">
+          <div>
+            <div style="font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 700;">DLS Revised Target</div>
+            <div style="font-size: 24px; font-weight: 800; color: #38bdf8;" id="dls-calc-target-val">136 runs</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 11px; text-transform: uppercase; color: #94a3b8; font-weight: 700;">Required Run Rate</div>
+            <div style="font-size: 18px; font-weight: 800; color: #fbbf24;" id="dls-calc-rrr-val">9.71</div>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="btn-apply-dls" onclick="applyDlsRevision()" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px; font-weight: 700;" data-tooltip="Apply DLS target to 2nd innings and update live scoring HUD">
+          <span>🌧️</span> Apply DLS Target to Match
+        </button>
+      </div>
+
+      <!-- Live DLS Par Score Table (Wickets 0..9) -->
+      <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <h4 style="font-size: 13px; font-weight: 800; margin: 0; color: #f59e0b;">
+            📊 Live Par Score Matrix (Current Ball: <span id="dls-matrix-ball">0.0 ov</span>)
+          </h4>
+          <span style="font-size: 11px; color: var(--color-text-muted);">Scores needed at stoppage</span>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="scorecard-table" style="font-size: 11px; text-align: center; margin: 0;">
+            <thead>
+              <tr>
+                <th style="padding: 4px;">Wkts Down</th>
+                <th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="dls-matrix-row">
+                <td style="font-weight: 700; color: #38bdf8; padding: 6px 4px;">Par Runs</td>
+                <!-- Dynamically populated -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Match Stoppage / Abandonment Call Off -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="font-size: 12px; color: var(--color-text-muted);">
+          * Minimum 5 overs in 2nd innings required for official DLS match result.
+        </div>
+        <button type="button" class="btn btn-secondary" id="btn-conclude-dls" onclick="concludeMatchViaDls()" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.4); font-size: 12px; font-weight: 700;" data-tooltip="Declare match completed using current DLS Par Score">
+          🏁 Call Off Match (DLS Result)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
        OBS LOWER-THIRD LIVE STREAM OVERLAY (STANDALONE & EMBEDDABLE)
        ======================================================================= -->
   <div id="obs-overlay-container" style="display: none;">
@@ -2823,7 +2937,13 @@
         tossWinner: "A",
         tossChoice: "bat",
         status: "LIVE", // SETUP, TOSS, LIVE, BREAK, COMPLETED
-        currentInningsNumber: 1
+        currentInningsNumber: 1,
+        dls: {
+          applied: false,
+          originalTarget: null,
+          revisedTarget: null,
+          revisedOvers: null
+        }
       },
       squads: {
         A: [
@@ -3639,6 +3759,7 @@
       closeModal('match-result-modal');
       state.match.currentInningsNumber = 1;
       state.match.status = "LIVE";
+      state.match.dls = { applied: false, originalTarget: null, revisedTarget: null, revisedOvers: null };
       state.innings1.totalRuns = 0;
       state.innings1.wickets = 0;
       state.innings1.legalBalls = 0;
@@ -3691,16 +3812,22 @@
         rrrWrap.style.display = 'block';
         chaseBanner.style.display = 'block';
 
-        document.getElementById('hero-target').textContent = inn.targetRuns;
+        const isDls = state.match.dls && state.match.dls.applied;
+        document.getElementById('hero-target').textContent = isDls ? `${inn.targetRuns} (DLS)` : inn.targetRuns;
+        const totalBallsAllocated = (state.match.dls?.revisedOvers ? state.match.dls.revisedOvers : state.match.totalOvers) * 6;
         const remRuns = Math.max(0, inn.targetRuns - inn.totalRuns);
-        const remBalls = Math.max(0, (state.match.totalOvers * 6) - inn.legalBalls);
+        const remBalls = Math.max(0, totalBallsAllocated - inn.legalBalls);
         const rrr = remBalls > 0 ? ((remRuns / remBalls) * 6).toFixed(2) : "0.00";
         document.getElementById('hero-rrr').textContent = rrr;
-        chaseBanner.textContent = `Need ${remRuns} runs from ${remBalls} balls to win`;
+        chaseBanner.textContent = `Need ${remRuns} runs from ${remBalls} balls to win${isDls ? ' (DLS Revised)' : ''}`;
+
+        updateDlsLiveHud();
       } else {
         targetWrap.style.display = 'none';
         rrrWrap.style.display = 'none';
         chaseBanner.style.display = 'none';
+        const dlsWrap = document.getElementById('hero-dls-par-wrap');
+        if (dlsWrap) dlsWrap.style.display = 'none';
       }
 
       // Active Batters
@@ -6022,6 +6149,245 @@
         document.querySelectorAll('.modal-backdrop.open').forEach(el => el.classList.remove('open'));
       }
     });
+
+    // ========================================================================
+    // SECTION: DUCKWORTH-LEWIS-STERN (DLS) STANDARD EDITION ENGINE
+    // ========================================================================
+    const DLS_RESOURCES_T20 = [
+      [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+      [8.5, 8.2, 7.8, 7.3, 6.6, 5.7, 4.5, 3.2, 1.8, 0.8],
+      [16.2, 15.6, 14.8, 13.7, 12.3, 10.5, 8.2, 5.8, 3.2, 1.4],
+      [23.3, 22.4, 21.1, 19.4, 17.3, 14.6, 11.3, 7.9, 4.3, 1.9],
+      [29.8, 28.5, 26.7, 24.4, 21.6, 18.1, 13.9, 9.6, 5.3, 2.3],
+      [35.7, 34.0, 31.7, 28.9, 25.4, 21.1, 16.1, 11.1, 6.1, 2.6],
+      [41.1, 39.0, 36.3, 32.9, 28.7, 23.7, 18.0, 12.3, 6.7, 2.8],
+      [46.1, 43.6, 40.4, 36.4, 31.6, 26.0, 19.6, 13.4, 7.2, 3.0],
+      [50.7, 47.8, 44.1, 39.6, 34.2, 28.0, 21.0, 14.3, 7.7, 3.2],
+      [54.9, 51.6, 47.5, 42.4, 36.5, 29.8, 22.2, 15.0, 8.1, 3.4],
+      [58.9, 55.1, 50.5, 45.0, 38.5, 31.3, 23.3, 15.7, 8.4, 3.5],
+      [62.7, 58.4, 53.3, 47.3, 40.4, 32.7, 24.2, 16.2, 8.7, 3.6],
+      [66.3, 61.4, 55.9, 49.4, 42.0, 33.9, 25.0, 16.7, 8.9, 3.7],
+      [69.6, 64.3, 58.2, 51.3, 43.5, 35.0, 25.7, 17.1, 9.1, 3.8],
+      [72.8, 66.9, 60.4, 53.1, 44.9, 36.0, 26.3, 17.5, 9.3, 3.9],
+      [75.8, 69.4, 62.4, 54.7, 46.1, 36.8, 26.9, 17.8, 9.4, 3.9],
+      [78.6, 71.7, 64.3, 56.1, 47.2, 37.6, 27.4, 18.1, 9.5, 4.0],
+      [81.3, 73.9, 66.0, 57.5, 48.2, 38.3, 27.8, 18.3, 9.6, 4.0],
+      [83.8, 75.9, 67.6, 58.7, 49.1, 38.9, 28.2, 18.5, 9.7, 4.1],
+      [86.2, 77.9, 69.1, 59.8, 50.0, 39.5, 28.5, 18.7, 9.8, 4.1],
+      [88.5, 79.7, 70.5, 60.9, 50.7, 40.0, 28.8, 18.8, 9.8, 4.1]
+    ];
+
+    function getDlsResource(oversLeft, wicketsLost, matchTotalOvers = 20) {
+      if (wicketsLost >= 10 || oversLeft <= 0) return 0.0;
+      const w = Math.min(9, Math.max(0, wicketsLost));
+      const u = Math.min(20, Math.max(0, oversLeft));
+      const floorU = Math.floor(u);
+      const ceilU = Math.min(20, floorU + 1);
+      const frac = u - floorU;
+      const raw = DLS_RESOURCES_T20[floorU][w] + (DLS_RESOURCES_T20[ceilU][w] - DLS_RESOURCES_T20[floorU][w]) * frac;
+      const maxOvers = Math.min(20, Math.max(5, matchTotalOvers));
+      const base = DLS_RESOURCES_T20[maxOvers][0];
+      return (raw / base) * 100.0;
+    }
+
+    function calculateDlsTarget(inn1Runs, totalMatchOvers, revisedOvers) {
+      const r1 = getDlsResource(totalMatchOvers, 0, totalMatchOvers); // 100.0%
+      const r2 = getDlsResource(revisedOvers, 0, totalMatchOvers);
+      if (r2 < r1) {
+        return Math.floor(inn1Runs * (r2 / r1)) + 1;
+      } else {
+        const avg20OverRuns = 150;
+        return inn1Runs + Math.floor(((r2 - r1) / 100.0) * avg20OverRuns) + 1;
+      }
+    }
+
+    function calculateDlsParScore(inn1Runs, totalMatchOvers, ballsBowled, wicketsLost, inn2TotalOvers = null) {
+      const oversAllocated = inn2TotalOvers || totalMatchOvers;
+      const oversLeft = Math.max(0, oversAllocated - (ballsBowled / 6.0));
+      const r1 = getDlsResource(totalMatchOvers, 0, totalMatchOvers);
+      const r2Initial = getDlsResource(oversAllocated, 0, totalMatchOvers);
+      const r2Rem = getDlsResource(oversLeft, wicketsLost, totalMatchOvers);
+      const r2Used = Math.max(0, r2Initial - r2Rem);
+      return Math.floor(inn1Runs * (r2Used / r1));
+    }
+
+    function openDlsModal() {
+      const inn1 = state.innings1;
+      const teamA = state.match.teamA || "Mumbai Strikers";
+      const totalOvers = state.match.totalOvers || 20;
+
+      const teamAEl = document.getElementById('dls-info-team-a');
+      const scoreAEl = document.getElementById('dls-info-team-a-score');
+      const oversAEl = document.getElementById('dls-info-match-overs');
+      const inputEl = document.getElementById('dls-revised-overs-input');
+
+      if (teamAEl) teamAEl.textContent = `Team 1: ${teamA}`;
+      if (scoreAEl) scoreAEl.textContent = `${inn1.totalRuns}/${inn1.wickets} (${formatOvers(inn1.legalBalls)} ov)`;
+      if (oversAEl) oversAEl.textContent = `${totalOvers} Overs`;
+
+      if (inputEl) {
+        inputEl.max = totalOvers;
+        if (!state.match.dls?.revisedOvers) {
+          inputEl.value = Math.max(5, totalOvers - 6);
+        } else {
+          inputEl.value = state.match.dls.revisedOvers;
+        }
+      }
+
+      calculateDlsTargetFromInput();
+      renderDlsParMatrix();
+
+      const modal = document.getElementById('dls-modal');
+      if (modal) modal.classList.add('open');
+    }
+
+    function calculateDlsTargetFromInput() {
+      const inputEl = document.getElementById('dls-revised-overs-input');
+      const revisedOvers = parseInt(inputEl?.value || '14', 10);
+      const totalOvers = state.match.totalOvers || 20;
+      const inn1Runs = state.innings1.totalRuns;
+
+      const r2 = getDlsResource(revisedOvers, 0, totalOvers);
+      const target = calculateDlsTarget(inn1Runs, totalOvers, revisedOvers);
+      const rrr = revisedOvers > 0 ? (target / revisedOvers).toFixed(2) : "0.00";
+
+      const rPctEl = document.getElementById('dls-resource-pct-display');
+      const targetEl = document.getElementById('dls-calc-target-val');
+      const rrrEl = document.getElementById('dls-calc-rrr-val');
+
+      if (rPctEl) rPctEl.textContent = `${r2.toFixed(1)}%`;
+      if (targetEl) targetEl.textContent = `${target} runs`;
+      if (rrrEl) rrrEl.textContent = rrr;
+    }
+
+    function renderDlsParMatrix() {
+      const inn1Runs = state.innings1.totalRuns;
+      const totalOvers = state.match.totalOvers || 20;
+      const inn2 = state.innings2;
+      const balls = inn2.legalBalls;
+      const oversAllocated = state.match.dls?.revisedOvers || totalOvers;
+
+      const ballLabelEl = document.getElementById('dls-matrix-ball');
+      if (ballLabelEl) ballLabelEl.textContent = `${formatOvers(balls)} ov`;
+
+      const matrixRow = document.getElementById('dls-matrix-row');
+      if (!matrixRow) return;
+
+      let html = '<td style="font-weight: 700; color: #38bdf8; padding: 6px 4px;">Par</td>';
+      for (let w = 0; w <= 9; w++) {
+        const par = calculateDlsParScore(inn1Runs, totalOvers, balls, w, oversAllocated);
+        const isCurrent = (w === inn2.wickets && state.match.currentInningsNumber === 2);
+        html += `<td style="padding: 6px 4px; font-weight: ${isCurrent ? '800' : '500'}; background: ${isCurrent ? 'rgba(56, 189, 248, 0.25)' : 'transparent'}; color: ${isCurrent ? '#38bdf8' : '#e2e8f0'};">${par}</td>`;
+      }
+      matrixRow.innerHTML = html;
+    }
+
+    function applyDlsRevision() {
+      const inputEl = document.getElementById('dls-revised-overs-input');
+      const revisedOvers = parseInt(inputEl?.value || '14', 10);
+      const totalOvers = state.match.totalOvers || 20;
+      const inn1Runs = state.innings1.totalRuns;
+
+      const originalTarget = inn1Runs + 1;
+      const revisedTarget = calculateDlsTarget(inn1Runs, totalOvers, revisedOvers);
+
+      state.match.dls = {
+        applied: true,
+        originalTarget,
+        revisedTarget,
+        revisedOvers
+      };
+      state.innings2.targetRuns = revisedTarget;
+
+      closeModal('dls-modal');
+      renderLiveConsole();
+      showToast(`🌧️ DLS Applied! Revised Target: ${revisedTarget} in ${revisedOvers} overs`);
+    }
+
+    function updateDlsLiveHud() {
+      const wrap = document.getElementById('hero-dls-par-wrap');
+      if (!wrap) return;
+
+      if (state.match.currentInningsNumber !== 2) {
+        wrap.style.display = 'none';
+        return;
+      }
+
+      wrap.style.display = 'flex';
+      const inn1Runs = state.innings1.totalRuns;
+      const totalOvers = state.match.totalOvers || 20;
+      const inn2 = state.innings2;
+      const balls = inn2.legalBalls;
+      const wickets = inn2.wickets;
+      const oversAllocated = state.match.dls?.revisedOvers || totalOvers;
+
+      const parScore = calculateDlsParScore(inn1Runs, totalOvers, balls, wickets, oversAllocated);
+      const currentRuns = inn2.totalRuns;
+      const diff = currentRuns - parScore;
+
+      const parScoreEl = document.getElementById('hero-dls-par-score');
+      const diffBadgeEl = document.getElementById('hero-dls-diff-badge');
+
+      if (parScoreEl) parScoreEl.textContent = parScore;
+      if (diffBadgeEl) {
+        if (diff > 0) {
+          diffBadgeEl.textContent = `+${diff} (Ahead)`;
+          diffBadgeEl.style.background = 'rgba(16, 185, 129, 0.2)';
+          diffBadgeEl.style.color = '#10b981';
+        } else if (diff < 0) {
+          diffBadgeEl.textContent = `${diff} (Behind)`;
+          diffBadgeEl.style.background = 'rgba(239, 68, 68, 0.2)';
+          diffBadgeEl.style.color = '#ef4444';
+        } else {
+          diffBadgeEl.textContent = 'Par Tied';
+          diffBadgeEl.style.background = 'rgba(56, 189, 248, 0.2)';
+          diffBadgeEl.style.color = '#38bdf8';
+        }
+      }
+    }
+
+    function concludeMatchViaDls() {
+      if (state.match.currentInningsNumber !== 2) {
+        showToast('DLS match conclusion only applies during 2nd innings');
+        return;
+      }
+      const inn2 = state.innings2;
+      if (inn2.legalBalls < 30) {
+        showToast('⚠️ Minimum 5 overs (30 balls) required for official DLS result');
+        return;
+      }
+
+      const inn1Runs = state.innings1.totalRuns;
+      const totalOvers = state.match.totalOvers || 20;
+      const oversAllocated = state.match.dls?.revisedOvers || totalOvers;
+      const parScore = calculateDlsParScore(inn1Runs, totalOvers, inn2.legalBalls, inn2.wickets, oversAllocated);
+      const currentRuns = inn2.totalRuns;
+      const diff = currentRuns - parScore;
+
+      const teamA = state.match.teamA || "Mumbai Strikers";
+      const teamB = state.match.teamB || "Bangalore Blasters";
+
+      let winnerText = "";
+      if (diff > 0) {
+        winnerText = `${teamB} won by ${diff} runs (DLS Method)`;
+      } else if (diff < 0) {
+        winnerText = `${teamA} won by ${Math.abs(diff)} runs (DLS Method)`;
+      } else {
+        winnerText = `Match Tied (DLS Method)`;
+      }
+
+      state.match.status = "COMPLETED";
+      closeModal('dls-modal');
+
+      const modalTitle = document.getElementById('winner-modal-title');
+      const modalDesc = document.getElementById('winner-modal-desc');
+      if (modalTitle) modalTitle.textContent = 'Match Completed (DLS Result)';
+      if (modalDesc) modalDesc.textContent = winnerText;
+
+      const resultModal = document.getElementById('match-result-modal');
+      if (resultModal) resultModal.classList.add('open');
+      showToast(`🏆 ${winnerText}`);
+    }
 
     // ------------------------------------------------------------------------
     // SECTION: PWA OFFLINE-READY STATUS & SERVICE WORKER

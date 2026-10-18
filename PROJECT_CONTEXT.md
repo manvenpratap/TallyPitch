@@ -1,20 +1,21 @@
 # Project Context & Working Memory
 
-**Last Updated:** 2026-10-18 09:31:39
-**Version:** 1.5.0  
+**Last Updated:** 2026-10-18 11:19:45
+**Version:** 1.6.0  
 **Stack:** Single-File Web (SPA) / Progressive Web App (PWA) / Node.js Backend / Supabase PostgreSQL / Playwright / MQTT 3.1.1 Bridge  
 
 ---
 
 ## 1. Current Status & Milestone
-- **Active Phase**: Milestone 13 Completed — Social Match Graphic & Award Card Exporter (S16) Live & Verified!
-- **Test Health**: 100% Passing (31 e2e Playwright tests passing across 7 modules: `test_cricket_engine.py`, `test_wagon_wheel_and_charts.py`, `test_realtime_bridge.py`, `test_community_and_badges.py`, `test_ground_and_insights.py`, `test_pwa_offline.py`, and `test_social_card_exporter.py`)
+- **Active Phase**: Milestone 14 Completed — Duckworth-Lewis-Stern (DLS) Standard Edition Rain Rule & Target Revision Engine (S07) Live & Verified!
+- **Test Health**: 100% Passing (35 e2e Playwright tests passing across 8 modules: `test_cricket_engine.py`, `test_wagon_wheel_and_charts.py`, `test_realtime_bridge.py`, `test_community_and_badges.py`, `test_ground_and_insights.py`, `test_pwa_offline.py`, `test_social_card_exporter.py`, and `test_dls_engine.py`)
 - **Distribution Health**: Synced (`dist/index.html`, `dist/manifest.json`, `dist/sw.js`, `dist/icon-*.png` byte-for-byte in parity)
-- **Feature Parity**: 100.0% against CricHeroes (33/33 core features completed) + Advanced Intelligence + Social Media Graphics Engine (S16)
+- **Feature Parity**: 100.0% against CricHeroes (33/33 core features completed) + Advanced Intelligence + Social Media Graphics Engine (S16) + DLS Standard Edition Engine (S07)
 
 ---
 
 ## 2. Implemented Features
+- [x] **Duckworth-Lewis-Stern (DLS) Standard Edition Engine (S07)**: Full client-side ICC Standard Edition DLS rain rule engine. Embedded 20-over resource matrix (`DLS_RESOURCES_T20` across 0..20 overs remaining and 0..9 wickets lost), mathematical target revision calculator (`R2 / R1 * S`), live DLS Par Score HUD on S07 with dynamic ahead/behind badge (`+X (Ahead)`, `-X (Behind)`, `Par Tied`), and Modal 9 (`#dls-modal`) with target revision calculator, live par score matrix, and official DLS match stoppage decision handler.
 - [x] **Social Match Graphic & Award Card Exporter (S16)**: Native client-side HTML5 Canvas (1080x1080) high-resolution graphic exporter for WhatsApp and Instagram. Dual-mode generator supporting two-innings match scorecards with top performers, result banner, and MVP spotlight, or individual Player of the Match certificate award cards. Includes 1-click PNG download, image clipboard copy, Web Share API integration, and trigger buttons across S07, S13, S21, and the match result modal.
 - [x] **Ground & Pitch Intelligence Engine (Track A)**: Multi-venue ground telemetry (Wankhede, Oval Maidan, Chinnaswamy, Kotla) rendering toss win ratios (Bat 1st vs Chasing %), benchmark 1st/2nd innings averages, pace vs spin economies/wickets, and 4-way dismissal breakdown (Caught, Bowled, LBW, Run Out).
 - [x] **Match Setup Venue Telemetry Preview (S03)**: Instant pitch conditions preview pill on ground dropdown selection.
@@ -64,3 +65,4 @@
 - [x] Milestone 11 (Track C): Package as installable Progressive Web App (PWA) with offline Service Worker caching and network status HUD.
 - [x] Milestone 12 (Track D): Comprehensive test automation (27 passing tests), distribution verification, and release shipping.
 - [x] Milestone 13: Build Social Match Summary & Award Card Exporter (S16) via HTML5 Canvas 1080x1080 generator for WhatsApp & Instagram (31 passing tests).
+- [x] Milestone 14 (Track 1): Implement Duckworth-Lewis-Stern (DLS) Standard Edition Rain Rule & Target Revision Engine (S07) with Modal 9, live ahead/behind HUD, and stoppage decision handling (35 passing tests).
