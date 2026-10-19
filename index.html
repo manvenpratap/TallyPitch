@@ -1614,6 +1614,20 @@
         </div>
       </div>
 
+      <!-- S07: Super Over Active Telemetry Banner (Track 7 / tbl_MatchSuperOverBallByBall) -->
+      <div id="super-over-active-banner" style="display: none; margin-top: 12px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.15)); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: var(--radius-md); padding: 10px 14px; align-items: center; justify-content: space-between;" data-tooltip="Official ICC Super Over tie-breaker console active (1 Over • Max 2 Wickets)">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 18px;">⚡</span>
+          <div>
+            <div style="font-size: 13px; font-weight: 800; color: #f59e0b;" id="so-banner-title">OFFICIAL ICC SUPER OVER IN PROGRESS</div>
+            <div style="font-size: 11px; color: var(--color-text-muted);" id="so-banner-sub">1 Over (6 balls) • Maximum 2 Wickets • 3 Nominated Batters</div>
+          </div>
+        </div>
+        <span id="so-banner-status-pill" style="font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: var(--radius-pill); background: #f59e0b; color: #000;">
+          INNINGS 1
+        </span>
+      </div>
+
       <!-- Active Batters & Bowler Status -->
       <div class="player-stats-card">
         <!-- Striker Row -->
@@ -1828,6 +1842,25 @@
         </div>
         <div id="scorecard-partnerships-wrap" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 20px;">
           <!-- Dynamically populated by renderScorecardPartnerships() -->
+        </div>
+
+        <!-- Super Over Scorecard Breakdown (Track 7 / tbl_MatchSuperOverBallByBall) -->
+        <div id="scorecard-super-over-wrap" style="display: none; background: rgba(30, 41, 59, 0.75); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: var(--radius-lg); padding: 16px; margin: 24px 0 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 20px;">⚡</span>
+              <div>
+                <h3 style="font-size: 16px; font-weight: 800; margin: 0; color: #f59e0b;">Official ICC Super Over Breakdown</h3>
+                <div style="font-size: 11px; color: var(--color-text-muted);">tbl_MatchSuperOverBallByBall • 1 Over (6 balls) • Max 2 Wickets</div>
+              </div>
+            </div>
+            <span id="scorecard-so-winner-badge" style="font-size: 12px; font-weight: 800; padding: 4px 10px; border-radius: var(--radius-pill); background: #f59e0b; color: #000;">
+              Super Over Completed
+            </span>
+          </div>
+          <div id="scorecard-so-content">
+            <!-- Dynamically populated by renderScorecardSuperOver() -->
+          </div>
         </div>
 
         <!-- Match Progression & Visual Charts (S14) -->
@@ -2616,6 +2649,11 @@
         <div style="font-size: 13px; color: var(--color-text-muted);" id="mvp-player-stats">58 runs (32b), 2 catches • MVP: 84.5 pts</div>
       </div>
 
+      <!-- Super Over Tie-Breaker Launch Button (Track 7 / tbl_MatchSuperOverBallByBall) -->
+      <button type="button" class="btn" id="btn-launch-super-over" style="display: none; width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; padding: 11px 16px; margin-bottom: 12px; justify-content: center; align-items: center; gap: 8px; border-radius: var(--radius-md); box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);" onclick="openSuperOverSetupModal(1)" data-tooltip="Scores are level! Commence official ICC 1-over tie-breaker (Super Over)">
+        <span>⚡</span> Commence Official Super Over
+      </button>
+
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
         <button type="button" class="btn btn-secondary" onclick="closeModal('match-result-modal'); navigate('S13');">View Scorecard</button>
         <button type="button" class="btn btn-primary" onclick="restartMatch()">New Match</button>
@@ -3091,6 +3129,94 @@
   </div>
 
   <!-- =======================================================================
+       MODAL 11: OFFICIAL ICC SUPER OVER SETUP (TRACK 7)
+       ======================================================================= -->
+  <div id="super-over-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('super-over-modal')">
+    <div class="modal-card" style="max-width: 580px; border: 1px solid rgba(245, 158, 11, 0.4); box-shadow: 0 20px 45px rgba(0,0,0,0.6);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);">
+            ⚡
+          </div>
+          <div>
+            <h3 style="font-size: 18px; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 8px;" id="so-modal-title">
+              Official ICC Super Over
+              <span class="badge-status-online" style="font-size: 10px; padding: 2px 6px; background: #f59e0b; color: #000;">TIE-BREAKER</span>
+            </h3>
+            <p style="font-size: 12px; color: var(--color-text-muted); margin: 3px 0 0 0;" id="so-modal-sub">
+              1 Over per side (6 balls) • Maximum 2 Wickets • 3 Nominated Batters
+            </p>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('super-over-modal')" style="padding: 4px 8px; font-size: 14px;" data-tooltip="Close Super Over Modal (Esc)">✕</button>
+      </div>
+
+      <!-- Super Over Target Banner (Innings 2 only) -->
+      <div id="so-target-banner" style="display: none; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 14px; text-align: center;">
+        <div style="font-size: 12px; font-weight: 700; color: #f59e0b; text-transform: uppercase;">Super Over Chase Target</div>
+        <div style="font-size: 16px; font-weight: 900; margin: 3px 0;" id="so-target-text">Bangalore Blasters need 16 runs from 6 balls</div>
+      </div>
+
+      <!-- Nominations Form -->
+      <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+        <!-- Batting & Bowling Teams Banner -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 10px;">
+            <div style="font-size: 11px; font-weight: 700; color: #38bdf8; text-transform: uppercase;">Batting Team</div>
+            <div style="font-size: 14px; font-weight: 800; margin-top: 2px;" id="so-batting-team-label">Mumbai Strikers</div>
+          </div>
+          <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 10px;">
+            <div style="font-size: 11px; font-weight: 700; color: #f43f5e; text-transform: uppercase;">Bowling Team</div>
+            <div style="font-size: 14px; font-weight: 800; margin-top: 2px;" id="so-bowling-team-label">Bangalore Blasters</div>
+          </div>
+        </div>
+
+        <!-- 3 Nominated Batters Grid -->
+        <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px;">
+          <div style="font-size: 12px; font-weight: 800; color: var(--color-accent); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+            Nominate 3 Batters (ICC Limit: 2 Wkts)
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+            <div>
+              <label style="font-size: 11px; color: var(--color-text-muted); display: block; margin-bottom: 4px;">1. Striker *</label>
+              <select id="so-striker-select" class="form-control" style="width: 100%; font-size: 12px; padding: 6px;"></select>
+            </div>
+            <div>
+              <label style="font-size: 11px; color: var(--color-text-muted); display: block; margin-bottom: 4px;">2. Non-Striker *</label>
+              <select id="so-non-striker-select" class="form-control" style="width: 100%; font-size: 12px; padding: 6px;"></select>
+            </div>
+            <div>
+              <label style="font-size: 11px; color: var(--color-text-muted); display: block; margin-bottom: 4px;">3. Reserve Batter *</label>
+              <select id="so-reserve-select" class="form-control" style="width: 100%; font-size: 12px; padding: 6px;"></select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1 Nominated Bowler -->
+        <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px;">
+          <div style="font-size: 12px; font-weight: 800; color: #f43f5e; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">
+            Nominate 1 Bowler (6 Deliveries)
+          </div>
+          <div>
+            <label style="font-size: 11px; color: var(--color-text-muted); display: block; margin-bottom: 4px;">Nominated Bowler *</label>
+            <select id="so-bowler-select" class="form-control" style="width: 100%; font-size: 12px; padding: 6px;"></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display: flex; gap: 10px;">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('super-over-modal')" style="flex: 1;" data-tooltip="Cancel Super Over setup and return to match result">
+          Cancel
+        </button>
+        <button type="button" class="btn" id="btn-start-so-action" onclick="confirmSuperOverInnings()" style="flex: 2; background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; padding: 10px 14px;" data-tooltip="Commence Super Over scoring console">
+          ⚡ Start Super Over Innings
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
        OBS LOWER-THIRD LIVE STREAM OVERLAY (STANDALONE & EMBEDDABLE)
        ======================================================================= -->
   <div id="obs-overlay-container" style="display: none;">
@@ -3260,6 +3386,7 @@
         activeChartTab: "manhattan",
         wagonScorecardFilter: "all"
       },
+      superOver: null, // Track 7: Official ICC Super Over tie-breaker engine
       undoStack: [], // Rollback snapshot of states
       communityFilter: "all",
       communityListings: [
@@ -3538,6 +3665,9 @@
     // CORE CRICKET ENGINE (S07): BALL-BY-BALL, STRIKE ROTATION & EXTRAS
     // ------------------------------------------------------------------------
     function getCurrentInnings() {
+      if (state.superOver && state.superOver.active) {
+        return state.superOver.inningsNumber === 1 ? state.superOver.inn1 : state.superOver.inn2;
+      }
       return state.match.currentInningsNumber === 1 ? state.innings1 : state.innings2;
     }
 
@@ -3547,7 +3677,8 @@
         match: state.match,
         innings1: state.innings1,
         innings2: state.innings2,
-        currentLive: state.currentLive
+        currentLive: state.currentLive,
+        superOver: state.superOver
       });
       state.undoStack.push(snapshot);
       if (state.undoStack.length > 30) state.undoStack.shift();
@@ -3563,6 +3694,7 @@
       state.innings1 = prev.innings1;
       state.innings2 = prev.innings2;
       state.currentLive = prev.currentLive;
+      state.superOver = prev.superOver;
       showToast("Last delivery undone!");
       renderLiveConsole();
     }
@@ -3605,7 +3737,9 @@
         extraType: null,
         isWicket: false,
         text: `${runs === 0 ? '•' : runs}`,
-        wagonWheel: state.currentLive.pendingWagonWheel || getDefaultWagonWheel(runs)
+        wagonWheel: state.currentLive.pendingWagonWheel || getDefaultWagonWheel(runs),
+        superOverNumber: (state.superOver && state.superOver.active) ? 1 : null,
+        superOverInning: (state.superOver && state.superOver.active) ? state.superOver.inningsNumber : null
       };
       state.currentLive.pendingWagonWheel = null;
       inn.deliveries.push(deliveryRecord);
@@ -3729,20 +3863,29 @@
 
       // Next Available Batters (not already out or on pitch)
       nextSelect.innerHTML = '';
-      const onPitch = [s.id, ns.id];
-      const batKey = inn.battingTeam;
-      let availableCount = 0;
-
-      state.squads[batKey].forEach(p => {
-        const b = inn.batters[p.id];
-        if (!b.isOut && !onPitch.includes(p.id)) {
-          nextSelect.innerHTML += `<option value="${p.id}">${p.name} (${p.role})</option>`;
-          availableCount++;
+      if (state.superOver && state.superOver.active) {
+        if (inn.wickets === 0 && inn.reserveBatterId && inn.batters[inn.reserveBatterId]) {
+          const res = inn.batters[inn.reserveBatterId];
+          nextSelect.innerHTML = `<option value="${res.id}">${res.name} (3rd Nominated Batter)</option>`;
+        } else {
+          nextSelect.innerHTML = `<option value="">(All Out / Super Over 2-Wkt Limit)</option>`;
         }
-      });
+      } else {
+        const onPitch = [s.id, ns.id];
+        const batKey = inn.battingTeam;
+        let availableCount = 0;
 
-      if (availableCount === 0) {
-        nextSelect.innerHTML = `<option value="">(All out / No remaining batters)</option>`;
+        state.squads[batKey].forEach(p => {
+          const b = inn.batters[p.id];
+          if (!b.isOut && !onPitch.includes(p.id)) {
+            nextSelect.innerHTML += `<option value="${p.id}">${p.name} (${p.role})</option>`;
+            availableCount++;
+          }
+        });
+
+        if (availableCount === 0) {
+          nextSelect.innerHTML = `<option value="">(All out / No remaining batters)</option>`;
+        }
       }
 
       document.getElementById('wicket-modal').classList.add('open');
@@ -3821,6 +3964,9 @@
         } else {
           state.currentLive.nonStrikerId = nextId;
         }
+        if (state.superOver && state.superOver.active) {
+          inn.reserveBatterId = null;
+        }
       }
 
       closeModal('wicket-modal');
@@ -3844,6 +3990,11 @@
     // Over Completion & Bowler Handover (S10)
     // ------------------------------------------------------------------------
     function checkInningsOrOverCompletion() {
+      if (state.superOver && state.superOver.active) {
+        checkSuperOverCompletion();
+        return;
+      }
+
       const inn = getCurrentInnings();
       const maxBalls = state.match.totalOvers * 6;
 
@@ -4018,6 +4169,12 @@
       commitMatchPlayerStatsToTournament();
       renderTournamentLeaderboards();
 
+      // Super Over tie-breaker button toggle
+      const soBtn = document.getElementById('btn-launch-super-over');
+      if (soBtn) {
+        soBtn.style.display = (winnerName === "Match Tied") ? "flex" : "none";
+      }
+
       // MVP Calculation
       computeMVP();
       document.getElementById('match-result-modal').classList.add('open');
@@ -4048,6 +4205,13 @@
 
     function restartMatch() {
       closeModal('match-result-modal');
+      state.superOver = null;
+      const soBtn = document.getElementById('btn-launch-super-over');
+      if (soBtn) soBtn.style.display = 'none';
+      const soBanner = document.getElementById('super-over-active-banner');
+      if (soBanner) soBanner.style.display = 'none';
+      const soWrap = document.getElementById('scorecard-super-over-wrap');
+      if (soWrap) soWrap.style.display = 'none';
       state.match.currentInningsNumber = 1;
       state.match.status = "LIVE";
       state.match.dls = { applied: false, originalTarget: null, revisedTarget: null, revisedOvers: null };
@@ -4079,15 +4243,35 @@
       const batKey = inn.battingTeam;
       const bowlKey = inn.bowlingTeam;
 
-      const batName = batKey === 'A' ? state.match.teamA : state.match.teamB;
-      const bowlName = bowlKey === 'A' ? state.match.teamA : state.match.teamB;
+      const batName = batKey === 'A' ? state.match.teamA : (batKey === 'B' ? state.match.teamB : batKey);
+      const bowlName = bowlKey === 'A' ? state.match.teamA : (bowlKey === 'B' ? state.match.teamB : bowlKey);
+
+      const isSuperOver = state.superOver && state.superOver.active;
+      const soBanner = document.getElementById('super-over-active-banner');
+      if (soBanner) {
+        if (isSuperOver) {
+          soBanner.style.display = 'flex';
+          const pill = document.getElementById('so-banner-status-pill');
+          if (pill) pill.textContent = state.superOver.inningsNumber === 1 ? 'INNINGS 1 (DEFENDING)' : 'INNINGS 2 (CHASE)';
+          const sub = document.getElementById('so-banner-sub');
+          if (sub) sub.textContent = `1 Over (6 balls) • Max 2 Wickets • Striker: ${inn.batters[state.currentLive.strikerId]?.name || 'Batter'} • Bowler: ${inn.bowlers[state.currentLive.bowlerId]?.name || 'Bowler'}`;
+        } else {
+          soBanner.style.display = 'none';
+        }
+      }
 
       // Hero Card Stats
-      document.getElementById('hero-match-status').textContent = `LIVE MATCH • ${state.match.currentInningsNumber === 1 ? '1ST INNINGS' : '2ND INNINGS'}`;
+      if (isSuperOver) {
+        document.getElementById('hero-match-status').textContent = `⚡ SUPER OVER • ${state.superOver.inningsNumber === 1 ? '1ST INNINGS' : '2ND INNINGS (CHASE)'}`;
+        document.getElementById('hero-overs').textContent = `Super Over: ${formatOvers(inn.legalBalls)} / 1 (Max 6b • 2 Wkts)`;
+      } else {
+        document.getElementById('hero-match-status').textContent = `LIVE MATCH • ${state.match.currentInningsNumber === 1 ? '1ST INNINGS' : '2ND INNINGS'}`;
+        document.getElementById('hero-overs').textContent = `Overs: ${formatOvers(inn.legalBalls)} / ${state.match.totalOvers}`;
+      }
+
       document.getElementById('hero-batting-team').textContent = batName;
       document.getElementById('hero-bowling-team').textContent = bowlName;
       document.getElementById('hero-score').textContent = `${inn.totalRuns}/${inn.wickets}`;
-      document.getElementById('hero-overs').textContent = `Overs: ${formatOvers(inn.legalBalls)} / ${state.match.totalOvers}`;
 
       const oversDecimal = (Math.floor(inn.legalBalls / 6) + (inn.legalBalls % 6) / 6);
       const crr = oversDecimal > 0 ? (inn.totalRuns / oversDecimal).toFixed(2) : "0.00";
@@ -4098,7 +4282,25 @@
       const rrrWrap = document.getElementById('hero-rrr-wrap');
       const chaseBanner = document.getElementById('hero-chase-banner');
 
-      if (state.match.currentInningsNumber === 2) {
+      if (isSuperOver) {
+        if (state.superOver.inningsNumber === 2) {
+          targetWrap.style.display = 'block';
+          rrrWrap.style.display = 'block';
+          chaseBanner.style.display = 'block';
+          document.getElementById('hero-target').textContent = inn.targetRuns;
+          const remRuns = Math.max(0, inn.targetRuns - inn.totalRuns);
+          const remBalls = Math.max(0, 6 - inn.legalBalls);
+          const rrr = remBalls > 0 ? ((remRuns / remBalls) * 6).toFixed(2) : "0.00";
+          document.getElementById('hero-rrr').textContent = rrr;
+          chaseBanner.textContent = `⚡ SUPER OVER: Need ${remRuns} runs from ${remBalls} balls to win`;
+        } else {
+          targetWrap.style.display = 'none';
+          rrrWrap.style.display = 'none';
+          chaseBanner.style.display = 'none';
+        }
+        const dlsWrap = document.getElementById('hero-dls-par-wrap');
+        if (dlsWrap) dlsWrap.style.display = 'none';
+      } else if (state.match.currentInningsNumber === 2) {
         targetWrap.style.display = 'block';
         rrrWrap.style.display = 'block';
         chaseBanner.style.display = 'block';
@@ -4454,6 +4656,391 @@
       wrap.innerHTML = html;
     }
 
+    // ========================================================================
+    // OFFICIAL ICC SUPER OVER TIE-BREAKER ENGINE (Track 7 / tbl_MatchSuperOverBallByBall)
+    // ========================================================================
+
+    function openSuperOverSetupModal(phase = 1) {
+      closeModal('match-result-modal');
+      const soModal = document.getElementById('super-over-modal');
+      if (!soModal) return;
+
+      const titleEl = document.getElementById('so-modal-title');
+      const targetBanner = document.getElementById('so-target-banner');
+      const actionBtn = document.getElementById('btn-start-so-action');
+      const batLabel = document.getElementById('so-batting-team-label');
+      const bowlLabel = document.getElementById('so-bowling-team-label');
+
+      const sSelect = document.getElementById('so-striker-select');
+      const nsSelect = document.getElementById('so-non-striker-select');
+      const resSelect = document.getElementById('so-reserve-select');
+      const bSelect = document.getElementById('so-bowler-select');
+
+      sSelect.innerHTML = '';
+      nsSelect.innerHTML = '';
+      resSelect.innerHTML = '';
+      bSelect.innerHTML = '';
+
+      // ICC Rule: Team batting second in main match bats first in Super Over
+      let batKey = 'B';
+      let bowlKey = 'A';
+
+      if (phase === 1) {
+        batKey = state.innings2?.battingTeam || 'B';
+        bowlKey = batKey === 'A' ? 'B' : 'A';
+        titleEl.innerHTML = `Official ICC Super Over <span class="badge-status-online" style="font-size: 10px; padding: 2px 6px; background: #f59e0b; color: #000;">1ST INNINGS</span>`;
+        if (targetBanner) targetBanner.style.display = 'none';
+        actionBtn.innerHTML = `⚡ Start Super Over (1st Innings)`;
+      } else {
+        // Phase 2: Chasing team
+        batKey = state.superOver?.inn1?.bowlingTeam || 'A';
+        bowlKey = state.superOver?.inn1?.battingTeam || 'B';
+        const target = (state.superOver?.inn1?.totalRuns || 0) + 1;
+        titleEl.innerHTML = `Official ICC Super Over <span class="badge-status-online" style="font-size: 10px; padding: 2px 6px; background: #f59e0b; color: #000;">2ND INNINGS (CHASE)</span>`;
+        if (targetBanner) {
+          targetBanner.style.display = 'block';
+          const chaseTeamName = batKey === 'A' ? state.match.teamA : state.match.teamB;
+          document.getElementById('so-target-text').textContent = `${chaseTeamName} need ${target} run(s) from 6 balls to win`;
+        }
+        actionBtn.innerHTML = `⚡ Start Super Over Chase (2nd Innings)`;
+      }
+
+      const batTeamName = batKey === 'A' ? state.match.teamA : state.match.teamB;
+      const bowlTeamName = bowlKey === 'A' ? state.match.teamA : state.match.teamB;
+      batLabel.textContent = batTeamName;
+      bowlLabel.textContent = bowlTeamName;
+
+      // Populate Batters (3 nominated batters)
+      const batSquad = state.squads[batKey] || [];
+      batSquad.forEach((p, idx) => {
+        sSelect.innerHTML += `<option value="${p.id}" ${idx === 0 ? 'selected' : ''}>${p.name} (${p.role})</option>`;
+        nsSelect.innerHTML += `<option value="${p.id}" ${idx === 1 ? 'selected' : ''}>${p.name} (${p.role})</option>`;
+        resSelect.innerHTML += `<option value="${p.id}" ${idx === 2 ? 'selected' : ''}>${p.name} (${p.role})</option>`;
+      });
+
+      // Populate Bowler (1 nominated bowler)
+      const bowlSquad = state.squads[bowlKey] || [];
+      bowlSquad.forEach((p, idx) => {
+        bSelect.innerHTML += `<option value="${p.id}" ${idx === 0 ? 'selected' : ''}>${p.name} (${p.role})</option>`;
+      });
+
+      soModal.dataset.phase = String(phase);
+      soModal.dataset.batKey = batKey;
+      soModal.dataset.bowlKey = bowlKey;
+      soModal.classList.add('open');
+    }
+
+    function confirmSuperOverInnings() {
+      const soModal = document.getElementById('super-over-modal');
+      const phase = parseInt(soModal.dataset.phase || "1", 10);
+      const batKey = soModal.dataset.batKey || (phase === 1 ? 'B' : 'A');
+      const bowlKey = soModal.dataset.bowlKey || (phase === 1 ? 'A' : 'B');
+
+      const sId = document.getElementById('so-striker-select').value;
+      const nsId = document.getElementById('so-non-striker-select').value;
+      const resId = document.getElementById('so-reserve-select').value;
+      const bId = document.getElementById('so-bowler-select').value;
+
+      if (!sId || !nsId || !resId) {
+        showToast("Please nominate 3 batters for the Super Over");
+        return;
+      }
+      if (sId === nsId || sId === resId || nsId === resId) {
+        showToast("Striker, Non-Striker, and Reserve must be 3 different players!");
+        return;
+      }
+      if (!bId) {
+        showToast("Please nominate 1 bowler for the Super Over");
+        return;
+      }
+
+      pushUndoSnapshot();
+
+      const getPlayerObj = (id) => {
+        const found = [...(state.squads.A || []), ...(state.squads.B || [])].find(p => p.id === id);
+        return found ? { id: found.id, name: found.name, role: found.role } : { id, name: id, role: 'Player' };
+      };
+
+      const sPlayer = getPlayerObj(sId);
+      const nsPlayer = getPlayerObj(nsId);
+      const resPlayer = getPlayerObj(resId);
+      const bPlayer = getPlayerObj(bId);
+
+      const innObj = {
+        battingTeam: batKey,
+        bowlingTeam: bowlKey,
+        totalRuns: 0,
+        wickets: 0,
+        legalBalls: 0,
+        targetRuns: phase === 2 ? ((state.superOver?.inn1?.totalRuns || 0) + 1) : 0,
+        extras: { wides: 0, noBalls: 0, byes: 0, legByes: 0 },
+        nominatedBatters: [sId, nsId, resId],
+        reserveBatterId: resId,
+        nominatedBowler: bId,
+        batters: {
+          [sId]: { id: sId, name: sPlayer.name, runs: 0, balls: 0, fours: 0, sixes: 0, isOut: false, dismissalText: '' },
+          [nsId]: { id: nsId, name: nsPlayer.name, runs: 0, balls: 0, fours: 0, sixes: 0, isOut: false, dismissalText: '' },
+          [resId]: { id: resId, name: resPlayer.name, runs: 0, balls: 0, fours: 0, sixes: 0, isOut: false, dismissalText: '' }
+        },
+        bowlers: {
+          [bId]: { id: bId, name: bPlayer.name, runsConceded: 0, legalBalls: 0, maidens: 0, wickets: 0 }
+        },
+        deliveries: [],
+        fow: [],
+        partnerships: [],
+        currentPartnership: null
+      };
+
+      initInningsPartnership(innObj, sId, nsId);
+
+      if (phase === 1) {
+        state.superOver = {
+          active: true,
+          inningsNumber: 1,
+          teamA: state.match.teamA,
+          teamB: state.match.teamB,
+          inn1: innObj,
+          inn2: {
+            battingTeam: bowlKey,
+            bowlingTeam: batKey,
+            totalRuns: 0,
+            wickets: 0,
+            legalBalls: 0,
+            targetRuns: 0,
+            extras: { wides: 0, noBalls: 0, byes: 0, legByes: 0 },
+            nominatedBatters: [],
+            reserveBatterId: null,
+            nominatedBowler: null,
+            batters: {},
+            bowlers: {},
+            deliveries: [],
+            fow: [],
+            partnerships: [],
+            currentPartnership: null
+          },
+          result: null
+        };
+      } else {
+        state.superOver.inn2 = innObj;
+        state.superOver.inningsNumber = 2;
+        state.superOver.active = true;
+      }
+
+      state.currentLive.strikerId = sId;
+      state.currentLive.nonStrikerId = nsId;
+      state.currentLive.bowlerId = bId;
+      state.currentLive.prevBowlerId = null;
+      state.currentLive.currentOverDeliveries = [];
+      state.currentLive.freeHitActive = false;
+
+      closeModal('super-over-modal');
+      navigate('S07');
+      showToast(phase === 1 ? "Super Over 1st Innings is LIVE! (6 balls • 2 wickets)" : "Super Over Chase is LIVE!");
+      renderLiveConsole();
+    }
+
+    function checkSuperOverCompletion() {
+      if (!state.superOver || !state.superOver.active) return;
+      const so = state.superOver;
+      const inn = so.inningsNumber === 1 ? so.inn1 : so.inn2;
+
+      if (so.inningsNumber === 1) {
+        // Innings 1 ends when 2 wickets fall or 6 legal balls bowled
+        if (inn.wickets >= 2 || inn.legalBalls >= 6) {
+          triggerSuperOverInningsBreak();
+        }
+      } else {
+        // Innings 2: Chase in progress
+        if (inn.totalRuns >= inn.targetRuns) {
+          declareSuperOverWinner();
+          return;
+        }
+        if (inn.wickets >= 2 || inn.legalBalls >= 6) {
+          declareSuperOverWinner();
+          return;
+        }
+      }
+    }
+
+    function triggerSuperOverInningsBreak() {
+      const inn1 = state.superOver.inn1;
+      const target = inn1.totalRuns + 1;
+      state.superOver.inn2.targetRuns = target;
+      showToast(`Super Over 1st Innings complete! Target: ${target} runs`);
+      openSuperOverSetupModal(2);
+    }
+
+    function declareSuperOverWinner() {
+      if (!state.superOver) return;
+      const so = state.superOver;
+      const inn1 = so.inn1;
+      const inn2 = so.inn2;
+
+      const teamAName = state.match.teamA;
+      const teamBName = state.match.teamB;
+      const getTeamName = (key) => key === 'A' ? teamAName : teamBName;
+      const team1Name = getTeamName(inn1.battingTeam);
+      const team2Name = getTeamName(inn2.battingTeam);
+
+      let winnerName = "";
+      let loserName = "";
+      let margin = "";
+
+      if (inn2.totalRuns >= inn2.targetRuns) {
+        winnerName = team2Name;
+        loserName = team1Name;
+        const wktsRemaining = 2 - inn2.wickets;
+        margin = `won the Super Over by ${wktsRemaining} wicket(s)`;
+        so.result = `${winnerName} ${margin}`;
+      } else if (inn1.totalRuns > inn2.totalRuns) {
+        winnerName = team1Name;
+        loserName = team2Name;
+        const runDiff = inn1.totalRuns - inn2.totalRuns;
+        margin = `won the Super Over by ${runDiff} run(s)`;
+        so.result = `${winnerName} ${margin}`;
+      } else {
+        winnerName = "Match Tied";
+        margin = "Super Over Tied! (Boundary countback / Trophy shared)";
+        so.result = margin;
+      }
+
+      so.active = false; // finished
+
+      // Update Tournament Standings
+      if (winnerName !== "Match Tied") {
+        updateTournamentStandingsFromMatchResult(winnerName, loserName, false);
+      } else {
+        updateTournamentStandingsFromMatchResult(teamAName, teamBName, true);
+      }
+
+      // Hide Super Over trigger button since completed
+      const soBtn = document.getElementById('btn-launch-super-over');
+      if (soBtn) soBtn.style.display = 'none';
+
+      // Update Match Result Modal
+      document.getElementById('winner-modal-title').textContent = winnerName === "Match Tied" ? "Super Over Tied!" : `⚡ ${winnerName} Super Over Victory!`;
+      document.getElementById('winner-modal-desc').textContent = so.result;
+
+      computeMVP();
+      document.getElementById('match-result-modal').classList.add('open');
+      renderScorecardSuperOver();
+      showToast(so.result);
+    }
+
+    function renderScorecardSuperOver() {
+      const soWrap = document.getElementById('scorecard-super-over-wrap');
+      if (!soWrap) return;
+
+      if (!state.superOver || (!state.superOver.inn1?.legalBalls && !state.superOver.inn1?.wickets && !state.superOver.result)) {
+        soWrap.style.display = 'none';
+        return;
+      }
+
+      soWrap.style.display = 'block';
+      const so = state.superOver;
+      const winnerBadge = document.getElementById('scorecard-so-winner-badge');
+      if (winnerBadge) {
+        winnerBadge.textContent = so.result || (so.inningsNumber === 1 ? '1st Innings in Progress' : 'Chase in Progress');
+      }
+
+      const teamAName = state.match.teamA;
+      const teamBName = state.match.teamB;
+      const getTeamName = (key) => key === 'A' ? teamAName : teamBName;
+
+      function renderSoInningsCard(inn, innTitle) {
+        if (!inn || !inn.battingTeam) return '';
+        const tName = getTeamName(inn.battingTeam);
+        const bowlTName = getTeamName(inn.bowlingTeam);
+
+        let bRows = '';
+        for (let bId in inn.batters) {
+          const b = inn.batters[bId];
+          const sr = b.balls > 0 ? ((b.runs / b.balls) * 100).toFixed(1) : '0.0';
+          bRows += `
+            <tr>
+              <td><strong>${b.name}</strong> ${!b.isOut ? '*' : ''}</td>
+              <td style="color: var(--color-text-muted); font-size: 11px;">${b.dismissalText || (b.isOut ? 'out' : 'not out')}</td>
+              <td class="num"><strong>${b.runs}</strong></td>
+              <td class="num">${b.balls}</td>
+              <td class="num">${b.fours}</td>
+              <td class="num">${b.sixes}</td>
+              <td class="num">${sr}</td>
+            </tr>
+          `;
+        }
+
+        let bowlRows = '';
+        for (let bId in inn.bowlers) {
+          const b = inn.bowlers[bId];
+          const bOversDecimal = Math.floor(b.legalBalls / 6) + (b.legalBalls % 6) / 6;
+          const eco = bOversDecimal > 0 ? (b.runsConceded / bOversDecimal).toFixed(2) : '0.00';
+          bowlRows += `
+            <tr>
+              <td><strong>${b.name}</strong> (${bowlTName})</td>
+              <td class="num">${formatOvers(b.legalBalls)}</td>
+              <td class="num">${b.runsConceded}</td>
+              <td class="num"><strong>${b.wickets}</strong></td>
+              <td class="num">${eco}</td>
+            </tr>
+          `;
+        }
+
+        const ballChips = (inn.deliveries && inn.deliveries.length)
+          ? inn.deliveries.map(d => `<span class="delivery-chip ${d.isWicket ? 'chip-w' : d.runs === 4 ? 'chip-4' : d.runs === 6 ? 'chip-6' : ''}">${d.text}</span>`).join(' ')
+          : '<span style="font-size: 11px; color: var(--color-text-muted); font-style: italic;">Yet to bat</span>';
+
+        return `
+          <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
+              <h4 style="font-size: 14px; font-weight: 800; margin: 0; color: #38bdf8;">${innTitle}: ${tName}</h4>
+              <span style="font-size: 15px; font-weight: 900; color: #fff;">${inn.totalRuns}/${inn.wickets} <span style="font-size: 12px; color: var(--color-text-muted);">(${formatOvers(inn.legalBalls)} ov)</span></span>
+            </div>
+            
+            <table class="scorecard-table" style="font-size: 12px; margin-bottom: 8px;">
+              <thead>
+                <tr>
+                  <th>Batter</th>
+                  <th>Status</th>
+                  <th class="num">R</th>
+                  <th class="num">B</th>
+                  <th class="num">4s</th>
+                  <th class="num">6s</th>
+                  <th class="num">SR</th>
+                </tr>
+              </thead>
+              <tbody>${bRows || '<tr><td colspan="7" style="text-align:center; color:var(--color-text-muted);">Yet to bat</td></tr>'}</tbody>
+            </table>
+
+            <table class="scorecard-table" style="font-size: 12px; margin-bottom: 8px;">
+              <thead>
+                <tr>
+                  <th>Bowler</th>
+                  <th class="num">O</th>
+                  <th class="num">R</th>
+                  <th class="num">W</th>
+                  <th class="num">Eco</th>
+                </tr>
+              </thead>
+              <tbody>${bowlRows || '<tr><td colspan="5" style="text-align:center; color:var(--color-text-muted);">Yet to bowl</td></tr>'}</tbody>
+            </table>
+
+            <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--color-text-muted);">Balls:</span>
+              <div class="delivery-chips-wrap">${ballChips}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      const content = document.getElementById('scorecard-so-content');
+      if (content) {
+        content.innerHTML = `
+          ${renderSoInningsCard(so.inn1, '1st Innings (Defending)')}
+          ${renderSoInningsCard(so.inn2, '2nd Innings (Chasing)')}
+        `;
+      }
+    }
+
     // ------------------------------------------------------------------------
     // CRICKET FIELD ZONES & REAL-TIME VOICE COMMENTARY SYNTHESIZER (Track 4)
     // ------------------------------------------------------------------------
@@ -4741,6 +5328,9 @@
 
       // Innings Partnerships (Track 6 / tbl_Partnership)
       renderScorecardPartnerships();
+
+      // Super Over Scorecard Breakdown (Track 7 / tbl_MatchSuperOverBallByBall)
+      renderScorecardSuperOver();
 
       // Commentary Feed
       const comList = document.getElementById('commentary-list');
