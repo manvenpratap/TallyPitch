@@ -1813,7 +1813,12 @@
 
       <!-- Current Over Deliveries Reel -->
       <div class="over-reel-card">
-        <div class="over-reel-label" id="this-over-label">This Over</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <div class="over-reel-label" id="this-over-label">This Over</div>
+          <div id="live-turning-point-alert" style="display: none; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: var(--radius-pill); background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); align-items: center; gap: 4px; cursor: pointer;" onclick="switchToTurningPointsTab()" data-tooltip="Game-changing turning point over detected! Click to inspect momentum shifts">
+            ⚡ Turning Point
+          </div>
+        </div>
         <div class="delivery-chips-wrap" id="current-over-chips">
           <span style="font-size: 12px; color: var(--color-text-muted); font-style: italic;">No balls bowled in this over</span>
         </div>
@@ -1972,6 +1977,7 @@
               <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-venue" onclick="switchChartTab('venue')" data-tooltip="Ground & pitch conditions, pace vs spin, win ratios">🏟️ Venue Telemetry</button>
               <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-shots" onclick="switchChartTab('shots')" data-tooltip="Cricket shot classification breakdown (Runs & Dismissals by shot type)">🏏 Shot Analysis</button>
               <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-faceoff" onclick="switchChartTab('faceoff')" data-tooltip="Batter vs Bowler head-to-head face-off matrix and duels">⚔️ Face-Off Matrix</button>
+              <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-turning" onclick="switchChartTab('turning')" data-tooltip="Game-changing turning point overs and match momentum shifts">⚡ Turning Points</button>
             </div>
           </div>
 
@@ -2218,6 +2224,63 @@
                 <span id="faceoff-spotlight-status" class="badge" style="background: rgba(37,99,235,0.15); color: var(--color-accent); font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: var(--radius-pill);">Contested</span>
               </div>
               <div id="faceoff-spotlight-content"></div>
+            </div>
+          </div>
+
+          <!-- Turning Point Overs & Match Momentum View (Track 11) -->
+          <div id="chart-view-turning" class="chart-tab-view" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                <button type="button" class="btn btn-secondary tp-filter-btn active" id="btn-tp-all" onclick="setTurningPointPerspective('all')" style="font-size: 11px; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-pill);" data-tooltip="Show all game-changing overs across match">⚡ All</button>
+                <button type="button" class="btn btn-secondary tp-filter-btn" id="btn-tp-batting" onclick="setTurningPointPerspective('batting')" style="font-size: 11px; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-pill);" data-tooltip="Batting explosions & boundary blitzes">🚀 Batting Blasts</button>
+                <button type="button" class="btn btn-secondary tp-filter-btn" id="btn-tp-bowling" onclick="setTurningPointPerspective('bowling')" style="font-size: 11px; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-pill);" data-tooltip="Wicket surges, maiden traps & death strangles">🎯 Bowling Breakthroughs</button>
+                <button type="button" class="btn btn-secondary tp-filter-btn" id="btn-tp-swings" onclick="setTurningPointPerspective('swings')" style="font-size: 11px; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-pill);" data-tooltip="Largest win probability and momentum swings">📈 Momentum Swings</button>
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <label for="tp-innings-select" style="font-size: 11px; font-weight: 700; color: var(--color-text-muted);">Innings:</label>
+                <select id="tp-innings-select" class="form-select" style="padding: 4px 10px; font-size: 12px; width: auto;" onchange="renderTurningPointsChart()"></select>
+              </div>
+            </div>
+
+            <!-- 4 Turning Point Telemetry KPI Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 14px;">
+              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🚀 Biggest Over</div>
+                <div id="tp-kpi-biggest" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-accent);">None (0r)</div>
+              </div>
+              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🎯 Deadliest Over</div>
+                <div id="tp-kpi-deadliest" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-danger);">None (0 Wkts)</div>
+              </div>
+              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🧱 Tightest Over</div>
+                <div id="tp-kpi-tightest" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: #f59e0b;">None (0r)</div>
+              </div>
+              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">📈 Top Swing</div>
+                <div id="tp-kpi-swing" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-success);">0% Win Shift</div>
+              </div>
+            </div>
+
+            <!-- Visual Match Momentum Graph -->
+            <div style="margin-bottom: 14px; background: var(--color-bg); border-radius: var(--radius-md); padding: 12px; border: 1px solid var(--color-border);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 11px;">
+                <span style="font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Over-by-Over Momentum Index Curve</span>
+                <div style="display: flex; gap: 12px; font-size: 10px;">
+                  <span style="color: var(--color-success); font-weight: 700;">▲ Batting Surge</span>
+                  <span style="color: var(--color-danger); font-weight: 700;">▼ Bowling Domination</span>
+                  <span style="color: #f59e0b; font-weight: 700;">● Wicket Taken</span>
+                </div>
+              </div>
+              <div id="tp-momentum-chart-container" style="width: 100%; overflow-x: auto;"></div>
+            </div>
+
+            <!-- Game Changing Overs Card List -->
+            <div>
+              <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 8px;">
+                Game-Changing Overs Breakdown
+              </div>
+              <div id="tp-overs-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
             </div>
           </div>
         </div>
@@ -4794,6 +4857,9 @@
       // Update Live Face-Off HUD Chip (Track 10 / past_match_face_off)
       updateLiveFaceOffHUD();
 
+      // Update Live Turning Point Alert Pill (Track 11 / past_match_turning_point_overs)
+      updateLiveTurningPointAlert();
+
       // Sync with OBS live overlay & CricHeroes MQTT bridge
       if (typeof broadcastLiveState === 'function') {
         broadcastLiveState();
@@ -5823,6 +5889,7 @@
       renderPhasesTable();
       renderShotAnalysisChart();
       renderFaceOffMatrix();
+      renderTurningPointsChart();
     }
 
     // ------------------------------------------------------------------------
@@ -5975,7 +6042,7 @@
 
     function switchChartTab(tab) {
       state.currentLive.activeChartTab = tab;
-      ['manhattan', 'worm', 'wagon', 'phases', 'venue', 'shots', 'faceoff'].forEach(t => {
+      ['manhattan', 'worm', 'wagon', 'phases', 'venue', 'shots', 'faceoff', 'turning'].forEach(t => {
         const btn = document.getElementById(`btn-chart-${t}`);
         const view = document.getElementById(`chart-view-${t}`);
         if (btn) btn.classList.toggle('active', t === tab);
@@ -5988,6 +6055,7 @@
       else if (tab === 'venue') renderVenueIntelligence();
       else if (tab === 'shots') renderShotAnalysisChart();
       else if (tab === 'faceoff') renderFaceOffMatrix();
+      else if (tab === 'turning') renderTurningPointsChart();
     }
 
     function renderManhattanChart() {
@@ -6953,6 +7021,466 @@
           ${chipsHtml}
         </div>
       `;
+    }
+
+    // ------------------------------------------------------------------------
+    // MATCH TURNING POINT OVERS & MOMENTUM ENGINE (Track 11 / past_match_turning_point_overs)
+    // ------------------------------------------------------------------------
+    let turningPointState = {
+      perspective: 'all' // 'all', 'batting', 'bowling', 'swings'
+    };
+
+    function setTurningPointPerspective(perspective) {
+      turningPointState.perspective = perspective;
+      ['all', 'batting', 'bowling', 'swings'].forEach(p => {
+        const btn = document.getElementById(`btn-tp-${p}`);
+        if (btn) btn.classList.toggle('active', p === perspective);
+      });
+      renderTurningPointsChart();
+    }
+
+    function getMatchTurningPointOvers(inningsFilter = 'all', perspective = 'all') {
+      const inn1 = state.innings1;
+      const inn2 = state.innings2;
+      const totalOvers = state.match.totalOvers || 20;
+
+      let targetInnings = [];
+      if (inningsFilter === 'inn1') {
+        targetInnings = [{ inn: inn1, num: 1, team: state.match.teamA || 'Team A', opp: state.match.teamB || 'Team B' }];
+      } else if (inningsFilter === 'inn2') {
+        targetInnings = [{ inn: inn2, num: 2, team: state.match.teamB || 'Team B', opp: state.match.teamA || 'Team A' }];
+      } else {
+        targetInnings = [
+          { inn: inn1, num: 1, team: state.match.teamA || 'Team A', opp: state.match.teamB || 'Team B' },
+          { inn: inn2, num: 2, team: state.match.teamB || 'Team B', opp: state.match.teamA || 'Team A' }
+        ];
+      }
+
+      const allOvers = [];
+
+      targetInnings.forEach(({ inn, num: innNum, team, opp }) => {
+        if (!inn || !inn.deliveries || inn.deliveries.length === 0) return;
+
+        // Group deliveries by overNum
+        const overMap = {};
+        inn.deliveries.forEach(d => {
+          const o = d.overNum !== undefined ? d.overNum : 0;
+          if (!overMap[o]) overMap[o] = [];
+          overMap[o].push(d);
+        });
+
+        let runningRuns = 0;
+        let runningWkts = 0;
+        let runningLegalBalls = 0;
+
+        const sortedOverNums = Object.keys(overMap).map(Number).sort((a, b) => a - b);
+
+        sortedOverNums.forEach(o => {
+          const dels = overMap[o];
+          const overRuns = dels.reduce((sum, d) => sum + (d.runs || 0) + (d.isExtra ? 1 : 0), 0);
+          const overWkts = dels.filter(d => d.isWicket).length;
+          const overDots = dels.filter(d => d.runs === 0 && !d.isWicket && !d.isExtra).length;
+          const overFours = dels.filter(d => d.runs === 4).length;
+          const overSixes = dels.filter(d => d.runs === 6).length;
+          const legalBallsInOver = dels.filter(d => !d.isExtra || d.extraType === 'bye' || d.extraType === 'leg_bye').length;
+
+          // Bowler & Batters in this over
+          const bId = dels[0]?.bowlerId;
+          const bowlerObj = (inn.bowlers && inn.bowlers[bId]) || { name: 'Bowler' };
+          const battersFacing = new Set();
+          dels.forEach(d => {
+            if (d.strikerId && inn.batters && inn.batters[d.strikerId]) {
+              battersFacing.add(inn.batters[d.strikerId].name);
+            }
+          });
+
+          runningRuns += overRuns;
+          runningWkts += overWkts;
+          runningLegalBalls += legalBallsInOver;
+
+          // Win probability / Momentum Swing Delta
+          let prevRuns = runningRuns - overRuns;
+          let prevWkts = runningWkts - overWkts;
+          let prevBalls = runningLegalBalls - legalBallsInOver;
+          
+          let prevWinProb = 50;
+          let postWinProb = 50;
+          if (innNum === 1) {
+            const avg1st = (GROUND_DATABASE[state.match.venueKey || 'oval_maidan'] || {}).avgFirstInns || 142;
+            const totalBalls = totalOvers * 6;
+            const projPre = prevBalls > 0 ? (prevRuns + (prevRuns / prevBalls) * (totalBalls - prevBalls)) : avg1st;
+            const projPost = runningLegalBalls > 0 ? (runningRuns + (runningRuns / runningLegalBalls) * (totalBalls - runningLegalBalls)) : avg1st;
+            prevWinProb = Math.max(5, Math.min(95, Math.round(50 + ((projPre - avg1st) / 3.0) - (prevWkts * 3.5))));
+            postWinProb = Math.max(5, Math.min(95, Math.round(50 + ((projPost - avg1st) / 3.0) - (runningWkts * 3.5))));
+          } else {
+            const target = state.match.targetScore || 150;
+            const totalBalls = totalOvers * 6;
+            const preRem = Math.max(0, totalBalls - prevBalls);
+            const preNeed = Math.max(0, target - prevRuns);
+            const preCRR = prevBalls > 0 ? (prevRuns / (prevBalls / 6)) : 6.0;
+            const preRRR = preRem > 0 ? (preNeed / (preRem / 6)) : 36.0;
+            prevWinProb = Math.max(5, Math.min(95, Math.round(50 + ((preCRR - preRRR) * 6) - (prevWkts * 5.5))));
+
+            const postRem = Math.max(0, totalBalls - runningLegalBalls);
+            const postNeed = Math.max(0, target - runningRuns);
+            const postCRR = runningLegalBalls > 0 ? (runningRuns / (runningLegalBalls / 6)) : 6.0;
+            const postRRR = postRem > 0 ? (postNeed / (postRem / 6)) : 36.0;
+            postWinProb = Math.max(5, Math.min(95, Math.round(50 + ((postCRR - postRRR) * 6) - (runningWkts * 5.5))));
+          }
+
+          const winShift = postWinProb - prevWinProb;
+          const momentumIndex = (overRuns * 1.5) + (overSixes * 3) + (overFours * 1.5) - (overWkts * 14) - (overDots * 0.6);
+
+          // Classification
+          let type = 'standard';
+          let label = 'Standard Over';
+          let badgeColor = 'var(--color-text-muted)';
+          let badgeBg = 'rgba(100, 116, 139, 0.12)';
+          let icon = '⚖️';
+
+          if (overWkts >= 2 || (overWkts >= 1 && overRuns <= 4)) {
+            type = 'wicket_storm';
+            label = `${overWkts >= 2 ? 'Double Strike 🎯' : 'Crucial Breakthrough 🎯'}`;
+            badgeColor = 'var(--color-danger)';
+            badgeBg = 'rgba(239, 68, 68, 0.15)';
+            icon = '🎯';
+          } else if (overRuns >= 14 || overSixes >= 2) {
+            type = 'boundary_blitz';
+            label = 'Boundary Explosion 🚀';
+            badgeColor = 'var(--color-accent)';
+            badgeBg = 'rgba(37, 99, 235, 0.15)';
+            icon = '🚀';
+          } else if (overRuns <= 2 && legalBallsInOver >= 5) {
+            type = 'maiden_trap';
+            label = `${overRuns === 0 ? 'Maiden Trap 🧱' : 'Death Strangle 🧱'}`;
+            badgeColor = '#f59e0b';
+            badgeBg = 'rgba(245, 158, 11, 0.15)';
+            icon = '🧱';
+          } else if (Math.abs(winShift) >= 8 || overRuns >= 10 || overWkts >= 1) {
+            type = 'momentum_swing';
+            label = `Momentum Shift (${winShift >= 0 ? '+' : ''}${winShift}%) ⚡`;
+            badgeColor = 'var(--color-success)';
+            badgeBg = 'rgba(34, 197, 94, 0.15)';
+            icon = '⚡';
+          }
+
+          allOvers.push({
+            overNum: o,
+            overDisplay: o + 1,
+            inningsNumber: innNum,
+            teamName: team,
+            oppName: opp,
+            runs: overRuns,
+            wickets: overWkts,
+            dots: overDots,
+            fours: overFours,
+            sixes: overSixes,
+            bowlerName: bowlerObj.name,
+            battersFacing: Array.from(battersFacing).join(', ') || 'Batters',
+            legalBalls: legalBallsInOver,
+            totalScore: `${runningRuns}/${runningWkts}`,
+            runRate: (legalBallsInOver > 0 ? (overRuns / (legalBallsInOver / 6)).toFixed(1) : "0.0"),
+            prevWinProb,
+            postWinProb,
+            winShift,
+            momentumIndex,
+            type,
+            label,
+            badgeColor,
+            badgeBg,
+            icon,
+            deliveries: dels
+          });
+        });
+      });
+
+      // Perspective Filtering
+      let filtered = [...allOvers];
+      if (perspective === 'batting') {
+        filtered = filtered.filter(o => o.type === 'boundary_blitz' || o.runs >= 10 || o.momentumIndex > 5)
+                           .sort((a, b) => b.runs - a.runs || b.momentumIndex - a.momentumIndex);
+      } else if (perspective === 'bowling') {
+        filtered = filtered.filter(o => o.type === 'wicket_storm' || o.type === 'maiden_trap' || o.wickets > 0 || o.runs <= 3)
+                           .sort((a, b) => b.wickets - a.wickets || a.runs - b.runs);
+      } else if (perspective === 'swings') {
+        filtered = filtered.filter(o => Math.abs(o.winShift) >= 5 || o.type !== 'standard')
+                           .sort((a, b) => Math.abs(b.winShift) - Math.abs(a.winShift) || Math.abs(b.momentumIndex) - Math.abs(a.momentumIndex));
+      } else {
+        filtered.sort((a, b) => {
+          const aIsTP = a.type !== 'standard' ? 1 : 0;
+          const bIsTP = b.type !== 'standard' ? 1 : 0;
+          if (aIsTP !== bIsTP) return bIsTP - aIsTP;
+          return Math.abs(b.momentumIndex) - Math.abs(a.momentumIndex) || a.overNum - b.overNum;
+        });
+      }
+
+      return {
+        allOvers,
+        filtered
+      };
+    }
+
+    function syncTurningPointInningsOptions() {
+      const sel = document.getElementById('tp-innings-select');
+      if (!sel) return;
+      const currentVal = sel.value || 'all';
+
+      const inn2 = state.innings2;
+      const teamAName = state.match.teamA || 'Team A';
+      const teamBName = state.match.teamB || 'Team B';
+
+      let opts = [
+        `<option value="all">Entire Match</option>`,
+        `<option value="inn1">1st Innings (${teamAName})</option>`
+      ];
+      if (inn2 && inn2.deliveries && inn2.deliveries.length > 0) {
+        opts.push(`<option value="inn2">2nd Innings (${teamBName})</option>`);
+      }
+
+      sel.innerHTML = opts.join('');
+      if (sel.querySelector(`option[value="${currentVal}"]`)) {
+        sel.value = currentVal;
+      } else {
+        sel.value = 'all';
+      }
+    }
+
+    function renderTurningPointsChart() {
+      const container = document.getElementById('chart-view-turning');
+      if (!container) return;
+
+      syncTurningPointInningsOptions();
+      const sel = document.getElementById('tp-innings-select');
+      const filter = sel ? sel.value : 'all';
+
+      const data = getMatchTurningPointOvers(filter, turningPointState.perspective);
+      const all = data.allOvers;
+      const filtered = data.filtered;
+
+      const kpiBiggest = document.getElementById('tp-kpi-biggest');
+      const kpiDeadliest = document.getElementById('tp-kpi-deadliest');
+      const kpiTightest = document.getElementById('tp-kpi-tightest');
+      const kpiSwing = document.getElementById('tp-kpi-swing');
+      const chartContainer = document.getElementById('tp-momentum-chart-container');
+      const listContainer = document.getElementById('tp-overs-list');
+
+      if (!all.length) {
+        if (kpiBiggest) kpiBiggest.textContent = "None (0r)";
+        if (kpiDeadliest) kpiDeadliest.textContent = "None (0 Wkts)";
+        if (kpiTightest) kpiTightest.textContent = "None (0r)";
+        if (kpiSwing) kpiSwing.textContent = "0% Win Shift";
+        if (chartContainer) chartContainer.innerHTML = `<div style="text-align: center; padding: 20px; color: var(--color-text-muted); font-size: 13px; font-style: italic;">Score match deliveries to generate over-by-over momentum curve.</div>`;
+        if (listContainer) listContainer.innerHTML = `<div style="text-align: center; padding: 20px; color: var(--color-text-muted); font-size: 13px; font-style: italic;">No overs recorded yet. Score deliveries in S07 to detect game-changing turning points!</div>`;
+        return;
+      }
+
+      // 1. Biggest Over (Highest runs)
+      const sortedByRuns = [...all].sort((a, b) => b.runs - a.runs);
+      const biggest = sortedByRuns[0];
+      if (kpiBiggest) {
+        kpiBiggest.textContent = biggest && biggest.runs > 0 ? `Ov ${biggest.overDisplay}: ${biggest.runs}r (${biggest.teamName.split(' ')[0]})` : "None (0r)";
+      }
+
+      // 2. Deadliest Over (Most wickets)
+      const sortedByWkts = [...all].filter(o => o.wickets > 0).sort((a, b) => b.wickets - a.wickets || a.runs - b.runs);
+      const deadliest = sortedByWkts[0];
+      if (kpiDeadliest) {
+        kpiDeadliest.textContent = deadliest ? `Ov ${deadliest.overDisplay}: ${deadliest.wickets} Wkts (${deadliest.bowlerName.split(' ')[0]})` : "None (0 Wkts)";
+      }
+
+      // 3. Tightest Over (Lowest runs, min 5 legal balls)
+      const sortedByTight = [...all].filter(o => o.legalBalls >= 4).sort((a, b) => a.runs - b.runs || b.dots - a.dots);
+      const tightest = sortedByTight[0];
+      if (kpiTightest) {
+        kpiTightest.textContent = tightest ? `Ov ${tightest.overDisplay}: ${tightest.runs}r (${tightest.bowlerName.split(' ')[0]})` : "None (0r)";
+      }
+
+      // 4. Top Win Shift
+      const sortedBySwing = [...all].sort((a, b) => Math.abs(b.winShift) - Math.abs(a.winShift));
+      const topSwing = sortedBySwing[0];
+      if (kpiSwing) {
+        const sign = topSwing && topSwing.winShift > 0 ? '+' : '';
+        kpiSwing.textContent = topSwing ? `Ov ${topSwing.overDisplay}: ${sign}${topSwing.winShift}% Shift` : "0% Win Shift";
+      }
+
+      // Render Visual Momentum SVG
+      renderTurningPointMomentumSVG(all);
+
+      // Render Overs Cards List
+      if (listContainer) {
+        if (!filtered.length) {
+          listContainer.innerHTML = `<div style="text-align: center; padding: 20px; color: var(--color-text-muted); font-size: 13px; font-style: italic;">No game-changing overs match the selected perspective filter.</div>`;
+          return;
+        }
+
+        listContainer.innerHTML = filtered.map(o => {
+          let chipsHtml = o.deliveries.map(d => {
+            const shotName = d.shotType || d.wagonWheel?.shot_type || 'Ball';
+            let chipClass = 'ball-chip';
+            if (d.isWicket) chipClass += ' wicket';
+            else if (d.isExtra) chipClass += ' extra';
+            else if (d.runs === 4 || d.runs === 6) chipClass += ' boundary';
+            else if (d.runs === 0) chipClass += ' dot';
+            else chipClass += ' single';
+            return `<div class="${chipClass}" style="width: 24px; height: 24px; font-size: 10px;" data-tooltip="Over ${d.overNum}.${d.ballInOver} • ${d.runs} runs (${shotName})">${d.text || d.runs}</div>`;
+          }).join('');
+
+          const swingSign = o.winShift > 0 ? '+' : '';
+          const swingColor = o.winShift > 0 ? 'var(--color-success)' : (o.winShift < 0 ? 'var(--color-danger)' : 'var(--color-text-muted)');
+
+          return `
+            <div class="card" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 14px; font-weight: 800; color: var(--color-text);">Over ${o.overDisplay}</span>
+                  <span style="font-size: 11px; color: var(--color-text-muted);">${o.teamName} (${o.inningsNumber === 1 ? '1st Inns' : '2nd Inns'})</span>
+                </div>
+                <span class="badge" style="background: ${o.badgeBg}; color: ${o.badgeColor}; font-weight: 800; font-size: 11px; padding: 3px 8px; border-radius: var(--radius-pill);">
+                  ${o.label}
+                </span>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
+                <div style="font-size: 12px; color: var(--color-text);">
+                  ⚾ <strong>${o.bowlerName}</strong> to 🏏 <span>${o.battersFacing}</span>
+                </div>
+                <div style="font-size: 13px; font-weight: 800; color: var(--color-accent);">
+                  ${o.runs} Runs <span style="font-size: 11px; font-weight: normal; color: var(--color-text-muted);">• ${o.wickets} Wkts • Score: ${o.totalScore}</span>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 8px;">
+                ${chipsHtml}
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--color-text-muted); border-top: 1px solid var(--color-border); padding-top: 6px;">
+                <span>Over Run Rate: <strong style="color: var(--color-text);">${o.runRate}</strong></span>
+                <span>Momentum Swing: <strong style="color: ${swingColor};">${swingSign}${o.winShift}% Win Shift</strong></span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function renderTurningPointMomentumSVG(overs) {
+      const container = document.getElementById('tp-momentum-chart-container');
+      if (!container || !overs || !overs.length) return;
+
+      const n = overs.length;
+      const w = Math.max(500, n * 38 + 60);
+      const h = 180;
+      const padL = 36;
+      const padR = 20;
+      const padT = 20;
+      const padB = 28;
+      const chartW = w - padL - padR;
+      const chartH = h - padT - padB;
+      const slotW = chartW / n;
+      const barW = Math.min(20, slotW * 0.65);
+      const zeroY = padT + (chartH / 2);
+
+      let maxAbs = 15;
+      overs.forEach(o => {
+        if (Math.abs(o.momentumIndex) > maxAbs) maxAbs = Math.abs(o.momentumIndex);
+      });
+      maxAbs = Math.ceil(maxAbs / 5) * 5;
+
+      let svg = `<svg viewBox="0 0 ${w} ${h}" width="100%" height="180" style="display:block; font-family: var(--font-mono); font-size: 10px;">`;
+
+      // Zero baseline
+      svg += `<line x1="${padL}" y1="${zeroY}" x2="${w - padR}" y2="${zeroY}" stroke="var(--color-border)" stroke-width="1.5"/>`;
+
+      // Grid guidelines
+      const halfH = chartH / 2;
+      const topY = padT;
+      const botY = padT + chartH;
+      svg += `<line x1="${padL}" y1="${topY}" x2="${w - padR}" y2="${topY}" stroke="var(--color-border)" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>`;
+      svg += `<line x1="${padL}" y1="${botY}" x2="${w - padR}" y2="${botY}" stroke="var(--color-border)" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>`;
+      svg += `<text x="${padL - 6}" y="${topY + 3}" fill="var(--color-success)" text-anchor="end">+${maxAbs}</text>`;
+      svg += `<text x="${padL - 6}" y="${zeroY + 3}" fill="var(--color-text-muted)" text-anchor="end">0</text>`;
+      svg += `<text x="${padL - 6}" y="${botY + 3}" fill="var(--color-danger)" text-anchor="end">-${maxAbs}</text>`;
+
+      overs.forEach((o, idx) => {
+        const cx = padL + (idx + 0.5) * slotW;
+        const val = o.momentumIndex;
+        const barHeight = (Math.abs(val) / maxAbs) * halfH;
+
+        let barY = zeroY;
+        let barColor = 'var(--color-success)';
+        if (val < 0) {
+          barY = zeroY;
+          barColor = 'var(--color-danger)';
+        } else {
+          barY = zeroY - barHeight;
+        }
+
+        const isSpecial = o.type !== 'standard';
+        const opacity = isSpecial ? '1.0' : '0.6';
+
+        // Render Momentum bar
+        svg += `<rect x="${cx - barW / 2}" y="${barY}" width="${barW}" height="${Math.max(2, barHeight)}" fill="${barColor}" opacity="${opacity}" rx="2" data-tooltip="Over ${o.overDisplay} (${o.teamName.split(' ')[0]}): ${o.runs} runs, ${o.wickets} wkts (${o.label})"/>`;
+
+        // Runs on top of bar
+        const textY = val >= 0 ? barY - 4 : barY + barHeight + 9;
+        svg += `<text x="${cx}" y="${textY}" fill="${barColor}" text-anchor="middle" font-weight="700" font-size="9">${o.runs}r</text>`;
+
+        // Wicket pin marker
+        if (o.wickets > 0) {
+          svg += `<circle cx="${cx}" cy="${zeroY + barHeight + 5}" r="4" fill="#f59e0b" stroke="#ffffff" stroke-width="1" data-tooltip="${o.wickets} Wicket(s) fallen in Over ${o.overDisplay}"/>`;
+        }
+
+        // X-axis label
+        svg += `<text x="${cx}" y="${h - 8}" fill="var(--color-text-muted)" text-anchor="middle" font-size="9">Ov ${o.overDisplay}</text>`;
+      });
+
+      svg += `</svg>`;
+      container.innerHTML = svg;
+    }
+
+    function updateLiveTurningPointAlert() {
+      const alertPill = document.getElementById('live-turning-point-alert');
+      if (!alertPill) return;
+
+      const inn = getCurrentInnings();
+      if (!inn || !inn.deliveries || !inn.deliveries.length) {
+        alertPill.style.display = 'none';
+        return;
+      }
+
+      // Check current or latest over
+      const latestOverNum = inn.deliveries[inn.deliveries.length - 1].overNum || 0;
+      const latestDels = inn.deliveries.filter(d => d.overNum === latestOverNum);
+      const runsInOver = latestDels.reduce((sum, d) => sum + (d.runs || 0) + (d.isExtra ? 1 : 0), 0);
+      const wktsInOver = latestDels.filter(d => d.isWicket).length;
+      const legalBallsInOver = latestDels.filter(d => !d.isExtra || d.extraType === 'bye' || d.extraType === 'leg_bye').length;
+
+      if (runsInOver >= 14 || (runsInOver >= 10 && latestDels.some(d => d.runs === 6))) {
+        alertPill.textContent = `🚀 Game-Changer: ${runsInOver}r in Ov ${latestOverNum + 1}`;
+        alertPill.style.display = 'inline-flex';
+        alertPill.style.color = 'var(--color-accent)';
+        alertPill.style.background = 'rgba(37,99,235,0.15)';
+        alertPill.style.borderColor = 'rgba(37,99,235,0.3)';
+      } else if (wktsInOver >= 2 || (wktsInOver >= 1 && runsInOver <= 3)) {
+        alertPill.textContent = `🎯 Game-Changer: ${wktsInOver} Wkt${wktsInOver > 1 ? 's' : ''}!`;
+        alertPill.style.display = 'inline-flex';
+        alertPill.style.color = 'var(--color-danger)';
+        alertPill.style.background = 'rgba(239,68,68,0.15)';
+        alertPill.style.borderColor = 'rgba(239,68,68,0.3)';
+      } else if (legalBallsInOver >= 5 && runsInOver <= 2) {
+        alertPill.textContent = `🧱 Maiden Trap in Ov ${latestOverNum + 1}`;
+        alertPill.style.display = 'inline-flex';
+        alertPill.style.color = '#f59e0b';
+        alertPill.style.background = 'rgba(245,158,11,0.15)';
+        alertPill.style.borderColor = 'rgba(245,158,11,0.3)';
+      } else {
+        alertPill.style.display = 'none';
+      }
+    }
+
+    function switchToTurningPointsTab() {
+      navigate('S13');
+      switchChartTab('turning');
     }
 
     // ------------------------------------------------------------------------

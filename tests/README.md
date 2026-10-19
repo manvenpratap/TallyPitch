@@ -23,6 +23,7 @@ Automated regression and end-to-end testing infrastructure powered by Playwright
 | `test_compare_vs_engine.py` | Player & Team Head-to-Head Compare VS Engine (Track 8 / CricInsights PRO) | • Un-paywalled dual mode switcher (Player vs Player & Team vs Team)<br>• Marquee presets (Rohit vs Virat, Bumrah vs Siraj, Hardik vs Maxwell)<br>• 10 official comparative metrics with 10%-90% proportional split bars<br>• Dynamic head-to-head dominance index pill calculation<br>• Team vs team benchmark breakdown (matches, win %, innings averages, boundary pacing, pace share)<br>• Cross-screen triggers from S20 Player Profile (`#btn-compare-from-profile`) and Scouting Table (`⚡ VS`)<br>• Zero critical console errors verification |
 | `test_shot_type_engine.py` | 8-Sector Ground Cricket Shot Type Classification Engine (Track 9 / tbl_ShotType) | • 8-sector ground mapping to canonical cricket shot types across Ground and Lofted/Air trajectories<br>• Modal 3 interactive shot chips (`#wagon-shot-type-chips`) and active shot badge (`#wagon-selected-shot-pill`)<br>• Delivery ball-by-ball shot recording (`d.shotType` & `d.wagonWheel.shot_type`)<br>• Speech commentary synthesis dynamically speaking shot names<br>• S14 Shot Analysis chart tab (`#btn-chart-shots`), filter selector, 4 KPI cards, and proportional distribution list<br>• 0ms atomic delivery rollback (Undo)<br>• Zero critical console errors verification |
 | `test_face_off_engine.py` | Batter vs Bowler Head-to-Head Face-Off Matrix Engine (Track 10 / past_match_face_off) | • S07 Live Face-Off HUD button (`#btn-faceoff-hud`) & real-time striker vs bowler metrics<br>• Modal 12 (`#faceoff-modal`) interactive duel card, batter/bowler selectors, boundaries, dismissals & delivery chips<br>• S14 Face-Off Matrix chart tab (`#btn-chart-faceoff`), innings filter selector (`#faceoff-innings-select`)<br>• 4 KPI telemetry cards (Top Dominant Batter, Nemesis Bowler, Dot Ball Trap, Top Scoring Duel)<br>• Interactive grid matrix table with clickable cells and spotlight inspector (`#faceoff-spotlight-card`)<br>• 0ms atomic delivery rollback (Undo)<br>• Zero critical console errors verification |
+| `test_turning_point_engine.py` | Match Turning Point Overs & Momentum Engine (Track 11 / past_match_turning_point_overs) | • S07 Live Turning Point Alert pill (`#live-turning-point-alert`) with quick navigation to S14<br>• S14 8th chart tab (`#btn-chart-turning`) and `#chart-view-turning` container<br>• 4 KPI cards (Biggest Over, Deadliest Over, Tightest Over, Top Swing)<br>• Over-by-over Momentum Index SVG bar curve with baseline, advantage bars & wicket pins<br>• Perspective switcher (All, Batting Blasts, Bowling Breakthroughs, Momentum Swings)<br>• Breakdown cards list with ball-by-ball chips and win-shift telemetry<br>• 0ms atomic delivery rollback (Undo)<br>• Zero critical console errors verification |
 
 ## Running Tests
 
@@ -44,6 +45,6 @@ pytest -v tests/
 - `helpers.py`: Bounding-box collision detection, viewport overflow checking, and zero console error assertion.
 
 ---
-**Total Active Test Modules:** 17
-**Total Passing E2E Tests:** 63 (100% passing)  
+**Total Active Test Modules:** 18
+**Total Passing E2E Tests:** 66 (100% passing)  
 
