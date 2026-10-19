@@ -1211,6 +1211,28 @@
       transition: width 300ms ease;
     }
 
+    /* Track 9: Cricket Shot Type Classification Styles */
+    .shot-chip {
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: var(--radius-pill);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      cursor: pointer;
+      transition: all 150ms ease;
+    }
+    .shot-chip:hover {
+      border-color: var(--color-accent);
+    }
+    .shot-chip.active {
+      background: var(--color-accent);
+      color: #ffffff;
+      border-color: var(--color-accent);
+      box-shadow: 0 2px 6px rgba(29, 78, 216, 0.35);
+    }
+
     .community-filters-row {
       display: flex;
       gap: 8px;
@@ -1945,6 +1967,7 @@
               <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-wagon" onclick="switchChartTab('wagon')" data-tooltip="All match shot vectors on 360° field">🎯 Wagon Wheel</button>
               <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-phases" onclick="switchChartTab('phases')" data-tooltip="Powerplay, Middle, and Death overs breakdown">⏱️ Phases</button>
               <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-venue" onclick="switchChartTab('venue')" data-tooltip="Ground & pitch conditions, pace vs spin, win ratios">🏟️ Venue Telemetry</button>
+              <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-shots" onclick="switchChartTab('shots')" data-tooltip="Cricket shot classification breakdown (Runs & Dismissals by shot type)">🏏 Shot Analysis</button>
             </div>
           </div>
 
@@ -2082,6 +2105,56 @@
                 <span><span style="display: inline-block; width: 8px; height: 8px; background: #f59e0b; border-radius: 50%;"></span> LBW (<span id="dis-pct-lbw">12%</span>)</span>
                 <span><span style="display: inline-block; width: 8px; height: 8px; background: #8b5cf6; border-radius: 50%;"></span> Run Out (<span id="dis-pct-runout">6%</span>)</span>
               </div>
+            </div>
+          </div>
+
+          <!-- Shot Analysis View (Track 9 / tbl_ShotType) -->
+          <div id="chart-view-shots" class="chart-tab-view" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <h4 style="font-size: 14px; font-weight: 800; margin: 0;">🏏 8-Sector Cricket Shot Type Analysis</h4>
+                  <span class="badge" style="background: rgba(37,99,235,0.15); color: var(--color-accent); font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: var(--radius-pill);">
+                    tbl_ShotType • PRO UN-PAYWALLED
+                  </span>
+                </div>
+                <p style="font-size: 11px; color: var(--color-text-muted); margin: 2px 0 0;">
+                  Ground sector shot classification mapping productivity, boundary yield, and dismissal risk.
+                </p>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <label for="shots-filter-select" style="font-size: 11px; font-weight: 700; color: var(--color-text-muted);">Filter:</label>
+                <select id="shots-filter-select" class="form-select" style="padding: 4px 10px; font-size: 12px; width: auto;" onchange="renderShotAnalysisChart()"></select>
+              </div>
+            </div>
+
+            <!-- 4 Telemetry KPI Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 14px;">
+              <div class="card" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid var(--color-accent);">
+                <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">👑 Most Productive</div>
+                <div id="shots-kpi-productive" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-text);">Cover Drive (0r)</div>
+              </div>
+              <div class="card" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid var(--color-success);">
+                <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🚀 Boundary Yield</div>
+                <div id="shots-kpi-boundary" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-success);">0% Boundaries</div>
+              </div>
+              <div class="card" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid #f59e0b);">
+                <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🛡️ Top Ground Control</div>
+                <div id="shots-kpi-ground" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: #f59e0b;">Straight Drive (0r)</div>
+              </div>
+              <div class="card" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid var(--color-danger);">
+                <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">⚠️ High Risk Dismissal</div>
+                <div id="shots-kpi-risk" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-danger);">None (0 Wkts)</div>
+              </div>
+            </div>
+
+            <!-- Detailed Shots Breakdown List -->
+            <div class="card" style="padding: 12px; background: var(--color-bg); margin: 0;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">
+                <span>Shot Type Breakdown</span>
+                <span>Runs • SR • Boundaries • Wkts</span>
+              </div>
+              <div id="shots-breakdown-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
             </div>
           </div>
         </div>
@@ -2939,6 +3012,19 @@
         <label class="btn btn-secondary" style="font-size: 12px; cursor: pointer; padding: 6px 12px;">
           <input type="radio" name="wagon_height" value="air" onchange="updateWagonHeight('air')"> 🚀 Lofted / In Air
         </label>
+      </div>
+
+      <!-- Cricket Shot Type Selector (Track 9 / tbl_ShotType) -->
+      <div style="margin-bottom: 16px; text-align: left; background: var(--color-bg); padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <label style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">
+            Cricket Shot Type (tbl_ShotType)
+          </label>
+          <span id="wagon-selected-shot-pill" class="badge" style="background: rgba(37,99,235,0.15); color: var(--color-accent); font-weight: 700; font-size: 11px; padding: 2px 8px; border-radius: var(--radius-pill);">
+            Cover Drive
+          </span>
+        </div>
+        <div id="wagon-shot-type-chips" style="display: flex; gap: 6px; flex-wrap: wrap;"></div>
       </div>
 
       <!-- Action buttons -->
@@ -3947,6 +4033,7 @@
         superOverNumber: (state.superOver && state.superOver.active) ? 1 : null,
         superOverInning: (state.superOver && state.superOver.active) ? state.superOver.inningsNumber : null
       };
+      deliveryRecord.shotType = deliveryRecord.wagonWheel?.shot_type || inferShotType(deliveryRecord.wagonWheel?.wagon_part, runs, deliveryRecord.wagonWheel?.wagon_height);
       state.currentLive.pendingWagonWheel = null;
       inn.deliveries.push(deliveryRecord);
       state.currentLive.currentOverDeliveries.push(deliveryRecord);
@@ -4154,8 +4241,14 @@
         isExtra: false,
         extraType: null,
         isWicket: true,
-        text: 'W'
+        text: 'W',
+        wagonWheel: state.currentLive.pendingWagonWheel || getDefaultWagonWheel(0)
       };
+      deliveryRecord.shotType = dismissalType === 'Caught' ? 'Lofted Shot' : (dismissalType === 'Bowled' ? 'Forward Defence' : (dismissalType === 'LBW' ? 'Flick' : 'Push'));
+      if (deliveryRecord.wagonWheel) {
+        deliveryRecord.wagonWheel.shot_type = deliveryRecord.shotType;
+      }
+      state.currentLive.pendingWagonWheel = null;
       inn.deliveries.push(deliveryRecord);
       state.currentLive.currentOverDeliveries.push(deliveryRecord);
       speakDeliveryCommentary(deliveryRecord);
@@ -5280,6 +5373,52 @@
       return CRIC_ZONES[0];
     }
 
+    // ------------------------------------------------------------------------
+    // TRACK 9: 8-SECTOR GROUND CRICKET SHOT TYPE CLASSIFICATION (tbl_ShotType)
+    // ------------------------------------------------------------------------
+    const SHOT_TYPES_BY_ZONE = {
+      "1": { // Fine Leg (0° - 45°)
+        ground: ["Leg Glance", "Flick", "Paddle Sweep", "Forward Defence"],
+        air: ["Hook Shot", "Top Edge / Scoop", "Lofted Flick"]
+      },
+      "2": { // Square Leg (45° - 90°)
+        ground: ["Pull Shot", "Sweep Shot", "Flick", "Forward Defence"],
+        air: ["Slog Sweep", "Pull Shot", "Hook Shot"]
+      },
+      "3": { // Mid-Wicket (90° - 135°)
+        ground: ["On Drive", "Flick", "Clip off Pads", "Forward Defence"],
+        air: ["Cow Corner Slog", "Lofted On Drive", "Helicopter Shot"]
+      },
+      "4": { // Long-On (135° - 180°)
+        ground: ["Straight Drive", "On Drive", "Push", "Forward Defence"],
+        air: ["Lofted Straight Drive", "Helicopter Shot", "Long-On Six"]
+      },
+      "5": { // Long-Off (180° - 225°)
+        ground: ["Straight Drive", "Off Drive", "Push", "Forward Defence"],
+        air: ["Lofted Off Drive", "Straight Loft", "Inside-out Drive"]
+      },
+      "6": { // Extra Cover (225° - 270°)
+        ground: ["Cover Drive", "Inside-out Drive", "Push", "Forward Defence"],
+        air: ["Lofted Cover Drive", "Inside-out Loft", "Lofted Shot"]
+      },
+      "7": { // Cover (270° - 315°)
+        ground: ["Square Drive", "Cover Drive", "Punch", "Forward Defence"],
+        air: ["Lofted Square Drive", "Upper Cut", "Over Cover"]
+      },
+      "8": { // Point / 3rd Man (315° - 360°)
+        ground: ["Square Cut", "Late Cut", "Deflection", "Forward Defence"],
+        air: ["Upper Cut", "Reverse Sweep", "Ramp / Scoop"]
+      }
+    };
+
+    function inferShotType(zoneId, runs, height) {
+      if (runs === 0) return "Forward Defence";
+      const z = String(zoneId || "4");
+      const h = (height === "air" || runs >= 6) ? "air" : "ground";
+      const list = (SHOT_TYPES_BY_ZONE[z] && SHOT_TYPES_BY_ZONE[z][h]) || ["Cover Drive"];
+      return list[0];
+    }
+
     function getDefaultWagonWheel(runs) {
       let zoneId = "4";
       let deg = 154;
@@ -5289,13 +5428,16 @@
       else if (runs === 1) { zoneId = "7"; deg = 292; }
       else if (runs === 2) { zoneId = "2"; deg = 68; }
       const zone = CRIC_ZONES.find(z => z.id === zoneId) || CRIC_ZONES[3];
+      const h = runs >= 6 ? "air" : "ground";
+      const shotType = inferShotType(zoneId, runs, h);
       return {
         wagon_part: zoneId,
         wagon_degrees: String(deg),
         wagon_percentage: String(pct),
-        wagon_height: runs >= 6 ? "air" : "ground",
+        wagon_height: h,
         zone_name: zone.name,
-        runs: runs
+        runs: runs,
+        shot_type: shotType
       };
     }
 
@@ -5304,6 +5446,7 @@
       inn = inn || getCurrentInnings();
       const striker = (inn && inn.batters && inn.batters[d.strikerId]) ? inn.batters[d.strikerId].name : 'Batter';
       const bowler = (inn && inn.bowlers && inn.bowlers[d.bowlerId]) ? inn.bowlers[d.bowlerId].name : 'Bowler';
+      const shotName = d.shotType || d.wagonWheel?.shot_type;
 
       let zoneName = "";
       if (d.wagonWheel) {
@@ -5316,7 +5459,8 @@
       }
 
       if (d.isWicket) {
-        return `OUT! Wicket falls! ${striker} has to depart. Great delivery by ${bowler}!`;
+        const shotRef = shotName && shotName !== 'Forward Defence' ? ` off a ${shotName}` : '';
+        return `OUT! Wicket falls! ${striker} has to depart${shotRef}. Great delivery by ${bowler}!`;
       }
       if (d.isExtra) {
         if (d.extraType === 'wide') {
@@ -5334,21 +5478,25 @@
         return `Extra conceded (${d.extraType}). Run added to the total.`;
       }
       if (d.runs === 4) {
+        const shotPhrase = shotName ? ` with a pristine ${shotName}` : '';
         return zoneName
-          ? `FOUR! Beautifully timed by ${striker} through ${zoneName}, races away to the boundary rope!`
-          : `FOUR! Beautifully timed by ${striker}, races across the turf to the boundary rope!`;
+          ? `FOUR! Beautifully timed${shotPhrase} by ${striker} through ${zoneName}, races away to the boundary rope!`
+          : `FOUR! Beautifully timed${shotPhrase} by ${striker}, races across the turf to the boundary rope!`;
       }
       if (d.runs === 6) {
+        const shotPhrase = shotName ? ` with an explosive ${shotName}` : '';
         return zoneName
-          ? `SIX! Smashed high and handsome over ${zoneName} by ${striker} for a maximum!`
-          : `SIX! Smashed high and handsome over deep mid-wicket by ${striker} for a maximum!`;
+          ? `SIX! Smashed high and handsome over ${zoneName} by ${striker}${shotPhrase} for a maximum!`
+          : `SIX! Smashed high and handsome over deep mid-wicket by ${striker}${shotPhrase} for a maximum!`;
       }
       if (d.runs === 0) {
-        return `No run. Solid defensive stroke by ${striker}, gathered cleanly by the fielder.`;
+        const strokeDesc = shotName ? `${shotName}` : 'defensive stroke';
+        return `No run. Solid ${strokeDesc} by ${striker}, gathered cleanly by the fielder.`;
       }
       if (d.runs === 1) {
+        const shotPhrase = shotName ? ` via ${shotName}` : '';
         return zoneName
-          ? `Single taken by ${striker} pushed towards ${zoneName}. Strike rotated.`
+          ? `Single taken by ${striker}${shotPhrase} pushed towards ${zoneName}. Strike rotated.`
           : `Single taken. Good running between the wickets by ${striker}.`;
       }
       return `${d.runs} runs taken. Nicely placed into the gap by ${striker}.`;
@@ -5565,6 +5713,7 @@
       renderWormChart();
       renderScorecardWagonWheel(state.currentLive.wagonScorecardFilter || 'all');
       renderPhasesTable();
+      renderShotAnalysisChart();
     }
 
     // ------------------------------------------------------------------------
@@ -5577,7 +5726,8 @@
       distancePct: 105,
       x: 150,
       y: 35,
-      height: "ground"
+      height: "ground",
+      shotType: "Straight Drive"
     };
 
     function openWagonWheelModal() {
@@ -5590,13 +5740,47 @@
         wagonPlacement.height = lastD.wagonWheel.wagon_height || "ground";
         const zone = CRIC_ZONES.find(z => z.id === wagonPlacement.zoneId) || CRIC_ZONES[3];
         wagonPlacement.zoneName = zone.name;
+        wagonPlacement.shotType = lastD.shotType || lastD.wagonWheel.shot_type || inferShotType(wagonPlacement.zoneId, lastD.runs, wagonPlacement.height);
         const rad = (wagonPlacement.degrees * Math.PI) / 180;
         const r = (wagonPlacement.distancePct / 100) * 135;
         wagonPlacement.x = 150 + r * Math.sin(rad);
         wagonPlacement.y = 150 - r * Math.cos(rad);
+      } else {
+        wagonPlacement.shotType = inferShotType(wagonPlacement.zoneId, lastD ? lastD.runs : 4, wagonPlacement.height);
       }
+
+      const radios = document.querySelectorAll('input[name="wagon_height"]');
+      radios.forEach(r => { r.checked = (r.value === wagonPlacement.height); });
+
       updateWagonWheelVisuals();
+      updateShotTypeChips();
       document.getElementById('wagon-wheel-modal').classList.add('open');
+    }
+
+    function updateShotTypeChips() {
+      const container = document.getElementById('wagon-shot-type-chips');
+      const pill = document.getElementById('wagon-selected-shot-pill');
+      const z = String(wagonPlacement.zoneId || "4");
+      const h = wagonPlacement.height || "ground";
+      const shotList = (SHOT_TYPES_BY_ZONE[z] && SHOT_TYPES_BY_ZONE[z][h]) || ["Cover Drive", "Push", "Forward Defence"];
+
+      if (!wagonPlacement.shotType || !shotList.includes(wagonPlacement.shotType)) {
+        wagonPlacement.shotType = shotList[0];
+      }
+      if (pill) {
+        pill.textContent = wagonPlacement.shotType;
+      }
+      if (!container) return;
+
+      container.innerHTML = shotList.map(shot => {
+        const isActive = (shot === wagonPlacement.shotType);
+        return `<button type="button" class="shot-chip ${isActive ? 'active' : ''}" onclick="selectWagonShotType('${shot.replace(/'/g, "\\'")}')" data-tooltip="Select ${shot} as delivery shot type">${shot}</button>`;
+      }).join('');
+    }
+
+    function selectWagonShotType(shotName) {
+      wagonPlacement.shotType = shotName;
+      updateShotTypeChips();
     }
 
     function updateWagonWheelVisuals() {
@@ -5640,12 +5824,21 @@
       wagonPlacement.zoneId = zone.id;
       wagonPlacement.zoneName = zone.name;
 
+      const inn = getCurrentInnings();
+      const lastD = inn.deliveries[inn.deliveries.length - 1];
+      wagonPlacement.shotType = inferShotType(zone.id, (lastD ? lastD.runs : 4), wagonPlacement.height);
+
       updateWagonWheelVisuals();
+      updateShotTypeChips();
     }
 
     function updateWagonHeight(h) {
       wagonPlacement.height = h;
+      const inn = getCurrentInnings();
+      const lastD = inn.deliveries[inn.deliveries.length - 1];
+      wagonPlacement.shotType = inferShotType(wagonPlacement.zoneId, (lastD ? lastD.runs : 4), h);
       updateWagonWheelVisuals();
+      updateShotTypeChips();
     }
 
     function saveWagonWheelPlacement() {
@@ -5657,21 +5850,23 @@
         wagon_percentage: String(wagonPlacement.distancePct),
         wagon_height: wagonPlacement.height,
         zone_name: wagonPlacement.zoneName,
-        runs: lastD ? lastD.runs : 4
+        runs: lastD ? lastD.runs : 4,
+        shot_type: wagonPlacement.shotType
       };
 
       if (lastD) {
         lastD.wagonWheel = wagonObj;
+        lastD.shotType = wagonPlacement.shotType;
       }
       state.currentLive.pendingWagonWheel = wagonObj;
 
       closeModal('wagon-wheel-modal');
-      showToast(`Saved shot vector: ${wagonPlacement.zoneName} (${wagonPlacement.degrees}°)`);
+      showToast(`Saved shot vector: ${wagonPlacement.zoneName} (${wagonPlacement.shotType})`);
     }
 
     function switchChartTab(tab) {
       state.currentLive.activeChartTab = tab;
-      ['manhattan', 'worm', 'wagon', 'phases', 'venue'].forEach(t => {
+      ['manhattan', 'worm', 'wagon', 'phases', 'venue', 'shots'].forEach(t => {
         const btn = document.getElementById(`btn-chart-${t}`);
         const view = document.getElementById(`chart-view-${t}`);
         if (btn) btn.classList.toggle('active', t === tab);
@@ -5682,6 +5877,7 @@
       else if (tab === 'wagon') renderScorecardWagonWheel(state.currentLive.wagonScorecardFilter || 'all');
       else if (tab === 'phases') renderPhasesTable();
       else if (tab === 'venue') renderVenueIntelligence();
+      else if (tab === 'shots') renderShotAnalysisChart();
     }
 
     function renderManhattanChart() {
@@ -5948,6 +6144,219 @@
           </tr>
         `;
       }).join('');
+    }
+
+    // ------------------------------------------------------------------------
+    // 8-SECTOR SHOT TYPE ANALYSIS ENGINE (Track 9 / tbl_ShotType & match_insights_shots_analysis)
+    // ------------------------------------------------------------------------
+    function syncShotsFilterOptions() {
+      const sel = document.getElementById('shots-filter-select');
+      if (!sel) return;
+      const currentVal = sel.value || 'all';
+
+      const inn1 = state.innings1;
+      const inn2 = state.innings2;
+      const teamAName = state.match.teamA || 'Team A';
+      const teamBName = state.match.teamB || 'Team B';
+
+      let opts = [
+        `<option value="all">Entire Match</option>`,
+        `<option value="inn1">1st Innings (${teamAName})</option>`
+      ];
+      if (inn2 && inn2.deliveries && inn2.deliveries.length > 0) {
+        opts.push(`<option value="inn2">2nd Innings (${teamBName})</option>`);
+      }
+
+      const battersMap = new Map();
+      [inn1, inn2].forEach(inn => {
+        if (!inn || !inn.batters) return;
+        Object.values(inn.batters).forEach(b => {
+          if (b.balls > 0 && !battersMap.has(b.id)) {
+            battersMap.set(b.id, b);
+          }
+        });
+      });
+
+      if (battersMap.size > 0) {
+        opts.push(`<optgroup label="Batters">`);
+        battersMap.forEach(b => {
+          opts.push(`<option value="batter_${b.id}">${b.name} (${b.runs}r, ${b.balls}b)</option>`);
+        });
+        opts.push(`</optgroup>`);
+      }
+
+      sel.innerHTML = opts.join('');
+      if (sel.querySelector(`option[value="${currentVal}"]`)) {
+        sel.value = currentVal;
+      } else {
+        sel.value = 'all';
+      }
+    }
+
+    function getMatchShotsDeliveries(filter) {
+      const deliveries = [];
+      const inn1 = state.innings1;
+      const inn2 = state.innings2;
+
+      let targetInnings = [];
+      if (filter === 'inn1') {
+        targetInnings = [inn1];
+      } else if (filter === 'inn2') {
+        targetInnings = [inn2];
+      } else {
+        targetInnings = [inn1, inn2].filter(Boolean);
+      }
+
+      targetInnings.forEach(inn => {
+        if (!inn || !inn.deliveries) return;
+        inn.deliveries.forEach(d => {
+          if (filter && filter.startsWith('batter_')) {
+            const bId = filter.replace('batter_', '');
+            if (d.strikerId === bId) deliveries.push(d);
+          } else {
+            deliveries.push(d);
+          }
+        });
+      });
+
+      return deliveries;
+    }
+
+    function renderShotAnalysisChart() {
+      const container = document.getElementById('chart-view-shots');
+      if (!container) return;
+
+      syncShotsFilterOptions();
+      const sel = document.getElementById('shots-filter-select');
+      const filter = sel ? sel.value : 'all';
+
+      const deliveries = getMatchShotsDeliveries(filter);
+      const breakdownList = document.getElementById('shots-breakdown-list');
+      const kpiProductive = document.getElementById('shots-kpi-productive');
+      const kpiBoundary = document.getElementById('shots-kpi-boundary');
+      const kpiGround = document.getElementById('shots-kpi-ground');
+      const kpiRisk = document.getElementById('shots-kpi-risk');
+
+      if (!deliveries.length) {
+        if (kpiProductive) kpiProductive.textContent = "None (0r)";
+        if (kpiBoundary) kpiBoundary.textContent = "0% Boundaries";
+        if (kpiGround) kpiGround.textContent = "Forward Defence (0r)";
+        if (kpiRisk) kpiRisk.textContent = "None (0 Wkts)";
+        if (breakdownList) {
+          breakdownList.innerHTML = `<div style="text-align: center; padding: 20px; color: var(--color-text-muted); font-size: 13px; font-style: italic;">No deliveries recorded for this filter. Score deliveries in S07 to view 8-sector shot type breakdown!</div>`;
+        }
+        return;
+      }
+
+      // Aggregate shot stats
+      const shotStats = {};
+      let totalRuns = 0;
+      let totalBoundaryRuns = 0;
+      let totalBalls = 0;
+
+      deliveries.forEach(d => {
+        const shotName = d.shotType || d.wagonWheel?.shot_type || inferShotType(d.wagonWheel?.wagon_part, d.runs, d.wagonWheel?.wagon_height) || "Straight Drive";
+        if (!shotStats[shotName]) {
+          shotStats[shotName] = {
+            name: shotName,
+            runs: 0,
+            balls: 0,
+            fours: 0,
+            sixes: 0,
+            wickets: 0,
+            dots: 0,
+            isAir: (d.wagonWheel?.wagon_height === 'air' || d.runs >= 6)
+          };
+        }
+        const s = shotStats[shotName];
+        const runs = d.runs || 0;
+        s.runs += runs;
+        totalRuns += runs;
+
+        const isLegal = !d.isExtra || d.extraType === 'bye' || d.extraType === 'leg_bye';
+        if (isLegal) {
+          s.balls += 1;
+          totalBalls += 1;
+        }
+
+        if (runs === 4) {
+          s.fours += 1;
+          totalBoundaryRuns += 4;
+        } else if (runs === 6) {
+          s.sixes += 1;
+          totalBoundaryRuns += 6;
+        } else if (runs === 0 && !d.isWicket && !d.isExtra) {
+          s.dots += 1;
+        }
+
+        if (d.isWicket) {
+          s.wickets += 1;
+        }
+      });
+
+      const shotList = Object.values(shotStats);
+
+      // 1. Most Productive Shot
+      const sortedByRuns = [...shotList].sort((a, b) => b.runs - a.runs || b.balls - a.balls);
+      const topProductive = sortedByRuns[0] && sortedByRuns[0].runs > 0 ? sortedByRuns[0] : null;
+      if (kpiProductive) {
+        kpiProductive.textContent = topProductive ? `${topProductive.name} (${topProductive.runs}r)` : "None (0r)";
+      }
+
+      // 2. Boundary Yield
+      const boundaryYieldPct = totalRuns > 0 ? Math.round((totalBoundaryRuns / totalRuns) * 100) : 0;
+      if (kpiBoundary) {
+        kpiBoundary.textContent = `${boundaryYieldPct}% Boundaries (${totalBoundaryRuns}r)`;
+      }
+
+      // 3. Top Ground Control
+      const groundShots = shotList.filter(s => !s.isAir && s.runs > 0).sort((a, b) => b.runs - a.runs);
+      const topGround = groundShots[0] || shotList.find(s => s.name === "Forward Defence") || sortedByRuns[0];
+      if (kpiGround) {
+        kpiGround.textContent = topGround ? `${topGround.name} (${topGround.runs}r)` : "Straight Drive (0r)";
+      }
+
+      // 4. High Risk Dismissal
+      const dismissalShots = [...shotList].filter(s => s.wickets > 0).sort((a, b) => b.wickets - a.wickets || b.balls - a.balls);
+      const topRisk = dismissalShots[0];
+      if (kpiRisk) {
+        kpiRisk.textContent = topRisk ? `${topRisk.name} (${topRisk.wickets} Wkts)` : "None (0 Wkts)";
+      }
+
+      // Render Breakdown List
+      if (breakdownList) {
+        const sorted = [...shotList].sort((a, b) => b.runs - a.runs || b.balls - a.balls);
+        const maxShotRuns = Math.max(...sorted.map(s => s.runs), 1);
+
+        breakdownList.innerHTML = sorted.map(s => {
+          const sr = s.balls > 0 ? ((s.runs / s.balls) * 100).toFixed(1) : "0.0";
+          const pctOfMax = Math.max(6, Math.round((s.runs / maxShotRuns) * 100));
+          const icon = s.isAir ? '🚀' : '🟢';
+
+          return `
+            <div style="padding: 10px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md);" data-tooltip="${s.name}: ${s.runs} runs in ${s.balls} balls (SR ${sr}), ${s.fours} fours, ${s.sixes} sixes, ${s.wickets} dismissals">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span style="font-size: 13px;">${icon}</span>
+                  <span style="font-weight: 700; font-size: 13px;">${s.name}</span>
+                  ${s.isAir ? '<span style="font-size: 10px; padding: 1px 6px; border-radius: 4px; background: rgba(168,85,247,0.15); color: #a855f7; font-weight: 700;">Lofted</span>' : '<span style="font-size: 10px; padding: 1px 6px; border-radius: 4px; background: rgba(34,197,94,0.15); color: #22c55e; font-weight: 700;">Ground</span>'}
+                </div>
+                <div style="font-size: 12px; font-weight: 800;">
+                  <span style="color: var(--color-accent); font-size: 13px;">${s.runs}r</span>
+                  <span style="color: var(--color-text-muted); font-size: 11px; margin-left: 4px;">(${s.balls}b • SR ${sr})</span>
+                </div>
+              </div>
+              <div style="height: 6px; background: var(--color-bg); border-radius: 3px; overflow: hidden; margin-bottom: 6px;">
+                <div style="width: ${pctOfMax}%; height: 100%; background: ${s.isAir ? '#a855f7' : 'var(--color-accent)'}; border-radius: 3px; transition: width 0.3s ease;"></div>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--color-text-muted);">
+                <span>Boundaries: <strong style="color: var(--color-text);">${s.fours}x4</strong>, <strong style="color: var(--color-text);">${s.sixes}x6</strong></span>
+                <span>Dismissals: <strong style="color: ${s.wickets > 0 ? 'var(--color-danger)' : 'var(--color-text)'};">${s.wickets}</strong></span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
     }
 
     // ------------------------------------------------------------------------
