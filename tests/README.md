@@ -18,6 +18,7 @@ Automated regression and end-to-end testing infrastructure powered by Playwright
 | `test_android_packaging.py` | Android TWA & Native APK Packaging | • Android project structure (`android/app/build.gradle`, `AndroidManifest.xml`, `twa-manifest.json`)<br>• Google Digital Asset Links specification (`.well-known/assetlinks.json`)<br>• Standalone Python packaging validator script (`scripts/build_android_twa.py`)<br>• Modal 10 UI interaction, header CTA, AssetLinks drawer toggle, and Escape dismissal<br>• Zero critical console errors verification |
 | `test_voice_commentary.py` | Real-time Audio Voice & Speech Commentary Synthesizer (Track 4) | • Zone-aware natural language commentary generator (`generateBallCommentary`)<br>• S07 HUD live voice commentary toggle button (`#btn-voice-commentary-toggle`)<br>• S13 scorecard commentary feed integration and over audio recap (`#btn-speak-over-recap`)<br>• Native `window.speechSynthesis` real-time delivery execution and over audio recap<br>• Zero critical console errors verification |
 | `test_tournament_leaderboards.py` | Dynamic Tournament Leaderboards & Cap Honors Engine (Track 5 / S19) | • S19 4-cap podium honors cards rendering (Orange Cap, Purple Cap, MVP, Maximum Sixes)<br>• Top-5 Batting and Bowling leaderboards tab toggle and rankings table<br>• Dynamic live in-match cap overtaking on ball scoring (Orange Cap & Purple Cap)<br>• Match conclusion player stats consolidation into tournament baseline<br>• Zero critical console errors verification |
+| `test_partnerships_engine.py` | Live Batting Partnerships Engine (Track 6 / tbl_Partnership) | • S07 Live Batting Partnership HUD card (runs, balls, RR, 4s/6s)<br>• Proportional visual contribution split bar<br>• Real-time updates on ball scoring and extras<br>• Wicket transition to next wicket partnership & unbroken active partnership tracking<br>• S13 scorecard partnerships breakdown rendering<br>• 0ms atomic delivery rollback (Undo)<br>• Zero critical console errors verification |
 
 ## Running Tests
 
@@ -39,5 +40,5 @@ pytest -v tests/
 - `helpers.py`: Bounding-box collision detection, viewport overflow checking, and zero console error assertion.
 
 ---
-**Total Active Test Modules:** 12
-**Total Passing E2E Tests:** 48 (100% passing)
+**Total Active Test Modules:** 13
+**Total Passing E2E Tests:** 51 (100% passing)
