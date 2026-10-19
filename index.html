@@ -620,6 +620,8 @@
       border: 1px solid var(--color-border);
       width: 100%;
       max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
       padding: 24px;
       box-shadow: var(--shadow-pop);
       animation: modalPop 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -1978,6 +1980,7 @@
               <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-shots" onclick="switchChartTab('shots')" data-tooltip="Cricket shot classification breakdown (Runs & Dismissals by shot type)">🏏 Shot Analysis</button>
               <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-faceoff" onclick="switchChartTab('faceoff')" data-tooltip="Batter vs Bowler head-to-head face-off matrix and duels">⚔️ Face-Off Matrix</button>
               <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-turning" onclick="switchChartTab('turning')" data-tooltip="Game-changing turning point overs and match momentum shifts">⚡ Turning Points</button>
+              <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-pitch" onclick="switchChartTab('pitch')" data-tooltip="Delivery Pitch Map line and length matrix and bowler heatmaps">🏏 Pitch Map</button>
             </div>
           </div>
 
@@ -2281,6 +2284,73 @@
                 Game-Changing Overs Breakdown
               </div>
               <div id="tp-overs-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+            </div>
+          </div>
+
+          <!-- Delivery Pitch Map Matrix View (Track 12 / tbl_PitchLineLength) -->
+          <div id="chart-view-pitch" class="chart-tab-view" style="display: none;">
+            <!-- Filter Bar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                <button type="button" class="btn btn-secondary pitch-type-btn active" id="btn-pitch-type-all" onclick="setPitchDeliveryFilter('all')" style="font-size: 11px; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-pill);" data-tooltip="Show all deliveries on pitch">All Balls</button>
+                <button type="button" class="btn btn-secondary pitch-type-btn" id="btn-pitch-type-dots" onclick="setPitchDeliveryFilter('dots')" style="font-size: 11px; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-pill);" data-tooltip="Dot balls only">🧱 Dots</button>
+                <button type="button" class="btn btn-secondary pitch-type-btn" id="btn-pitch-type-boundaries" onclick="setPitchDeliveryFilter('boundaries')" style="font-size: 11px; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-pill);" data-tooltip="Fours & Sixes only">🚀 Boundaries</button>
+                <button type="button" class="btn btn-secondary pitch-type-btn" id="btn-pitch-type-wickets" onclick="setPitchDeliveryFilter('wickets')" style="font-size: 11px; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-pill);" data-tooltip="Wicket-taking deliveries only">🎯 Wickets</button>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 4px;">
+                  <label for="pitch-bowler-select" style="font-size: 11px; font-weight: 700; color: var(--color-text-muted);">Bowler:</label>
+                  <select id="pitch-bowler-select" class="form-select" style="padding: 4px 8px; font-size: 12px; width: auto;" onchange="renderPitchMapChart()"></select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                  <label for="pitch-innings-select" style="font-size: 11px; font-weight: 700; color: var(--color-text-muted);">Innings:</label>
+                  <select id="pitch-innings-select" class="form-select" style="padding: 4px 8px; font-size: 12px; width: auto;" onchange="renderPitchMapChart()"></select>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4 Pitch Map Telemetry KPI Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 14px;">
+              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🎯 Frequent Zone</div>
+                <div id="pitch-kpi-frequent" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-accent);">None (0b)</div>
+              </div>
+              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🛡️ Best Economy</div>
+                <div id="pitch-kpi-economical" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-success);">0.00 Eco</div>
+              </div>
+              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">⚠️ High Yield Length</div>
+                <div id="pitch-kpi-expensive" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-danger);">None (0r)</div>
+              </div>
+              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🎯 Top Wicket Zone</div>
+                <div id="pitch-kpi-wickets" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: #f59e0b;">None (0 Wkts)</div>
+              </div>
+            </div>
+
+            <!-- Pitch Visuals & Matrix Grid (Dual Column) -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 14px;">
+              <!-- Left: 2D Pitch Turf Heatmap -->
+              <div class="card" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                  <span>2D Pitch Turf Heatmap (22 Yards)</span>
+                  <div style="display: flex; gap: 8px; font-size: 10px;">
+                    <span style="color: var(--color-danger); font-weight: 700;">● Wicket</span>
+                    <span style="color: var(--color-success); font-weight: 700;">● Boundary</span>
+                    <span style="color: var(--color-text-muted); font-weight: 700;">● Dot</span>
+                  </div>
+                </div>
+                <div id="pitch-heatmap-svg-wrap" style="width: 100%; display: flex; justify-content: center; overflow-x: auto;"></div>
+              </div>
+
+              <!-- Right: Pitch Line & Length Matrix Table -->
+              <div class="card" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); overflow-x: auto;">
+                <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 8px;">
+                  Length × Line Breakdown Table
+                </div>
+                <div id="pitch-matrix-table-wrap"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -3153,10 +3223,28 @@
         <div id="wagon-shot-type-chips" style="display: flex; gap: 6px; flex-wrap: wrap;"></div>
       </div>
 
+      <!-- Delivery Pitch Map Line & Length Selector (Track 12 / tbl_PitchLineLength) -->
+      <div style="margin-bottom: 16px; text-align: left; background: var(--color-bg); padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <label style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">
+            Pitch Line & Length (tbl_PitchLineLength)
+          </label>
+          <span id="wagon-selected-pitch-pill" class="badge" style="background: rgba(16,185,129,0.15); color: var(--color-success); font-weight: 700; font-size: 11px; padding: 2px 8px; border-radius: var(--radius-pill);">
+            Good Length • Off Stump
+          </span>
+        </div>
+
+        <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 4px;">Length:</div>
+        <div id="wagon-pitch-length-chips" style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px;"></div>
+
+        <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 4px;">Line:</div>
+        <div id="wagon-pitch-line-chips" style="display: flex; gap: 4px; flex-wrap: wrap;"></div>
+      </div>
+
       <!-- Action buttons -->
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
         <button type="button" class="btn btn-secondary" onclick="closeModal('wagon-wheel-modal')">Skip / Cancel</button>
-        <button type="button" class="btn btn-primary" onclick="saveWagonWheelPlacement()">Save Shot Placement</button>
+        <button type="button" class="btn btn-primary" id="wagon-save-btn" onclick="saveWagonWheelPlacement()">Save Shot Placement</button>
       </div>
     </div>
   </div>
@@ -4202,6 +4290,12 @@
         superOverInning: (state.superOver && state.superOver.active) ? state.superOver.inningsNumber : null
       };
       deliveryRecord.shotType = deliveryRecord.wagonWheel?.shot_type || inferShotType(deliveryRecord.wagonWheel?.wagon_part, runs, deliveryRecord.wagonWheel?.wagon_height);
+      const pendingPitch = state.currentLive.pendingPitch || inferPitchLineLength(deliveryRecord.shotType, runs, false);
+      deliveryRecord.pitchLength = pendingPitch.length;
+      deliveryRecord.pitchLine = pendingPitch.line;
+      deliveryRecord.pitchX = pendingPitch.x;
+      deliveryRecord.pitchY = pendingPitch.y;
+      state.currentLive.pendingPitch = null;
       state.currentLive.pendingWagonWheel = null;
       inn.deliveries.push(deliveryRecord);
       state.currentLive.currentOverDeliveries.push(deliveryRecord);
@@ -4281,7 +4375,11 @@
         isExtra: true,
         extraType: type,
         isWicket: false,
-        text: chipText
+        text: chipText,
+        pitchLength: type === 'wide' ? 'Full' : 'Good Length',
+        pitchLine: type === 'wide' ? 'Outside Off' : 'Off Stump',
+        pitchX: type === 'wide' ? 18 : 44,
+        pitchY: type === 'wide' ? 150 : 115
       };
       inn.deliveries.push(deliveryRecord);
       state.currentLive.currentOverDeliveries.push(deliveryRecord);
@@ -4416,6 +4514,12 @@
       if (deliveryRecord.wagonWheel) {
         deliveryRecord.wagonWheel.shot_type = deliveryRecord.shotType;
       }
+      const pendingPitch = state.currentLive.pendingPitch || inferPitchLineLength(deliveryRecord.shotType, 0, true);
+      deliveryRecord.pitchLength = pendingPitch.length;
+      deliveryRecord.pitchLine = pendingPitch.line;
+      deliveryRecord.pitchX = pendingPitch.x;
+      deliveryRecord.pitchY = pendingPitch.y;
+      state.currentLive.pendingPitch = null;
       state.currentLive.pendingWagonWheel = null;
       inn.deliveries.push(deliveryRecord);
       state.currentLive.currentOverDeliveries.push(deliveryRecord);
@@ -5890,11 +5994,15 @@
       renderShotAnalysisChart();
       renderFaceOffMatrix();
       renderTurningPointsChart();
+      renderPitchMapChart();
     }
 
     // ------------------------------------------------------------------------
     // WAGON WHEEL (S09) & VISUAL CHARTS ENGINE (S14)
     // ------------------------------------------------------------------------
+    const PITCH_LENGTHS = ['Yorker', 'Full', 'Good Length', 'Back of Length', 'Short', 'Full Toss'];
+    const PITCH_LINES = ['Outside Off', 'Off Stump', 'Middle / Leg', 'Down Leg'];
+
     let wagonPlacement = {
       zoneId: "4",
       zoneName: "Long-On",
@@ -5903,8 +6011,86 @@
       x: 150,
       y: 35,
       height: "ground",
-      shotType: "Straight Drive"
+      shotType: "Straight Drive",
+      pitchLength: "Good Length",
+      pitchLine: "Off Stump"
     };
+
+    function inferPitchLineLength(shotType = '', runs = 0, isWicket = false) {
+      const st = (shotType || '').toLowerCase();
+      if (st.includes('yorker')) {
+        return { length: 'Yorker', line: 'Middle / Leg', x: 50, y: 178 };
+      }
+      if (st.includes('full toss')) {
+        return { length: 'Full Toss', line: 'Middle / Leg', x: 50, y: 170 };
+      }
+      if (st.includes('hook') || st.includes('pull') || st.includes('upper cut')) {
+        const isCut = st.includes('cut');
+        return { length: 'Short', line: isCut ? 'Outside Off' : 'Middle / Leg', x: isCut ? 24 : 54, y: 38 };
+      }
+      if (st.includes('cut') || st.includes('square cut') || st.includes('back foot punch')) {
+        return { length: 'Back of Length', line: 'Outside Off', x: 26, y: 76 };
+      }
+      if (st.includes('cover drive') || st.includes('square drive')) {
+        return { length: 'Full', line: 'Outside Off', x: 30, y: 148 };
+      }
+      if (st.includes('straight drive') || st.includes('on drive') || st.includes('off drive')) {
+        return { length: 'Full', line: 'Off Stump', x: 42, y: 150 };
+      }
+      if (st.includes('flick') || st.includes('glance') || st.includes('sweep')) {
+        return { length: 'Good Length', line: 'Middle / Leg', x: 58, y: 112 };
+      }
+      if (st.includes('forward defence')) {
+        return { length: 'Good Length', line: 'Off Stump', x: 44, y: 116 };
+      }
+      if (st.includes('reverse sweep') || st.includes('ramp') || st.includes('scoop')) {
+        return { length: 'Yorker', line: 'Off Stump', x: 42, y: 176 };
+      }
+      if (runs === 6) {
+        return { length: 'Full', line: 'Middle / Leg', x: 52, y: 152 };
+      }
+      if (runs === 4) {
+        return { length: 'Full', line: 'Outside Off', x: 28, y: 146 };
+      }
+      if (isWicket) {
+        return { length: 'Good Length', line: 'Off Stump', x: 42, y: 110 };
+      }
+      return { length: 'Good Length', line: 'Off Stump', x: 45, y: 114 };
+    }
+
+    function updatePitchChips() {
+      const lenContainer = document.getElementById('wagon-pitch-length-chips');
+      const lineContainer = document.getElementById('wagon-pitch-line-chips');
+      const pill = document.getElementById('wagon-selected-pitch-pill');
+
+      if (pill) {
+        pill.textContent = `${wagonPlacement.pitchLength} • ${wagonPlacement.pitchLine}`;
+      }
+
+      if (lenContainer) {
+        lenContainer.innerHTML = PITCH_LENGTHS.map(l => {
+          const isActive = (l === wagonPlacement.pitchLength);
+          return `<button type="button" class="shot-chip ${isActive ? 'active' : ''}" onclick="selectPitchLength('${l}')" data-tooltip="Set delivery length to ${l}" style="font-size: 10px; padding: 2px 7px;">${l}</button>`;
+        }).join('');
+      }
+
+      if (lineContainer) {
+        lineContainer.innerHTML = PITCH_LINES.map(l => {
+          const isActive = (l === wagonPlacement.pitchLine);
+          return `<button type="button" class="shot-chip ${isActive ? 'active' : ''}" onclick="selectPitchLine('${l}')" data-tooltip="Set delivery line to ${l}" style="font-size: 10px; padding: 2px 7px;">${l}</button>`;
+        }).join('');
+      }
+    }
+
+    function selectPitchLength(l) {
+      wagonPlacement.pitchLength = l;
+      updatePitchChips();
+    }
+
+    function selectPitchLine(l) {
+      wagonPlacement.pitchLine = l;
+      updatePitchChips();
+    }
 
     function openWagonWheelModal() {
       const inn = getCurrentInnings();
@@ -5925,11 +6111,15 @@
         wagonPlacement.shotType = inferShotType(wagonPlacement.zoneId, lastD ? lastD.runs : 4, wagonPlacement.height);
       }
 
+      wagonPlacement.pitchLength = (lastD && lastD.pitchLength) || inferPitchLineLength(wagonPlacement.shotType, lastD ? lastD.runs : 4, lastD ? lastD.isWicket : false).length;
+      wagonPlacement.pitchLine = (lastD && lastD.pitchLine) || inferPitchLineLength(wagonPlacement.shotType, lastD ? lastD.runs : 4, lastD ? lastD.isWicket : false).line;
+
       const radios = document.querySelectorAll('input[name="wagon_height"]');
       radios.forEach(r => { r.checked = (r.value === wagonPlacement.height); });
 
       updateWagonWheelVisuals();
       updateShotTypeChips();
+      updatePitchChips();
       document.getElementById('wagon-wheel-modal').classList.add('open');
     }
 
@@ -6033,16 +6223,22 @@
       if (lastD) {
         lastD.wagonWheel = wagonObj;
         lastD.shotType = wagonPlacement.shotType;
+        lastD.pitchLength = wagonPlacement.pitchLength;
+        lastD.pitchLine = wagonPlacement.pitchLine;
       }
       state.currentLive.pendingWagonWheel = wagonObj;
+      state.currentLive.pendingPitch = {
+        length: wagonPlacement.pitchLength,
+        line: wagonPlacement.pitchLine
+      };
 
       closeModal('wagon-wheel-modal');
-      showToast(`Saved shot vector: ${wagonPlacement.zoneName} (${wagonPlacement.shotType})`);
+      showToast(`Saved shot: ${wagonPlacement.zoneName} (${wagonPlacement.shotType} • ${wagonPlacement.pitchLength})`);
     }
 
     function switchChartTab(tab) {
       state.currentLive.activeChartTab = tab;
-      ['manhattan', 'worm', 'wagon', 'phases', 'venue', 'shots', 'faceoff', 'turning'].forEach(t => {
+      ['manhattan', 'worm', 'wagon', 'phases', 'venue', 'shots', 'faceoff', 'turning', 'pitch'].forEach(t => {
         const btn = document.getElementById(`btn-chart-${t}`);
         const view = document.getElementById(`chart-view-${t}`);
         if (btn) btn.classList.toggle('active', t === tab);
@@ -6056,6 +6252,7 @@
       else if (tab === 'shots') renderShotAnalysisChart();
       else if (tab === 'faceoff') renderFaceOffMatrix();
       else if (tab === 'turning') renderTurningPointsChart();
+      else if (tab === 'pitch') renderPitchMapChart();
     }
 
     function renderManhattanChart() {
@@ -7481,6 +7678,434 @@
     function switchToTurningPointsTab() {
       navigate('S13');
       switchChartTab('turning');
+    }
+
+    // ------------------------------------------------------------------------
+    // TRACK 12: DELIVERY PITCH LINE & LENGTH MAP ENGINE (tbl_PitchLineLength)
+    // ------------------------------------------------------------------------
+    let pitchMapFilterState = {
+      type: 'all' // 'all' | 'dots' | 'boundaries' | 'wickets'
+    };
+
+    function setPitchDeliveryFilter(type) {
+      pitchMapFilterState.type = type;
+      ['all', 'dots', 'boundaries', 'wickets'].forEach(t => {
+        const btn = document.getElementById(`btn-pitch-type-${t}`);
+        if (btn) btn.classList.toggle('active', t === type);
+      });
+      renderPitchMapChart();
+    }
+
+    function syncPitchMapFilterOptions() {
+      const innSelect = document.getElementById('pitch-innings-select');
+      const bowlerSelect = document.getElementById('pitch-bowler-select');
+      if (!state.match) return;
+
+      if (innSelect) {
+        const curInn = innSelect.value || 'all';
+        const teamA = state.match.teamA || 'Team A';
+        const teamB = state.match.teamB || 'Team B';
+        let opts = [`<option value="all">Entire Match</option>`, `<option value="1">1st Innings (${teamA})</option>`];
+        if (state.innings2 && state.innings2.deliveries && state.innings2.deliveries.length > 0) {
+          opts.push(`<option value="2">2nd Innings (${teamB})</option>`);
+        }
+        innSelect.innerHTML = opts.join('');
+        if (innSelect.querySelector(`option[value="${curInn}"]`)) {
+          innSelect.value = curInn;
+        } else {
+          innSelect.value = 'all';
+        }
+      }
+
+      if (bowlerSelect) {
+        const curBowler = bowlerSelect.value || 'all';
+        const bowlerSet = new Map();
+        [state.innings1, state.innings2].forEach(inn => {
+          if (inn && inn.deliveries) {
+            inn.deliveries.forEach(d => {
+              const bName = (inn.bowlers && d.bowlerId && inn.bowlers[d.bowlerId]?.name) || d.bowler;
+              if (bName) {
+                bowlerSet.set(bName, bName);
+              }
+            });
+          }
+        });
+
+        let opts = [`<option value="all">All Bowlers</option>`];
+        Array.from(bowlerSet.keys()).sort().forEach(bName => {
+          opts.push(`<option value="${bName}">${bName}</option>`);
+        });
+        bowlerSelect.innerHTML = opts.join('');
+        if (bowlerSet.has(curBowler)) {
+          bowlerSelect.value = curBowler;
+        } else {
+          bowlerSelect.value = 'all';
+        }
+      }
+    }
+
+    function getMatchPitchMapData(filterInnings = 'all', filterBowler = 'all', filterType = 'all') {
+      const inn1 = state.innings1;
+      const inn2 = state.innings2;
+      let targetDeliveries = [];
+
+      if (filterInnings === '1' && inn1 && inn1.deliveries) {
+        targetDeliveries = inn1.deliveries.map(d => ({
+          ...d,
+          inningsNum: 1,
+          bowlerName: (inn1.bowlers && d.bowlerId && inn1.bowlers[d.bowlerId]?.name) || d.bowler || 'Bowler',
+          batterName: (inn1.batters && d.strikerId && inn1.batters[d.strikerId]?.name) || d.batter || 'Batter'
+        }));
+      } else if (filterInnings === '2' && inn2 && inn2.deliveries) {
+        targetDeliveries = inn2.deliveries.map(d => ({
+          ...d,
+          inningsNum: 2,
+          bowlerName: (inn2.bowlers && d.bowlerId && inn2.bowlers[d.bowlerId]?.name) || d.bowler || 'Bowler',
+          batterName: (inn2.batters && d.strikerId && inn2.batters[d.strikerId]?.name) || d.batter || 'Batter'
+        }));
+      } else {
+        if (inn1 && inn1.deliveries) {
+          targetDeliveries.push(...inn1.deliveries.map(d => ({
+            ...d,
+            inningsNum: 1,
+            bowlerName: (inn1.bowlers && d.bowlerId && inn1.bowlers[d.bowlerId]?.name) || d.bowler || 'Bowler',
+            batterName: (inn1.batters && d.strikerId && inn1.batters[d.strikerId]?.name) || d.batter || 'Batter'
+          })));
+        }
+        if (inn2 && inn2.deliveries) {
+          targetDeliveries.push(...inn2.deliveries.map(d => ({
+            ...d,
+            inningsNum: 2,
+            bowlerName: (inn2.bowlers && d.bowlerId && inn2.bowlers[d.bowlerId]?.name) || d.bowler || 'Bowler',
+            batterName: (inn2.batters && d.strikerId && inn2.batters[d.strikerId]?.name) || d.batter || 'Batter'
+          })));
+        }
+      }
+
+      if (filterBowler && filterBowler !== 'all') {
+        targetDeliveries = targetDeliveries.filter(d => d.bowlerName === filterBowler);
+      }
+
+      if (filterType === 'dots') {
+        targetDeliveries = targetDeliveries.filter(d => d.runs === 0 && !d.isWide && !d.isNoBall);
+      } else if (filterType === 'boundaries') {
+        targetDeliveries = targetDeliveries.filter(d => d.runs === 4 || d.runs === 6);
+      } else if (filterType === 'wickets') {
+        targetDeliveries = targetDeliveries.filter(d => d.isWicket);
+      }
+
+      const processedDeliveries = targetDeliveries.map((d, idx) => {
+        let length = d.pitchLength;
+        let line = d.pitchLine;
+        if (!length || !line) {
+          const inf = inferPitchLineLength(d.shotType, d.runs, d.isWicket);
+          length = length || inf.length;
+          line = line || inf.line;
+        }
+        return {
+          ...d,
+          ballIdx: idx,
+          pitchLength: length,
+          pitchLine: line
+        };
+      });
+
+      const matrix = {};
+      const totalsByLength = {};
+      const totalsByLine = {};
+
+      PITCH_LENGTHS.forEach(len => {
+        matrix[len] = {};
+        totalsByLength[len] = { balls: 0, runs: 0, wickets: 0, dots: 0, boundaries: 0 };
+        PITCH_LINES.forEach(ln => {
+          matrix[len][ln] = { balls: 0, runs: 0, wickets: 0, dots: 0, boundaries: 0 };
+        });
+      });
+
+      PITCH_LINES.forEach(ln => {
+        totalsByLine[ln] = { balls: 0, runs: 0, wickets: 0, dots: 0, boundaries: 0 };
+      });
+
+      let maxCellBalls = 0;
+      processedDeliveries.forEach(d => {
+        const len = matrix[d.pitchLength] ? d.pitchLength : 'Good Length';
+        const ln = matrix[len][d.pitchLine] ? d.pitchLine : 'Off Stump';
+
+        const cell = matrix[len][ln];
+        const runs = (d.runs || 0) + (d.isExtra ? 1 : 0);
+        cell.balls++;
+        cell.runs += runs;
+        if (d.isWicket) cell.wickets++;
+        if (d.runs === 0 && !d.isExtra) cell.dots++;
+        if (d.runs === 4 || d.runs === 6) cell.boundaries++;
+
+        if (cell.balls > maxCellBalls) maxCellBalls = cell.balls;
+
+        totalsByLength[len].balls++;
+        totalsByLength[len].runs += runs;
+        if (d.isWicket) totalsByLength[len].wickets++;
+        if (d.runs === 0 && !d.isExtra) totalsByLength[len].dots++;
+        if (d.runs === 4 || d.runs === 6) totalsByLength[len].boundaries++;
+
+        totalsByLine[ln].balls++;
+        totalsByLine[ln].runs += runs;
+        if (d.isWicket) totalsByLine[ln].wickets++;
+        if (d.runs === 0 && !d.isExtra) totalsByLine[ln].dots++;
+        if (d.runs === 4 || d.runs === 6) totalsByLine[ln].boundaries++;
+      });
+
+      let topZone = { name: 'Good Length • Off Stump', balls: 0 };
+      PITCH_LENGTHS.forEach(len => {
+        PITCH_LINES.forEach(ln => {
+          if (matrix[len][ln].balls > topZone.balls) {
+            topZone = { name: `${len} • ${ln}`, balls: matrix[len][ln].balls };
+          }
+        });
+      });
+
+      let bestEco = { name: 'None', eco: 99.0, balls: 0 };
+      PITCH_LENGTHS.forEach(len => {
+        const t = totalsByLength[len];
+        if (t.balls >= 2) {
+          const eco = (t.runs / (t.balls / 6));
+          if (eco < bestEco.eco) {
+            bestEco = { name: len, eco: eco, balls: t.balls };
+          }
+        }
+      });
+      if (bestEco.eco === 99.0) {
+        let minRuns = 999;
+        PITCH_LENGTHS.forEach(len => {
+          const t = totalsByLength[len];
+          if (t.balls > 0 && t.runs < minRuns) {
+            minRuns = t.runs;
+            bestEco = { name: len, eco: (t.runs / (t.balls / 6)), balls: t.balls };
+          }
+        });
+      }
+
+      let highYield = { name: 'None', runs: 0 };
+      PITCH_LENGTHS.forEach(len => {
+        const t = totalsByLength[len];
+        if (t.runs >= highYield.runs && t.balls > 0) {
+          highYield = { name: len, runs: t.runs };
+        }
+      });
+
+      let topWkt = { name: 'None', wickets: 0 };
+      PITCH_LENGTHS.forEach(len => {
+        const t = totalsByLength[len];
+        if (t.wickets >= topWkt.wickets && t.wickets > 0) {
+          topWkt = { name: len, wickets: t.wickets };
+        }
+      });
+
+      return {
+        deliveries: processedDeliveries,
+        matrix,
+        totalsByLength,
+        totalsByLine,
+        maxCellBalls,
+        kpis: {
+          topZone,
+          bestEco: bestEco.name !== 'None' ? bestEco : { name: 'Good Length', eco: 0.0, balls: 0 },
+          highYield: highYield.name !== 'None' ? highYield : { name: 'Good Length', runs: 0 },
+          topWkt: topWkt.name !== 'None' ? topWkt : { name: 'Good Length', wickets: 0 }
+        }
+      };
+    }
+
+    function renderPitchHeatmapSVG(deliveries) {
+      const lengthYMap = {
+        'Full Toss': 275,
+        'Yorker': 252,
+        'Full': 218,
+        'Good Length': 172,
+        'Back of Length': 125,
+        'Short': 75
+      };
+
+      const lineXMap = {
+        'Outside Off': 80,
+        'Off Stump': 108,
+        'Middle / Leg': 132,
+        'Down Leg': 160
+      };
+
+      let dotsSvg = '';
+      deliveries.forEach((d, i) => {
+        const nominalY = lengthYMap[d.pitchLength] || 172;
+        const nominalX = lineXMap[d.pitchLine] || 108;
+        const jx = ((i * 17 + 5) % 15) - 7;
+        const jy = ((i * 23 + 7) % 15) - 7;
+        const cx = Math.max(56, Math.min(184, nominalX + jx));
+        const cy = Math.max(26, Math.min(294, nominalY + jy));
+
+        let fill = '#f59e0b';
+        let stroke = '#ffffff';
+        let strokeWidth = '1';
+        let r = 4.5;
+        let titleClass = `${d.runs} runs`;
+
+        if (d.isWicket) {
+          fill = '#ef4444';
+          stroke = '#ffffff';
+          strokeWidth = '1.5';
+          r = 6;
+          titleClass = 'WICKET';
+        } else if (d.runs === 4 || d.runs === 6) {
+          fill = '#10b981';
+          stroke = '#ffffff';
+          strokeWidth = '1.5';
+          r = 5.5;
+          titleClass = `${d.runs} (BOUNDARY)`;
+        } else if (d.runs === 0 && !d.isExtra) {
+          fill = '#64748b';
+          stroke = 'rgba(255,255,255,0.7)';
+          strokeWidth = '0.8';
+          r = 3.5;
+          titleClass = 'Dot Ball';
+        }
+
+        dotsSvg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}" style="cursor: pointer; transition: transform 0.15s ease;">
+          <title>${d.bowlerName} to ${d.batterName}: ${titleClass} (${d.pitchLength} • ${d.pitchLine})</title>
+        </circle>`;
+      });
+
+      return `
+        <svg viewBox="0 0 240 320" width="240" height="320" style="max-width: 100%; border-radius: var(--radius-md); box-shadow: 0 4px 14px rgba(0,0,0,0.18);">
+          <!-- Lush Turf Outer Border -->
+          <rect width="240" height="320" rx="8" fill="#143e24" stroke="#0d2818" stroke-width="2"/>
+          
+          <!-- 22 Yards Cricket Pitch Strip -->
+          <rect x="50" y="20" width="140" height="280" fill="#d8b284" stroke="#b58c5c" stroke-width="1.5" rx="3"/>
+
+          <!-- Pitch Return Creases (Tramlines) -->
+          <line x1="68" y1="20" x2="68" y2="300" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>
+          <line x1="172" y1="20" x2="172" y2="300" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>
+
+          <!-- Bowling Crease (Top) -->
+          <line x1="50" y1="45" x2="190" y2="45" stroke="#ffffff" stroke-width="1.5"/>
+          <circle cx="116" cy="36" r="2" fill="#ffffff"/>
+          <circle cx="120" cy="36" r="2" fill="#ffffff"/>
+          <circle cx="124" cy="36" r="2" fill="#ffffff"/>
+          <text x="120" y="30" fill="rgba(255,255,255,0.75)" font-size="7" font-weight="700" text-anchor="middle">BOWLER END</text>
+
+          <!-- Zone Dividers -->
+          <line x1="50" y1="100" x2="190" y2="100" stroke="rgba(60,40,20,0.2)" stroke-dasharray="3,3"/>
+          <text x="54" y="96" fill="rgba(60,40,20,0.6)" font-size="7" font-weight="800">SHORT</text>
+
+          <line x1="50" y1="150" x2="190" y2="150" stroke="rgba(60,40,20,0.2)" stroke-dasharray="3,3"/>
+          <text x="54" y="146" fill="rgba(60,40,20,0.6)" font-size="7" font-weight="800">BACK OF LENGTH</text>
+
+          <line x1="50" y1="200" x2="190" y2="200" stroke="rgba(60,40,20,0.2)" stroke-dasharray="3,3"/>
+          <text x="54" y="196" fill="rgba(60,40,20,0.6)" font-size="7" font-weight="800">GOOD LENGTH</text>
+
+          <line x1="50" y1="240" x2="190" y2="240" stroke="rgba(60,40,20,0.2)" stroke-dasharray="3,3"/>
+          <text x="54" y="236" fill="rgba(60,40,20,0.6)" font-size="7" font-weight="800">FULL</text>
+
+          <!-- Batting Crease / Popping Crease (Bottom) -->
+          <line x1="50" y1="265" x2="190" y2="265" stroke="#ffffff" stroke-width="2"/>
+          <text x="54" y="260" fill="rgba(60,40,20,0.7)" font-size="7" font-weight="800">YORKER</text>
+          <text x="54" y="278" fill="rgba(60,40,20,0.7)" font-size="7" font-weight="800">FULL TOSS</text>
+
+          <!-- Batting Stumps -->
+          <circle cx="116" cy="282" r="2.5" fill="#ffffff"/>
+          <circle cx="120" cy="282" r="2.5" fill="#ffffff"/>
+          <circle cx="124" cy="282" r="2.5" fill="#ffffff"/>
+          <text x="120" y="295" fill="rgba(255,255,255,0.75)" font-size="7" font-weight="700" text-anchor="middle">STRIKER END</text>
+
+          <!-- Delivery Landing Heatmap Dots -->
+          <g id="pitch-dots-group">
+            ${dotsSvg}
+          </g>
+        </svg>
+      `;
+    }
+
+    function renderPitchMapChart() {
+      const view = document.getElementById('chart-view-pitch');
+      if (!view) return;
+
+      syncPitchMapFilterOptions();
+
+      const innSelect = document.getElementById('pitch-innings-select');
+      const bowlerSelect = document.getElementById('pitch-bowler-select');
+
+      const filterInnings = innSelect ? innSelect.value : 'all';
+      const filterBowler = bowlerSelect ? bowlerSelect.value : 'all';
+      const filterType = pitchMapFilterState.type || 'all';
+
+      const data = getMatchPitchMapData(filterInnings, filterBowler, filterType);
+
+      // 4 KPIs
+      const kpiFreq = document.getElementById('pitch-kpi-frequent');
+      const kpiEco = document.getElementById('pitch-kpi-economical');
+      const kpiExp = document.getElementById('pitch-kpi-expensive');
+      const kpiWkt = document.getElementById('pitch-kpi-wickets');
+
+      if (kpiFreq) kpiFreq.textContent = `${data.kpis.topZone.name} (${data.kpis.topZone.balls}b)`;
+      if (kpiEco) kpiEco.textContent = `${data.kpis.bestEco.eco.toFixed(1)} Eco (${data.kpis.bestEco.name})`;
+      if (kpiExp) kpiExp.textContent = `${data.kpis.highYield.name} (${data.kpis.highYield.runs}r)`;
+      if (kpiWkt) kpiWkt.textContent = `${data.kpis.topWkt.name} (${data.kpis.topWkt.wickets} Wkts)`;
+
+      // Heatmap SVG
+      const heatmapWrap = document.getElementById('pitch-heatmap-svg-wrap');
+      if (heatmapWrap) {
+        heatmapWrap.innerHTML = renderPitchHeatmapSVG(data.deliveries);
+      }
+
+      // Matrix Table
+      const tableWrap = document.getElementById('pitch-matrix-table-wrap');
+      if (tableWrap) {
+        const rowsHtml = PITCH_LENGTHS.map(len => {
+          const tot = data.totalsByLength[len];
+          const econ = tot.balls > 0 ? (tot.runs / (tot.balls / 6)).toFixed(1) : '-';
+
+          const cellsHtml = PITCH_LINES.map(ln => {
+            const cell = data.matrix[len][ln];
+            const heatRatio = data.maxCellBalls > 0 ? (cell.balls / data.maxCellBalls) : 0;
+            const bgOpacity = (heatRatio * 0.28).toFixed(2);
+            const bgColor = cell.balls > 0 ? `rgba(37, 99, 235, ${bgOpacity})` : 'transparent';
+
+            return `
+              <td style="padding: 6px 4px; background: ${bgColor}; border: 1px solid var(--color-border); vertical-align: middle;">
+                <div style="font-weight: 800; font-size: 12px; color: ${cell.balls > 0 ? 'var(--color-text)' : 'var(--color-text-muted)'};">${cell.balls}</div>
+                ${cell.balls > 0 ? `<div style="font-size: 9px; color: var(--color-text-muted);">${cell.runs}r${cell.wickets > 0 ? ` • <span style="color:var(--color-danger);font-weight:700;">${cell.wickets}w</span>` : ''}</div>` : ''}
+              </td>
+            `;
+          }).join('');
+
+          return `
+            <tr>
+              <td style="padding: 6px 6px; font-weight: 700; text-align: left; background: var(--color-bg); border: 1px solid var(--color-border); white-space: nowrap;">${len}</td>
+              ${cellsHtml}
+              <td style="padding: 6px 6px; font-weight: 800; background: var(--color-surface); border: 1px solid var(--color-border);">
+                <div>${tot.balls}b • ${tot.runs}r</div>
+                <div style="font-size: 9px; color: var(--color-text-muted);">${tot.wickets}w • ${econ} eco</div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        tableWrap.innerHTML = `
+          <table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: center;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--color-border); color: var(--color-text-muted); font-size: 10px; text-transform: uppercase;">
+                <th style="text-align: left; padding: 6px 6px;">Length</th>
+                <th style="padding: 6px 4px;">Outside Off</th>
+                <th style="padding: 6px 4px;">Off Stump</th>
+                <th style="padding: 6px 4px;">Middle/Leg</th>
+                <th style="padding: 6px 4px;">Down Leg</th>
+                <th style="padding: 6px 6px; font-weight: 800; color: var(--color-text);">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+        `;
+      }
     }
 
     // ------------------------------------------------------------------------

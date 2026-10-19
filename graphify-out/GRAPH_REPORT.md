@@ -1,16 +1,16 @@
-# Graph Report - TallyPitch  (2026-10-19)
+# Graph Report - TallyPitch  (2026-10-20)
 
 ## Corpus Check
-- 68 files · ~117,866 words
+- 69 files · ~121,665 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 668 nodes · 678 edges · 61 communities (58 shown, 3 thin omitted)
+- 680 nodes · 689 edges · 62 communities (59 shown, 3 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a33c8c2c`
+- Built from commit: `79cebfea`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -67,9 +67,10 @@
 - [[_COMMUNITY_Security Module Core|Security Module Core]]
 - [[_COMMUNITY_validate_android_project() Subsystem|validate_android_project() Subsystem]]
 - [[_COMMUNITY_TallyPitch Wiki(Home) Subsystem|[TallyPitch Wiki](Home) Subsystem]]
-- [[_COMMUNITY_CricHeroes Replica - Build Log Subsystem|CricHeroes Replica - Build Log Subsystem]]
+- [[_COMMUNITY_Test Plan CricHeroes Replica Subsystem|Test Plan: CricHeroes Replica Subsystem]]
 - [[_COMMUNITY_build.gradle Subsystem|build.gradle Subsystem]]
 - [[_COMMUNITY_settings.gradle Subsystem|settings.gradle Subsystem]]
+- [[_COMMUNITY_build.gradle Subsystem|build.gradle Subsystem]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `main()` - 17 edges
@@ -95,7 +96,7 @@
 - `requestHandler()` --calls--> `createProCheckoutSession()`  [EXTRACTED]
   server/api.js → server/stripe.js
 
-## Communities (61 total, 3 thin omitted)
+## Communities (62 total, 3 thin omitted)
 
 ### Community 0 - "AST Parsing & Semantic Syntax Tree Engine"
 Cohesion: 0.08
@@ -199,114 +200,118 @@ Nodes (4): Verify partnership completes on wicket, next partnership begins, and 
 
 ### Community 25 - "3D WebGL Stadium & Visual Scene Engine"
 Cohesion: 0.17
-Nodes (4): Verify interactive matrix cell spotlight inspection, delivery chips, and 0ms ato, Verify S07 Live Face-Off HUD button, real-time stat updates, Modal 12 opening, s, Verify Screen S14 Face-Off Matrix tab, 4 KPI telemetry cards, matrix table, and, TestFaceOffEngine
+Nodes (4): Verify Length x Line matrix table, delivery type filter buttons, and 0ms atomic, Verify delivery automatically attaches pitchLength/pitchLine and Modal 3 display, Verify S14 Pitch Map tab renders 4 KPI cards and 2D Turf Heatmap SVG., TestPitchMapEngine
 
 ### Community 26 - "Match Ball Scoring & State Engine"
 Cohesion: 0.17
-Nodes (4): Verify 2-wicket limit, reserve batter rollover, chase target, winner declaration, Verify #btn-launch-super-over is hidden on standard win and visible on match tie, Verify Super Over Modal 11 opens, nominates 3 batters and 1 bowler, and launches, TestSuperOverEngine
+Nodes (4): Verify interactive matrix cell spotlight inspection, delivery chips, and 0ms ato, Verify S07 Live Face-Off HUD button, real-time stat updates, Modal 12 opening, s, Verify Screen S14 Face-Off Matrix tab, 4 KPI telemetry cards, matrix table, and, TestFaceOffEngine
 
 ### Community 27 - "Contributing Module Core"
 Cohesion: 0.17
-Nodes (11): 1. The Three Lists, 2. The Fix Plan, 3. Positioning Angles, 4. Next Step, Fixes and Positioning Plan: CricHeroes Clone, Option A: The Scorer's Sanctuary (Focus on Speed & Zero Ads), Option B: The Transparent League Platform (Focus on Free Broadcast & Pricing) - **RECOMMENDED**, Option C: The Unbreakable Offline Scorer (Focus on Reliability) (+3 more)
+Nodes (4): Verify 2-wicket limit, reserve batter rollover, chase target, winner declaration, Verify #btn-launch-super-over is hidden on standard win and visible on match tie, Verify Super Over Modal 11 opens, nominates 3 batters and 1 bowler, and launches, TestSuperOverEngine
 
 ### Community 28 - "Wagon Wheel And Charts Automated Test Suite"
-Cohesion: 0.18
-Nodes (3): Test natural language commentary generation with field zones, wickets, boundarie, Test HUD and S13 voice commentary toggle buttons update state and labels, TestVoiceCommentary
+Cohesion: 0.17
+Nodes (11): 1. The Three Lists, 2. The Fix Plan, 3. Positioning Angles, 4. Next Step, Fixes and Positioning Plan: CricHeroes Clone, Option A: The Scorer's Sanctuary (Focus on Speed & Zero Ads), Option B: The Transparent League Platform (Focus on Free Broadcast & Pricing) - **RECOMMENDED**, Option C: The Unbreakable Offline Scorer (Focus on Reliability) (+3 more)
 
 ### Community 29 - "Match Ball Scoring & State Engine"
 Cohesion: 0.18
-Nodes (10): 1. Development Principles, 2. Git & Branching Workflow, 3. Local Verification, 4. Submitting a Pull Request, Branch Naming, code:bash (git config core.hooksPath .githooks), code:bash (# 1. Run doctor check), Commit Messages (+2 more)
+Nodes (3): Test natural language commentary generation with field zones, wickets, boundarie, Test HUD and S13 voice commentary toggle buttons update state and labels, TestVoiceCommentary
 
 ### Community 30 - "Match Ball Scoring & State Engine"
+Cohesion: 0.18
+Nodes (10): 1. Development Principles, 2. Git & Branching Workflow, 3. Local Verification, 4. Submitting a Pull Request, Branch Naming, code:bash (git config core.hooksPath .githooks), code:bash (# 1. Run doctor check), Commit Messages (+2 more)
+
+### Community 31 - "Match Ball Scoring & State Engine"
 Cohesion: 0.2
 Nodes (3): Verify opening S09 Wagon Wheel modal, clicking ground canvas, and saving shot pl, Verify S14 Match Progression Charts (Manhattan, Worm, Wagon, Phases) render clea, TestWagonWheelAndCharts
 
-### Community 31 - "Match Ball Scoring & State Engine"
+### Community 32 - "Universal Pipeline & CI/CD Health Automation"
 Cohesion: 0.22
 Nodes (8): 1. Multi-Stage Tournament Structure, 2. Automated ICC Net Run Rate (NRR) Calculation, 3. Points Table Sorting Logic, Decimal Overs Conversion Invariant, Storage & Precision, The All-Out Rule, The Formula, Tournament Management & Net Run Rate (NRR)
 
-### Community 32 - "Universal Pipeline & CI/CD Health Automation"
+### Community 33 - "AST Parsing & Semantic Syntax Tree Engine"
 Cohesion: 0.25
 Nodes (7): 1. Mandatory Context Reading, 2. Minimal Tokens Protocol (MANDATORY), 3. Persistent Context Maintenance, 4. Regression Test Suite Rules, 5. UI Tooltips & Accessibility Invariants, 6. Packaging & Release Ship Rule, Project Agent Governance & Pipeline Rules
 
-### Community 33 - "AST Parsing & Semantic Syntax Tree Engine"
+### Community 34 - "Database Layer, Relational Schema & Storage"
 Cohesion: 0.25
 Nodes (7): 1. Keypad Design & Ball Entry, 2. 0ms Atomic Rollback Architecture, 3. End of Over & Bowler Rotation, 4. Wicket Dismissals & Fall-of-Wickets, Extras Handling, How TallyPitch Solves This, Scoring Engine & 0ms Rollback
 
-### Community 34 - "Database Layer, Relational Schema & Storage"
+### Community 35 - "Database Layer, Relational Schema & Storage"
 Cohesion: 0.25
 Nodes (7): 1. Quick Start for Developers, 2. The Universal Pipeline (`./pipeline.sh`), 3. Playwright E2E Test Suite (`tests/`), 4. Single-File Distribution Parity, code:bash (# Clone the repository), code:bash (# 1. Run diagnostic invariant checks), Developer Guide & Universal Pipeline
 
-### Community 35 - "Database Layer, Relational Schema & Storage"
+### Community 36 - "Tooltip Module Core"
 Cohesion: 0.25
 Nodes (7): 1. Database & Migrations, 2. Authentication & Sessions, 3. Realtime Live Score Broadcasting, 4. Payments & Subscriptions (Stripe), 5. Security Checklist, 6. Next Steps, Backend Architecture & Security Checklist: CricHeroes Replica
 
-### Community 36 - "Tooltip Module Core"
+### Community 37 - "Conftest Module Core"
 Cohesion: 0.25
 Nodes (7): 1. Competitor Benchmark Analysis, 2. Reviewer Feedback on Price & Billing, 3. TallyPitch Pricing Tiers, 4. Product Billing Principles & Anti-Pattern Guarantees, 5. Stripe Products and Price IDs, code:bash (# 1. Product: TallyPitch Club Pro), TallyPitch - Pricing Strategy & Structure
 
-### Community 37 - "Conftest Module Core"
+### Community 38 - "Product Module Core"
 Cohesion: 0.25
 Nodes (7): 1. Pre-Launch Beta & Quality Gate, 2. Community Outreach: Reaching Frustrated Users, 3. Product Hunt & Hacker News Launch Strategy, 4. First 10 User Interviews (Hands-on Feedback), Product Hunt Launch, Show HN Post Draft, TallyPitch - Launch & Go-To-Market Plan
 
-### Community 38 - "Product Module Core"
+### Community 39 - "Match Ball Scoring & State Engine"
 Cohesion: 0.43
 Nodes (4): createTooltipElement(), getTooltipElement(), positionTooltip(), show()
 
-### Community 39 - "Match Ball Scoring & State Engine"
+### Community 40 - "Home Module Core"
 Cohesion: 0.29
 Nodes (5): blank_page(), page_with_data(), conftest.py — Universal Playwright Test Suite Fixtures Provides shared, isolated, Launches headless Chromium, navigates to target local app,     and captures cons, Launches headless Chromium for testing uninitialized or first-run empty states.
 
-### Community 40 - "Home Module Core"
+### Community 41 - "Match Ball Scoring & State Engine"
 Cohesion: 0.29
 Nodes (6): Operating Context, Platform, Positioning, Product Purpose, Product Specification, Users
 
-### Community 41 - "Match Ball Scoring & State Engine"
+### Community 42 - "DLS Target Calculation & Rain Rule Engine"
 Cohesion: 0.29
 Nodes (6): Color Tokens (TallyPitch Sapphire System), Core Palette, Design System & Theme Foundations, Tooltips & Overlays, Typography, Visual Principles
 
-### Community 42 - "DLS Target Calculation & Rain Rule Engine"
+### Community 43 - "Readme Module Core"
 Cohesion: 0.29
 Nodes (6): 🎯 Core Features & User Guides, 🚀 Quick Links, 🏗️ Technical Architecture & Operations, Welcome to the TallyPitch Wiki 🏏, ⚡ Why TallyPitch?, 📖 Wiki Navigation
 
-### Community 43 - "Readme Module Core"
+### Community 44 - "AST Parsing & Semantic Syntax Tree Engine"
 Cohesion: 0.29
 Nodes (6): 1. REST API Specification, 2. PostgreSQL Database Schema (`supabase/migrations/`), 3. Data Integrity Invariants, API & Database Reference, Matches & Scoring (`server/api.js`), Tournaments & Standings
 
-### Community 44 - "AST Parsing & Semantic Syntax Tree Engine"
+### Community 45 - "Multi-Broker Execution & Order Gateway"
 Cohesion: 0.33
 Nodes (5): 1. Current Status & Milestone, 2. Implemented Features, 3. Core Architecture & Constraints, 4. Active Roadmap, Project Context & Working Memory
 
-### Community 45 - "Multi-Broker Execution & Order Gateway"
+### Community 46 - "Match Ball Scoring & State Engine"
 Cohesion: 0.33
 Nodes (5): code:bash (# Token-efficient summary (recommended for agents & CI)), Running Tests, Test Harness Helpers, Test Inventory, Test Suite: TallyPitch
 
-### Community 46 - "Match Ball Scoring & State Engine"
+### Community 47 - "Database Layer, Relational Schema & Storage"
 Cohesion: 0.33
 Nodes (5): 1. How the Live Overlay Works, 2. OBS Studio Setup (Step-by-Step), 3. Realtime Synchronization, code:text (http://<your-host>/index.html?overlay=true), OBS & Live Broadcast Streaming
 
-### Community 47 - "Database Layer, Relational Schema & Storage"
+### Community 48 - "Sw Module Core"
 Cohesion: 0.33
 Nodes (5): By area, Completed in this milestone, Left out on purpose (not scored), Parity: 100.0 / 100, Remaining, in build order
 
-### Community 48 - "Sw Module Core"
+### Community 49 - "Security Module Core"
 Cohesion: 0.4
 Nodes (4): BUG-001: Bowler selection dropdown in Over Complete modal should exclude previous bowler, BUG-002: Undo button on empty delivery stack, Bug Reports: CricHeroes Replica, Summary of Bug Severity
 
-### Community 49 - "Security Module Core"
+### Community 50 - "validate_android_project() Subsystem"
 Cohesion: 0.4
 Nodes (4): Asked for in their own words, What they ask for, What they hate, What users of the original hate and want
 
-### Community 50 - "validate_android_project() Subsystem"
+### Community 51 - "[TallyPitch Wiki](Home) Subsystem"
 Cohesion: 0.5
 Nodes (3): responseToCache, STATIC_ASSETS, url
 
-### Community 51 - "[TallyPitch Wiki](Home) Subsystem"
+### Community 52 - "Test Plan: CricHeroes Replica Subsystem"
 Cohesion: 0.5
 Nodes (3): Reporting a Vulnerability, Security Policy, Supported Versions
 
 ## Knowledge Gaps
-- **286 isolated node(s):** `STATIC_ASSETS`, `url`, `responseToCache`, `Verify Compare VS container, default player comparison, 10 metrics, and marquee`, `Verify switching to Team vs Team mode, team selectors, and team benchmark metric` (+281 more)
+- **289 isolated node(s):** `STATIC_ASSETS`, `url`, `responseToCache`, `Verify Compare VS container, default player comparison, 10 metrics, and marquee`, `Verify switching to Team vs Team mode, team selectors, and team benchmark metric` (+284 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -314,7 +319,7 @@ Nodes (3): Reporting a Vulnerability, Security Policy, Supported Versions
 _Questions this graph is uniquely positioned to answer:_
 
 - **What connects `STATIC_ASSETS`, `url`, `responseToCache` to the rest of the system?**
-  _286 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _289 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `AST Parsing & Semantic Syntax Tree Engine` be split into smaller, more focused modules?**
   _Cohesion score 0.08 - nodes in this community are weakly interconnected._
 - **Should `Match Ball Scoring & State Engine` be split into smaller, more focused modules?**
