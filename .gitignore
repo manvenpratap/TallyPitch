@@ -83,3 +83,6 @@ htmlcov/
 android/.gradle/
 android/app/build/
 
+# Graphify Cache
+graphify-out/cache/
+

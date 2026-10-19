@@ -22,6 +22,7 @@ Automated regression and end-to-end testing infrastructure powered by Playwright
 | `test_super_over_engine.py` | Official ICC Super Over Engine (Track 7 / tbl_MatchSuperOverBallByBall) | • Automated tied match detection on equal scores<br>• Modal 11 Super Over setup (nominating 3 batters & 1 bowler per side)<br>• S07 Super Over live console mode with dedicated telemetry banner<br>• 1-over (6 legal balls) and 2-wicket limits enforcement<br>• Reserve batter crease entry on 1st wicket & all-out trigger on 2nd wicket<br>• Innings 1 to Innings 2 chase target calculation and live RRR display<br>• Official ICC winner declaration and tournament standings consolidation<br>• S13 digital scorecard Super Over breakdown section<br>• 0ms atomic delivery rollback (Undo)<br>• Zero critical console errors verification |
 | `test_compare_vs_engine.py` | Player & Team Head-to-Head Compare VS Engine (Track 8 / CricInsights PRO) | • Un-paywalled dual mode switcher (Player vs Player & Team vs Team)<br>• Marquee presets (Rohit vs Virat, Bumrah vs Siraj, Hardik vs Maxwell)<br>• 10 official comparative metrics with 10%-90% proportional split bars<br>• Dynamic head-to-head dominance index pill calculation<br>• Team vs team benchmark breakdown (matches, win %, innings averages, boundary pacing, pace share)<br>• Cross-screen triggers from S20 Player Profile (`#btn-compare-from-profile`) and Scouting Table (`⚡ VS`)<br>• Zero critical console errors verification |
 | `test_shot_type_engine.py` | 8-Sector Ground Cricket Shot Type Classification Engine (Track 9 / tbl_ShotType) | • 8-sector ground mapping to canonical cricket shot types across Ground and Lofted/Air trajectories<br>• Modal 3 interactive shot chips (`#wagon-shot-type-chips`) and active shot badge (`#wagon-selected-shot-pill`)<br>• Delivery ball-by-ball shot recording (`d.shotType` & `d.wagonWheel.shot_type`)<br>• Speech commentary synthesis dynamically speaking shot names<br>• S14 Shot Analysis chart tab (`#btn-chart-shots`), filter selector, 4 KPI cards, and proportional distribution list<br>• 0ms atomic delivery rollback (Undo)<br>• Zero critical console errors verification |
+| `test_face_off_engine.py` | Batter vs Bowler Head-to-Head Face-Off Matrix Engine (Track 10 / past_match_face_off) | • S07 Live Face-Off HUD button (`#btn-faceoff-hud`) & real-time striker vs bowler metrics<br>• Modal 12 (`#faceoff-modal`) interactive duel card, batter/bowler selectors, boundaries, dismissals & delivery chips<br>• S14 Face-Off Matrix chart tab (`#btn-chart-faceoff`), innings filter selector (`#faceoff-innings-select`)<br>• 4 KPI telemetry cards (Top Dominant Batter, Nemesis Bowler, Dot Ball Trap, Top Scoring Duel)<br>• Interactive grid matrix table with clickable cells and spotlight inspector (`#faceoff-spotlight-card`)<br>• 0ms atomic delivery rollback (Undo)<br>• Zero critical console errors verification |
 
 ## Running Tests
 
@@ -43,6 +44,6 @@ pytest -v tests/
 - `helpers.py`: Bounding-box collision detection, viewport overflow checking, and zero console error assertion.
 
 ---
-**Total Active Test Modules:** 16
-**Total Passing E2E Tests:** 60 (100% passing)  
+**Total Active Test Modules:** 17
+**Total Passing E2E Tests:** 63 (100% passing)  
 

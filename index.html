@@ -1756,7 +1756,10 @@
           <div class="player-identity">
             <span style="font-size: 16px;">⚾</span>
             <div>
-              <div class="player-name" id="active-bowler-name">Jasprit Bumrah</div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="player-name" id="active-bowler-name">Jasprit Bumrah</div>
+                <button type="button" class="btn btn-secondary" id="btn-faceoff-hud" onclick="openFaceOffModal()" style="font-size: 10px; padding: 2px 7px; border-radius: var(--radius-pill); font-weight: 700; background: rgba(37,99,235,0.15); color: var(--color-accent); border: 1px solid rgba(37,99,235,0.3); display: inline-flex; align-items: center; gap: 4px;" data-tooltip="View live Striker vs Bowler head-to-head match-up metrics">⚔️ Face-Off</button>
+              </div>
               <div style="font-size: 11px; color: var(--color-text-muted);" id="active-bowler-sub">Right-arm fast</div>
             </div>
           </div>
@@ -1968,6 +1971,7 @@
               <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-phases" onclick="switchChartTab('phases')" data-tooltip="Powerplay, Middle, and Death overs breakdown">⏱️ Phases</button>
               <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-venue" onclick="switchChartTab('venue')" data-tooltip="Ground & pitch conditions, pace vs spin, win ratios">🏟️ Venue Telemetry</button>
               <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-shots" onclick="switchChartTab('shots')" data-tooltip="Cricket shot classification breakdown (Runs & Dismissals by shot type)">🏏 Shot Analysis</button>
+              <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-faceoff" onclick="switchChartTab('faceoff')" data-tooltip="Batter vs Bowler head-to-head face-off matrix and duels">⚔️ Face-Off Matrix</button>
             </div>
           </div>
 
@@ -2155,6 +2159,65 @@
                 <span>Runs • SR • Boundaries • Wkts</span>
               </div>
               <div id="shots-breakdown-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+            </div>
+          </div>
+
+          <!-- Batter vs Bowler Face-Off Matrix View (Track 10 / past_match_face_off) -->
+          <div id="chart-view-faceoff" class="chart-tab-view" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <h4 style="font-size: 14px; font-weight: 800; margin: 0;">⚔️ Batter vs Bowler Head-to-Head Matrix</h4>
+                  <span class="badge" style="background: rgba(37,99,235,0.15); color: var(--color-accent); font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: var(--radius-pill);">
+                    past_match_face_off • PRO UN-PAYWALLED
+                  </span>
+                </div>
+                <p style="font-size: 11px; color: var(--color-text-muted); margin: 2px 0 0;">
+                  Ball-by-ball player match-ups, dominance metrics, strike rates, and dismissal records.
+                </p>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <label for="faceoff-innings-select" style="font-size: 11px; font-weight: 700; color: var(--color-text-muted);">Innings:</label>
+                <select id="faceoff-innings-select" class="form-select" style="padding: 4px 10px; font-size: 12px; width: auto;" onchange="renderFaceOffMatrix()"></select>
+              </div>
+            </div>
+
+            <!-- 4 Face-Off KPI Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 14px;">
+              <div class="card" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid var(--color-accent);">
+                <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">👑 Top Dominant Batter</div>
+                <div id="faceoff-kpi-batter" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-text);">None (0r)</div>
+              </div>
+              <div class="card" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid var(--color-danger);">
+                <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🎯 Nemesis Bowler</div>
+                <div id="faceoff-kpi-bowler" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-danger);">None (0 Wkts)</div>
+              </div>
+              <div class="card" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid #f59e0b);">
+                <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🧱 Dot Ball Trap</div>
+                <div id="faceoff-kpi-dots" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: #f59e0b;">0% Dots</div>
+              </div>
+              <div class="card" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid var(--color-success);">
+                <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">⚡ Top Scoring Duel</div>
+                <div id="faceoff-kpi-duel" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-success);">None (0r)</div>
+              </div>
+            </div>
+
+            <!-- Matrix Grid Container -->
+            <div class="card" style="padding: 12px; background: var(--color-bg); margin: 0 0 14px; overflow-x: auto;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Face-Off Matrix Grid (Tap cell for breakdown)</span>
+                <span style="font-size: 11px; color: var(--color-text-muted);">Rows = Batters • Columns = Bowlers</span>
+              </div>
+              <div id="faceoff-matrix-grid-wrap"></div>
+            </div>
+
+            <!-- Spotlight Matchup Inspector -->
+            <div id="faceoff-spotlight-card" class="card" style="padding: 12px; background: var(--color-bg); margin: 0; border: 1px solid var(--color-border);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Selected Matchup Details</span>
+                <span id="faceoff-spotlight-status" class="badge" style="background: rgba(37,99,235,0.15); color: var(--color-accent); font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: var(--radius-pill);">Contested</span>
+              </div>
+              <div id="faceoff-spotlight-content"></div>
             </div>
           </div>
         </div>
@@ -3508,6 +3571,48 @@
   </div>
 
   <!-- =======================================================================
+       MODAL 12: TACTICAL BATTER VS BOWLER HEAD-TO-HEAD FACE-OFF
+       ======================================================================= -->
+  <div id="faceoff-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('faceoff-modal')">
+    <div class="modal-dialog" style="max-width: 540px; text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h3 class="modal-title" style="color: var(--color-accent); font-size: 17px; margin: 0; display: flex; align-items: center; gap: 8px;">
+          <span>⚔️</span> Batter vs Bowler Face-Off
+        </h3>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('faceoff-modal')" style="padding: 4px 10px; font-size: 12px;" data-tooltip="Close Face-Off modal (Esc)">✕</button>
+      </div>
+      <p class="modal-desc" style="margin-bottom: 14px; font-size: 12px;">
+        Live head-to-head match duel statistics, strike rate, dot ball ratio, and delivery timeline.
+      </p>
+
+      <!-- Player Selector Controls (Defaults to active striker & bowler) -->
+      <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center; margin-bottom: 14px;">
+        <div>
+          <label style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; display: block; margin-bottom: 3px;">Batter</label>
+          <select id="faceoff-modal-batter-select" class="form-select" style="width: 100%; font-size: 12px; padding: 4px 8px;" onchange="updateFaceOffModal()"></select>
+        </div>
+        <div style="font-size: 14px; font-weight: 900; color: var(--color-text-muted); padding-top: 14px;">VS</div>
+        <div>
+          <label style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; display: block; margin-bottom: 3px;">Bowler</label>
+          <select id="faceoff-modal-bowler-select" class="form-select" style="width: 100%; font-size: 12px; padding: 4px 8px;" onchange="updateFaceOffModal()"></select>
+        </div>
+      </div>
+
+      <!-- Duel Spotlight Card -->
+      <div id="faceoff-modal-duel-card" class="card" style="padding: 14px; background: var(--color-bg); margin: 0 0 14px; border: 1px solid var(--color-border);">
+        <!-- Dynamically rendered by updateFaceOffModal() -->
+      </div>
+
+      <!-- Close / Dismiss CTA -->
+      <div style="display: flex; justify-content: flex-end;">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('faceoff-modal')" style="font-size: 12px; padding: 6px 14px;" data-tooltip="Close Face-Off Dialog">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
        OBS LOWER-THIRD LIVE STREAM OVERLAY (STANDALONE & EMBEDDABLE)
        ======================================================================= -->
   <div id="obs-overlay-container" style="display: none;">
@@ -4686,6 +4791,9 @@
       // Update Live Batting Partnership HUD (Track 6 / tbl_Partnership)
       renderLivePartnership();
 
+      // Update Live Face-Off HUD Chip (Track 10 / past_match_face_off)
+      updateLiveFaceOffHUD();
+
       // Sync with OBS live overlay & CricHeroes MQTT bridge
       if (typeof broadcastLiveState === 'function') {
         broadcastLiveState();
@@ -5714,6 +5822,7 @@
       renderScorecardWagonWheel(state.currentLive.wagonScorecardFilter || 'all');
       renderPhasesTable();
       renderShotAnalysisChart();
+      renderFaceOffMatrix();
     }
 
     // ------------------------------------------------------------------------
@@ -5866,7 +5975,7 @@
 
     function switchChartTab(tab) {
       state.currentLive.activeChartTab = tab;
-      ['manhattan', 'worm', 'wagon', 'phases', 'venue', 'shots'].forEach(t => {
+      ['manhattan', 'worm', 'wagon', 'phases', 'venue', 'shots', 'faceoff'].forEach(t => {
         const btn = document.getElementById(`btn-chart-${t}`);
         const view = document.getElementById(`chart-view-${t}`);
         if (btn) btn.classList.toggle('active', t === tab);
@@ -5878,6 +5987,7 @@
       else if (tab === 'phases') renderPhasesTable();
       else if (tab === 'venue') renderVenueIntelligence();
       else if (tab === 'shots') renderShotAnalysisChart();
+      else if (tab === 'faceoff') renderFaceOffMatrix();
     }
 
     function renderManhattanChart() {
@@ -6357,6 +6467,492 @@
           `;
         }).join('');
       }
+    }
+
+    // ------------------------------------------------------------------------
+    // BATTER VS BOWLER HEAD-TO-HEAD FACE-OFF MATRIX ENGINE (Track 10 / past_match_face_off)
+    // ------------------------------------------------------------------------
+    let faceOffState = {
+      selectedBatterId: null,
+      selectedBowlerId: null
+    };
+
+    function getMatchFaceOffData(filter = 'all') {
+      const inn1 = state.innings1;
+      const inn2 = state.innings2;
+
+      let targetInnings = [];
+      if (filter === 'inn1') {
+        targetInnings = [inn1];
+      } else if (filter === 'inn2') {
+        targetInnings = [inn2];
+      } else {
+        targetInnings = [inn1, inn2].filter(Boolean);
+      }
+
+      const matchups = {};
+      const battersMap = new Map();
+      const bowlersMap = new Map();
+
+      targetInnings.forEach(inn => {
+        if (!inn) return;
+        if (inn.batters) {
+          Object.values(inn.batters).forEach(b => {
+            if (b.balls > 0 || (b.isOut && b.dismissalText)) {
+              battersMap.set(b.id, b);
+            }
+          });
+        }
+        if (inn.bowlers) {
+          Object.values(inn.bowlers).forEach(bowl => {
+            if (bowl.legalBalls > 0 || bowl.wickets > 0 || bowl.runsConceded > 0) {
+              bowlersMap.set(bowl.id, bowl);
+            }
+          });
+        }
+
+        if (inn.deliveries) {
+          inn.deliveries.forEach(d => {
+            if (!d.strikerId || !d.bowlerId) return;
+            const bId = d.strikerId;
+            const bowlId = d.bowlerId;
+            const key = `${bId}_vs_${bowlId}`;
+
+            const batterObj = (inn.batters && inn.batters[bId]) || { id: bId, name: 'Batter' };
+            const bowlerObj = (inn.bowlers && inn.bowlers[bowlId]) || { id: bowlId, name: 'Bowler' };
+            battersMap.set(bId, batterObj);
+            bowlersMap.set(bowlId, bowlerObj);
+
+            if (!matchups[key]) {
+              matchups[key] = {
+                key,
+                batterId: bId,
+                batterName: batterObj.name,
+                bowlerId: bowlId,
+                bowlerName: bowlerObj.name,
+                runs: 0,
+                balls: 0,
+                dots: 0,
+                fours: 0,
+                sixes: 0,
+                wickets: 0,
+                deliveries: []
+              };
+            }
+
+            const m = matchups[key];
+            m.deliveries.push(d);
+
+            const isLegal = !d.isExtra || d.extraType === 'bye' || d.extraType === 'leg_bye';
+            if (isLegal) {
+              m.balls += 1;
+            }
+
+            const r = d.runs || 0;
+            m.runs += r;
+
+            if (r === 4) m.fours += 1;
+            else if (r === 6) m.sixes += 1;
+            else if (r === 0 && !d.isWicket && !d.isExtra) m.dots += 1;
+
+            if (d.isWicket) {
+              m.wickets += 1;
+            }
+          });
+        }
+      });
+
+      // Calculate rates & status for each matchup
+      const matchupList = Object.values(matchups).map(m => {
+        m.sr = m.balls > 0 ? ((m.runs / m.balls) * 100).toFixed(1) : "0.0";
+        m.dotPct = m.balls > 0 ? Math.round((m.dots / m.balls) * 100) : 0;
+
+        if (m.wickets > 0) {
+          m.status = `Bowler on Top 🎯 (${m.wickets} Wkt${m.wickets > 1 ? 's' : ''})`;
+          m.statusType = 'danger';
+        } else if (parseFloat(m.sr) >= 150 && m.runs >= 8) {
+          m.status = 'Batter Dominating ⚡';
+          m.statusType = 'success';
+        } else if (m.dotPct >= 60 && m.balls >= 4) {
+          m.status = 'Bowler Constraining 🧱';
+          m.statusType = 'warning';
+        } else {
+          m.status = 'Contested Duel ⚖️';
+          m.statusType = 'accent';
+        }
+        return m;
+      });
+
+      return {
+        matchups,
+        matchupList,
+        batters: Array.from(battersMap.values()),
+        bowlers: Array.from(bowlersMap.values())
+      };
+    }
+
+    function updateLiveFaceOffHUD() {
+      const btn = document.getElementById('btn-faceoff-hud');
+      if (!btn) return;
+
+      const inn = getCurrentInnings();
+      const sId = state.currentLive.strikerId;
+      const bId = state.currentLive.bowlerId;
+      const sName = (inn.batters && inn.batters[sId]) ? inn.batters[sId].name : 'Striker';
+      const bName = (inn.bowlers && inn.bowlers[bId]) ? inn.bowlers[bId].name : 'Bowler';
+
+      // Find deliveries between sId and bId in this innings
+      const dels = (inn.deliveries || []).filter(d => d.strikerId === sId && d.bowlerId === bId);
+      const runs = dels.reduce((sum, d) => sum + (d.runs || 0), 0);
+      const balls = dels.filter(d => !d.isExtra || d.extraType === 'bye' || d.extraType === 'leg_bye').length;
+      const wkts = dels.filter(d => d.isWicket).length;
+      const sr = balls > 0 ? ((runs / balls) * 100).toFixed(1) : "0.0";
+
+      const sShort = sName.split(' ')[0] || sName;
+      const bShort = bName.split(' ')[0] || bName;
+
+      if (balls > 0 || wkts > 0) {
+        btn.innerHTML = `⚔️ ${sShort} vs ${bShort}: ${runs}r (${balls}b)${wkts > 0 ? ' 🎯 W' : ''}`;
+        btn.setAttribute('data-tooltip', `Live Match-up: ${sName} vs ${bName} (${runs} runs in ${balls} balls, SR ${sr}${wkts > 0 ? `, ${wkts} dismissals` : ''})`);
+      } else {
+        btn.innerHTML = `⚔️ Face-Off (0b)`;
+        btn.setAttribute('data-tooltip', `Live Match-up: ${sName} vs ${bName} (0 balls faced this match)`);
+      }
+    }
+
+    function openFaceOffModal(strikerId, bowlerId) {
+      const inn = getCurrentInnings();
+      const sId = strikerId || state.currentLive.strikerId || (inn.batters ? Object.keys(inn.batters)[0] : null);
+      const bId = bowlerId || state.currentLive.bowlerId || (inn.bowlers ? Object.keys(inn.bowlers)[0] : null);
+
+      faceOffState.selectedBatterId = sId;
+      faceOffState.selectedBowlerId = bId;
+
+      const batterSel = document.getElementById('faceoff-modal-batter-select');
+      const bowlerSel = document.getElementById('faceoff-modal-bowler-select');
+
+      if (batterSel && inn.batters) {
+        batterSel.innerHTML = Object.values(inn.batters).map(b =>
+          `<option value="${b.id}" ${b.id === sId ? 'selected' : ''}>${b.name}</option>`
+        ).join('');
+      }
+
+      if (bowlerSel && inn.bowlers) {
+        bowlerSel.innerHTML = Object.values(inn.bowlers).map(b =>
+          `<option value="${b.id}" ${b.id === bId ? 'selected' : ''}>${b.name}</option>`
+        ).join('');
+      }
+
+      updateFaceOffModal();
+      const modal = document.getElementById('faceoff-modal');
+      if (modal) modal.classList.add('open');
+    }
+
+    function updateFaceOffModal() {
+      const batterSel = document.getElementById('faceoff-modal-batter-select');
+      const bowlerSel = document.getElementById('faceoff-modal-bowler-select');
+      const bId = batterSel ? batterSel.value : faceOffState.selectedBatterId;
+      const bowlId = bowlerSel ? bowlerSel.value : faceOffState.selectedBowlerId;
+
+      faceOffState.selectedBatterId = bId;
+      faceOffState.selectedBowlerId = bowlId;
+
+      const card = document.getElementById('faceoff-modal-duel-card');
+      if (!card) return;
+
+      const inn = getCurrentInnings();
+      const batter = (inn.batters && inn.batters[bId]) || { name: 'Batter' };
+      const bowler = (inn.bowlers && inn.bowlers[bowlId]) || { name: 'Bowler' };
+
+      const foData = getMatchFaceOffData('all');
+      const m = foData.matchups[`${bId}_vs_${bowlId}`] || {
+        runs: 0,
+        balls: 0,
+        dots: 0,
+        fours: 0,
+        sixes: 0,
+        wickets: 0,
+        sr: "0.0",
+        dotPct: 0,
+        status: "No deliveries faced yet ⚖️",
+        statusType: "accent",
+        deliveries: []
+      };
+
+      const statusBg = m.statusType === 'danger' ? 'rgba(239,68,68,0.15)' :
+                       m.statusType === 'success' ? 'rgba(34,197,94,0.15)' :
+                       m.statusType === 'warning' ? 'rgba(245,158,11,0.15)' : 'rgba(37,99,235,0.15)';
+      const statusColor = m.statusType === 'danger' ? 'var(--color-danger)' :
+                          m.statusType === 'success' ? 'var(--color-success)' :
+                          m.statusType === 'warning' ? '#f59e0b' : 'var(--color-accent)';
+
+      let chipsHtml = '';
+      if (!m.deliveries.length) {
+        chipsHtml = `<span style="font-size: 11px; color: var(--color-text-muted); font-style: italic;">No match-up deliveries yet</span>`;
+      } else {
+        chipsHtml = m.deliveries.map(d => {
+          const shotName = d.shotType || d.wagonWheel?.shot_type || 'Ball';
+          let chipClass = 'ball-chip';
+          if (d.isWicket) chipClass += ' wicket';
+          else if (d.isExtra) chipClass += ' extra';
+          else if (d.runs === 4 || d.runs === 6) chipClass += ' boundary';
+          else if (d.runs === 0) chipClass += ' dot';
+          else chipClass += ' single';
+          return `<div class="${chipClass}" style="width: 26px; height: 26px; font-size: 11px;" data-tooltip="Over ${d.overNum}.${d.ballInOver} • ${d.runs} runs (${shotName})">${d.text || d.runs}</div>`;
+        }).join('');
+      }
+
+      card.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <div>
+            <div style="font-size: 15px; font-weight: 800; color: var(--color-text);">${batter.name} vs ${bowler.name}</div>
+            <div style="font-size: 11px; color: var(--color-text-muted); margin-top: 1px;">Live Head-to-Head Record</div>
+          </div>
+          <span class="badge" style="background: ${statusBg}; color: ${statusColor}; font-weight: 800; font-size: 11px; padding: 3px 8px; border-radius: var(--radius-pill);">
+            ${m.status}
+          </span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; text-align: center;">
+          <div style="background: var(--color-surface); padding: 8px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+            <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Runs (Balls)</div>
+            <div style="font-size: 15px; font-weight: 900; color: var(--color-accent); margin-top: 2px;">${m.runs} <span style="font-size: 11px; color: var(--color-text-muted);">(${m.balls}b)</span></div>
+          </div>
+          <div style="background: var(--color-surface); padding: 8px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+            <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Strike Rate</div>
+            <div style="font-size: 15px; font-weight: 900; color: var(--color-text); margin-top: 2px;">${m.sr}</div>
+          </div>
+          <div style="background: var(--color-surface); padding: 8px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+            <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Boundaries</div>
+            <div style="font-size: 15px; font-weight: 900; color: var(--color-success); margin-top: 2px;">${m.fours}x4 • ${m.sixes}x6</div>
+          </div>
+          <div style="background: var(--color-surface); padding: 8px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+            <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Dismissals</div>
+            <div style="font-size: 15px; font-weight: 900; color: ${m.wickets > 0 ? 'var(--color-danger)' : 'var(--color-text)'}; margin-top: 2px;">${m.wickets}</div>
+          </div>
+        </div>
+
+        <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 6px;">
+          Delivery Breakdown (${m.dotPct}% Dots)
+        </div>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          ${chipsHtml}
+        </div>
+      `;
+    }
+
+    function syncFaceOffInningsOptions() {
+      const sel = document.getElementById('faceoff-innings-select');
+      if (!sel) return;
+      const currentVal = sel.value || 'all';
+
+      const inn1 = state.innings1;
+      const inn2 = state.innings2;
+      const teamAName = state.match.teamA || 'Team A';
+      const teamBName = state.match.teamB || 'Team B';
+
+      let opts = [
+        `<option value="all">Entire Match</option>`,
+        `<option value="inn1">1st Innings (${teamAName})</option>`
+      ];
+      if (inn2 && inn2.deliveries && inn2.deliveries.length > 0) {
+        opts.push(`<option value="inn2">2nd Innings (${teamBName})</option>`);
+      }
+
+      sel.innerHTML = opts.join('');
+      if (sel.querySelector(`option[value="${currentVal}"]`)) {
+        sel.value = currentVal;
+      } else {
+        sel.value = 'all';
+      }
+    }
+
+    function renderFaceOffMatrix() {
+      const container = document.getElementById('chart-view-faceoff');
+      if (!container) return;
+
+      syncFaceOffInningsOptions();
+      const sel = document.getElementById('faceoff-innings-select');
+      const filter = sel ? sel.value : 'all';
+
+      const foData = getMatchFaceOffData(filter);
+      const kpiBatter = document.getElementById('faceoff-kpi-batter');
+      const kpiBowler = document.getElementById('faceoff-kpi-bowler');
+      const kpiDots = document.getElementById('faceoff-kpi-dots');
+      const kpiDuel = document.getElementById('faceoff-kpi-duel');
+      const gridWrap = document.getElementById('faceoff-matrix-grid-wrap');
+
+      if (!foData.matchupList.length) {
+        if (kpiBatter) kpiBatter.textContent = "None (0r)";
+        if (kpiBowler) kpiBowler.textContent = "None (0 Wkts)";
+        if (kpiDots) kpiDots.textContent = "0% Dots";
+        if (kpiDuel) kpiDuel.textContent = "None (0r)";
+        if (gridWrap) {
+          gridWrap.innerHTML = `<div style="text-align: center; padding: 20px; color: var(--color-text-muted); font-size: 13px; font-style: italic;">No match-ups recorded yet. Score deliveries in S07 to populate head-to-head face-off matrix!</div>`;
+        }
+        selectFaceOffSpotlight(null, null);
+        return;
+      }
+
+      // 1. Top Dominant Batter (Highest SR, min 2 balls, or most runs)
+      const sortedBySR = [...foData.matchupList].sort((a, b) => (parseFloat(b.sr) - parseFloat(a.sr)) || (b.runs - a.runs));
+      const topBatterMatchup = sortedBySR.find(m => m.balls >= 2 && m.runs >= 4) || sortedBySR[0];
+      if (kpiBatter) {
+        kpiBatter.textContent = topBatterMatchup ? `${topBatterMatchup.batterName.split(' ')[0]} vs ${topBatterMatchup.bowlerName.split(' ')[0]} (${topBatterMatchup.runs}r, SR ${topBatterMatchup.sr})` : "None (0r)";
+      }
+
+      // 2. Nemesis Bowler (Most wickets, or lowest economy)
+      const sortedByWkts = [...foData.matchupList].filter(m => m.wickets > 0).sort((a, b) => b.wickets - a.wickets || a.runs - b.runs);
+      const topNemesis = sortedByWkts[0];
+      if (kpiBowler) {
+        kpiBowler.textContent = topNemesis ? `${topNemesis.bowlerName.split(' ')[0]} vs ${topNemesis.batterName.split(' ')[0]} (${topNemesis.wickets} Wkts)` : "None (0 Wkts)";
+      }
+
+      // 3. Dot Ball Trap (Highest dotPct, min 2 balls)
+      const sortedByDots = [...foData.matchupList].filter(m => m.balls >= 2).sort((a, b) => b.dotPct - a.dotPct || b.dots - a.dots);
+      const topDotTrap = sortedByDots[0];
+      if (kpiDots) {
+        kpiDots.textContent = topDotTrap ? `${topDotTrap.bowlerName.split(' ')[0]} to ${topDotTrap.batterName.split(' ')[0]} (${topDotTrap.dotPct}% Dots)` : "0% Dots";
+      }
+
+      // 4. Top Scoring Duel (Most runs)
+      const sortedByRuns = [...foData.matchupList].sort((a, b) => b.runs - a.runs || b.balls - a.balls);
+      const topDuel = sortedByRuns[0];
+      if (kpiDuel) {
+        kpiDuel.textContent = topDuel && topDuel.runs > 0 ? `${topDuel.batterName.split(' ')[0]} vs ${topDuel.bowlerName.split(' ')[0]} (${topDuel.runs}r off ${topDuel.balls}b)` : "None (0r)";
+      }
+
+      // Render Matrix Table
+      if (gridWrap) {
+        const batters = foData.batters;
+        const bowlers = foData.bowlers;
+
+        let tableHtml = `
+          <table class="table" style="width: 100%; border-collapse: collapse; font-size: 12px;">
+            <thead>
+              <tr style="background: var(--color-surface); border-bottom: 2px solid var(--color-border);">
+                <th style="padding: 8px 10px; text-align: left; position: sticky; left: 0; background: var(--color-surface); z-index: 2;">Batter \\ Bowler</th>
+                ${bowlers.map(bowl => `
+                  <th style="padding: 8px 10px; text-align: center; white-space: nowrap;">
+                    <div style="font-weight: 800;">${bowl.name.split(' ')[0]}</div>
+                    <div style="font-size: 10px; font-weight: normal; color: var(--color-text-muted);">${formatOvers(bowl.legalBalls || 0)} ov</div>
+                  </th>
+                `).join('')}
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        batters.forEach(b => {
+          tableHtml += `
+            <tr style="border-bottom: 1px solid var(--color-border);">
+              <td style="padding: 8px 10px; font-weight: 700; white-space: nowrap; position: sticky; left: 0; background: var(--color-bg); z-index: 1;">
+                ${b.name} <span style="font-size: 10px; color: var(--color-text-muted); font-weight: normal;">(${b.runs}r, ${b.balls}b)</span>
+              </td>
+          `;
+
+          bowlers.forEach(bowl => {
+            const key = `${b.id}_vs_${bowl.id}`;
+            const m = foData.matchups[key];
+
+            if (m && (m.balls > 0 || m.wickets > 0)) {
+              const cellBg = m.wickets > 0 ? 'rgba(239, 68, 68, 0.12)' : (parseFloat(m.sr) >= 150 ? 'rgba(34, 197, 94, 0.12)' : 'transparent');
+              tableHtml += `
+                <td style="padding: 8px 10px; text-align: center; background: ${cellBg}; cursor: pointer; border-left: 1px solid var(--color-border);" onclick="selectFaceOffSpotlight('${b.id}', '${bowl.id}')" data-tooltip="${b.name} vs ${bowl.name}: ${m.runs} runs off ${m.balls} balls (SR ${m.sr})${m.wickets > 0 ? `, ${m.wickets} dismissals` : ''}">
+                  <div style="font-weight: 800; color: var(--color-accent); font-size: 13px;">${m.runs} <span style="font-size: 10px; color: var(--color-text-muted);">(${m.balls}b)</span></div>
+                  ${m.wickets > 0 ? `<span style="font-size: 10px; padding: 1px 5px; border-radius: 4px; background: rgba(239,68,68,0.2); color: var(--color-danger); font-weight: 700;">${m.wickets} Wkt</span>` : `<span style="font-size: 10px; color: var(--color-text-muted);">SR ${m.sr}</span>`}
+                </td>
+              `;
+            } else {
+              tableHtml += `
+                <td style="padding: 8px 10px; text-align: center; color: var(--color-text-muted); font-size: 11px; border-left: 1px solid var(--color-border);">-</td>
+              `;
+            }
+          });
+
+          tableHtml += `</tr>`;
+        });
+
+        tableHtml += `
+            </tbody>
+          </table>
+        `;
+        gridWrap.innerHTML = tableHtml;
+      }
+
+      // Spotlight initial selection
+      const initialMatchup = topDuel || foData.matchupList[0];
+      if (initialMatchup) {
+        selectFaceOffSpotlight(initialMatchup.batterId, initialMatchup.bowlerId);
+      } else {
+        selectFaceOffSpotlight(null, null);
+      }
+    }
+
+    function selectFaceOffSpotlight(batterId, bowlerId) {
+      const card = document.getElementById('faceoff-spotlight-content');
+      const statusBadge = document.getElementById('faceoff-spotlight-status');
+      if (!card) return;
+
+      if (!batterId || !bowlerId) {
+        card.innerHTML = `<div style="text-align: center; padding: 12px; color: var(--color-text-muted); font-size: 12px; font-style: italic;">Select any cell in the Face-Off Matrix above to inspect match-up duel details.</div>`;
+        if (statusBadge) statusBadge.textContent = 'None Selected';
+        return;
+      }
+
+      const foData = getMatchFaceOffData('all');
+      const m = foData.matchups[`${batterId}_vs_${bowlerId}`];
+
+      if (!m) {
+        card.innerHTML = `<div style="text-align: center; padding: 12px; color: var(--color-text-muted); font-size: 12px; font-style: italic;">No match-up deliveries recorded between this pair.</div>`;
+        if (statusBadge) statusBadge.textContent = 'No Deliveries';
+        return;
+      }
+
+      if (statusBadge) {
+        statusBadge.textContent = m.status;
+        statusBadge.style.color = m.statusType === 'danger' ? 'var(--color-danger)' :
+                                  m.statusType === 'success' ? 'var(--color-success)' :
+                                  m.statusType === 'warning' ? '#f59e0b' : 'var(--color-accent)';
+        statusBadge.style.background = m.statusType === 'danger' ? 'rgba(239,68,68,0.15)' :
+                                       m.statusType === 'success' ? 'rgba(34,197,94,0.15)' :
+                                       m.statusType === 'warning' ? 'rgba(245,158,11,0.15)' : 'rgba(37,99,235,0.15)';
+      }
+
+      let chipsHtml = m.deliveries.map(d => {
+        const shotName = d.shotType || d.wagonWheel?.shot_type || 'Ball';
+        let chipClass = 'ball-chip';
+        if (d.isWicket) chipClass += ' wicket';
+        else if (d.isExtra) chipClass += ' extra';
+        else if (d.runs === 4 || d.runs === 6) chipClass += ' boundary';
+        else if (d.runs === 0) chipClass += ' dot';
+        else chipClass += ' single';
+        return `<div class="${chipClass}" style="width: 26px; height: 26px; font-size: 11px;" data-tooltip="Over ${d.overNum}.${d.ballInOver} • ${d.runs} runs (${shotName})">${d.text || d.runs}</div>`;
+      }).join('');
+
+      card.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div style="font-size: 14px; font-weight: 800; color: var(--color-text);">
+            <span>🏏 ${m.batterName}</span> <span style="color: var(--color-text-muted); font-size: 12px; margin: 0 4px;">vs</span> <span>⚾ ${m.bowlerName}</span>
+          </div>
+          <div style="font-size: 13px; font-weight: 800; color: var(--color-accent);">
+            ${m.runs} runs off ${m.balls} balls <span style="font-size: 11px; color: var(--color-text-muted);">(SR ${m.sr})</span>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 14px; font-size: 11px; color: var(--color-text-muted); margin-bottom: 8px; flex-wrap: wrap;">
+          <span>Boundaries: <strong style="color: var(--color-text);">${m.fours}x4</strong>, <strong style="color: var(--color-text);">${m.sixes}x6</strong></span>
+          <span>Dots: <strong style="color: var(--color-text);">${m.dots} (${m.dotPct}%)</strong></span>
+          <span>Dismissals: <strong style="color: ${m.wickets > 0 ? 'var(--color-danger)' : 'var(--color-text)'};">${m.wickets}</strong></span>
+        </div>
+
+        <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 4px;">
+          Timeline & Shot Sequence
+        </div>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          ${chipsHtml}
+        </div>
+      `;
     }
 
     // ------------------------------------------------------------------------
