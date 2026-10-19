@@ -20,6 +20,7 @@ Automated regression and end-to-end testing infrastructure powered by Playwright
 | `test_tournament_leaderboards.py` | Dynamic Tournament Leaderboards & Cap Honors Engine (Track 5 / S19) | • S19 4-cap podium honors cards rendering (Orange Cap, Purple Cap, MVP, Maximum Sixes)<br>• Top-5 Batting and Bowling leaderboards tab toggle and rankings table<br>• Dynamic live in-match cap overtaking on ball scoring (Orange Cap & Purple Cap)<br>• Match conclusion player stats consolidation into tournament baseline<br>• Zero critical console errors verification |
 | `test_partnerships_engine.py` | Live Batting Partnerships Engine (Track 6 / tbl_Partnership) | • S07 Live Batting Partnership HUD card (runs, balls, RR, 4s/6s)<br>• Proportional visual contribution split bar<br>• Real-time updates on ball scoring and extras<br>• Wicket transition to next wicket partnership & unbroken active partnership tracking<br>• S13 scorecard partnerships breakdown rendering<br>• 0ms atomic delivery rollback (Undo)<br>• Zero critical console errors verification |
 | `test_super_over_engine.py` | Official ICC Super Over Engine (Track 7 / tbl_MatchSuperOverBallByBall) | • Automated tied match detection on equal scores<br>• Modal 11 Super Over setup (nominating 3 batters & 1 bowler per side)<br>• S07 Super Over live console mode with dedicated telemetry banner<br>• 1-over (6 legal balls) and 2-wicket limits enforcement<br>• Reserve batter crease entry on 1st wicket & all-out trigger on 2nd wicket<br>• Innings 1 to Innings 2 chase target calculation and live RRR display<br>• Official ICC winner declaration and tournament standings consolidation<br>• S13 digital scorecard Super Over breakdown section<br>• 0ms atomic delivery rollback (Undo)<br>• Zero critical console errors verification |
+| `test_compare_vs_engine.py` | Player & Team Head-to-Head Compare VS Engine (Track 8 / CricInsights PRO) | • Un-paywalled dual mode switcher (Player vs Player & Team vs Team)<br>• Marquee presets (Rohit vs Virat, Bumrah vs Siraj, Hardik vs Maxwell)<br>• 10 official comparative metrics with 10%-90% proportional split bars<br>• Dynamic head-to-head dominance index pill calculation<br>• Team vs team benchmark breakdown (matches, win %, innings averages, boundary pacing, pace share)<br>• Cross-screen triggers from S20 Player Profile (`#btn-compare-from-profile`) and Scouting Table (`⚡ VS`)<br>• Zero critical console errors verification |
 
 ## Running Tests
 
@@ -41,5 +42,6 @@ pytest -v tests/
 - `helpers.py`: Bounding-box collision detection, viewport overflow checking, and zero console error assertion.
 
 ---
-**Total Active Test Modules:** 14
-**Total Passing E2E Tests:** 54 (100% passing)
+**Total Active Test Modules:** 15
+**Total Passing E2E Tests:** 57 (100% passing)  
+

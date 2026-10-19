@@ -1142,6 +1142,75 @@
       margin-top: 2px;
     }
 
+    /* =====================================================================
+       Track 8: Head-to-Head Compare VS Engine Styles
+       ===================================================================== */
+    .compare-vs-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1d4ed8, #7c3aed);
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px rgba(29, 78, 216, 0.45);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      user-select: none;
+      flex-shrink: 0;
+    }
+    .compare-spotlight-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .compare-metric-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .compare-metric-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-family: var(--font-mono);
+    }
+    .compare-metric-name {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+    .compare-bar-track {
+      width: 100%;
+      height: 10px;
+      background: rgba(0, 0, 0, 0.08);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      display: flex;
+    }
+    .compare-bar-left {
+      height: 100%;
+      background: linear-gradient(90deg, #2563eb, #3b82f6);
+      transition: width 300ms ease;
+    }
+    .compare-bar-right {
+      height: 100%;
+      background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+      transition: width 300ms ease;
+    }
+
     .community-filters-row {
       display: flex;
       gap: 8px;
@@ -2409,6 +2478,9 @@
                   Milestone Badges & Honors (S21)
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px;">
+                  <button type="button" class="btn btn-secondary" id="btn-compare-from-profile" onclick="openCompareWithCurrentProfile()" style="padding: 3px 8px; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Compare this player head-to-head in VS Engine">
+                    <span>⚡</span> Compare VS
+                  </button>
                   <button type="button" class="btn btn-secondary" id="btn-share-player-award" onclick="openPlayerAwardCardFromProfile()" style="padding: 3px 8px; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Generate and share 1080x1080 Player Award Certificate">
                     <span>🏅</span> Award Card
                   </button>
@@ -2418,6 +2490,139 @@
                 </div>
               </div>
               <div class="badges-grid" id="profile-badges-wrap"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =====================================================================
+             TRACK 8: HEAD-TO-HEAD COMPARE VS ENGINE (CRICINSIGHTS PRO UN-PAYWALLED)
+             ===================================================================== -->
+        <div id="player-team-compare-wrap" style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--color-border);">
+          <!-- Compare Header -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <h3 style="font-size: 16px; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 6px;">
+                  <span>⚔️</span> Head-to-Head Compare VS Engine
+                </h3>
+                <span class="badge" style="background: linear-gradient(135deg, rgba(29,78,216,0.15), rgba(124,58,237,0.15)); color: var(--color-accent); font-weight: 800; border: 1px solid rgba(29,78,216,0.3); font-size: 10px; text-transform: uppercase; padding: 2px 8px; border-radius: var(--radius-pill);">
+                  PRO UN-PAYWALLED
+                </span>
+              </div>
+              <p style="font-size: 12px; color: var(--color-text-muted); margin-top: 2px;">
+                Direct side-by-side performance benchmarking across 10 comparative metrics with proportional dominance breakdown.
+              </p>
+            </div>
+
+            <!-- Mode Switcher -->
+            <div class="btn-group" style="display: inline-flex; background: var(--color-surface); padding: 3px; border-radius: var(--radius-md); border: 1px solid var(--color-border);" role="tablist">
+              <button type="button" class="btn btn-sm active" id="btn-compare-mode-player" onclick="switchCompareMode('player')" style="padding: 5px 12px; font-size: 12px; font-weight: 700;" data-tooltip="Compare two players head-to-head">
+                👤 Player vs Player
+              </button>
+              <button type="button" class="btn btn-sm" id="btn-compare-mode-team" onclick="switchCompareMode('team')" style="padding: 5px 12px; font-size: 12px; font-weight: 700;" data-tooltip="Compare two teams head-to-head">
+                🛡️ Team vs Team
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Preset Marquee Pills -->
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;" id="compare-presets-wrap">
+            <span style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Marquee Rivals:</span>
+            <button type="button" class="btn btn-secondary" onclick="loadComparePreset('A1', 'B1')" style="padding: 3px 10px; font-size: 11px; border-radius: var(--radius-pill);" data-tooltip="Benchmark Rohit Sharma vs Virat Kohli">
+              👑 Rohit vs Virat
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="loadComparePreset('A8', 'B8')" style="padding: 3px 10px; font-size: 11px; border-radius: var(--radius-pill);" data-tooltip="Benchmark Jasprit Bumrah vs Mohammed Siraj">
+              🎯 Bumrah vs Siraj
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="loadComparePreset('A4', 'B4')" style="padding: 3px 10px; font-size: 11px; border-radius: var(--radius-pill);" data-tooltip="Benchmark Hardik Pandya vs Glenn Maxwell">
+              ⚡ Hardik vs Maxwell
+            </button>
+          </div>
+
+          <!-- ================= PLAYER VS PLAYER VIEW ================= -->
+          <div id="compare-player-view">
+            <!-- Player Selectors & VS Banner -->
+            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: center; margin-bottom: 16px;">
+              <div>
+                <label class="form-label" for="compare-p1-select" style="font-size: 11px; font-weight: 700;">Player 1 (Left)</label>
+                <select id="compare-p1-select" class="form-select" onchange="handlePlayerCompareChange()"></select>
+              </div>
+
+              <!-- VS Badge & Dominance Summary -->
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 0 4px;">
+                <div class="compare-vs-badge" id="compare-vs-badge">VS</div>
+                <div id="compare-dominance-pill" class="badge" style="background: rgba(29, 78, 216, 0.15); color: var(--color-accent); font-weight: 800; font-size: 11px; padding: 3px 10px; border-radius: var(--radius-pill); border: 1px solid rgba(29, 78, 216, 0.3); white-space: nowrap;">
+                  ANALYZING
+                </div>
+              </div>
+
+              <div>
+                <label class="form-label" for="compare-p2-select" style="font-size: 11px; font-weight: 700;">Player 2 (Right)</label>
+                <select id="compare-p2-select" class="form-select" onchange="handlePlayerCompareChange()"></select>
+              </div>
+            </div>
+
+            <!-- Spotlight Cards Row -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px;">
+              <!-- Left Spotlight Card -->
+              <div id="compare-card-p1" class="compare-spotlight-card" style="border-left: 4px solid var(--color-accent);">
+                <!-- Populated dynamically -->
+              </div>
+              <!-- Right Spotlight Card -->
+              <div id="compare-card-p2" class="compare-spotlight-card" style="border-right: 4px solid #7c3aed; text-align: right;">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Comparative Metric Split Bars Table/Grid -->
+            <div class="card" style="background: var(--color-surface); border: 1px solid var(--color-border); padding: 14px; border-radius: var(--radius-md);">
+              <div style="font-size: 12px; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+                <span>Comparative Telemetry (10 Official Metrics)</span>
+                <span style="font-size: 11px; text-transform: none; font-weight: 600;">Proportional split (10% - 90% clamped)</span>
+              </div>
+              <div id="compare-player-metrics-wrap" style="display: flex; flex-direction: column; gap: 14px;">
+                <!-- Dynamically populated by renderPlayerCompare() -->
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= TEAM VS TEAM VIEW ================= -->
+          <div id="compare-team-view" style="display: none;">
+            <!-- Team Selectors & VS Banner -->
+            <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 14px; align-items: center; margin-bottom: 16px;">
+              <div>
+                <label class="form-label" for="compare-t1-select" style="font-size: 11px; font-weight: 700;">Team 1 (Left)</label>
+                <select id="compare-t1-select" class="form-select" onchange="handleTeamCompareChange()"></select>
+              </div>
+
+              <!-- VS Badge & Dominance Summary -->
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 0 4px;">
+                <div class="compare-vs-badge" id="compare-team-vs-badge">VS</div>
+                <div id="compare-team-dominance-pill" class="badge" style="background: rgba(29, 78, 216, 0.15); color: var(--color-accent); font-weight: 800; font-size: 11px; padding: 3px 10px; border-radius: var(--radius-pill); border: 1px solid rgba(29, 78, 216, 0.3); white-space: nowrap;">
+                  ANALYZING
+                </div>
+              </div>
+
+              <div>
+                <label class="form-label" for="compare-t2-select" style="font-size: 11px; font-weight: 700;">Team 2 (Right)</label>
+                <select id="compare-t2-select" class="form-select" onchange="handleTeamCompareChange()"></select>
+              </div>
+            </div>
+
+            <!-- Spotlight Cards Row -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px;">
+              <div id="compare-card-t1" class="compare-spotlight-card" style="border-left: 4px solid var(--color-accent);"></div>
+              <div id="compare-card-t2" class="compare-spotlight-card" style="border-right: 4px solid #7c3aed; text-align: right;"></div>
+            </div>
+
+            <!-- Team Metrics Table/Grid -->
+            <div class="card" style="background: var(--color-surface); border: 1px solid var(--color-border); padding: 14px; border-radius: var(--radius-md);">
+              <div style="font-size: 12px; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 12px;">
+                Team Benchmark Breakdown
+              </div>
+              <div id="compare-team-metrics-wrap" style="display: flex; flex-direction: column; gap: 14px;">
+                <!-- Dynamically populated by renderTeamCompare() -->
+              </div>
             </div>
           </div>
         </div>
@@ -3554,6 +3759,7 @@
         renderCommunityBoard();
       } else if (screenId === 'teams-profiles') {
         renderSelectedPlayerCareer();
+        renderCompareEngine();
       } else if (screenId === 'tournaments') {
         renderTournamentView();
       }
@@ -7193,9 +7399,14 @@
           <td class="num" style="color: ${p.sr >= 140 ? 'var(--color-success)' : 'inherit'}; font-weight: 700;">${p.sr.toFixed(1)}</td>
           <td class="num" style="color: ${p.econ <= 7.0 ? 'var(--color-accent)' : 'inherit'}; font-weight: 700;">${p.econ.toFixed(1)}</td>
           <td>
-            <button type="button" class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="selectScoutedPlayer('${p.id}')" data-tooltip="View complete player career honors and milestone badges">
-              View Record ↗
-            </button>
+            <div style="display: flex; gap: 4px; align-items: center;">
+              <button type="button" class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="selectScoutedPlayer('${p.id}')" data-tooltip="View complete player career honors and milestone badges">
+                View Record ↗
+              </button>
+              <button type="button" class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px; color: var(--color-accent); font-weight: 700;" onclick="openCompareWithPlayer('${p.id}')" data-tooltip="Compare ${p.name} head-to-head in VS Engine">
+                ⚡ VS
+              </button>
+            </div>
           </td>
         `;
         tbody.appendChild(tr);
@@ -7223,6 +7434,555 @@
       if (sr) sr.value = '';
       if (ec) ec.value = '';
       filterScoutedPlayers();
+    }
+
+    // ========================================================================
+    // TRACK 8: PLAYER & TEAM HEAD-TO-HEAD COMPARE VS ENGINE (UN-PAYWALLED)
+    // ========================================================================
+    const compareState = {
+      mode: 'player', // 'player' | 'team'
+      p1Id: 'A1',
+      p2Id: 'B1',
+      t1: 'Mumbai Strikers',
+      t2: 'Bangalore Blasters'
+    };
+
+    function getPlayerCompareStats(pId) {
+      const allPlayers = [...(state.squads.A || []), ...(state.squads.B || [])];
+      const p = allPlayers.find(item => item.id === pId) || allPlayers[0] || { id: pId, name: 'Player', role: 'Batter' };
+      const team = (state.squads.A || []).some(x => x.id === p.id) ? (state.match.teamA || 'Mumbai Strikers') : (state.match.teamB || 'Bangalore Blasters');
+      const isBatter = p.role === 'Batter' || p.role === 'Keeper';
+
+      // Check tournament aggregated stats first
+      const aggStats = typeof getAggregatedTournamentPlayerStats === 'function' ? getAggregatedTournamentPlayerStats() : [];
+      const found = aggStats.find(x => x.id === p.id);
+
+      let runs = 0, balls = 0, fours = 0, sixes = 0, wickets = 0, overs = '0.0', runsConceded = 0, maidens = 0, catches = 0;
+      let sr = 0, econ = 0, avg = 0, mvp = 0;
+
+      if (found) {
+        runs = Number(found.runs || 0);
+        balls = Number(found.balls || 0);
+        fours = Number(found.fours || 0);
+        sixes = Number(found.sixes || 0);
+        wickets = Number(found.wickets || 0);
+        overs = String(found.overs || '0.0');
+        runsConceded = Number(found.runsConceded || 0);
+        maidens = Number(found.maidens || 0);
+        catches = Number(found.catches || 0);
+        sr = balls > 0 ? Number(((runs / balls) * 100).toFixed(1)) : 0;
+        const ov = parseFloat(overs) || 0;
+        econ = ov > 0 ? Number((runsConceded / ov).toFixed(1)) : 0;
+        avg = isBatter ? Number((runs / 4).toFixed(1)) : Number((runs / 2).toFixed(1));
+        mvp = Number(found.mvpPoints || Math.round((runs * 1) + (fours * 1) + (sixes * 2) + (wickets * 20) + (maidens * 10) + (catches * 10)));
+      } else {
+        // Fallback baseline according to role & player profile
+        runs = isBatter ? (p.name.includes('Rohit') || p.name.includes('Virat') ? 180 : 120) : (p.role === 'All-Rounder' ? 85 : 20);
+        balls = Math.round(runs / (isBatter ? 1.4 : 1.1)) || 10;
+        fours = Math.round(runs * 0.12);
+        sixes = Math.round(runs * 0.05);
+        wickets = p.role === 'Bowler' ? (p.name.includes('Bumrah') ? 8 : 6) : (p.role === 'All-Rounder' ? 4 : 0);
+        overs = p.role === 'Bowler' ? '8.0' : (p.role === 'All-Rounder' ? '6.0' : '0.0');
+        runsConceded = p.role === 'Bowler' ? 48 : (p.role === 'All-Rounder' ? 44 : 0);
+        maidens = p.name.includes('Bumrah') ? 2 : (p.role === 'Bowler' ? 1 : 0);
+        catches = p.isKeeper || p.role === 'All-Rounder' ? 2 : 1;
+        sr = balls > 0 ? Number(((runs / balls) * 100).toFixed(1)) : 0;
+        const ov = parseFloat(overs) || 0;
+        econ = ov > 0 ? Number((runsConceded / ov).toFixed(1)) : 0;
+        avg = isBatter ? Number((runs / 3).toFixed(1)) : Number((runs / 2).toFixed(1));
+        mvp = Math.round((runs * 1) + (fours * 1) + (sixes * 2) + (wickets * 20) + (maidens * 10) + (catches * 10));
+      }
+
+      // Count milestone badges
+      let badgesUnlocked = 0;
+      if (typeof MILESTONE_DEFINITIONS !== 'undefined') {
+        MILESTONE_DEFINITIONS.forEach(b => {
+          if (b.check(p, isBatter)) badgesUnlocked++;
+        });
+      }
+
+      return {
+        id: p.id,
+        name: p.name,
+        role: p.role,
+        team,
+        isCaptain: !!p.isCaptain,
+        runs,
+        balls,
+        sr,
+        avg,
+        fours,
+        sixes,
+        wickets,
+        overs,
+        econ,
+        catches,
+        mvp,
+        badges: badgesUnlocked
+      };
+    }
+
+    function getTeamCompareStats(teamName) {
+      const standings = (tournamentState && tournamentState.tournaments && tournamentState.tournaments[0] && tournamentState.tournaments[0].standings) || [];
+      const found = standings.find(s => s.team && s.team.toLowerCase() === teamName.toLowerCase());
+
+      const isMumbai = teamName.toLowerCase().includes('mumbai');
+      const isBangalore = teamName.toLowerCase().includes('bangalore');
+      const isPune = teamName.toLowerCase().includes('pune');
+
+      const played = found ? found.p : 2;
+      const wins = found ? found.w : (isMumbai ? 2 : (isBangalore ? 1 : 1));
+      const losses = found ? found.l : Math.max(0, played - wins);
+      const points = found ? found.pts : (wins * 2);
+      const nrr = found ? found.nrr : (isMumbai ? '+1.650' : '+0.250');
+      const winPct = played > 0 ? Math.round((wins / played) * 100) : 50;
+
+      const avg1st = isMumbai ? 178 : (isBangalore ? 168 : (isPune ? 162 : 154));
+      const avg2nd = isMumbai ? 164 : (isBangalore ? 156 : (isPune ? 148 : 142));
+      const boundaryPace = isMumbai ? 19.2 : (isBangalore ? 16.5 : (isPune ? 14.8 : 13.5));
+      const paceWkts = isMumbai ? 64 : (isBangalore ? 58 : 50);
+
+      return {
+        name: teamName,
+        played,
+        wins,
+        losses,
+        points,
+        nrr,
+        winPct,
+        avg1st,
+        avg2nd,
+        boundaryPace,
+        paceWkts
+      };
+    }
+
+    function initCompareEngine() {
+      populateCompareSelects();
+      renderCompareEngine();
+    }
+
+    function populateCompareSelects() {
+      const p1Select = document.getElementById('compare-p1-select');
+      const p2Select = document.getElementById('compare-p2-select');
+
+      if (p1Select && p2Select) {
+        const teamAName = state.match.teamA || 'Mumbai Strikers';
+        const teamBName = state.match.teamB || 'Bangalore Blasters';
+
+        let optionsHtml = '';
+        optionsHtml += `<optgroup label="${teamAName}">`;
+        (state.squads.A || []).forEach(p => {
+          optionsHtml += `<option value="${p.id}">${p.name} (${p.role})</option>`;
+        });
+        optionsHtml += `</optgroup>`;
+        optionsHtml += `<optgroup label="${teamBName}">`;
+        (state.squads.B || []).forEach(p => {
+          optionsHtml += `<option value="${p.id}">${p.name} (${p.role})</option>`;
+        });
+        optionsHtml += `</optgroup>`;
+
+        p1Select.innerHTML = optionsHtml;
+        p2Select.innerHTML = optionsHtml;
+
+        p1Select.value = compareState.p1Id || 'A1';
+        p2Select.value = compareState.p2Id || 'B1';
+      }
+
+      const t1Select = document.getElementById('compare-t1-select');
+      const t2Select = document.getElementById('compare-t2-select');
+      if (t1Select && t2Select) {
+        const teamsList = [
+          state.match.teamA || 'Mumbai Strikers',
+          state.match.teamB || 'Bangalore Blasters',
+          'Pune Warriors',
+          'Chennai Challengers',
+          'Delhi Dynamos',
+          'Ahmedabad Lions'
+        ];
+        const uniqueTeams = [...new Set(teamsList)];
+        let teamOptions = '';
+        uniqueTeams.forEach(t => {
+          teamOptions += `<option value="${t}">${t}</option>`;
+        });
+        t1Select.innerHTML = teamOptions;
+        t2Select.innerHTML = teamOptions;
+        t1Select.value = compareState.t1 || uniqueTeams[0];
+        t2Select.value = compareState.t2 || (uniqueTeams[1] || uniqueTeams[0]);
+      }
+    }
+
+    function switchCompareMode(mode) {
+      compareState.mode = mode;
+      const btnP = document.getElementById('btn-compare-mode-player');
+      const btnT = document.getElementById('btn-compare-mode-team');
+      const viewP = document.getElementById('compare-player-view');
+      const viewT = document.getElementById('compare-team-view');
+      const presetsWrap = document.getElementById('compare-presets-wrap');
+
+      if (mode === 'player') {
+        if (btnP) btnP.classList.add('active');
+        if (btnT) btnT.classList.remove('active');
+        if (viewP) viewP.style.display = 'block';
+        if (viewT) viewT.style.display = 'none';
+        if (presetsWrap) presetsWrap.style.display = 'flex';
+        renderPlayerCompare();
+      } else {
+        if (btnP) btnP.classList.remove('active');
+        if (btnT) btnT.classList.add('active');
+        if (viewP) viewP.style.display = 'none';
+        if (viewT) viewT.style.display = 'block';
+        if (presetsWrap) presetsWrap.style.display = 'none';
+        renderTeamCompare();
+      }
+    }
+
+    function loadComparePreset(p1Id, p2Id) {
+      switchCompareMode('player');
+      compareState.p1Id = p1Id;
+      compareState.p2Id = p2Id;
+      const s1 = document.getElementById('compare-p1-select');
+      const s2 = document.getElementById('compare-p2-select');
+      if (s1) s1.value = p1Id;
+      if (s2) s2.value = p2Id;
+      renderPlayerCompare();
+      const p1 = getPlayerCompareStats(p1Id);
+      const p2 = getPlayerCompareStats(p2Id);
+      showToast(`Loaded comparison for ${p1.name} vs ${p2.name}`);
+    }
+
+    function handlePlayerCompareChange() {
+      const s1 = document.getElementById('compare-p1-select');
+      const s2 = document.getElementById('compare-p2-select');
+      if (s1) compareState.p1Id = s1.value;
+      if (s2) compareState.p2Id = s2.value;
+      renderPlayerCompare();
+    }
+
+    function handleTeamCompareChange() {
+      const s1 = document.getElementById('compare-t1-select');
+      const s2 = document.getElementById('compare-t2-select');
+      if (s1) compareState.t1 = s1.value;
+      if (s2) compareState.t2 = s2.value;
+      renderTeamCompare();
+    }
+
+    function openCompareWithCurrentProfile() {
+      const select = document.getElementById('profile-player-select');
+      const pId = select ? select.value : 'A1';
+      openCompareWithPlayer(pId);
+    }
+
+    function openCompareWithPlayer(pId) {
+      navigate('teams-profiles');
+      switchCompareMode('player');
+      compareState.p1Id = pId;
+      if (compareState.p2Id === pId) {
+        compareState.p2Id = (state.squads.A || []).some(x => x.id === pId) ? 'B1' : 'A1';
+      }
+      const s1 = document.getElementById('compare-p1-select');
+      const s2 = document.getElementById('compare-p2-select');
+      if (s1) s1.value = compareState.p1Id;
+      if (s2) s2.value = compareState.p2Id;
+      renderPlayerCompare();
+
+      const wrap = document.getElementById('player-team-compare-wrap');
+      if (wrap) {
+        wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      const p = getPlayerCompareStats(pId);
+      showToast(`Loaded ${p.name} in Compare VS Engine`);
+    }
+
+    function renderCompareEngine() {
+      if (compareState.mode === 'player') {
+        renderPlayerCompare();
+      } else {
+        renderTeamCompare();
+      }
+    }
+
+    function renderPlayerCompare() {
+      const p1 = getPlayerCompareStats(compareState.p1Id || 'A1');
+      const p2 = getPlayerCompareStats(compareState.p2Id || 'B1');
+
+      // 1. Render Spotlight Cards
+      const cardP1 = document.getElementById('compare-card-p1');
+      const cardP2 = document.getElementById('compare-card-p2');
+
+      if (cardP1) {
+        cardP1.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #1d4ed8, #3b82f6); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 16px;">
+              ${p1.name.charAt(0)}
+            </div>
+            <div>
+              <div style="font-weight: 800; font-size: 14px; color: var(--color-text); display: flex; align-items: center; gap: 4px;">
+                ${p1.name} ${p1.isCaptain ? '<span class="scout-match-pill">C</span>' : ''}
+              </div>
+              <div style="font-size: 11px; color: var(--color-text-muted);">${p1.role} • ${p1.team}</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
+            <span class="badge" style="background: rgba(37,99,235,0.12); color: var(--color-accent); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill);" data-tooltip="CricHeroes official MVP rating">
+              ⭐ ${p1.mvp} MVP Pts
+            </span>
+            <span class="badge" style="background: rgba(16,185,129,0.12); color: var(--color-success); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill);" data-tooltip="Career milestone achievements achieved">
+              🎖️ ${p1.badges} Badges
+            </span>
+          </div>
+        `;
+      }
+
+      if (cardP2) {
+        cardP2.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+            <div>
+              <div style="font-weight: 800; font-size: 14px; color: var(--color-text); display: flex; align-items: center; justify-content: flex-end; gap: 4px;">
+                ${p2.isCaptain ? '<span class="scout-match-pill">C</span>' : ''} ${p2.name}
+              </div>
+              <div style="font-size: 11px; color: var(--color-text-muted);">${p2.role} • ${p2.team}</div>
+            </div>
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #7c3aed, #8b5cf6); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 16px;">
+              ${p2.name.charAt(0)}
+            </div>
+          </div>
+          <div style="display: flex; gap: 6px; margin-top: 6px; justify-content: flex-end; flex-wrap: wrap;">
+            <span class="badge" style="background: rgba(124,58,237,0.12); color: #7c3aed; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill);" data-tooltip="CricHeroes official MVP rating">
+              ⭐ ${p2.mvp} MVP Pts
+            </span>
+            <span class="badge" style="background: rgba(16,185,129,0.12); color: var(--color-success); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill);" data-tooltip="Career milestone achievements achieved">
+              🎖️ ${p2.badges} Badges
+            </span>
+          </div>
+        `;
+      }
+
+      // 2. Metrics Definition (10 metrics)
+      const metrics = [
+        { label: 'Total Runs', v1: p1.runs, v2: p2.runs, format: v => v, lowerBetter: false },
+        { label: 'Batting Strike Rate', v1: p1.sr, v2: p2.sr, format: v => v.toFixed(1), lowerBetter: false },
+        { label: 'Batting Average', v1: p1.avg, v2: p2.avg, format: v => v.toFixed(1), lowerBetter: false },
+        { label: 'Boundary Fours (4s)', v1: p1.fours, v2: p2.fours, format: v => v, lowerBetter: false },
+        { label: 'Boundary Sixes (6s)', v1: p1.sixes, v2: p2.sixes, format: v => v, lowerBetter: false },
+        { label: 'Wickets Taken', v1: p1.wickets, v2: p2.wickets, format: v => v, lowerBetter: false },
+        { label: 'Bowling Economy', v1: p1.econ, v2: p2.econ, format: v => v > 0 ? v.toFixed(1) : '—', lowerBetter: true },
+        { label: 'Outfield Catches', v1: p1.catches, v2: p2.catches, format: v => v, lowerBetter: false },
+        { label: 'CricHeroes MVP Points', v1: p1.mvp, v2: p2.mvp, format: v => v, lowerBetter: false },
+        { label: 'Milestone Badges', v1: p1.badges, v2: p2.badges, format: v => `${v} / 8`, lowerBetter: false }
+      ];
+
+      // 3. Compute Dominance Head-to-Head
+      let p1Wins = 0, p2Wins = 0;
+      metrics.forEach(m => {
+        if (m.lowerBetter) {
+          if (m.v1 > 0 && m.v2 > 0) {
+            if (m.v1 < m.v2) p1Wins++;
+            else if (m.v2 < m.v1) p2Wins++;
+          } else if (m.v1 > 0 && m.v2 === 0) {
+            p1Wins++;
+          } else if (m.v2 > 0 && m.v1 === 0) {
+            p2Wins++;
+          }
+        } else {
+          if (m.v1 > m.v2) p1Wins++;
+          else if (m.v2 > m.v1) p2Wins++;
+        }
+      });
+
+      const domPill = document.getElementById('compare-dominance-pill');
+      if (domPill) {
+        if (p1Wins > p2Wins) {
+          domPill.textContent = `${p1.name.split(' ')[0]} LEADS ${p1Wins}-${p2Wins}`;
+          domPill.style.background = 'rgba(29, 78, 216, 0.15)';
+          domPill.style.color = 'var(--color-accent)';
+          domPill.style.borderColor = 'rgba(29, 78, 216, 0.3)';
+        } else if (p2Wins > p1Wins) {
+          domPill.textContent = `${p2.name.split(' ')[0]} LEADS ${p2Wins}-${p1Wins}`;
+          domPill.style.background = 'rgba(124, 58, 237, 0.15)';
+          domPill.style.color = '#7c3aed';
+          domPill.style.borderColor = 'rgba(124, 58, 237, 0.3)';
+        } else {
+          domPill.textContent = `TIED ${p1Wins}-${p2Wins}`;
+          domPill.style.background = 'rgba(100, 116, 139, 0.15)';
+          domPill.style.color = 'var(--color-text-muted)';
+          domPill.style.borderColor = 'rgba(100, 116, 139, 0.3)';
+        }
+      }
+
+      // 4. Render Metric Split Bars
+      const metricsWrap = document.getElementById('compare-player-metrics-wrap');
+      if (!metricsWrap) return;
+
+      metricsWrap.innerHTML = metrics.map(m => {
+        let p1Lead = false, p2Lead = false;
+        if (m.lowerBetter) {
+          if (m.v1 > 0 && m.v2 > 0) {
+            p1Lead = m.v1 < m.v2;
+            p2Lead = m.v2 < m.v1;
+          } else if (m.v1 > 0) {
+            p1Lead = true;
+          } else if (m.v2 > 0) {
+            p2Lead = true;
+          }
+        } else {
+          p1Lead = m.v1 > m.v2;
+          p2Lead = m.v2 > m.v1;
+        }
+
+        let pct1 = 50;
+        if (m.lowerBetter) {
+          if (m.v1 > 0 && m.v2 > 0) {
+            const eff1 = 1 / m.v1;
+            const eff2 = 1 / m.v2;
+            pct1 = Math.round((eff1 / (eff1 + eff2)) * 100);
+          } else if (m.v1 > 0) {
+            pct1 = 80;
+          } else if (m.v2 > 0) {
+            pct1 = 20;
+          }
+        } else {
+          const tot = m.v1 + m.v2;
+          if (tot > 0) {
+            pct1 = Math.round((m.v1 / tot) * 100);
+          }
+        }
+        pct1 = Math.max(10, Math.min(90, pct1));
+        const pct2 = 100 - pct1;
+
+        return `
+          <div class="compare-metric-row">
+            <div class="compare-metric-header">
+              <span style="${p1Lead ? 'font-weight: 800; color: var(--color-accent);' : 'color: var(--color-text-muted);'}">
+                ${m.format(m.v1)} ${p1Lead ? '👑' : ''}
+              </span>
+              <span class="compare-metric-name">${m.label}</span>
+              <span style="${p2Lead ? 'font-weight: 800; color: #7c3aed;' : 'color: var(--color-text-muted);'}">
+                ${p2Lead ? '👑 ' : ''}${m.format(m.v2)}
+              </span>
+            </div>
+            <div class="compare-bar-track">
+              <div class="compare-bar-left" style="width: ${pct1}%;"></div>
+              <div class="compare-bar-right" style="width: ${pct2}%;"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderTeamCompare() {
+      const t1 = getTeamCompareStats(compareState.t1 || (state.match.teamA || 'Mumbai Strikers'));
+      const t2 = getTeamCompareStats(compareState.t2 || (state.match.teamB || 'Bangalore Blasters'));
+
+      // 1. Render Spotlight Cards
+      const cardT1 = document.getElementById('compare-card-t1');
+      const cardT2 = document.getElementById('compare-card-t2');
+
+      if (cardT1) {
+        cardT1.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #1d4ed8, #3b82f6); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 16px;">
+              ${t1.name.charAt(0)}
+            </div>
+            <div>
+              <div style="font-weight: 800; font-size: 14px; color: var(--color-text);">${t1.name}</div>
+              <div style="font-size: 11px; color: var(--color-text-muted);">Points: ${t1.points} • NRR: ${t1.nrr}</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 6px; margin-top: 6px;">
+            <span class="badge" style="background: rgba(37,99,235,0.12); color: var(--color-accent); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill);">
+              Record: ${t1.wins}W - ${t1.losses}L (${t1.winPct}%)
+            </span>
+          </div>
+        `;
+      }
+
+      if (cardT2) {
+        cardT2.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
+            <div>
+              <div style="font-weight: 800; font-size: 14px; color: var(--color-text);">${t2.name}</div>
+              <div style="font-size: 11px; color: var(--color-text-muted);">Points: ${t2.points} • NRR: ${t2.nrr}</div>
+            </div>
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #7c3aed, #8b5cf6); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 16px;">
+              ${t2.name.charAt(0)}
+            </div>
+          </div>
+          <div style="display: flex; gap: 6px; margin-top: 6px; justify-content: flex-end;">
+            <span class="badge" style="background: rgba(124,58,237,0.12); color: #7c3aed; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill);">
+              Record: ${t2.wins}W - ${t2.losses}L (${t2.winPct}%)
+            </span>
+          </div>
+        `;
+      }
+
+      // 2. Team Metrics Definition
+      const teamMetrics = [
+        { label: 'Tournament Matches', v1: t1.played, v2: t2.played, format: v => v },
+        { label: 'Win Percentage', v1: t1.winPct, v2: t2.winPct, format: v => `${v}%` },
+        { label: 'Avg 1st Innings Total', v1: t1.avg1st, v2: t2.avg1st, format: v => `${v} runs` },
+        { label: 'Avg 2nd Innings Total', v1: t1.avg2nd, v2: t2.avg2nd, format: v => `${v} runs` },
+        { label: 'Boundary Pacing', v1: t1.boundaryPace, v2: t2.boundaryPace, format: v => `${v} / inn` },
+        { label: 'Pace Wickets Share', v1: t1.paceWkts, v2: t2.paceWkts, format: v => `${v}% Pace` }
+      ];
+
+      // 3. Dominance
+      let t1Wins = 0, t2Wins = 0;
+      teamMetrics.forEach(m => {
+        if (m.v1 > m.v2) t1Wins++;
+        else if (m.v2 > m.v1) t2Wins++;
+      });
+
+      const domPill = document.getElementById('compare-team-dominance-pill');
+      if (domPill) {
+        if (t1Wins > t2Wins) {
+          domPill.textContent = `${t1.name.split(' ')[0]} LEADS ${t1Wins}-${t2Wins}`;
+          domPill.style.background = 'rgba(29, 78, 216, 0.15)';
+          domPill.style.color = 'var(--color-accent)';
+          domPill.style.borderColor = 'rgba(29, 78, 216, 0.3)';
+        } else if (t2Wins > t1Wins) {
+          domPill.textContent = `${t2.name.split(' ')[0]} LEADS ${t2Wins}-${t1Wins}`;
+          domPill.style.background = 'rgba(124, 58, 237, 0.15)';
+          domPill.style.color = '#7c3aed';
+          domPill.style.borderColor = 'rgba(124, 58, 237, 0.3)';
+        } else {
+          domPill.textContent = `TIED ${t1Wins}-${t2Wins}`;
+          domPill.style.background = 'rgba(100, 116, 139, 0.15)';
+          domPill.style.color = 'var(--color-text-muted)';
+          domPill.style.borderColor = 'rgba(100, 116, 139, 0.3)';
+        }
+      }
+
+      // 4. Render Metric Split Bars
+      const metricsWrap = document.getElementById('compare-team-metrics-wrap');
+      if (!metricsWrap) return;
+
+      metricsWrap.innerHTML = teamMetrics.map(m => {
+        const t1Lead = m.v1 > m.v2;
+        const t2Lead = m.v2 > m.v1;
+        const tot = m.v1 + m.v2;
+        let pct1 = tot > 0 ? Math.round((m.v1 / tot) * 100) : 50;
+        pct1 = Math.max(10, Math.min(90, pct1));
+        const pct2 = 100 - pct1;
+
+        return `
+          <div class="compare-metric-row">
+            <div class="compare-metric-header">
+              <span style="${t1Lead ? 'font-weight: 800; color: var(--color-accent);' : 'color: var(--color-text-muted);'}">
+                ${m.format(m.v1)} ${t1Lead ? '👑' : ''}
+              </span>
+              <span class="compare-metric-name">${m.label}</span>
+              <span style="${t2Lead ? 'font-weight: 800; color: #7c3aed;' : 'color: var(--color-text-muted);'}">
+                ${t2Lead ? '👑 ' : ''}${m.format(m.v2)}
+              </span>
+            </div>
+            <div class="compare-bar-track">
+              <div class="compare-bar-left" style="width: ${pct1}%;"></div>
+              <div class="compare-bar-right" style="width: ${pct2}%;"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     // ========================================================================
@@ -8197,6 +8957,7 @@
       renderVenueIntelligence('oval_maidan');
       updateVenueSetupTelemetry('oval_maidan');
       filterScoutedPlayers();
+      initCompareEngine();
       updateNetworkStatus();
 
       // Register PWA Offline Service Worker
