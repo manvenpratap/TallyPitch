@@ -1,0 +1,342 @@
+{
+  "/Volumes/Study/Projects/TallyPitch/tooltip.js": {
+    "mtime": 1792173097.266088,
+    "hash": "1d751942e02e2ff3e4653673e0f147df"
+  },
+  "/Volumes/Study/Projects/TallyPitch/sw.js": {
+    "mtime": 1792230917.1316934,
+    "hash": "1fc3f87425dc8e9bbb9368ac1d14424e"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_compare_vs_engine.py": {
+    "mtime": 1792380607.64527,
+    "hash": "7a3d5c0597aff6fa5d672111778b2c73"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_tournament_leaderboards.py": {
+    "mtime": 1792349917.5604548,
+    "hash": "cf6d0631cdde7d56310da6bb92d8099e"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_shot_type_engine.py": {
+    "mtime": 1792387125.6340234,
+    "hash": "ac68721255905120183d0479970bfe0f"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_cricket_engine.py": {
+    "mtime": 1792302224.3274744,
+    "hash": "5ecbbd4e3ef2dff73c95f11b8123c86a"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_ground_and_insights.py": {
+    "mtime": 1792231566.1330264,
+    "hash": "d8d6b91abcbf7822d67268e674beb41e"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/conftest.py": {
+    "mtime": 1792173097.2670872,
+    "hash": "c89c8336ea527005e6529d9a5986c1f0"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_dls_engine.py": {
+    "mtime": 1792301573.8391852,
+    "hash": "6050e37ed938ee3856c1f03143083bee"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_community_and_badges.py": {
+    "mtime": 1792226753.1302295,
+    "hash": "6bce18309f759ebf0f448ef995b57d8d"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_wagon_wheel_and_charts.py": {
+    "mtime": 1792302254.8468533,
+    "hash": "7468ac634fbf56f338e0561ca120f12b"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_pwa_offline.py": {
+    "mtime": 1792230940.6621726,
+    "hash": "acdf988f90cb34d0cde0c76ccf94ef9a"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_android_packaging.py": {
+    "mtime": 1792304573.239866,
+    "hash": "67a0b2c32e8dfa2dcd700f985cabf1c2"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_realtime_bridge.py": {
+    "mtime": 1792302275.3660955,
+    "hash": "5110c803ebefb75b700725eb0bef07d8"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_tournament_realtime.py": {
+    "mtime": 1792303154.2646425,
+    "hash": "ddb28fc1aac5f745a604d55de6b083f9"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_voice_commentary.py": {
+    "mtime": 1792306332.933228,
+    "hash": "8f4962331403b245365a42170d8d6235"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_social_card_exporter.py": {
+    "mtime": 1792295439.5580432,
+    "hash": "8454d9d64250183cbdcf38d00677c695"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_partnerships_engine.py": {
+    "mtime": 1792374829.2810764,
+    "hash": "499b8b7261e3d6723c7c354161d18868"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_face_off_engine.py": {
+    "mtime": 1792430024.9767745,
+    "hash": "85983896b7e89f2a44aaaca89aaca8cb"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/helpers.py": {
+    "mtime": 1792173097.2674146,
+    "hash": "2d97c56a644ba00ae6e1861cbbdc8711"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_super_over_engine.py": {
+    "mtime": 1792379056.682003,
+    "hash": "b8d32cb66fba15eb95407a422bff3045"
+  },
+  "/Volumes/Study/Projects/TallyPitch/server/db.js": {
+    "mtime": 1791945776.0100553,
+    "hash": "0c34dd97606c911c8b7ec4207a60621c"
+  },
+  "/Volumes/Study/Projects/TallyPitch/server/auth.js": {
+    "mtime": 1791945759.6735802,
+    "hash": "bb227920559b2833d27e942fe953faee"
+  },
+  "/Volumes/Study/Projects/TallyPitch/server/realtime.js": {
+    "mtime": 1792302784.6793563,
+    "hash": "9aedff7144018221d8d3c1f4e3ef2ddb"
+  },
+  "/Volumes/Study/Projects/TallyPitch/server/stripe.js": {
+    "mtime": 1791945802.6229668,
+    "hash": "6fe908322dcc8f12aed83b4b5be63e25"
+  },
+  "/Volumes/Study/Projects/TallyPitch/server/api.js": {
+    "mtime": 1792302834.2547717,
+    "hash": "c0940309e4d7ebf4b98f918fc5f623ca"
+  },
+  "/Volumes/Study/Projects/TallyPitch/supabase/migrations/20261014000000_init_tallypitch.sql": {
+    "mtime": 1791945825.7490458,
+    "hash": "b1ab0ee2e188cefb93eaa1f73972a06b"
+  },
+  "/Volumes/Study/Projects/TallyPitch/android/build.gradle": {
+    "mtime": 1792304185.887954,
+    "hash": "0ba00931fce6edf3cc09c26022ffd5bc"
+  },
+  "/Volumes/Study/Projects/TallyPitch/android/settings.gradle": {
+    "mtime": 1792304203.7157447,
+    "hash": "217695b0519ec690d7fc08f0c76b3a7e"
+  },
+  "/Volumes/Study/Projects/TallyPitch/android/app/build.gradle": {
+    "mtime": 1792304317.079748,
+    "hash": "6ae190d09cf62504744a6c8ee3b7ec05"
+  },
+  "/Volumes/Study/Projects/TallyPitch/scripts/seed.sql": {
+    "mtime": 1791945723.8595138,
+    "hash": "0325892e6f806c775762461a454d9fe8"
+  },
+  "/Volumes/Study/Projects/TallyPitch/scripts/pipeline.py": {
+    "mtime": 1792354934.4844573,
+    "hash": "1b7e3ab21925250b95c0d3184980df76"
+  },
+  "/Volumes/Study/Projects/TallyPitch/scripts/build_android_twa.py": {
+    "mtime": 1792304392.321726,
+    "hash": "190534e1c5c73b5bed157dd2eb482afb"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/schema.sql": {
+    "mtime": 1791942088.2810628,
+    "hash": "1c90ab2da3c36000c30584672abce3b1"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/design/tailwind.config.js": {
+    "mtime": 1791945660.5457704,
+    "hash": "6ea526fce908cb1052cf8d9d236e3cb1"
+  },
+  "/Volumes/Study/Projects/TallyPitch/PROJECT_CONTEXT.md": {
+    "mtime": 1792430367.8102884,
+    "hash": "8373c01290f6c1045dd5ba9b8721d4a7"
+  },
+  "/Volumes/Study/Projects/TallyPitch/PRODUCT.md": {
+    "mtime": 1792173155.4435492,
+    "hash": "312cad1cc5240f9d7659553c3382bb4b"
+  },
+  "/Volumes/Study/Projects/TallyPitch/index.html": {
+    "mtime": 1792429873.6817667,
+    "hash": "9848544af19972b0163f5d07a48d171c"
+  },
+  "/Volumes/Study/Projects/TallyPitch/requirements.txt": {
+    "mtime": 1792308119.261897,
+    "hash": "514fe6e28f86d2ce1f4515df09b9ea79"
+  },
+  "/Volumes/Study/Projects/TallyPitch/README.md": {
+    "mtime": 1792176018.2674563,
+    "hash": "b1341ad04c6cc10c9bd86f394179af52"
+  },
+  "/Volumes/Study/Projects/TallyPitch/CONTRIBUTING.md": {
+    "mtime": 1792174831.0404756,
+    "hash": "a3779240e855fc77e9e9e59fa6845885"
+  },
+  "/Volumes/Study/Projects/TallyPitch/DESIGN.md": {
+    "mtime": 1792173174.8354056,
+    "hash": "6e71544471580642340d09f237b79d35"
+  },
+  "/Volumes/Study/Projects/TallyPitch/AGENTS.md": {
+    "mtime": 1792173097.2686026,
+    "hash": "8353033de7a2236f42274802196b838d"
+  },
+  "/Volumes/Study/Projects/TallyPitch/landing.html": {
+    "mtime": 1791946271.69717,
+    "hash": "970feba85b196fa765fa74c95ed041cd"
+  },
+  "/Volumes/Study/Projects/TallyPitch/SECURITY.md": {
+    "mtime": 1792174838.2816527,
+    "hash": "d65a2462819436574644751e386e3c09"
+  },
+  "/Volumes/Study/Projects/TallyPitch/tests/README.md": {
+    "mtime": 1792430367.8125281,
+    "hash": "53b665dbf815f578b48f012428f54e00"
+  },
+  "/Volumes/Study/Projects/TallyPitch/wiki/Scoring-Engine-and-Rollback.md": {
+    "mtime": 1792175628.0438058,
+    "hash": "8fd81241902d59c3e6270a2206f1c70f"
+  },
+  "/Volumes/Study/Projects/TallyPitch/wiki/OBS-and-Live-Streaming.md": {
+    "mtime": 1792175648.9019604,
+    "hash": "1a41e9b283f93cd381e91595eca26d3e"
+  },
+  "/Volumes/Study/Projects/TallyPitch/wiki/Home.md": {
+    "mtime": 1792175964.496115,
+    "hash": "7adc0f9344c1d3c82eee56f15f436254"
+  },
+  "/Volumes/Study/Projects/TallyPitch/wiki/Tournament-Management-and-NRR.md": {
+    "mtime": 1792175639.1787355,
+    "hash": "2e5b453510f8457c6b998d9bc5820e9a"
+  },
+  "/Volumes/Study/Projects/TallyPitch/wiki/_Sidebar.md": {
+    "mtime": 1792175697.716111,
+    "hash": "af9b248645f42fd217efdd29e6677c2e"
+  },
+  "/Volumes/Study/Projects/TallyPitch/wiki/API-and-Database-Reference.md": {
+    "mtime": 1792175673.8360038,
+    "hash": "dee0d08eada8c36dabd40072437d1d86"
+  },
+  "/Volumes/Study/Projects/TallyPitch/wiki/Offline-Resilience-and-Architecture.md": {
+    "mtime": 1792382781.646927,
+    "hash": "799281fcec489972871982a451b97530"
+  },
+  "/Volumes/Study/Projects/TallyPitch/wiki/_Footer.md": {
+    "mtime": 1792175718.5199425,
+    "hash": "2ed4bce6d7d455373914e1355eebc9d9"
+  },
+  "/Volumes/Study/Projects/TallyPitch/wiki/Contributing-and-Development.md": {
+    "mtime": 1792175689.237955,
+    "hash": "9b316392c6ad334d771707f081bff3c5"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/architecture.md": {
+    "mtime": 1791942120.1842496,
+    "hash": "2edcba7e1fe764cfe5169a30b7922486"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/bugs.md": {
+    "mtime": 1791944483.0117593,
+    "hash": "1eb1bd29ed6aa3b66b40eb90a5ca9673"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/brand.md": {
+    "mtime": 1791945590.606623,
+    "hash": "b93444f39c406d367fcb20ff53e62433"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/recon.md": {
+    "mtime": 1791941595.6509457,
+    "hash": "7b478eb65d8db158b3780063bc5ee5c7"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/cricheroes_spec.md": {
+    "mtime": 1792232273.4302804,
+    "hash": "89c2d3b17ae7ea08de467c636f80b294"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/backend.md": {
+    "mtime": 1791944108.222417,
+    "hash": "75063d8126a6204519fd098a5d14f2ce"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/fixes.md": {
+    "mtime": 1791944938.817672,
+    "hash": "998d92042e17aceed190a76dc4aaaf33"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/parity.md": {
+    "mtime": 1792226874.9331086,
+    "hash": "1c523138f378599ff8803e98dd181cb2"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/feedback.md": {
+    "mtime": 1791944919.044046,
+    "hash": "c9e614a64eb76b27c291db86d220b01b"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/test-plan.md": {
+    "mtime": 1791944466.5017862,
+    "hash": "a91b500e8fbc72caa0b89f4112a919b0"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/build-log.md": {
+    "mtime": 1791945263.2423122,
+    "hash": "2215bb13809fe22fa2b06ec7845f9387"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/design/components.md": {
+    "mtime": 1791942264.6512973,
+    "hash": "9bc218c39fd945d57e1c641b9e23808e"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/launch/pricing.md": {
+    "mtime": 1791946115.2375631,
+    "hash": "fd04582aa62453c0a391221cb49c4772"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/launch/launch-plan.md": {
+    "mtime": 1791946209.5192513,
+    "hash": "35b6a7473f795e073d3006a64947c691"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/launch/landing.md": {
+    "mtime": 1791946182.52361,
+    "hash": "3a11e220be390d7d3e910e4fe31e0af3"
+  },
+  "/Volumes/Study/Projects/TallyPitch/icon-192.png": {
+    "mtime": 1792230885.8424897,
+    "hash": "72b5eecec9b7f2a8a139f9df8d57b5f9"
+  },
+  "/Volumes/Study/Projects/TallyPitch/icon-512.png": {
+    "mtime": 1792230885.8472874,
+    "hash": "aa01e746fa8f21a65667f9748b552721"
+  },
+  "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-mdpi/ic_launcher.png": {
+    "mtime": 1792430271.276948,
+    "hash": "72b5eecec9b7f2a8a139f9df8d57b5f9"
+  },
+  "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png": {
+    "mtime": 1792430271.2771723,
+    "hash": "72b5eecec9b7f2a8a139f9df8d57b5f9"
+  },
+  "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-hdpi/ic_launcher.png": {
+    "mtime": 1792430271.2773316,
+    "hash": "72b5eecec9b7f2a8a139f9df8d57b5f9"
+  },
+  "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png": {
+    "mtime": 1792430271.277491,
+    "hash": "72b5eecec9b7f2a8a139f9df8d57b5f9"
+  },
+  "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png": {
+    "mtime": 1792430271.278293,
+    "hash": "aa01e746fa8f21a65667f9748b552721"
+  },
+  "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png": {
+    "mtime": 1792430271.2784593,
+    "hash": "aa01e746fa8f21a65667f9748b552721"
+  },
+  "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png": {
+    "mtime": 1792430271.277988,
+    "hash": "aa01e746fa8f21a65667f9748b552721"
+  },
+  "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png": {
+    "mtime": 1792430271.2781303,
+    "hash": "aa01e746fa8f21a65667f9748b552721"
+  },
+  "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png": {
+    "mtime": 1792430271.2776437,
+    "hash": "72b5eecec9b7f2a8a139f9df8d57b5f9"
+  },
+  "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png": {
+    "mtime": 1792430271.2777808,
+    "hash": "72b5eecec9b7f2a8a139f9df8d57b5f9"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/clone-screens/S07.png": {
+    "mtime": 1791942609.2867,
+    "hash": "cb39ab0cc16049ffe02345d4521198b9"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/clone-screens/S13.png": {
+    "mtime": 1791942609.290402,
+    "hash": "722e9aac889056d16c00190052299f50"
+  },
+  "/Volumes/Study/Projects/TallyPitch/replica/clone-screens/S03.png": {
+    "mtime": 1791942609.2933877,
+    "hash": "17713b18834252f9e91d68068c1596c2"
+  }
+}
