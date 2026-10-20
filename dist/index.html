@@ -2010,21 +2010,76 @@
             <div id="worm-svg-container" style="width: 100%; overflow-x: auto; background: var(--color-bg); border-radius: var(--radius-md); padding: 10px 6px; border: 1px solid var(--color-border);"></div>
           </div>
 
-          <!-- Wagon Wheel Summary View -->
+          <!-- Wagon Wheel Summary View (Track 13: Radial Sector Spray & Lofted Arcs) -->
           <div id="chart-view-wagon" class="chart-tab-view" style="display: none;">
+            <!-- Filter Bar -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-              <div style="display: flex; gap: 6px; font-size: 12px; flex-wrap: wrap;">
+              <div style="display: flex; gap: 5px; font-size: 11px; flex-wrap: wrap;">
                 <button type="button" class="btn btn-secondary wagon-filter-btn active" id="btn-wf-all" onclick="filterWagonWheelScorecard('all')" data-tooltip="Display all scored shots">All Shots</button>
+                <button type="button" class="btn btn-secondary wagon-filter-btn" id="btn-wf-ground" onclick="filterWagonWheelScorecard('ground')" data-tooltip="Filter only ground rolling shots">🟢 Ground Only</button>
+                <button type="button" class="btn btn-secondary wagon-filter-btn" id="btn-wf-air" onclick="filterWagonWheelScorecard('air')" data-tooltip="Filter lofted aerial shots with parabolic flight arcs">🚀 Lofted / Air</button>
                 <button type="button" class="btn btn-secondary wagon-filter-btn" id="btn-wf-boundaries" onclick="filterWagonWheelScorecard('boundaries')" data-tooltip="Filter only boundaries (4s & 6s)">Boundaries (4s/6s)</button>
                 <button type="button" class="btn btn-secondary wagon-filter-btn" id="btn-wf-singles" onclick="filterWagonWheelScorecard('singles')" data-tooltip="Filter running between wickets (1s, 2s, 3s)">1s, 2s, 3s</button>
                 <button type="button" class="btn btn-secondary wagon-filter-btn" id="btn-wf-dots" onclick="filterWagonWheelScorecard('dots')" data-tooltip="Filter non-scoring dot balls">Dots (0s)</button>
                 <button type="button" class="btn btn-secondary wagon-filter-btn" id="btn-wf-vulnerability" onclick="toggleWagonVulnerability()" data-tooltip="Toggle CricInsights Field Vulnerability Heatmap (Un-Paywalled)">🛡️ Vulnerability Heatmap</button>
               </div>
-              <div style="font-size: 12px; color: var(--color-text-muted);">
-                🟢 4s • 🟣 6s • 🔵 1s-3s • ⚪ Dots
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 4px;">
+                  <label for="wagon-batter-select" style="font-size: 11px; font-weight: 700; color: var(--color-text-muted);">Batter:</label>
+                  <select id="wagon-batter-select" class="form-select" style="padding: 4px 8px; font-size: 12px; width: auto;" onchange="renderScorecardWagonWheel(state.currentLive.wagonScorecardFilter || 'all')"></select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                  <label for="wagon-innings-select" style="font-size: 11px; font-weight: 700; color: var(--color-text-muted);">Innings:</label>
+                  <select id="wagon-innings-select" class="form-select" style="padding: 4px 8px; font-size: 12px; width: auto;" onchange="renderScorecardWagonWheel(state.currentLive.wagonScorecardFilter || 'all')"></select>
+                </div>
               </div>
             </div>
-            <div id="scorecard-wagon-svg-container" style="text-align: center; background: var(--color-bg); border-radius: var(--radius-md); padding: 14px; border: 1px solid var(--color-border);"></div>
+
+            <!-- 4 Radial KPI Telemetry Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 14px;">
+              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">👑 Top Sector</div>
+                <div id="wagon-kpi-productive" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-accent);">None (0r)</div>
+              </div>
+              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🚀 Lofted Yield</div>
+                <div id="wagon-kpi-lofted" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: #a855f7;">0r (0 Air)</div>
+              </div>
+              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🛡️ Ground Control</div>
+                <div id="wagon-kpi-ground" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-success);">0r (0 Ground)</div>
+              </div>
+              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🎯 Boundary Hotspot</div>
+                <div id="wagon-kpi-boundary" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: #f59e0b;">None (0 Bdys)</div>
+              </div>
+            </div>
+
+            <!-- Dual Column: 360 Turf Canvas & Radial Sector Breakdown Table -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 12px;">
+              <!-- Left Column: SVG Ground Turf Canvas -->
+              <div class="card" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                  <span>360° Turf Wagon Wheel & Lofted Arcs</span>
+                  <div style="display: flex; gap: 6px; font-size: 10px;">
+                    <span style="color: #a855f7; font-weight: 700;">🟣 6s (Arc)</span>
+                    <span style="color: #22c55e; font-weight: 700;">🟢 4s</span>
+                    <span style="color: #38bdf8; font-weight: 700;">🔵 1-3s</span>
+                    <span style="color: #94a3b8; font-weight: 700;">⚪ Dots</span>
+                  </div>
+                </div>
+                <div id="scorecard-wagon-svg-container" style="text-align: center; display: flex; justify-content: center; overflow-x: auto;"></div>
+              </div>
+
+              <!-- Right Column: 8-Sector Spray Distribution Table -->
+              <div class="card" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); overflow-x: auto;">
+                <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 8px;">
+                  8-Sector Radial Spray & Trajectory Split
+                </div>
+                <div id="wagon-radial-matrix-wrap"></div>
+              </div>
+            </div>
+
             <div id="wagon-vulnerability-banner" style="display: none; margin-top: 10px; padding: 10px; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: var(--radius-sm); font-size: 12px;">
               <strong>🛡️ CricInsights Pitch Vulnerability Analysis:</strong> High scoring hazard at Deep Mid-Wicket & Long-On (74% boundary conversion). Defensive choke point at Cover & Extra Cover (62% dot ball frequency).
             </div>
@@ -6406,9 +6461,59 @@
       container.innerHTML = svg;
     }
 
+    // ------------------------------------------------------------------------
+    // TRACK 13: GROUND WAGON WHEEL RADIAL SECTOR SPRAY & LOFTED ARC CHART
+    // ------------------------------------------------------------------------
+    function syncWagonFilterOptions() {
+      const innSel = document.getElementById('wagon-innings-select');
+      const btrSel = document.getElementById('wagon-batter-select');
+      if (!state.match) return;
+
+      if (innSel) {
+        const curInn = innSel.value || 'all';
+        const teamA = state.match.teamA || 'Team A';
+        const teamB = state.match.teamB || 'Team B';
+        let opts = [`<option value="all">Entire Match</option>`, `<option value="1">1st Innings (${teamA})</option>`];
+        if (state.innings2 && state.innings2.deliveries && state.innings2.deliveries.length > 0) {
+          opts.push(`<option value="2">2nd Innings (${teamB})</option>`);
+        }
+        innSel.innerHTML = opts.join('');
+        if (innSel.querySelector(`option[value="${curInn}"]`)) {
+          innSel.value = curInn;
+        } else {
+          innSel.value = 'all';
+        }
+      }
+
+      if (btrSel) {
+        const curBtr = btrSel.value || 'all';
+        const battersMap = new Map();
+        [state.innings1, state.innings2].forEach(inn => {
+          if (inn && inn.batters) {
+            Object.values(inn.batters).forEach(b => {
+              if (b.balls > 0 || b.runs > 0) {
+                battersMap.set(b.id, b.name);
+              }
+            });
+          }
+        });
+
+        let opts = [`<option value="all">All Batters</option>`];
+        Array.from(battersMap.entries()).sort((a, b) => a[1].localeCompare(b[1])).forEach(([id, name]) => {
+          opts.push(`<option value="${id}">${name}</option>`);
+        });
+        btrSel.innerHTML = opts.join('');
+        if (battersMap.has(curBtr)) {
+          btrSel.value = curBtr;
+        } else {
+          btrSel.value = 'all';
+        }
+      }
+    }
+
     function filterWagonWheelScorecard(filter) {
       state.currentLive.wagonScorecardFilter = filter;
-      ['all', 'boundaries', 'singles', 'dots'].forEach(f => {
+      ['all', 'ground', 'air', 'boundaries', 'singles', 'dots'].forEach(f => {
         const btn = document.getElementById(`btn-wf-${f}`);
         if (btn) btn.classList.toggle('active', f === filter);
       });
@@ -6429,39 +6534,233 @@
       const container = document.getElementById('scorecard-wagon-svg-container');
       if (!container) return;
 
-      const inn = getCurrentInnings();
-      let deliveries = [...inn.deliveries];
+      syncWagonFilterOptions();
 
+      const innSel = document.getElementById('wagon-innings-select');
+      const btrSel = document.getElementById('wagon-batter-select');
+
+      const inningsFilter = innSel ? innSel.value : 'all';
+      const batterFilter = btrSel ? btrSel.value : 'all';
+
+      let targetDeliveries = [];
+      const inn1 = state.innings1;
+      const inn2 = state.innings2;
+
+      if (inningsFilter === '1' && inn1 && inn1.deliveries) {
+        targetDeliveries = inn1.deliveries.map(d => ({
+          ...d,
+          inningsNum: 1,
+          batterName: (inn1.batters && inn1.batters[d.strikerId]?.name) || d.batter || 'Batter'
+        }));
+      } else if (inningsFilter === '2' && inn2 && inn2.deliveries) {
+        targetDeliveries = inn2.deliveries.map(d => ({
+          ...d,
+          inningsNum: 2,
+          batterName: (inn2.batters && inn2.batters[d.strikerId]?.name) || d.batter || 'Batter'
+        }));
+      } else {
+        if (inn1 && inn1.deliveries) {
+          targetDeliveries.push(...inn1.deliveries.map(d => ({
+            ...d,
+            inningsNum: 1,
+            batterName: (inn1.batters && inn1.batters[d.strikerId]?.name) || d.batter || 'Batter'
+          })));
+        }
+        if (inn2 && inn2.deliveries) {
+          targetDeliveries.push(...inn2.deliveries.map(d => ({
+            ...d,
+            inningsNum: 2,
+            batterName: (inn2.batters && inn2.batters[d.strikerId]?.name) || d.batter || 'Batter'
+          })));
+        }
+      }
+
+      // If no match deliveries yet, fall back to current live innings
+      if (targetDeliveries.length === 0) {
+        const curInn = getCurrentInnings();
+        if (curInn && curInn.deliveries) {
+          targetDeliveries = curInn.deliveries.map(d => ({
+            ...d,
+            batterName: (curInn.batters && curInn.batters[d.strikerId]?.name) || d.batter || 'Batter'
+          }));
+        }
+      }
+
+      // Filter by Batter
+      if (batterFilter && batterFilter !== 'all') {
+        targetDeliveries = targetDeliveries.filter(d => d.strikerId === batterFilter);
+      }
+
+      // Filter by Trajectory / Runs
+      let deliveries = [...targetDeliveries];
       if (filter === 'boundaries') {
         deliveries = deliveries.filter(d => d.runs === 4 || d.runs === 6);
       } else if (filter === 'singles') {
         deliveries = deliveries.filter(d => d.runs > 0 && d.runs < 4);
       } else if (filter === 'dots') {
         deliveries = deliveries.filter(d => d.runs === 0 && !d.isWicket);
+      } else if (filter === 'ground') {
+        deliveries = deliveries.filter(d => {
+          const h = d.wagonWheel?.wagon_height || (d.runs >= 6 ? 'air' : 'ground');
+          return h === 'ground';
+        });
+      } else if (filter === 'air') {
+        deliveries = deliveries.filter(d => {
+          const h = d.wagonWheel?.wagon_height || (d.runs >= 6 ? 'air' : 'ground');
+          return h === 'air';
+        });
       }
 
+      // Compute 8-Sector Radial Statistics
+      const sectorStats = {};
+      CRIC_ZONES.forEach(z => {
+        sectorStats[z.id] = {
+          zone: z,
+          runs: 0,
+          balls: 0,
+          fours: 0,
+          sixes: 0,
+          ground: 0,
+          air: 0,
+          groundRuns: 0,
+          airRuns: 0
+        };
+      });
+
+      let totalFilteredRuns = 0;
+      let maxSectorRuns = 0;
+
+      deliveries.forEach(d => {
+        const ww = d.wagonWheel || getDefaultWagonWheel(d.runs);
+        const zId = String(ww.wagon_part || "4");
+        const s = sectorStats[zId] || sectorStats["4"];
+        const runs = d.runs || 0;
+        const h = ww.wagon_height || (runs >= 6 ? "air" : "ground");
+
+        s.balls++;
+        s.runs += runs;
+        totalFilteredRuns += runs;
+        if (runs === 4) s.fours++;
+        if (runs === 6) s.sixes++;
+
+        if (h === 'air' || runs >= 6) {
+          s.air++;
+          s.airRuns += runs;
+        } else {
+          s.ground++;
+          s.groundRuns += runs;
+        }
+
+        if (s.runs > maxSectorRuns) maxSectorRuns = s.runs;
+      });
+
+      // 4 Telemetry KPIs
+      // 1. Most Productive Sector
+      let topSector = { name: 'None', runs: 0, pct: 0 };
+      CRIC_ZONES.forEach(z => {
+        const s = sectorStats[z.id];
+        if (s.runs >= topSector.runs && s.runs > 0) {
+          const pct = totalFilteredRuns > 0 ? Math.round((s.runs / totalFilteredRuns) * 100) : 0;
+          topSector = { name: z.name, runs: s.runs, pct };
+        }
+      });
+
+      // 2. Lofted Aerial Yield
+      let topLofted = { name: 'None', airRuns: 0, sixes: 0 };
+      CRIC_ZONES.forEach(z => {
+        const s = sectorStats[z.id];
+        if (s.airRuns >= topLofted.airRuns && s.airRuns > 0) {
+          topLofted = { name: z.name, airRuns: s.airRuns, sixes: s.sixes };
+        }
+      });
+
+      // 3. Ground Control Sector
+      let topGround = { name: 'None', groundRuns: 0 };
+      CRIC_ZONES.forEach(z => {
+        const s = sectorStats[z.id];
+        if (s.groundRuns >= topGround.groundRuns && s.groundRuns > 0) {
+          topGround = { name: z.name, groundRuns: s.groundRuns };
+        }
+      });
+
+      // 4. Boundary Hotspot
+      let topBoundary = { name: 'None', boundaries: 0 };
+      CRIC_ZONES.forEach(z => {
+        const s = sectorStats[z.id];
+        const bdys = s.fours + s.sixes;
+        if (bdys >= topBoundary.boundaries && bdys > 0) {
+          topBoundary = { name: z.name, boundaries: bdys };
+        }
+      });
+
+      // Populate KPI DOM Cards
+      const kpiProd = document.getElementById('wagon-kpi-productive');
+      const kpiLoft = document.getElementById('wagon-kpi-lofted');
+      const kpiGrd = document.getElementById('wagon-kpi-ground');
+      const kpiBdy = document.getElementById('wagon-kpi-boundary');
+
+      if (kpiProd) kpiProd.textContent = topSector.runs > 0 ? `${topSector.name} (${topSector.runs}r • ${topSector.pct}%)` : 'None (0r)';
+      if (kpiLoft) kpiLoft.textContent = topLofted.airRuns > 0 ? `${topLofted.name} (${topLofted.airRuns}r in air)` : '0r (0 Air)';
+      if (kpiGrd) kpiGrd.textContent = topGround.groundRuns > 0 ? `${topGround.name} (${topGround.groundRuns}r ground)` : '0r (0 Ground)';
+      if (kpiBdy) kpiBdy.textContent = topBoundary.boundaries > 0 ? `${topBoundary.name} (${topBoundary.boundaries} Bdys)` : 'None (0 Bdys)';
+
+      // Build 360 Turf SVG
       let svg = `
         <svg viewBox="0 0 300 300" width="280" height="280" style="background: #14532d; border-radius: 50%; box-shadow: inset 0 0 20px rgba(0,0,0,0.4); display: inline-block;">
-          <circle cx="150" cy="150" r="135" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="6,4"/>
-          <circle cx="150" cy="150" r="70" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6"/>
-          <rect x="145" y="134" width="10" height="32" fill="#ca8a04" rx="2"/>
+      `;
+
+      // 8 Sector Wedges
+      CRIC_ZONES.forEach(z => {
+        const s = sectorStats[z.id];
+        const rad1 = (z.minDeg * Math.PI) / 180;
+        const rad2 = (z.maxDeg * Math.PI) / 180;
+        const x1 = (150 + 135 * Math.sin(rad1)).toFixed(1);
+        const y1 = (150 - 135 * Math.cos(rad1)).toFixed(1);
+        const x2 = (150 + 135 * Math.sin(rad2)).toFixed(1);
+        const y2 = (150 - 135 * Math.cos(rad2)).toFixed(1);
+
+        const heatRatio = maxSectorRuns > 0 ? (s.runs / maxSectorRuns) : 0;
+        const opacity = (heatRatio * 0.22).toFixed(2);
+        const fillColor = s.runs > 0 ? `rgba(34, 197, 94, ${opacity})` : 'transparent';
+
+        svg += `<path d="M 150 150 L ${x1} ${y1} A 135 135 0 0 1 ${x2} ${y2} Z" fill="${fillColor}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
+        svg += `<line x1="150" y1="150" x2="${x2}" y2="${y2}" stroke="rgba(255,255,255,0.22)" stroke-width="1" stroke-dasharray="2,3"/>`;
+      });
+
+      // Field Boundary & Crease Lines
+      svg += `
+        <circle cx="150" cy="150" r="135" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="6,4"/>
+        <circle cx="150" cy="150" r="70" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.6"/>
+        <rect x="145" y="134" width="10" height="32" fill="#ca8a04" rx="2"/>
+        <line x1="142" y1="138" x2="158" y2="138" stroke="#ffffff" stroke-width="1.2"/>
+        <line x1="142" y1="162" x2="158" y2="162" stroke="#ffffff" stroke-width="1.2"/>
+      `;
+
+      // Sector Labels Around Boundary
+      svg += `
+        <g font-size="8" font-weight="700" fill="rgba(255,255,255,0.8)" text-anchor="middle">
+          <text x="200" y="228">Fine Leg</text>
+          <text x="242" y="153">Sq Leg</text>
+          <text x="200" y="74">Mid-Wkt</text>
+          <text x="150" y="38">Long-On</text>
+          <text x="100" y="38">Long-Off</text>
+          <text x="56" y="74">Ex Cover</text>
+          <text x="44" y="153">Cover</text>
+          <text x="82" y="228">Point</text>
+        </g>
       `;
 
       // Vulnerability Overlays if enabled
       if (state.currentLive.wagonVulnerabilityMode) {
-        // Zone 3 & 4: Deep Mid-Wicket / Long-On (Angle 90° - 180°) - Boundary Hazard (Translucent Red)
         svg += `<path d="M 150 150 L 285 150 A 135 135 0 0 1 150 285 Z" fill="rgba(239, 68, 68, 0.28)" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3"/>`;
         svg += `<text x="210" y="210" fill="#fca5a5" font-size="9" font-weight="700">74% Hazard</text>`;
-
-        // Zone 6: Extra Cover (Angle 225° - 270°) - Prime Scoring Arc (Translucent Emerald)
         svg += `<path d="M 150 150 L 54 245 A 135 135 0 0 1 15 150 Z" fill="rgba(34, 197, 94, 0.22)" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="3,3"/>`;
         svg += `<text x="20" y="200" fill="#86efac" font-size="9" font-weight="700">Prime Arc</text>`;
-
-        // Zone 8: Third Man / Point (Angle 315° - 360°) - Dot / Edge Trap (Translucent Amber)
         svg += `<path d="M 150 150 L 54 54 A 135 135 0 0 1 150 15 Z" fill="rgba(245, 158, 11, 0.25)" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,3"/>`;
         svg += `<text x="60" y="45" fill="#fde68a" font-size="9" font-weight="700">52% Dot/Edge</text>`;
       }
 
+      // Draw Delivery Trajectories (Ground Lines vs Lofted Arcs)
       deliveries.forEach((d) => {
         const ww = d.wagonWheel || getDefaultWagonWheel(d.runs);
         const deg = parseInt(ww.wagon_degrees, 10);
@@ -6476,15 +6775,80 @@
         else if (d.runs === 6) color = '#a855f7';
         else if (d.runs > 0) color = '#38bdf8';
 
-        const btr = inn.batters[d.strikerId];
-        const btrName = btr ? btr.name : "Batter";
+        const btrName = d.batterName || "Batter";
+        const isAir = (ww.wagon_height === 'air' || d.runs === 6);
+        const tooltip = `${btrName}: ${d.runs} run(s) • ${ww.zone_name || 'Ground'} (${deg}°) [${isAir ? 'Lofted Arc 🚀' : 'Ground 🟢'}]`;
 
-        svg += `<line class="wagon-shot-line" x1="150" y1="155" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="${color}" stroke-width="${d.runs >= 4 ? 2.5 : 1.5}" opacity="0.85" data-tooltip="${btrName}: ${d.runs} run(s) • ${ww.zone_name} (${deg}°)"/>`;
-        svg += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${d.runs >= 4 ? 3.5 : 2}" fill="${color}"/>`;
+        if (isAir) {
+          const mx = (150 + x) / 2;
+          const my = (155 + y) / 2;
+          const dx = x - 150;
+          const dy = y - 155;
+          const dist = Math.hypot(dx, dy) || 1;
+          const nx = -dy / dist;
+          const ny = dx / dist;
+          const arcLift = Math.min(18, dist * 0.16);
+          const ctrlX = mx + nx * arcLift;
+          const ctrlY = my + ny * arcLift;
+
+          svg += `<line x1="150" y1="155" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="rgba(0,0,0,0.3)" stroke-width="1" stroke-dasharray="2,2"/>`;
+          svg += `<path class="wagon-shot-line" d="M 150 155 Q ${ctrlX.toFixed(1)} ${ctrlY.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}" fill="none" stroke="${color}" stroke-width="${d.runs === 6 ? 3 : 2}" stroke-linecap="round" data-tooltip="${tooltip}"/>`;
+          svg += `<circle cx="${ctrlX.toFixed(1)}" cy="${ctrlY.toFixed(1)}" r="1.8" fill="#ffffff" stroke="${color}" stroke-width="1.2"/>`;
+          svg += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${d.runs === 6 ? 4 : 2.5}" fill="${color}" stroke="#ffffff" stroke-width="1"/>`;
+        } else {
+          svg += `<line class="wagon-shot-line" x1="150" y1="155" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="${color}" stroke-width="${d.runs >= 4 ? 2.5 : 1.5}" opacity="0.85" data-tooltip="${tooltip}"/>`;
+          svg += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${d.runs >= 4 ? 3.5 : 2}" fill="${color}"/>`;
+        }
       });
 
       svg += `</svg>`;
       container.innerHTML = svg;
+
+      // Render 8-Sector Radial Matrix Table
+      const matrixWrap = document.getElementById('wagon-radial-matrix-wrap');
+      if (matrixWrap) {
+        const rowsHtml = CRIC_ZONES.map(z => {
+          const s = sectorStats[z.id];
+          const pct = totalFilteredRuns > 0 ? Math.round((s.runs / totalFilteredRuns) * 100) : 0;
+          return `
+            <tr style="border-bottom: 1px solid var(--color-border);">
+              <td style="text-align: left; padding: 6px 8px; font-weight: 700;">${z.name}</td>
+              <td style="padding: 6px 4px; font-size: 10px; color: var(--color-text-muted);">${z.minDeg}°-${z.maxDeg}°</td>
+              <td style="padding: 6px 6px;">
+                <div style="font-weight: 800; font-size: 12px;">${s.runs}r <span style="font-size: 10px; color: var(--color-text-muted);">(${pct}%)</span></div>
+                <div style="width: 100%; height: 3px; background: rgba(0,0,0,0.1); border-radius: 2px; margin-top: 2px;">
+                  <div style="width: ${pct}%; height: 3px; background: var(--color-accent); border-radius: 2px;"></div>
+                </div>
+              </td>
+              <td style="padding: 6px 4px; font-weight: 700;">${s.balls}b</td>
+              <td style="padding: 6px 4px; font-size: 10px;">
+                <span style="color: var(--color-success); font-weight: 700;">${s.ground}G</span> / <span style="color: #a855f7; font-weight: 700;">${s.air}A</span>
+              </td>
+              <td style="padding: 6px 6px; font-size: 10px; font-weight: 700;">
+                ${s.fours > 0 ? `<span style="color: var(--color-success);">${s.fours}×4</span>` : '-'} ${s.sixes > 0 ? `<span style="color: #a855f7;">${s.sixes}×6</span>` : ''}
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        matrixWrap.innerHTML = `
+          <table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: center;">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--color-border); color: var(--color-text-muted); font-size: 10px; text-transform: uppercase;">
+                <th style="text-align: left; padding: 6px 8px;">Sector</th>
+                <th style="padding: 6px 4px;">Arc</th>
+                <th style="padding: 6px 6px;">Runs (% Share)</th>
+                <th style="padding: 6px 4px;">Balls</th>
+                <th style="padding: 6px 4px;">Trajectory</th>
+                <th style="padding: 6px 6px;">4s / 6s</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+        `;
+      }
     }
 
     function renderPhasesTable() {

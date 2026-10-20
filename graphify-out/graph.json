@@ -9,7 +9,7 @@
       "source_file": "tooltip.js",
       "source_location": "L1",
       "id": "tooltip_js",
-      "community": 39,
+      "community": 40,
       "norm_label": "tooltip.js"
     },
     {
@@ -18,7 +18,7 @@
       "source_file": "tooltip.js",
       "source_location": "L18",
       "id": "tallypitch_tooltip_createtooltipelement",
-      "community": 39,
+      "community": 40,
       "norm_label": "createtooltipelement()"
     },
     {
@@ -27,7 +27,7 @@
       "source_file": "tooltip.js",
       "source_location": "L28",
       "id": "tallypitch_tooltip_gettooltipelement",
-      "community": 39,
+      "community": 40,
       "norm_label": "gettooltipelement()"
     },
     {
@@ -36,7 +36,7 @@
       "source_file": "tooltip.js",
       "source_location": "L32",
       "id": "tallypitch_tooltip_positiontooltip",
-      "community": 39,
+      "community": 40,
       "norm_label": "positiontooltip()"
     },
     {
@@ -45,7 +45,7 @@
       "source_file": "tooltip.js",
       "source_location": "L73",
       "id": "tallypitch_tooltip_show",
-      "community": 39,
+      "community": 40,
       "norm_label": "show()"
     },
     {
@@ -54,7 +54,7 @@
       "source_file": "tooltip.js",
       "source_location": "L88",
       "id": "tallypitch_tooltip_hide",
-      "community": 39,
+      "community": 40,
       "norm_label": "hide()"
     },
     {
@@ -63,7 +63,7 @@
       "source_file": "tooltip.js",
       "source_location": "L99",
       "id": "tallypitch_tooltip_init",
-      "community": 39,
+      "community": 40,
       "norm_label": "init()"
     },
     {
@@ -72,7 +72,7 @@
       "source_file": "sw.js",
       "source_location": "L1",
       "id": "sw_js",
-      "community": 51,
+      "community": 52,
       "norm_label": "sw.js"
     },
     {
@@ -81,7 +81,7 @@
       "source_file": "sw.js",
       "source_location": "L5",
       "id": "tallypitch_sw_static_assets",
-      "community": 51,
+      "community": 52,
       "norm_label": "static_assets"
     },
     {
@@ -90,7 +90,7 @@
       "source_file": "sw.js",
       "source_location": "L37",
       "id": "tallypitch_sw_url",
-      "community": 51,
+      "community": 52,
       "norm_label": "url"
     },
     {
@@ -99,7 +99,7 @@
       "source_file": "sw.js",
       "source_location": "L56",
       "id": "tallypitch_sw_responsetocache",
-      "community": 51,
+      "community": 52,
       "norm_label": "responsetocache"
     },
     {
@@ -810,7 +810,7 @@
       "source_file": "tests/conftest.py",
       "source_location": "L1",
       "id": "tests_conftest_py",
-      "community": 40,
+      "community": 41,
       "norm_label": "conftest.py"
     },
     {
@@ -819,7 +819,7 @@
       "source_file": "tests/conftest.py",
       "source_location": "L16",
       "id": "tests_conftest_event_loop_policy",
-      "community": 40,
+      "community": 41,
       "norm_label": "event_loop_policy()"
     },
     {
@@ -828,7 +828,7 @@
       "source_file": "tests/conftest.py",
       "source_location": "L22",
       "id": "tests_conftest_page_with_data",
-      "community": 40,
+      "community": 41,
       "norm_label": "page_with_data()"
     },
     {
@@ -837,7 +837,7 @@
       "source_file": "tests/conftest.py",
       "source_location": "L50",
       "id": "tests_conftest_blank_page",
-      "community": 40,
+      "community": 41,
       "norm_label": "blank_page()"
     },
     {
@@ -846,7 +846,7 @@
       "source_file": "tests/conftest.py",
       "source_location": "L1",
       "id": "tests_conftest_rationale_1",
-      "community": 40,
+      "community": 41,
       "norm_label": "conftest.py \u2014 universal playwright test suite fixtures provides shared, isolated"
     },
     {
@@ -855,7 +855,7 @@
       "source_file": "tests/conftest.py",
       "source_location": "L23",
       "id": "tests_conftest_rationale_23",
-      "community": 40,
+      "community": 41,
       "norm_label": "launches headless chromium, navigates to target local app,     and captures cons"
     },
     {
@@ -864,7 +864,7 @@
       "source_file": "tests/conftest.py",
       "source_location": "L51",
       "id": "tests_conftest_rationale_51",
-      "community": 40,
+      "community": 41,
       "norm_label": "launches headless chromium for testing uninitialized or first-run empty states."
     },
     {
@@ -1107,7 +1107,7 @@
       "source_file": "tests/test_wagon_wheel_and_charts.py",
       "source_location": "L1",
       "id": "tests_test_wagon_wheel_and_charts_py",
-      "community": 31,
+      "community": 32,
       "norm_label": "test_wagon_wheel_and_charts.py"
     },
     {
@@ -1116,7 +1116,7 @@
       "source_file": "tests/test_wagon_wheel_and_charts.py",
       "source_location": "L10",
       "id": "tests_test_wagon_wheel_and_charts_testwagonwheelandcharts",
-      "community": 31,
+      "community": 32,
       "norm_label": "testwagonwheelandcharts"
     },
     {
@@ -1125,7 +1125,7 @@
       "source_file": "tests/test_wagon_wheel_and_charts.py",
       "source_location": "L12",
       "id": "tests_test_wagon_wheel_and_charts_setupclass",
-      "community": 31,
+      "community": 32,
       "norm_label": "setupclass()"
     },
     {
@@ -1134,7 +1134,7 @@
       "source_file": "tests/test_wagon_wheel_and_charts.py",
       "source_location": "L17",
       "id": "tests_test_wagon_wheel_and_charts_teardownclass",
-      "community": 31,
+      "community": 32,
       "norm_label": "teardownclass()"
     },
     {
@@ -1143,7 +1143,7 @@
       "source_file": "tests/test_wagon_wheel_and_charts.py",
       "source_location": "L21",
       "id": "tests_test_wagon_wheel_and_charts_testwagonwheelandcharts_setup",
-      "community": 31,
+      "community": 32,
       "norm_label": ".setup()"
     },
     {
@@ -1152,7 +1152,7 @@
       "source_file": "tests/test_wagon_wheel_and_charts.py",
       "source_location": "L27",
       "id": "tests_test_wagon_wheel_and_charts_testwagonwheelandcharts_teardown",
-      "community": 31,
+      "community": 32,
       "norm_label": ".teardown()"
     },
     {
@@ -1161,7 +1161,7 @@
       "source_file": "tests/test_wagon_wheel_and_charts.py",
       "source_location": "L32",
       "id": "tests_test_wagon_wheel_and_charts_testwagonwheelandcharts_test_wagon_wheel_modal_interaction_and_shot_placement",
-      "community": 31,
+      "community": 32,
       "norm_label": ".test_wagon_wheel_modal_interaction_and_shot_placement()"
     },
     {
@@ -1170,7 +1170,7 @@
       "source_file": "tests/test_wagon_wheel_and_charts.py",
       "source_location": "L57",
       "id": "tests_test_wagon_wheel_and_charts_testwagonwheelandcharts_test_manhattan_chart_and_worm_chart_rendering",
-      "community": 31,
+      "community": 32,
       "norm_label": ".test_manhattan_chart_and_worm_chart_rendering()"
     },
     {
@@ -1179,7 +1179,7 @@
       "source_file": "tests/test_wagon_wheel_and_charts.py",
       "source_location": "L33",
       "id": "tests_test_wagon_wheel_and_charts_rationale_33",
-      "community": 31,
+      "community": 32,
       "norm_label": "verify opening s09 wagon wheel modal, clicking ground canvas, and saving shot pl"
     },
     {
@@ -1188,7 +1188,7 @@
       "source_file": "tests/test_wagon_wheel_and_charts.py",
       "source_location": "L58",
       "id": "tests_test_wagon_wheel_and_charts_rationale_58",
-      "community": 31,
+      "community": 32,
       "norm_label": "verify s14 match progression charts (manhattan, worm, wagon, phases) render clea"
     },
     {
@@ -1300,12 +1300,120 @@
       "norm_label": "verify network status indicator badge is visible in header with accessible toolt"
     },
     {
+      "label": "test_radial_spray_engine.py",
+      "file_type": "code",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L1",
+      "id": "tests_test_radial_spray_engine_py",
+      "community": 22,
+      "norm_label": "test_radial_spray_engine.py"
+    },
+    {
+      "label": "TestRadialSprayEngine",
+      "file_type": "code",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L13",
+      "id": "tests_test_radial_spray_engine_testradialsprayengine",
+      "community": 22,
+      "norm_label": "testradialsprayengine"
+    },
+    {
+      "label": "setUpClass()",
+      "file_type": "code",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L15",
+      "id": "tests_test_radial_spray_engine_setupclass",
+      "community": 22,
+      "norm_label": "setupclass()"
+    },
+    {
+      "label": "tearDownClass()",
+      "file_type": "code",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L20",
+      "id": "tests_test_radial_spray_engine_teardownclass",
+      "community": 22,
+      "norm_label": "teardownclass()"
+    },
+    {
+      "label": ".setUp()",
+      "file_type": "code",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L24",
+      "id": "tests_test_radial_spray_engine_testradialsprayengine_setup",
+      "community": 22,
+      "norm_label": ".setup()"
+    },
+    {
+      "label": ".tearDown()",
+      "file_type": "code",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L30",
+      "id": "tests_test_radial_spray_engine_testradialsprayengine_teardown",
+      "community": 22,
+      "norm_label": ".teardown()"
+    },
+    {
+      "label": ".test_radial_kpis_and_sector_matrix_table()",
+      "file_type": "code",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L35",
+      "id": "tests_test_radial_spray_engine_testradialsprayengine_test_radial_kpis_and_sector_matrix_table",
+      "community": 22,
+      "norm_label": ".test_radial_kpis_and_sector_matrix_table()"
+    },
+    {
+      "label": ".test_lofted_arc_vs_ground_trajectories_and_filters()",
+      "file_type": "code",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L75",
+      "id": "tests_test_radial_spray_engine_testradialsprayengine_test_lofted_arc_vs_ground_trajectories_and_filters",
+      "community": 22,
+      "norm_label": ".test_lofted_arc_vs_ground_trajectories_and_filters()"
+    },
+    {
+      "label": ".test_radial_batter_filter_and_undo_rollback()",
+      "file_type": "code",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L122",
+      "id": "tests_test_radial_spray_engine_testradialsprayengine_test_radial_batter_filter_and_undo_rollback",
+      "community": 22,
+      "norm_label": ".test_radial_batter_filter_and_undo_rollback()"
+    },
+    {
+      "label": "Verify S14 Wagon Wheel renders 4 Radial KPI cards and the 8-Sector Spray Distrib",
+      "file_type": "rationale",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L36",
+      "id": "tests_test_radial_spray_engine_rationale_36",
+      "community": 22,
+      "norm_label": "verify s14 wagon wheel renders 4 radial kpi cards and the 8-sector spray distrib"
+    },
+    {
+      "label": "Verify 360 SVG turf displays both lofted flight paths and ground lines, with gro",
+      "file_type": "rationale",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L76",
+      "id": "tests_test_radial_spray_engine_rationale_76",
+      "community": 22,
+      "norm_label": "verify 360 svg turf displays both lofted flight paths and ground lines, with gro"
+    },
+    {
+      "label": "Verify batter dropdown selector and 0ms atomic undo rollback on radial engine.",
+      "file_type": "rationale",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L123",
+      "id": "tests_test_radial_spray_engine_rationale_123",
+      "community": 22,
+      "norm_label": "verify batter dropdown selector and 0ms atomic undo rollback on radial engine."
+    },
+    {
       "label": "test_android_packaging.py",
       "file_type": "code",
       "source_file": "tests/test_android_packaging.py",
       "source_location": "L1",
       "id": "tests_test_android_packaging_py",
-      "community": 22,
+      "community": 23,
       "norm_label": "test_android_packaging.py"
     },
     {
@@ -1314,7 +1422,7 @@
       "source_file": "tests/test_android_packaging.py",
       "source_location": "L14",
       "id": "tests_test_android_packaging_testandroidpackaging",
-      "community": 22,
+      "community": 23,
       "norm_label": "testandroidpackaging"
     },
     {
@@ -1323,7 +1431,7 @@
       "source_file": "tests/test_android_packaging.py",
       "source_location": "L16",
       "id": "tests_test_android_packaging_setupclass",
-      "community": 22,
+      "community": 23,
       "norm_label": "setupclass()"
     },
     {
@@ -1332,7 +1440,7 @@
       "source_file": "tests/test_android_packaging.py",
       "source_location": "L21",
       "id": "tests_test_android_packaging_teardownclass",
-      "community": 22,
+      "community": 23,
       "norm_label": "teardownclass()"
     },
     {
@@ -1341,7 +1449,7 @@
       "source_file": "tests/test_android_packaging.py",
       "source_location": "L25",
       "id": "tests_test_android_packaging_testandroidpackaging_setup",
-      "community": 22,
+      "community": 23,
       "norm_label": ".setup()"
     },
     {
@@ -1350,7 +1458,7 @@
       "source_file": "tests/test_android_packaging.py",
       "source_location": "L31",
       "id": "tests_test_android_packaging_testandroidpackaging_teardown",
-      "community": 22,
+      "community": 23,
       "norm_label": ".teardown()"
     },
     {
@@ -1359,7 +1467,7 @@
       "source_file": "tests/test_android_packaging.py",
       "source_location": "L36",
       "id": "tests_test_android_packaging_testandroidpackaging_test_android_project_structure_and_manifest_spec",
-      "community": 22,
+      "community": 23,
       "norm_label": ".test_android_project_structure_and_manifest_spec()"
     },
     {
@@ -1368,7 +1476,7 @@
       "source_file": "tests/test_android_packaging.py",
       "source_location": "L66",
       "id": "tests_test_android_packaging_testandroidpackaging_test_build_android_twa_script_execution",
-      "community": 22,
+      "community": 23,
       "norm_label": ".test_build_android_twa_script_execution()"
     },
     {
@@ -1377,7 +1485,7 @@
       "source_file": "tests/test_android_packaging.py",
       "source_location": "L72",
       "id": "tests_test_android_packaging_testandroidpackaging_test_android_modal_ui_interaction_and_assetlinks_drawer",
-      "community": 22,
+      "community": 23,
       "norm_label": ".test_android_modal_ui_interaction_and_assetlinks_drawer()"
     },
     {
@@ -1386,7 +1494,7 @@
       "source_file": "tests/test_android_packaging.py",
       "source_location": "L37",
       "id": "tests_test_android_packaging_rationale_37",
-      "community": 22,
+      "community": 23,
       "norm_label": "verify android twa project structure, gradle config, and digital asset links"
     },
     {
@@ -1395,7 +1503,7 @@
       "source_file": "tests/test_android_packaging.py",
       "source_location": "L67",
       "id": "tests_test_android_packaging_rationale_67",
-      "community": 22,
+      "community": 23,
       "norm_label": "verify python android packaging validator script executes cleanly"
     },
     {
@@ -1404,7 +1512,7 @@
       "source_file": "tests/test_android_packaging.py",
       "source_location": "L73",
       "id": "tests_test_android_packaging_rationale_73",
-      "community": 22,
+      "community": 23,
       "norm_label": "verify modal 10 opens via header cta, displays twa cards, toggles assetlinks jso"
     },
     {
@@ -1413,7 +1521,7 @@
       "source_file": "tests/test_turning_point_engine.py",
       "source_location": "L1",
       "id": "tests_test_turning_point_engine_py",
-      "community": 23,
+      "community": 24,
       "norm_label": "test_turning_point_engine.py"
     },
     {
@@ -1422,7 +1530,7 @@
       "source_file": "tests/test_turning_point_engine.py",
       "source_location": "L12",
       "id": "tests_test_turning_point_engine_testturningpointengine",
-      "community": 23,
+      "community": 24,
       "norm_label": "testturningpointengine"
     },
     {
@@ -1431,7 +1539,7 @@
       "source_file": "tests/test_turning_point_engine.py",
       "source_location": "L14",
       "id": "tests_test_turning_point_engine_setupclass",
-      "community": 23,
+      "community": 24,
       "norm_label": "setupclass()"
     },
     {
@@ -1440,7 +1548,7 @@
       "source_file": "tests/test_turning_point_engine.py",
       "source_location": "L19",
       "id": "tests_test_turning_point_engine_teardownclass",
-      "community": 23,
+      "community": 24,
       "norm_label": "teardownclass()"
     },
     {
@@ -1449,7 +1557,7 @@
       "source_file": "tests/test_turning_point_engine.py",
       "source_location": "L23",
       "id": "tests_test_turning_point_engine_testturningpointengine_setup",
-      "community": 23,
+      "community": 24,
       "norm_label": ".setup()"
     },
     {
@@ -1458,7 +1566,7 @@
       "source_file": "tests/test_turning_point_engine.py",
       "source_location": "L29",
       "id": "tests_test_turning_point_engine_testturningpointengine_teardown",
-      "community": 23,
+      "community": 24,
       "norm_label": ".teardown()"
     },
     {
@@ -1467,7 +1575,7 @@
       "source_file": "tests/test_turning_point_engine.py",
       "source_location": "L34",
       "id": "tests_test_turning_point_engine_testturningpointengine_test_live_turning_point_alert_in_s07",
-      "community": 23,
+      "community": 24,
       "norm_label": ".test_live_turning_point_alert_in_s07()"
     },
     {
@@ -1476,7 +1584,7 @@
       "source_file": "tests/test_turning_point_engine.py",
       "source_location": "L64",
       "id": "tests_test_turning_point_engine_testturningpointengine_test_s14_turning_points_tab_kpis_and_momentum_svg",
-      "community": 23,
+      "community": 24,
       "norm_label": ".test_s14_turning_points_tab_kpis_and_momentum_svg()"
     },
     {
@@ -1485,7 +1593,7 @@
       "source_file": "tests/test_turning_point_engine.py",
       "source_location": "L100",
       "id": "tests_test_turning_point_engine_testturningpointengine_test_turning_point_perspective_filters_and_overs_list",
-      "community": 23,
+      "community": 24,
       "norm_label": ".test_turning_point_perspective_filters_and_overs_list()"
     },
     {
@@ -1494,7 +1602,7 @@
       "source_file": "tests/test_turning_point_engine.py",
       "source_location": "L35",
       "id": "tests_test_turning_point_engine_rationale_35",
-      "community": 23,
+      "community": 24,
       "norm_label": "verify s07 live turning point alert pill appears on high impact overs and naviga"
     },
     {
@@ -1503,7 +1611,7 @@
       "source_file": "tests/test_turning_point_engine.py",
       "source_location": "L65",
       "id": "tests_test_turning_point_engine_rationale_65",
-      "community": 23,
+      "community": 24,
       "norm_label": "verify s14 turning points tab renders 4 kpi cards and interactive momentum index"
     },
     {
@@ -1512,7 +1620,7 @@
       "source_file": "tests/test_turning_point_engine.py",
       "source_location": "L101",
       "id": "tests_test_turning_point_engine_rationale_101",
-      "community": 23,
+      "community": 24,
       "norm_label": "verify perspective filter buttons (all, batting, bowling, swings) and breakdown"
     },
     {
@@ -1773,7 +1881,7 @@
       "source_file": "tests/test_voice_commentary.py",
       "source_location": "L1",
       "id": "tests_test_voice_commentary_py",
-      "community": 29,
+      "community": 30,
       "norm_label": "test_voice_commentary.py"
     },
     {
@@ -1782,7 +1890,7 @@
       "source_file": "tests/test_voice_commentary.py",
       "source_location": "L11",
       "id": "tests_test_voice_commentary_testvoicecommentary",
-      "community": 29,
+      "community": 30,
       "norm_label": "testvoicecommentary"
     },
     {
@@ -1791,7 +1899,7 @@
       "source_file": "tests/test_voice_commentary.py",
       "source_location": "L13",
       "id": "tests_test_voice_commentary_setupclass",
-      "community": 29,
+      "community": 30,
       "norm_label": "setupclass()"
     },
     {
@@ -1800,7 +1908,7 @@
       "source_file": "tests/test_voice_commentary.py",
       "source_location": "L18",
       "id": "tests_test_voice_commentary_teardownclass",
-      "community": 29,
+      "community": 30,
       "norm_label": "teardownclass()"
     },
     {
@@ -1809,7 +1917,7 @@
       "source_file": "tests/test_voice_commentary.py",
       "source_location": "L22",
       "id": "tests_test_voice_commentary_testvoicecommentary_setup",
-      "community": 29,
+      "community": 30,
       "norm_label": ".setup()"
     },
     {
@@ -1818,7 +1926,7 @@
       "source_file": "tests/test_voice_commentary.py",
       "source_location": "L28",
       "id": "tests_test_voice_commentary_testvoicecommentary_teardown",
-      "community": 29,
+      "community": 30,
       "norm_label": ".teardown()"
     },
     {
@@ -1827,7 +1935,7 @@
       "source_file": "tests/test_voice_commentary.py",
       "source_location": "L33",
       "id": "tests_test_voice_commentary_testvoicecommentary_test_generate_ball_commentary_unit",
-      "community": 29,
+      "community": 30,
       "norm_label": ".test_generate_ball_commentary_unit()"
     },
     {
@@ -1836,7 +1944,7 @@
       "source_file": "tests/test_voice_commentary.py",
       "source_location": "L93",
       "id": "tests_test_voice_commentary_testvoicecommentary_test_voice_commentary_toggle_buttons",
-      "community": 29,
+      "community": 30,
       "norm_label": ".test_voice_commentary_toggle_buttons()"
     },
     {
@@ -1845,7 +1953,7 @@
       "source_file": "tests/test_voice_commentary.py",
       "source_location": "L115",
       "id": "tests_test_voice_commentary_testvoicecommentary_test_speech_synthesis_recording_and_over_recap",
-      "community": 29,
+      "community": 30,
       "norm_label": ".test_speech_synthesis_recording_and_over_recap()"
     },
     {
@@ -1854,7 +1962,7 @@
       "source_file": "tests/test_voice_commentary.py",
       "source_location": "L34",
       "id": "tests_test_voice_commentary_rationale_34",
-      "community": 29,
+      "community": 30,
       "norm_label": "test natural language commentary generation with field zones, wickets, boundarie"
     },
     {
@@ -1863,7 +1971,7 @@
       "source_file": "tests/test_voice_commentary.py",
       "source_location": "L94",
       "id": "tests_test_voice_commentary_rationale_94",
-      "community": 29,
+      "community": 30,
       "norm_label": "test hud and s13 voice commentary toggle buttons update state and labels"
     },
     {
@@ -1998,7 +2106,7 @@
       "source_file": "tests/test_partnerships_engine.py",
       "source_location": "L1",
       "id": "tests_test_partnerships_engine_py",
-      "community": 24,
+      "community": 25,
       "norm_label": "test_partnerships_engine.py"
     },
     {
@@ -2007,7 +2115,7 @@
       "source_file": "tests/test_partnerships_engine.py",
       "source_location": "L12",
       "id": "tests_test_partnerships_engine_testpartnershipsengine",
-      "community": 24,
+      "community": 25,
       "norm_label": "testpartnershipsengine"
     },
     {
@@ -2016,7 +2124,7 @@
       "source_file": "tests/test_partnerships_engine.py",
       "source_location": "L14",
       "id": "tests_test_partnerships_engine_setupclass",
-      "community": 24,
+      "community": 25,
       "norm_label": "setupclass()"
     },
     {
@@ -2025,7 +2133,7 @@
       "source_file": "tests/test_partnerships_engine.py",
       "source_location": "L19",
       "id": "tests_test_partnerships_engine_teardownclass",
-      "community": 24,
+      "community": 25,
       "norm_label": "teardownclass()"
     },
     {
@@ -2034,7 +2142,7 @@
       "source_file": "tests/test_partnerships_engine.py",
       "source_location": "L23",
       "id": "tests_test_partnerships_engine_testpartnershipsengine_setup",
-      "community": 24,
+      "community": 25,
       "norm_label": ".setup()"
     },
     {
@@ -2043,7 +2151,7 @@
       "source_file": "tests/test_partnerships_engine.py",
       "source_location": "L29",
       "id": "tests_test_partnerships_engine_testpartnershipsengine_teardown",
-      "community": 24,
+      "community": 25,
       "norm_label": ".teardown()"
     },
     {
@@ -2052,7 +2160,7 @@
       "source_file": "tests/test_partnerships_engine.py",
       "source_location": "L34",
       "id": "tests_test_partnerships_engine_testpartnershipsengine_test_initial_partnership_hud_rendering",
-      "community": 24,
+      "community": 25,
       "norm_label": ".test_initial_partnership_hud_rendering()"
     },
     {
@@ -2061,7 +2169,7 @@
       "source_file": "tests/test_partnerships_engine.py",
       "source_location": "L66",
       "id": "tests_test_partnerships_engine_testpartnershipsengine_test_partnership_updates_on_scoring_and_extras",
-      "community": 24,
+      "community": 25,
       "norm_label": ".test_partnership_updates_on_scoring_and_extras()"
     },
     {
@@ -2070,7 +2178,7 @@
       "source_file": "tests/test_partnerships_engine.py",
       "source_location": "L100",
       "id": "tests_test_partnerships_engine_testpartnershipsengine_test_partnership_wicket_rollover_and_scorecard",
-      "community": 24,
+      "community": 25,
       "norm_label": ".test_partnership_wicket_rollover_and_scorecard()"
     },
     {
@@ -2079,7 +2187,7 @@
       "source_file": "tests/test_partnerships_engine.py",
       "source_location": "L35",
       "id": "tests_test_partnerships_engine_rationale_35",
-      "community": 24,
+      "community": 25,
       "norm_label": "verify initial s07 live partnership card layout, labels, and 0-score state"
     },
     {
@@ -2088,7 +2196,7 @@
       "source_file": "tests/test_partnerships_engine.py",
       "source_location": "L67",
       "id": "tests_test_partnerships_engine_rationale_67",
-      "community": 24,
+      "community": 25,
       "norm_label": "verify live partnership updates runs, balls, boundaries, and batter splits as de"
     },
     {
@@ -2097,7 +2205,7 @@
       "source_file": "tests/test_partnerships_engine.py",
       "source_location": "L101",
       "id": "tests_test_partnerships_engine_rationale_101",
-      "community": 24,
+      "community": 25,
       "norm_label": "verify partnership completes on wicket, next partnership begins, and s13 scoreca"
     },
     {
@@ -2106,7 +2214,7 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L1",
       "id": "tests_test_pitch_map_engine_py",
-      "community": 25,
+      "community": 26,
       "norm_label": "test_pitch_map_engine.py"
     },
     {
@@ -2115,7 +2223,7 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L12",
       "id": "tests_test_pitch_map_engine_testpitchmapengine",
-      "community": 25,
+      "community": 26,
       "norm_label": "testpitchmapengine"
     },
     {
@@ -2124,7 +2232,7 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L14",
       "id": "tests_test_pitch_map_engine_setupclass",
-      "community": 25,
+      "community": 26,
       "norm_label": "setupclass()"
     },
     {
@@ -2133,7 +2241,7 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L19",
       "id": "tests_test_pitch_map_engine_teardownclass",
-      "community": 25,
+      "community": 26,
       "norm_label": "teardownclass()"
     },
     {
@@ -2142,7 +2250,7 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L23",
       "id": "tests_test_pitch_map_engine_testpitchmapengine_setup",
-      "community": 25,
+      "community": 26,
       "norm_label": ".setup()"
     },
     {
@@ -2151,7 +2259,7 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L29",
       "id": "tests_test_pitch_map_engine_testpitchmapengine_teardown",
-      "community": 25,
+      "community": 26,
       "norm_label": ".teardown()"
     },
     {
@@ -2160,7 +2268,7 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L34",
       "id": "tests_test_pitch_map_engine_testpitchmapengine_test_pitch_inference_and_modal_chips",
-      "community": 25,
+      "community": 26,
       "norm_label": ".test_pitch_inference_and_modal_chips()"
     },
     {
@@ -2169,7 +2277,7 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L74",
       "id": "tests_test_pitch_map_engine_testpitchmapengine_test_s14_pitch_map_tab_kpis_and_svg_heatmap",
-      "community": 25,
+      "community": 26,
       "norm_label": ".test_s14_pitch_map_tab_kpis_and_svg_heatmap()"
     },
     {
@@ -2178,7 +2286,7 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L111",
       "id": "tests_test_pitch_map_engine_testpitchmapengine_test_pitch_matrix_table_and_undo_rollback",
-      "community": 25,
+      "community": 26,
       "norm_label": ".test_pitch_matrix_table_and_undo_rollback()"
     },
     {
@@ -2187,7 +2295,7 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L35",
       "id": "tests_test_pitch_map_engine_rationale_35",
-      "community": 25,
+      "community": 26,
       "norm_label": "verify delivery automatically attaches pitchlength/pitchline and modal 3 display"
     },
     {
@@ -2196,7 +2304,7 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L75",
       "id": "tests_test_pitch_map_engine_rationale_75",
-      "community": 25,
+      "community": 26,
       "norm_label": "verify s14 pitch map tab renders 4 kpi cards and 2d turf heatmap svg."
     },
     {
@@ -2205,7 +2313,7 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L112",
       "id": "tests_test_pitch_map_engine_rationale_112",
-      "community": 25,
+      "community": 26,
       "norm_label": "verify length x line matrix table, delivery type filter buttons, and 0ms atomic"
     },
     {
@@ -2214,7 +2322,7 @@
       "source_file": "tests/test_face_off_engine.py",
       "source_location": "L1",
       "id": "tests_test_face_off_engine_py",
-      "community": 26,
+      "community": 27,
       "norm_label": "test_face_off_engine.py"
     },
     {
@@ -2223,7 +2331,7 @@
       "source_file": "tests/test_face_off_engine.py",
       "source_location": "L12",
       "id": "tests_test_face_off_engine_testfaceoffengine",
-      "community": 26,
+      "community": 27,
       "norm_label": "testfaceoffengine"
     },
     {
@@ -2232,7 +2340,7 @@
       "source_file": "tests/test_face_off_engine.py",
       "source_location": "L14",
       "id": "tests_test_face_off_engine_setupclass",
-      "community": 26,
+      "community": 27,
       "norm_label": "setupclass()"
     },
     {
@@ -2241,7 +2349,7 @@
       "source_file": "tests/test_face_off_engine.py",
       "source_location": "L19",
       "id": "tests_test_face_off_engine_teardownclass",
-      "community": 26,
+      "community": 27,
       "norm_label": "teardownclass()"
     },
     {
@@ -2250,7 +2358,7 @@
       "source_file": "tests/test_face_off_engine.py",
       "source_location": "L23",
       "id": "tests_test_face_off_engine_testfaceoffengine_setup",
-      "community": 26,
+      "community": 27,
       "norm_label": ".setup()"
     },
     {
@@ -2259,7 +2367,7 @@
       "source_file": "tests/test_face_off_engine.py",
       "source_location": "L29",
       "id": "tests_test_face_off_engine_testfaceoffengine_teardown",
-      "community": 26,
+      "community": 27,
       "norm_label": ".teardown()"
     },
     {
@@ -2268,7 +2376,7 @@
       "source_file": "tests/test_face_off_engine.py",
       "source_location": "L34",
       "id": "tests_test_face_off_engine_testfaceoffengine_test_faceoff_hud_and_modal_interaction",
-      "community": 26,
+      "community": 27,
       "norm_label": ".test_faceoff_hud_and_modal_interaction()"
     },
     {
@@ -2277,7 +2385,7 @@
       "source_file": "tests/test_face_off_engine.py",
       "source_location": "L76",
       "id": "tests_test_face_off_engine_testfaceoffengine_test_s14_faceoff_matrix_and_kpis",
-      "community": 26,
+      "community": 27,
       "norm_label": ".test_s14_faceoff_matrix_and_kpis()"
     },
     {
@@ -2286,7 +2394,7 @@
       "source_file": "tests/test_face_off_engine.py",
       "source_location": "L121",
       "id": "tests_test_face_off_engine_testfaceoffengine_test_faceoff_spotlight_and_undo_rollback",
-      "community": 26,
+      "community": 27,
       "norm_label": ".test_faceoff_spotlight_and_undo_rollback()"
     },
     {
@@ -2295,7 +2403,7 @@
       "source_file": "tests/test_face_off_engine.py",
       "source_location": "L35",
       "id": "tests_test_face_off_engine_rationale_35",
-      "community": 26,
+      "community": 27,
       "norm_label": "verify s07 live face-off hud button, real-time stat updates, modal 12 opening, s"
     },
     {
@@ -2304,7 +2412,7 @@
       "source_file": "tests/test_face_off_engine.py",
       "source_location": "L77",
       "id": "tests_test_face_off_engine_rationale_77",
-      "community": 26,
+      "community": 27,
       "norm_label": "verify screen s14 face-off matrix tab, 4 kpi telemetry cards, matrix table, and"
     },
     {
@@ -2313,7 +2421,7 @@
       "source_file": "tests/test_face_off_engine.py",
       "source_location": "L122",
       "id": "tests_test_face_off_engine_rationale_122",
-      "community": 26,
+      "community": 27,
       "norm_label": "verify interactive matrix cell spotlight inspection, delivery chips, and 0ms ato"
     },
     {
@@ -2466,7 +2574,7 @@
       "source_file": "tests/test_super_over_engine.py",
       "source_location": "L1",
       "id": "tests_test_super_over_engine_py",
-      "community": 27,
+      "community": 28,
       "norm_label": "test_super_over_engine.py"
     },
     {
@@ -2475,7 +2583,7 @@
       "source_file": "tests/test_super_over_engine.py",
       "source_location": "L13",
       "id": "tests_test_super_over_engine_testsuperoverengine",
-      "community": 27,
+      "community": 28,
       "norm_label": "testsuperoverengine"
     },
     {
@@ -2484,7 +2592,7 @@
       "source_file": "tests/test_super_over_engine.py",
       "source_location": "L15",
       "id": "tests_test_super_over_engine_setupclass",
-      "community": 27,
+      "community": 28,
       "norm_label": "setupclass()"
     },
     {
@@ -2493,7 +2601,7 @@
       "source_file": "tests/test_super_over_engine.py",
       "source_location": "L20",
       "id": "tests_test_super_over_engine_teardownclass",
-      "community": 27,
+      "community": 28,
       "norm_label": "teardownclass()"
     },
     {
@@ -2502,7 +2610,7 @@
       "source_file": "tests/test_super_over_engine.py",
       "source_location": "L24",
       "id": "tests_test_super_over_engine_testsuperoverengine_setup",
-      "community": 27,
+      "community": 28,
       "norm_label": ".setup()"
     },
     {
@@ -2511,7 +2619,7 @@
       "source_file": "tests/test_super_over_engine.py",
       "source_location": "L30",
       "id": "tests_test_super_over_engine_testsuperoverengine_teardown",
-      "community": 27,
+      "community": 28,
       "norm_label": ".teardown()"
     },
     {
@@ -2520,7 +2628,7 @@
       "source_file": "tests/test_super_over_engine.py",
       "source_location": "L35",
       "id": "tests_test_super_over_engine_testsuperoverengine_test_tied_match_detection_and_button_visibility",
-      "community": 27,
+      "community": 28,
       "norm_label": ".test_tied_match_detection_and_button_visibility()"
     },
     {
@@ -2529,7 +2637,7 @@
       "source_file": "tests/test_super_over_engine.py",
       "source_location": "L67",
       "id": "tests_test_super_over_engine_testsuperoverengine_test_super_over_modal_nominations_and_first_innings_scoring",
-      "community": 27,
+      "community": 28,
       "norm_label": ".test_super_over_modal_nominations_and_first_innings_scoring()"
     },
     {
@@ -2538,7 +2646,7 @@
       "source_file": "tests/test_super_over_engine.py",
       "source_location": "L123",
       "id": "tests_test_super_over_engine_testsuperoverengine_test_super_over_wicket_limits_innings_break_and_chase_completion",
-      "community": 27,
+      "community": 28,
       "norm_label": ".test_super_over_wicket_limits_innings_break_and_chase_completion()"
     },
     {
@@ -2547,7 +2655,7 @@
       "source_file": "tests/test_super_over_engine.py",
       "source_location": "L36",
       "id": "tests_test_super_over_engine_rationale_36",
-      "community": 27,
+      "community": 28,
       "norm_label": "verify #btn-launch-super-over is hidden on standard win and visible on match tie"
     },
     {
@@ -2556,7 +2664,7 @@
       "source_file": "tests/test_super_over_engine.py",
       "source_location": "L68",
       "id": "tests_test_super_over_engine_rationale_68",
-      "community": 27,
+      "community": 28,
       "norm_label": "verify super over modal 11 opens, nominates 3 batters and 1 bowler, and launches"
     },
     {
@@ -2565,7 +2673,7 @@
       "source_file": "tests/test_super_over_engine.py",
       "source_location": "L124",
       "id": "tests_test_super_over_engine_rationale_124",
-      "community": 27,
+      "community": 28,
       "norm_label": "verify 2-wicket limit, reserve batter rollover, chase target, winner declaration"
     },
     {
@@ -2943,7 +3051,7 @@
       "source_file": "android/build.gradle",
       "source_location": "L1",
       "id": "android_build_gradle",
-      "community": 57,
+      "community": 58,
       "norm_label": "build.gradle"
     },
     {
@@ -2952,7 +3060,7 @@
       "source_file": "android/settings.gradle",
       "source_location": "L1",
       "id": "android_settings_gradle",
-      "community": 58,
+      "community": 59,
       "norm_label": "settings.gradle"
     },
     {
@@ -2961,7 +3069,7 @@
       "source_file": "android/app/build.gradle",
       "source_location": "L1",
       "id": "android_app_build_gradle",
-      "community": 59,
+      "community": 60,
       "norm_label": "build.gradle"
     },
     {
@@ -3303,7 +3411,7 @@
       "source_file": "scripts/build_android_twa.py",
       "source_location": "L1",
       "id": "scripts_build_android_twa_py",
-      "community": 53,
+      "community": 54,
       "norm_label": "build_android_twa.py"
     },
     {
@@ -3312,7 +3420,7 @@
       "source_file": "scripts/build_android_twa.py",
       "source_location": "L20",
       "id": "scripts_build_android_twa_validate_android_project",
-      "community": 53,
+      "community": 54,
       "norm_label": "validate_android_project()"
     },
     {
@@ -3321,7 +3429,7 @@
       "source_file": "replica/design/tailwind.config.js",
       "source_location": "L1",
       "id": "replica_design_tailwind_config_js",
-      "community": 60,
+      "community": 61,
       "norm_label": "tailwind.config.js"
     },
     {
@@ -3330,7 +3438,7 @@
       "source_file": "PROJECT_CONTEXT.md",
       "source_location": "L1",
       "id": "project_context_md",
-      "community": 45,
+      "community": 46,
       "norm_label": "project_context.md"
     },
     {
@@ -3339,7 +3447,7 @@
       "source_file": "PROJECT_CONTEXT.md",
       "source_location": "L1",
       "id": "tallypitch_project_context_project_context_working_memory",
-      "community": 45,
+      "community": 46,
       "norm_label": "project context & working memory"
     },
     {
@@ -3348,7 +3456,7 @@
       "source_file": "PROJECT_CONTEXT.md",
       "source_location": "L9",
       "id": "tallypitch_project_context_1_current_status_milestone",
-      "community": 45,
+      "community": 46,
       "norm_label": "1. current status & milestone"
     },
     {
@@ -3357,25 +3465,25 @@
       "source_file": "PROJECT_CONTEXT.md",
       "source_location": "L17",
       "id": "tallypitch_project_context_2_implemented_features",
-      "community": 45,
+      "community": 46,
       "norm_label": "2. implemented features"
     },
     {
       "label": "3. Core Architecture & Constraints",
       "file_type": "document",
       "source_file": "PROJECT_CONTEXT.md",
-      "source_location": "L57",
+      "source_location": "L58",
       "id": "tallypitch_project_context_3_core_architecture_constraints",
-      "community": 45,
+      "community": 46,
       "norm_label": "3. core architecture & constraints"
     },
     {
       "label": "4. Active Roadmap",
       "file_type": "document",
       "source_file": "PROJECT_CONTEXT.md",
-      "source_location": "L65",
+      "source_location": "L66",
       "id": "tallypitch_project_context_4_active_roadmap",
-      "community": 45,
+      "community": 46,
       "norm_label": "4. active roadmap"
     },
     {
@@ -3384,7 +3492,7 @@
       "source_file": "PRODUCT.md",
       "source_location": "L1",
       "id": "product_md",
-      "community": 41,
+      "community": 42,
       "norm_label": "product.md"
     },
     {
@@ -3393,7 +3501,7 @@
       "source_file": "PRODUCT.md",
       "source_location": "L1",
       "id": "tallypitch_product_product_specification",
-      "community": 41,
+      "community": 42,
       "norm_label": "product specification"
     },
     {
@@ -3402,7 +3510,7 @@
       "source_file": "PRODUCT.md",
       "source_location": "L5",
       "id": "tallypitch_product_platform",
-      "community": 41,
+      "community": 42,
       "norm_label": "platform"
     },
     {
@@ -3411,7 +3519,7 @@
       "source_file": "PRODUCT.md",
       "source_location": "L8",
       "id": "tallypitch_product_users",
-      "community": 41,
+      "community": 42,
       "norm_label": "users"
     },
     {
@@ -3420,7 +3528,7 @@
       "source_file": "PRODUCT.md",
       "source_location": "L11",
       "id": "tallypitch_product_product_purpose",
-      "community": 41,
+      "community": 42,
       "norm_label": "product purpose"
     },
     {
@@ -3429,7 +3537,7 @@
       "source_file": "PRODUCT.md",
       "source_location": "L14",
       "id": "tallypitch_product_positioning",
-      "community": 41,
+      "community": 42,
       "norm_label": "positioning"
     },
     {
@@ -3438,7 +3546,7 @@
       "source_file": "PRODUCT.md",
       "source_location": "L17",
       "id": "tallypitch_product_operating_context",
-      "community": 41,
+      "community": 42,
       "norm_label": "operating context"
     },
     {
@@ -3591,7 +3699,7 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L1",
       "id": "contributing_md",
-      "community": 30,
+      "community": 31,
       "norm_label": "contributing.md"
     },
     {
@@ -3600,7 +3708,7 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L1",
       "id": "tallypitch_contributing_contributing_to_tallypitch",
-      "community": 30,
+      "community": 31,
       "norm_label": "contributing to tallypitch \ud83c\udfcf"
     },
     {
@@ -3609,7 +3717,7 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L7",
       "id": "tallypitch_contributing_1_development_principles",
-      "community": 30,
+      "community": 31,
       "norm_label": "1. development principles"
     },
     {
@@ -3618,7 +3726,7 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L16",
       "id": "tallypitch_contributing_2_git_branching_workflow",
-      "community": 30,
+      "community": 31,
       "norm_label": "2. git & branching workflow"
     },
     {
@@ -3627,7 +3735,7 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L18",
       "id": "tallypitch_contributing_branch_naming",
-      "community": 30,
+      "community": 31,
       "norm_label": "branch naming"
     },
     {
@@ -3636,7 +3744,7 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L24",
       "id": "tallypitch_contributing_commit_messages",
-      "community": 30,
+      "community": 31,
       "norm_label": "commit messages"
     },
     {
@@ -3645,7 +3753,7 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L32",
       "id": "tallypitch_contributing_optional_local_git_hooks",
-      "community": 30,
+      "community": 31,
       "norm_label": "optional: local git hooks"
     },
     {
@@ -3654,7 +3762,7 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L34",
       "id": "tallypitch_contributing_codeblock_1",
-      "community": 30,
+      "community": 31,
       "norm_label": "code:bash (git config core.hookspath .githooks)"
     },
     {
@@ -3663,7 +3771,7 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L40",
       "id": "tallypitch_contributing_3_local_verification",
-      "community": 30,
+      "community": 31,
       "norm_label": "3. local verification"
     },
     {
@@ -3672,7 +3780,7 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L44",
       "id": "tallypitch_contributing_codeblock_2",
-      "community": 30,
+      "community": 31,
       "norm_label": "code:bash (# 1. run doctor check)"
     },
     {
@@ -3681,7 +3789,7 @@
       "source_file": "CONTRIBUTING.md",
       "source_location": "L57",
       "id": "tallypitch_contributing_4_submitting_a_pull_request",
-      "community": 30,
+      "community": 31,
       "norm_label": "4. submitting a pull request"
     },
     {
@@ -3690,7 +3798,7 @@
       "source_file": "DESIGN.md",
       "source_location": "L1",
       "id": "design_md",
-      "community": 42,
+      "community": 43,
       "norm_label": "design.md"
     },
     {
@@ -3699,7 +3807,7 @@
       "source_file": "DESIGN.md",
       "source_location": "L1",
       "id": "tallypitch_design_design_system_theme_foundations",
-      "community": 42,
+      "community": 43,
       "norm_label": "design system & theme foundations"
     },
     {
@@ -3708,7 +3816,7 @@
       "source_file": "DESIGN.md",
       "source_location": "L3",
       "id": "tallypitch_design_visual_principles",
-      "community": 42,
+      "community": 43,
       "norm_label": "visual principles"
     },
     {
@@ -3717,7 +3825,7 @@
       "source_file": "DESIGN.md",
       "source_location": "L8",
       "id": "tallypitch_design_color_tokens_tallypitch_sapphire_system",
-      "community": 42,
+      "community": 43,
       "norm_label": "color tokens (tallypitch sapphire system)"
     },
     {
@@ -3726,7 +3834,7 @@
       "source_file": "DESIGN.md",
       "source_location": "L10",
       "id": "tallypitch_design_core_palette",
-      "community": 42,
+      "community": 43,
       "norm_label": "core palette"
     },
     {
@@ -3735,7 +3843,7 @@
       "source_file": "DESIGN.md",
       "source_location": "L23",
       "id": "tallypitch_design_typography",
-      "community": 42,
+      "community": 43,
       "norm_label": "typography"
     },
     {
@@ -3744,7 +3852,7 @@
       "source_file": "DESIGN.md",
       "source_location": "L27",
       "id": "tallypitch_design_tooltips_overlays",
-      "community": 42,
+      "community": 43,
       "norm_label": "tooltips & overlays"
     },
     {
@@ -3753,7 +3861,7 @@
       "source_file": "AGENTS.md",
       "source_location": "L1",
       "id": "agents_md",
-      "community": 33,
+      "community": 34,
       "norm_label": "agents.md"
     },
     {
@@ -3762,7 +3870,7 @@
       "source_file": "AGENTS.md",
       "source_location": "L1",
       "id": "tallypitch_agents_project_agent_governance_pipeline_rules",
-      "community": 33,
+      "community": 34,
       "norm_label": "project agent governance & pipeline rules"
     },
     {
@@ -3771,7 +3879,7 @@
       "source_file": "AGENTS.md",
       "source_location": "L3",
       "id": "tallypitch_agents_1_mandatory_context_reading",
-      "community": 33,
+      "community": 34,
       "norm_label": "1. mandatory context reading"
     },
     {
@@ -3780,7 +3888,7 @@
       "source_file": "AGENTS.md",
       "source_location": "L7",
       "id": "tallypitch_agents_2_minimal_tokens_protocol_mandatory",
-      "community": 33,
+      "community": 34,
       "norm_label": "2. minimal tokens protocol (mandatory)"
     },
     {
@@ -3789,7 +3897,7 @@
       "source_file": "AGENTS.md",
       "source_location": "L12",
       "id": "tallypitch_agents_3_persistent_context_maintenance",
-      "community": 33,
+      "community": 34,
       "norm_label": "3. persistent context maintenance"
     },
     {
@@ -3798,7 +3906,7 @@
       "source_file": "AGENTS.md",
       "source_location": "L19",
       "id": "tallypitch_agents_4_regression_test_suite_rules",
-      "community": 33,
+      "community": 34,
       "norm_label": "4. regression test suite rules"
     },
     {
@@ -3807,7 +3915,7 @@
       "source_file": "AGENTS.md",
       "source_location": "L25",
       "id": "tallypitch_agents_5_ui_tooltips_accessibility_invariants",
-      "community": 33,
+      "community": 34,
       "norm_label": "5. ui tooltips & accessibility invariants"
     },
     {
@@ -3816,7 +3924,7 @@
       "source_file": "AGENTS.md",
       "source_location": "L30",
       "id": "tallypitch_agents_6_packaging_release_ship_rule",
-      "community": 33,
+      "community": 34,
       "norm_label": "6. packaging & release ship rule"
     },
     {
@@ -3825,7 +3933,7 @@
       "source_file": "SECURITY.md",
       "source_location": "L1",
       "id": "security_md",
-      "community": 52,
+      "community": 53,
       "norm_label": "security.md"
     },
     {
@@ -3834,7 +3942,7 @@
       "source_file": "SECURITY.md",
       "source_location": "L1",
       "id": "tallypitch_security_security_policy",
-      "community": 52,
+      "community": 53,
       "norm_label": "security policy"
     },
     {
@@ -3843,7 +3951,7 @@
       "source_file": "SECURITY.md",
       "source_location": "L3",
       "id": "tallypitch_security_supported_versions",
-      "community": 52,
+      "community": 53,
       "norm_label": "supported versions"
     },
     {
@@ -3852,7 +3960,7 @@
       "source_file": "SECURITY.md",
       "source_location": "L9",
       "id": "tallypitch_security_reporting_a_vulnerability",
-      "community": 52,
+      "community": 53,
       "norm_label": "reporting a vulnerability"
     },
     {
@@ -3861,7 +3969,7 @@
       "source_file": "tests/README.md",
       "source_location": "L1",
       "id": "tests_readme_md",
-      "community": 46,
+      "community": 47,
       "norm_label": "readme.md"
     },
     {
@@ -3870,7 +3978,7 @@
       "source_file": "tests/README.md",
       "source_location": "L1",
       "id": "tests_readme_test_suite_tallypitch",
-      "community": 46,
+      "community": 47,
       "norm_label": "test suite: tallypitch"
     },
     {
@@ -3879,34 +3987,34 @@
       "source_file": "tests/README.md",
       "source_location": "L5",
       "id": "tests_readme_test_inventory",
-      "community": 46,
+      "community": 47,
       "norm_label": "test inventory"
     },
     {
       "label": "Running Tests",
       "file_type": "document",
       "source_file": "tests/README.md",
-      "source_location": "L29",
+      "source_location": "L30",
       "id": "tests_readme_running_tests",
-      "community": 46,
+      "community": 47,
       "norm_label": "running tests"
     },
     {
       "label": "code:bash (# Token-efficient summary (recommended for agents & CI))",
       "file_type": "document",
       "source_file": "tests/README.md",
-      "source_location": "L33",
+      "source_location": "L34",
       "id": "tests_readme_codeblock_1",
-      "community": 46,
+      "community": 47,
       "norm_label": "code:bash (# token-efficient summary (recommended for agents & ci))"
     },
     {
       "label": "Test Harness Helpers",
       "file_type": "document",
       "source_file": "tests/README.md",
-      "source_location": "L44",
+      "source_location": "L45",
       "id": "tests_readme_test_harness_helpers",
-      "community": 46,
+      "community": 47,
       "norm_label": "test harness helpers"
     },
     {
@@ -3915,7 +4023,7 @@
       "source_file": "wiki/Scoring-Engine-and-Rollback.md",
       "source_location": "L1",
       "id": "wiki_scoring_engine_and_rollback_md",
-      "community": 34,
+      "community": 35,
       "norm_label": "scoring-engine-and-rollback.md"
     },
     {
@@ -3924,7 +4032,7 @@
       "source_file": "wiki/Scoring-Engine-and-Rollback.md",
       "source_location": "L1",
       "id": "wiki_scoring_engine_and_rollback_scoring_engine_0ms_rollback",
-      "community": 34,
+      "community": 35,
       "norm_label": "scoring engine & 0ms rollback"
     },
     {
@@ -3933,7 +4041,7 @@
       "source_file": "wiki/Scoring-Engine-and-Rollback.md",
       "source_location": "L7",
       "id": "wiki_scoring_engine_and_rollback_1_keypad_design_ball_entry",
-      "community": 34,
+      "community": 35,
       "norm_label": "1. keypad design & ball entry"
     },
     {
@@ -3942,7 +4050,7 @@
       "source_file": "wiki/Scoring-Engine-and-Rollback.md",
       "source_location": "L15",
       "id": "wiki_scoring_engine_and_rollback_extras_handling",
-      "community": 34,
+      "community": 35,
       "norm_label": "extras handling"
     },
     {
@@ -3951,7 +4059,7 @@
       "source_file": "wiki/Scoring-Engine-and-Rollback.md",
       "source_location": "L23",
       "id": "wiki_scoring_engine_and_rollback_2_0ms_atomic_rollback_architecture",
-      "community": 34,
+      "community": 35,
       "norm_label": "2. 0ms atomic rollback architecture"
     },
     {
@@ -3960,7 +4068,7 @@
       "source_file": "wiki/Scoring-Engine-and-Rollback.md",
       "source_location": "L27",
       "id": "wiki_scoring_engine_and_rollback_how_tallypitch_solves_this",
-      "community": 34,
+      "community": 35,
       "norm_label": "how tallypitch solves this"
     },
     {
@@ -3969,7 +4077,7 @@
       "source_file": "wiki/Scoring-Engine-and-Rollback.md",
       "source_location": "L40",
       "id": "wiki_scoring_engine_and_rollback_3_end_of_over_bowler_rotation",
-      "community": 34,
+      "community": 35,
       "norm_label": "3. end of over & bowler rotation"
     },
     {
@@ -3978,7 +4086,7 @@
       "source_file": "wiki/Scoring-Engine-and-Rollback.md",
       "source_location": "L49",
       "id": "wiki_scoring_engine_and_rollback_4_wicket_dismissals_fall_of_wickets",
-      "community": 34,
+      "community": 35,
       "norm_label": "4. wicket dismissals & fall-of-wickets"
     },
     {
@@ -3987,7 +4095,7 @@
       "source_file": "wiki/OBS-and-Live-Streaming.md",
       "source_location": "L1",
       "id": "wiki_obs_and_live_streaming_md",
-      "community": 47,
+      "community": 48,
       "norm_label": "obs-and-live-streaming.md"
     },
     {
@@ -3996,7 +4104,7 @@
       "source_file": "wiki/OBS-and-Live-Streaming.md",
       "source_location": "L1",
       "id": "wiki_obs_and_live_streaming_obs_live_broadcast_streaming",
-      "community": 47,
+      "community": 48,
       "norm_label": "obs & live broadcast streaming"
     },
     {
@@ -4005,7 +4113,7 @@
       "source_file": "wiki/OBS-and-Live-Streaming.md",
       "source_location": "L7",
       "id": "wiki_obs_and_live_streaming_1_how_the_live_overlay_works",
-      "community": 47,
+      "community": 48,
       "norm_label": "1. how the live overlay works"
     },
     {
@@ -4014,7 +4122,7 @@
       "source_file": "wiki/OBS-and-Live-Streaming.md",
       "source_location": "L11",
       "id": "wiki_obs_and_live_streaming_codeblock_1",
-      "community": 47,
+      "community": 48,
       "norm_label": "code:text (http://<your-host>/index.html?overlay=true)"
     },
     {
@@ -4023,7 +4131,7 @@
       "source_file": "wiki/OBS-and-Live-Streaming.md",
       "source_location": "L22",
       "id": "wiki_obs_and_live_streaming_2_obs_studio_setup_step_by_step",
-      "community": 47,
+      "community": 48,
       "norm_label": "2. obs studio setup (step-by-step)"
     },
     {
@@ -4032,7 +4140,7 @@
       "source_file": "wiki/OBS-and-Live-Streaming.md",
       "source_location": "L38",
       "id": "wiki_obs_and_live_streaming_3_realtime_synchronization",
-      "community": 47,
+      "community": 48,
       "norm_label": "3. realtime synchronization"
     },
     {
@@ -4041,7 +4149,7 @@
       "source_file": "wiki/Home.md",
       "source_location": "L1",
       "id": "wiki_home_md",
-      "community": 43,
+      "community": 44,
       "norm_label": "home.md"
     },
     {
@@ -4050,7 +4158,7 @@
       "source_file": "wiki/Home.md",
       "source_location": "L1",
       "id": "wiki_home_welcome_to_the_tallypitch_wiki",
-      "community": 43,
+      "community": 44,
       "norm_label": "welcome to the tallypitch wiki \ud83c\udfcf"
     },
     {
@@ -4059,7 +4167,7 @@
       "source_file": "wiki/Home.md",
       "source_location": "L7",
       "id": "wiki_home_wiki_navigation",
-      "community": 43,
+      "community": 44,
       "norm_label": "\ud83d\udcd6 wiki navigation"
     },
     {
@@ -4068,7 +4176,7 @@
       "source_file": "wiki/Home.md",
       "source_location": "L9",
       "id": "wiki_home_core_features_user_guides",
-      "community": 43,
+      "community": 44,
       "norm_label": "\ud83c\udfaf core features & user guides"
     },
     {
@@ -4077,7 +4185,7 @@
       "source_file": "wiki/Home.md",
       "source_location": "L14",
       "id": "wiki_home_technical_architecture_operations",
-      "community": 43,
+      "community": 44,
       "norm_label": "\ud83c\udfd7\ufe0f technical architecture & operations"
     },
     {
@@ -4086,7 +4194,7 @@
       "source_file": "wiki/Home.md",
       "source_location": "L21",
       "id": "wiki_home_why_tallypitch",
-      "community": 43,
+      "community": 44,
       "norm_label": "\u26a1 why tallypitch?"
     },
     {
@@ -4095,7 +4203,7 @@
       "source_file": "wiki/Home.md",
       "source_location": "L36",
       "id": "wiki_home_quick_links",
-      "community": 43,
+      "community": 44,
       "norm_label": "\ud83d\ude80 quick links"
     },
     {
@@ -4104,7 +4212,7 @@
       "source_file": "wiki/Tournament-Management-and-NRR.md",
       "source_location": "L1",
       "id": "wiki_tournament_management_and_nrr_md",
-      "community": 32,
+      "community": 33,
       "norm_label": "tournament-management-and-nrr.md"
     },
     {
@@ -4113,7 +4221,7 @@
       "source_file": "wiki/Tournament-Management-and-NRR.md",
       "source_location": "L1",
       "id": "wiki_tournament_management_and_nrr_tournament_management_net_run_rate_nrr",
-      "community": 32,
+      "community": 33,
       "norm_label": "tournament management & net run rate (nrr)"
     },
     {
@@ -4122,7 +4230,7 @@
       "source_file": "wiki/Tournament-Management-and-NRR.md",
       "source_location": "L7",
       "id": "wiki_tournament_management_and_nrr_1_multi_stage_tournament_structure",
-      "community": 32,
+      "community": 33,
       "norm_label": "1. multi-stage tournament structure"
     },
     {
@@ -4131,7 +4239,7 @@
       "source_file": "wiki/Tournament-Management-and-NRR.md",
       "source_location": "L16",
       "id": "wiki_tournament_management_and_nrr_2_automated_icc_net_run_rate_nrr_calculation",
-      "community": 32,
+      "community": 33,
       "norm_label": "2. automated icc net run rate (nrr) calculation"
     },
     {
@@ -4140,7 +4248,7 @@
       "source_file": "wiki/Tournament-Management-and-NRR.md",
       "source_location": "L20",
       "id": "wiki_tournament_management_and_nrr_the_formula",
-      "community": 32,
+      "community": 33,
       "norm_label": "the formula"
     },
     {
@@ -4149,7 +4257,7 @@
       "source_file": "wiki/Tournament-Management-and-NRR.md",
       "source_location": "L23",
       "id": "wiki_tournament_management_and_nrr_decimal_overs_conversion_invariant",
-      "community": 32,
+      "community": 33,
       "norm_label": "decimal overs conversion invariant"
     },
     {
@@ -4158,7 +4266,7 @@
       "source_file": "wiki/Tournament-Management-and-NRR.md",
       "source_location": "L28",
       "id": "wiki_tournament_management_and_nrr_the_all_out_rule",
-      "community": 32,
+      "community": 33,
       "norm_label": "the all-out rule"
     },
     {
@@ -4167,7 +4275,7 @@
       "source_file": "wiki/Tournament-Management-and-NRR.md",
       "source_location": "L31",
       "id": "wiki_tournament_management_and_nrr_storage_precision",
-      "community": 32,
+      "community": 33,
       "norm_label": "storage & precision"
     },
     {
@@ -4176,7 +4284,7 @@
       "source_file": "wiki/Tournament-Management-and-NRR.md",
       "source_location": "L36",
       "id": "wiki_tournament_management_and_nrr_3_points_table_sorting_logic",
-      "community": 32,
+      "community": 33,
       "norm_label": "3. points table sorting logic"
     },
     {
@@ -4185,7 +4293,7 @@
       "source_file": "wiki/_Sidebar.md",
       "source_location": "L1",
       "id": "wiki_sidebar_md",
-      "community": 54,
+      "community": 55,
       "norm_label": "_sidebar.md"
     },
     {
@@ -4194,7 +4302,7 @@
       "source_file": "wiki/_Sidebar.md",
       "source_location": "L1",
       "id": "wiki_sidebar_tallypitch_wiki_home",
-      "community": 54,
+      "community": 55,
       "norm_label": "[tallypitch wiki](home)"
     },
     {
@@ -4203,7 +4311,7 @@
       "source_file": "wiki/API-and-Database-Reference.md",
       "source_location": "L1",
       "id": "wiki_api_and_database_reference_md",
-      "community": 44,
+      "community": 45,
       "norm_label": "api-and-database-reference.md"
     },
     {
@@ -4212,7 +4320,7 @@
       "source_file": "wiki/API-and-Database-Reference.md",
       "source_location": "L1",
       "id": "wiki_api_and_database_reference_api_database_reference",
-      "community": 44,
+      "community": 45,
       "norm_label": "api & database reference"
     },
     {
@@ -4221,7 +4329,7 @@
       "source_file": "wiki/API-and-Database-Reference.md",
       "source_location": "L7",
       "id": "wiki_api_and_database_reference_1_rest_api_specification",
-      "community": 44,
+      "community": 45,
       "norm_label": "1. rest api specification"
     },
     {
@@ -4230,7 +4338,7 @@
       "source_file": "wiki/API-and-Database-Reference.md",
       "source_location": "L9",
       "id": "wiki_api_and_database_reference_matches_scoring_server_api_js",
-      "community": 44,
+      "community": 45,
       "norm_label": "matches & scoring (`server/api.js`)"
     },
     {
@@ -4239,7 +4347,7 @@
       "source_file": "wiki/API-and-Database-Reference.md",
       "source_location": "L21",
       "id": "wiki_api_and_database_reference_tournaments_standings",
-      "community": 44,
+      "community": 45,
       "norm_label": "tournaments & standings"
     },
     {
@@ -4248,7 +4356,7 @@
       "source_file": "wiki/API-and-Database-Reference.md",
       "source_location": "L30",
       "id": "wiki_api_and_database_reference_2_postgresql_database_schema_supabase_migrations",
-      "community": 44,
+      "community": 45,
       "norm_label": "2. postgresql database schema (`supabase/migrations/`)"
     },
     {
@@ -4257,7 +4365,7 @@
       "source_file": "wiki/API-and-Database-Reference.md",
       "source_location": "L53",
       "id": "wiki_api_and_database_reference_3_data_integrity_invariants",
-      "community": 44,
+      "community": 45,
       "norm_label": "3. data integrity invariants"
     },
     {
@@ -4410,7 +4518,7 @@
       "source_file": "wiki/_Footer.md",
       "source_location": "L1",
       "id": "wiki_footer_md",
-      "community": 61,
+      "community": 62,
       "norm_label": "_footer.md"
     },
     {
@@ -4419,7 +4527,7 @@
       "source_file": "wiki/Contributing-and-Development.md",
       "source_location": "L1",
       "id": "wiki_contributing_and_development_md",
-      "community": 35,
+      "community": 36,
       "norm_label": "contributing-and-development.md"
     },
     {
@@ -4428,7 +4536,7 @@
       "source_file": "wiki/Contributing-and-Development.md",
       "source_location": "L1",
       "id": "wiki_contributing_and_development_developer_guide_universal_pipeline",
-      "community": 35,
+      "community": 36,
       "norm_label": "developer guide & universal pipeline"
     },
     {
@@ -4437,7 +4545,7 @@
       "source_file": "wiki/Contributing-and-Development.md",
       "source_location": "L7",
       "id": "wiki_contributing_and_development_1_quick_start_for_developers",
-      "community": 35,
+      "community": 36,
       "norm_label": "1. quick start for developers"
     },
     {
@@ -4446,7 +4554,7 @@
       "source_file": "wiki/Contributing-and-Development.md",
       "source_location": "L9",
       "id": "wiki_contributing_and_development_codeblock_1",
-      "community": 35,
+      "community": 36,
       "norm_label": "code:bash (# clone the repository)"
     },
     {
@@ -4455,7 +4563,7 @@
       "source_file": "wiki/Contributing-and-Development.md",
       "source_location": "L21",
       "id": "wiki_contributing_and_development_2_the_universal_pipeline_pipeline_sh",
-      "community": 35,
+      "community": 36,
       "norm_label": "2. the universal pipeline (`./pipeline.sh`)"
     },
     {
@@ -4464,7 +4572,7 @@
       "source_file": "wiki/Contributing-and-Development.md",
       "source_location": "L25",
       "id": "wiki_contributing_and_development_codeblock_2",
-      "community": 35,
+      "community": 36,
       "norm_label": "code:bash (# 1. run diagnostic invariant checks)"
     },
     {
@@ -4473,7 +4581,7 @@
       "source_file": "wiki/Contributing-and-Development.md",
       "source_location": "L44",
       "id": "wiki_contributing_and_development_3_playwright_e2e_test_suite_tests",
-      "community": 35,
+      "community": 36,
       "norm_label": "3. playwright e2e test suite (`tests/`)"
     },
     {
@@ -4482,7 +4590,7 @@
       "source_file": "wiki/Contributing-and-Development.md",
       "source_location": "L53",
       "id": "wiki_contributing_and_development_4_single_file_distribution_parity",
-      "community": 35,
+      "community": 36,
       "norm_label": "4. single-file distribution parity"
     },
     {
@@ -4680,7 +4788,7 @@
       "source_file": "replica/bugs.md",
       "source_location": "L1",
       "id": "replica_bugs_md",
-      "community": 49,
+      "community": 50,
       "norm_label": "bugs.md"
     },
     {
@@ -4689,7 +4797,7 @@
       "source_file": "replica/bugs.md",
       "source_location": "L1",
       "id": "replica_bugs_bug_reports_cricheroes_replica",
-      "community": 49,
+      "community": 50,
       "norm_label": "bug reports: cricheroes replica"
     },
     {
@@ -4698,7 +4806,7 @@
       "source_file": "replica/bugs.md",
       "source_location": "L9",
       "id": "replica_bugs_bug_001_bowler_selection_dropdown_in_over_complete_modal_should_exclude_previous_bowler",
-      "community": 49,
+      "community": 50,
       "norm_label": "bug-001: bowler selection dropdown in over complete modal should exclude previous bowler"
     },
     {
@@ -4707,7 +4815,7 @@
       "source_file": "replica/bugs.md",
       "source_location": "L24",
       "id": "replica_bugs_bug_002_undo_button_on_empty_delivery_stack",
-      "community": 49,
+      "community": 50,
       "norm_label": "bug-002: undo button on empty delivery stack"
     },
     {
@@ -4716,7 +4824,7 @@
       "source_file": "replica/bugs.md",
       "source_location": "L39",
       "id": "replica_bugs_summary_of_bug_severity",
-      "community": 49,
+      "community": 50,
       "norm_label": "summary of bug severity"
     },
     {
@@ -5202,7 +5310,7 @@
       "source_file": "replica/backend.md",
       "source_location": "L1",
       "id": "replica_backend_md",
-      "community": 36,
+      "community": 37,
       "norm_label": "backend.md"
     },
     {
@@ -5211,7 +5319,7 @@
       "source_file": "replica/backend.md",
       "source_location": "L1",
       "id": "replica_backend_backend_architecture_security_checklist_cricheroes_replica",
-      "community": 36,
+      "community": 37,
       "norm_label": "backend architecture & security checklist: cricheroes replica"
     },
     {
@@ -5220,7 +5328,7 @@
       "source_file": "replica/backend.md",
       "source_location": "L7",
       "id": "replica_backend_1_database_migrations",
-      "community": 36,
+      "community": 37,
       "norm_label": "1. database & migrations"
     },
     {
@@ -5229,7 +5337,7 @@
       "source_file": "replica/backend.md",
       "source_location": "L19",
       "id": "replica_backend_2_authentication_sessions",
-      "community": 36,
+      "community": 37,
       "norm_label": "2. authentication & sessions"
     },
     {
@@ -5238,7 +5346,7 @@
       "source_file": "replica/backend.md",
       "source_location": "L28",
       "id": "replica_backend_3_realtime_live_score_broadcasting",
-      "community": 36,
+      "community": 37,
       "norm_label": "3. realtime live score broadcasting"
     },
     {
@@ -5247,7 +5355,7 @@
       "source_file": "replica/backend.md",
       "source_location": "L37",
       "id": "replica_backend_4_payments_subscriptions_stripe",
-      "community": 36,
+      "community": 37,
       "norm_label": "4. payments & subscriptions (stripe)"
     },
     {
@@ -5256,7 +5364,7 @@
       "source_file": "replica/backend.md",
       "source_location": "L48",
       "id": "replica_backend_5_security_checklist",
-      "community": 36,
+      "community": 37,
       "norm_label": "5. security checklist"
     },
     {
@@ -5265,7 +5373,7 @@
       "source_file": "replica/backend.md",
       "source_location": "L59",
       "id": "replica_backend_6_next_steps",
-      "community": 36,
+      "community": 37,
       "norm_label": "6. next steps"
     },
     {
@@ -5274,7 +5382,7 @@
       "source_file": "replica/fixes.md",
       "source_location": "L1",
       "id": "replica_fixes_md",
-      "community": 28,
+      "community": 29,
       "norm_label": "fixes.md"
     },
     {
@@ -5283,7 +5391,7 @@
       "source_file": "replica/fixes.md",
       "source_location": "L1",
       "id": "replica_fixes_fixes_and_positioning_plan_cricheroes_clone",
-      "community": 28,
+      "community": 29,
       "norm_label": "fixes and positioning plan: cricheroes clone"
     },
     {
@@ -5292,7 +5400,7 @@
       "source_file": "replica/fixes.md",
       "source_location": "L7",
       "id": "replica_fixes_1_the_three_lists",
-      "community": 28,
+      "community": 29,
       "norm_label": "1. the three lists"
     },
     {
@@ -5301,7 +5409,7 @@
       "source_file": "replica/fixes.md",
       "source_location": "L9",
       "id": "replica_fixes_what_they_hate_complaints",
-      "community": 28,
+      "community": 29,
       "norm_label": "what they hate (complaints)"
     },
     {
@@ -5310,7 +5418,7 @@
       "source_file": "replica/fixes.md",
       "source_location": "L25",
       "id": "replica_fixes_what_is_missing_direct_requests",
-      "community": 28,
+      "community": 29,
       "norm_label": "what is missing (direct requests)"
     },
     {
@@ -5319,7 +5427,7 @@
       "source_file": "replica/fixes.md",
       "source_location": "L35",
       "id": "replica_fixes_what_is_unsolved_positioning_opportunities",
-      "community": 28,
+      "community": 29,
       "norm_label": "what is unsolved (positioning opportunities)"
     },
     {
@@ -5328,7 +5436,7 @@
       "source_file": "replica/fixes.md",
       "source_location": "L41",
       "id": "replica_fixes_2_the_fix_plan",
-      "community": 28,
+      "community": 29,
       "norm_label": "2. the fix plan"
     },
     {
@@ -5337,7 +5445,7 @@
       "source_file": "replica/fixes.md",
       "source_location": "L53",
       "id": "replica_fixes_3_positioning_angles",
-      "community": 28,
+      "community": 29,
       "norm_label": "3. positioning angles"
     },
     {
@@ -5346,7 +5454,7 @@
       "source_file": "replica/fixes.md",
       "source_location": "L55",
       "id": "replica_fixes_option_a_the_scorer_s_sanctuary_focus_on_speed_zero_ads",
-      "community": 28,
+      "community": 29,
       "norm_label": "option a: the scorer's sanctuary (focus on speed & zero ads)"
     },
     {
@@ -5355,7 +5463,7 @@
       "source_file": "replica/fixes.md",
       "source_location": "L59",
       "id": "replica_fixes_option_b_the_transparent_league_platform_focus_on_free_broadcast_pricing_recommended",
-      "community": 28,
+      "community": 29,
       "norm_label": "option b: the transparent league platform (focus on free broadcast & pricing) - **recommended**"
     },
     {
@@ -5364,7 +5472,7 @@
       "source_file": "replica/fixes.md",
       "source_location": "L63",
       "id": "replica_fixes_option_c_the_unbreakable_offline_scorer_focus_on_reliability",
-      "community": 28,
+      "community": 29,
       "norm_label": "option c: the unbreakable offline scorer (focus on reliability)"
     },
     {
@@ -5373,7 +5481,7 @@
       "source_file": "replica/fixes.md",
       "source_location": "L69",
       "id": "replica_fixes_4_next_step",
-      "community": 28,
+      "community": 29,
       "norm_label": "4. next step"
     },
     {
@@ -5382,7 +5490,7 @@
       "source_file": "replica/parity.md",
       "source_location": "L1",
       "id": "replica_parity_md",
-      "community": 48,
+      "community": 49,
       "norm_label": "parity.md"
     },
     {
@@ -5391,7 +5499,7 @@
       "source_file": "replica/parity.md",
       "source_location": "L1",
       "id": "replica_parity_parity_100_0_100",
-      "community": 48,
+      "community": 49,
       "norm_label": "parity: 100.0 / 100"
     },
     {
@@ -5400,7 +5508,7 @@
       "source_file": "replica/parity.md",
       "source_location": "L5",
       "id": "replica_parity_by_area",
-      "community": 48,
+      "community": 49,
       "norm_label": "by area"
     },
     {
@@ -5409,7 +5517,7 @@
       "source_file": "replica/parity.md",
       "source_location": "L19",
       "id": "replica_parity_completed_in_this_milestone",
-      "community": 48,
+      "community": 49,
       "norm_label": "completed in this milestone"
     },
     {
@@ -5418,7 +5526,7 @@
       "source_file": "replica/parity.md",
       "source_location": "L25",
       "id": "replica_parity_remaining_in_build_order",
-      "community": 48,
+      "community": 49,
       "norm_label": "remaining, in build order"
     },
     {
@@ -5427,7 +5535,7 @@
       "source_file": "replica/parity.md",
       "source_location": "L28",
       "id": "replica_parity_left_out_on_purpose_not_scored",
-      "community": 48,
+      "community": 49,
       "norm_label": "left out on purpose (not scored)"
     },
     {
@@ -5436,7 +5544,7 @@
       "source_file": "replica/feedback.md",
       "source_location": "L1",
       "id": "replica_feedback_md",
-      "community": 50,
+      "community": 51,
       "norm_label": "feedback.md"
     },
     {
@@ -5445,7 +5553,7 @@
       "source_file": "replica/feedback.md",
       "source_location": "L1",
       "id": "replica_feedback_what_users_of_the_original_hate_and_want",
-      "community": 50,
+      "community": 51,
       "norm_label": "what users of the original hate and want"
     },
     {
@@ -5454,7 +5562,7 @@
       "source_file": "replica/feedback.md",
       "source_location": "L7",
       "id": "replica_feedback_what_they_hate",
-      "community": 50,
+      "community": 51,
       "norm_label": "what they hate"
     },
     {
@@ -5463,7 +5571,7 @@
       "source_file": "replica/feedback.md",
       "source_location": "L46",
       "id": "replica_feedback_what_they_ask_for",
-      "community": 50,
+      "community": 51,
       "norm_label": "what they ask for"
     },
     {
@@ -5472,7 +5580,7 @@
       "source_file": "replica/feedback.md",
       "source_location": "L60",
       "id": "replica_feedback_asked_for_in_their_own_words",
-      "community": 50,
+      "community": 51,
       "norm_label": "asked for in their own words"
     },
     {
@@ -5481,7 +5589,7 @@
       "source_file": "replica/test-plan.md",
       "source_location": "L1",
       "id": "replica_test_plan_md",
-      "community": 55,
+      "community": 56,
       "norm_label": "test-plan.md"
     },
     {
@@ -5490,7 +5598,7 @@
       "source_file": "replica/test-plan.md",
       "source_location": "L1",
       "id": "replica_test_plan_test_plan_cricheroes_replica",
-      "community": 55,
+      "community": 56,
       "norm_label": "test plan: cricheroes replica"
     },
     {
@@ -5499,7 +5607,7 @@
       "source_file": "replica/build-log.md",
       "source_location": "L1",
       "id": "replica_build_log_md",
-      "community": 56,
+      "community": 57,
       "norm_label": "build-log.md"
     },
     {
@@ -5508,7 +5616,7 @@
       "source_file": "replica/build-log.md",
       "source_location": "L1",
       "id": "replica_build_log_cricheroes_replica_build_log",
-      "community": 56,
+      "community": 57,
       "norm_label": "cricheroes replica - build log"
     },
     {
@@ -5805,7 +5913,7 @@
       "source_file": "replica/launch/pricing.md",
       "source_location": "L1",
       "id": "replica_launch_pricing_md",
-      "community": 37,
+      "community": 38,
       "norm_label": "pricing.md"
     },
     {
@@ -5814,7 +5922,7 @@
       "source_file": "replica/launch/pricing.md",
       "source_location": "L1",
       "id": "launch_pricing_tallypitch_pricing_strategy_structure",
-      "community": 37,
+      "community": 38,
       "norm_label": "tallypitch - pricing strategy & structure"
     },
     {
@@ -5823,7 +5931,7 @@
       "source_file": "replica/launch/pricing.md",
       "source_location": "L7",
       "id": "launch_pricing_1_competitor_benchmark_analysis",
-      "community": 37,
+      "community": 38,
       "norm_label": "1. competitor benchmark analysis"
     },
     {
@@ -5832,7 +5940,7 @@
       "source_file": "replica/launch/pricing.md",
       "source_location": "L19",
       "id": "launch_pricing_2_reviewer_feedback_on_price_billing",
-      "community": 37,
+      "community": 38,
       "norm_label": "2. reviewer feedback on price & billing"
     },
     {
@@ -5841,7 +5949,7 @@
       "source_file": "replica/launch/pricing.md",
       "source_location": "L34",
       "id": "launch_pricing_3_tallypitch_pricing_tiers",
-      "community": 37,
+      "community": 38,
       "norm_label": "3. tallypitch pricing tiers"
     },
     {
@@ -5850,7 +5958,7 @@
       "source_file": "replica/launch/pricing.md",
       "source_location": "L57",
       "id": "launch_pricing_4_product_billing_principles_anti_pattern_guarantees",
-      "community": 37,
+      "community": 38,
       "norm_label": "4. product billing principles & anti-pattern guarantees"
     },
     {
@@ -5859,7 +5967,7 @@
       "source_file": "replica/launch/pricing.md",
       "source_location": "L70",
       "id": "launch_pricing_5_stripe_products_and_price_ids",
-      "community": 37,
+      "community": 38,
       "norm_label": "5. stripe products and price ids"
     },
     {
@@ -5868,7 +5976,7 @@
       "source_file": "replica/launch/pricing.md",
       "source_location": "L74",
       "id": "launch_pricing_codeblock_1",
-      "community": 37,
+      "community": 38,
       "norm_label": "code:bash (# 1. product: tallypitch club pro)"
     },
     {
@@ -5877,7 +5985,7 @@
       "source_file": "replica/launch/launch-plan.md",
       "source_location": "L1",
       "id": "replica_launch_launch_plan_md",
-      "community": 38,
+      "community": 39,
       "norm_label": "launch-plan.md"
     },
     {
@@ -5886,7 +5994,7 @@
       "source_file": "replica/launch/launch-plan.md",
       "source_location": "L1",
       "id": "launch_launch_plan_tallypitch_launch_go_to_market_plan",
-      "community": 38,
+      "community": 39,
       "norm_label": "tallypitch - launch & go-to-market plan"
     },
     {
@@ -5895,7 +6003,7 @@
       "source_file": "replica/launch/launch-plan.md",
       "source_location": "L7",
       "id": "launch_launch_plan_1_pre_launch_beta_quality_gate",
-      "community": 38,
+      "community": 39,
       "norm_label": "1. pre-launch beta & quality gate"
     },
     {
@@ -5904,7 +6012,7 @@
       "source_file": "replica/launch/launch-plan.md",
       "source_location": "L23",
       "id": "launch_launch_plan_2_community_outreach_reaching_frustrated_users",
-      "community": 38,
+      "community": 39,
       "norm_label": "2. community outreach: reaching frustrated users"
     },
     {
@@ -5913,7 +6021,7 @@
       "source_file": "replica/launch/launch-plan.md",
       "source_location": "L40",
       "id": "launch_launch_plan_3_product_hunt_hacker_news_launch_strategy",
-      "community": 38,
+      "community": 39,
       "norm_label": "3. product hunt & hacker news launch strategy"
     },
     {
@@ -5922,7 +6030,7 @@
       "source_file": "replica/launch/launch-plan.md",
       "source_location": "L42",
       "id": "launch_launch_plan_show_hn_post_draft",
-      "community": 38,
+      "community": 39,
       "norm_label": "show hn post draft"
     },
     {
@@ -5931,7 +6039,7 @@
       "source_file": "replica/launch/launch-plan.md",
       "source_location": "L62",
       "id": "launch_launch_plan_product_hunt_launch",
-      "community": 38,
+      "community": 39,
       "norm_label": "product hunt launch"
     },
     {
@@ -5940,7 +6048,7 @@
       "source_file": "replica/launch/launch-plan.md",
       "source_location": "L69",
       "id": "launch_launch_plan_4_first_10_user_interviews_hands_on_feedback",
-      "community": 38,
+      "community": 39,
       "norm_label": "4. first 10 user interviews (hands-on feedback)"
     },
     {
@@ -7481,6 +7589,116 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "tests_test_radial_spray_engine_py",
+      "target": "tests_test_radial_spray_engine_testradialsprayengine",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "tests_test_radial_spray_engine_py",
+      "target": "tests_test_radial_spray_engine_setupclass",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "tests_test_radial_spray_engine_py",
+      "target": "tests_test_radial_spray_engine_teardownclass",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "tests_test_radial_spray_engine_testradialsprayengine",
+      "target": "tests_test_radial_spray_engine_testradialsprayengine_setup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "tests_test_radial_spray_engine_testradialsprayengine",
+      "target": "tests_test_radial_spray_engine_testradialsprayengine_teardown",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "tests_test_radial_spray_engine_testradialsprayengine",
+      "target": "tests_test_radial_spray_engine_testradialsprayengine_test_radial_kpis_and_sector_matrix_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "tests_test_radial_spray_engine_testradialsprayengine",
+      "target": "tests_test_radial_spray_engine_testradialsprayengine_test_lofted_arc_vs_ground_trajectories_and_filters",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L122",
+      "weight": 1.0,
+      "source": "tests_test_radial_spray_engine_testradialsprayengine",
+      "target": "tests_test_radial_spray_engine_testradialsprayengine_test_radial_batter_filter_and_undo_rollback",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "tests_test_radial_spray_engine_rationale_36",
+      "target": "tests_test_radial_spray_engine_testradialsprayengine_test_radial_kpis_and_sector_matrix_table",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "tests_test_radial_spray_engine_rationale_76",
+      "target": "tests_test_radial_spray_engine_testradialsprayengine_test_lofted_arc_vs_ground_trajectories_and_filters",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_radial_spray_engine.py",
+      "source_location": "L123",
+      "weight": 1.0,
+      "source": "tests_test_radial_spray_engine_rationale_123",
+      "target": "tests_test_radial_spray_engine_testradialsprayengine_test_radial_batter_filter_and_undo_rollback",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "tests/test_android_packaging.py",
       "source_location": "L14",
       "weight": 1.0,
@@ -8304,9 +8522,9 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_pitch_map_engine_py",
-      "target": "tests_test_pitch_map_engine_testpitchmapengine",
-      "confidence_score": 1.0
+      "target": "tests_test_pitch_map_engine_testpitchmapengine"
     },
     {
       "relation": "contains",
@@ -8314,9 +8532,9 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_pitch_map_engine_py",
-      "target": "tests_test_pitch_map_engine_setupclass",
-      "confidence_score": 1.0
+      "target": "tests_test_pitch_map_engine_setupclass"
     },
     {
       "relation": "contains",
@@ -8324,9 +8542,9 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_pitch_map_engine_py",
-      "target": "tests_test_pitch_map_engine_teardownclass",
-      "confidence_score": 1.0
+      "target": "tests_test_pitch_map_engine_teardownclass"
     },
     {
       "relation": "method",
@@ -8334,9 +8552,9 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_pitch_map_engine_testpitchmapengine",
-      "target": "tests_test_pitch_map_engine_testpitchmapengine_setup",
-      "confidence_score": 1.0
+      "target": "tests_test_pitch_map_engine_testpitchmapengine_setup"
     },
     {
       "relation": "method",
@@ -8344,9 +8562,9 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_pitch_map_engine_testpitchmapengine",
-      "target": "tests_test_pitch_map_engine_testpitchmapengine_teardown",
-      "confidence_score": 1.0
+      "target": "tests_test_pitch_map_engine_testpitchmapengine_teardown"
     },
     {
       "relation": "method",
@@ -8354,9 +8572,9 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_pitch_map_engine_testpitchmapengine",
-      "target": "tests_test_pitch_map_engine_testpitchmapengine_test_pitch_inference_and_modal_chips",
-      "confidence_score": 1.0
+      "target": "tests_test_pitch_map_engine_testpitchmapengine_test_pitch_inference_and_modal_chips"
     },
     {
       "relation": "method",
@@ -8364,9 +8582,9 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L74",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_pitch_map_engine_testpitchmapengine",
-      "target": "tests_test_pitch_map_engine_testpitchmapengine_test_s14_pitch_map_tab_kpis_and_svg_heatmap",
-      "confidence_score": 1.0
+      "target": "tests_test_pitch_map_engine_testpitchmapengine_test_s14_pitch_map_tab_kpis_and_svg_heatmap"
     },
     {
       "relation": "method",
@@ -8374,9 +8592,9 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L111",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_pitch_map_engine_testpitchmapengine",
-      "target": "tests_test_pitch_map_engine_testpitchmapengine_test_pitch_matrix_table_and_undo_rollback",
-      "confidence_score": 1.0
+      "target": "tests_test_pitch_map_engine_testpitchmapengine_test_pitch_matrix_table_and_undo_rollback"
     },
     {
       "relation": "rationale_for",
@@ -8384,9 +8602,9 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_pitch_map_engine_rationale_35",
-      "target": "tests_test_pitch_map_engine_testpitchmapengine_test_pitch_inference_and_modal_chips",
-      "confidence_score": 1.0
+      "target": "tests_test_pitch_map_engine_testpitchmapengine_test_pitch_inference_and_modal_chips"
     },
     {
       "relation": "rationale_for",
@@ -8394,9 +8612,9 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_pitch_map_engine_rationale_75",
-      "target": "tests_test_pitch_map_engine_testpitchmapengine_test_s14_pitch_map_tab_kpis_and_svg_heatmap",
-      "confidence_score": 1.0
+      "target": "tests_test_pitch_map_engine_testpitchmapengine_test_s14_pitch_map_tab_kpis_and_svg_heatmap"
     },
     {
       "relation": "rationale_for",
@@ -8404,9 +8622,9 @@
       "source_file": "tests/test_pitch_map_engine.py",
       "source_location": "L112",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_pitch_map_engine_rationale_112",
-      "target": "tests_test_pitch_map_engine_testpitchmapengine_test_pitch_matrix_table_and_undo_rollback",
-      "confidence_score": 1.0
+      "target": "tests_test_pitch_map_engine_testpitchmapengine_test_pitch_matrix_table_and_undo_rollback"
     },
     {
       "relation": "contains",
@@ -13092,5 +13310,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "79cebfea179d681eaead3f588eb30c96eec02530"
+  "built_at_commit": "4397d3c5a0d05784de40b709d2f4f19aa2bbe090"
 }
