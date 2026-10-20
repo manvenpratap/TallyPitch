@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9a6ab4d0`
+- Built from commit: `564294c4`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -170,51 +170,51 @@ Nodes (12): code:block1 (F01 Quick Match Setup & First Ball Bowled), code:block2
 
 ### Community 17 - "Match Ball Scoring & State Engine"
 Cohesion: 0.17
-Nodes (4): Verify opening Compare VS from career profile and from scouting table., Verify Compare VS container, default player comparison, 10 metrics, and marquee, Verify switching to Team vs Team mode, team selectors, and team benchmark metric, TestCompareVsEngine
+Nodes (4): Verify 1-click pre-filling of S03 Match Setup from NRR simulator., Verify S18 NRR Calculator card renders with team selectors, presets, and telemet, Verify mathematical calculation of runs allowed, chase overs, and direct clash t, TestNrrScenarioEngine
 
 ### Community 18 - "Compare Vs Engine Automated Test Suite"
 Cohesion: 0.17
-Nodes (4): Verify initial S19 honors podium rendering and top-5 batting table, Verify switching between Batting Top 5 and Bowling Top 5 views, Verify dynamic cap honor reassignment when live match stats overtake tournament, TestTournamentLeaderboards
+Nodes (4): Verify opening Compare VS from career profile and from scouting table., Verify Compare VS container, default player comparison, 10 metrics, and marquee, Verify switching to Team vs Team mode, team selectors, and team benchmark metric, TestCompareVsEngine
 
 ### Community 19 - "Match Ball Scoring & State Engine"
 Cohesion: 0.17
-Nodes (4): Verify Screen S14 Shot Analysis tab, 4 KPI cards, proportional distribution list, Verify Modal 3 interactive shot chips, zone inference, manual chip selection, an, Verify deliveries record shotType, wagonWheel.shot_type, commentary speech integ, TestShotTypeEngine
+Nodes (4): Verify initial S19 honors podium rendering and top-5 batting table, Verify switching between Batting Top 5 and Bowling Top 5 views, Verify dynamic cap honor reassignment when live match stats overtake tournament, TestTournamentLeaderboards
 
 ### Community 20 - "Community And Badges Automated Test Suite"
 Cohesion: 0.17
-Nodes (4): Verify S21 Milestone Badges render cards with proper unlocked/locked states and, Verify S23 Community Board renders listings, counts, and filters correctly, Verify posting a new classified listing prepends card and updates counts dynamic, TestCommunityAndBadges
+Nodes (4): Verify Screen S14 Shot Analysis tab, 4 KPI cards, proportional distribution list, Verify Modal 3 interactive shot chips, zone inference, manual chip selection, an, Verify deliveries record shotType, wagonWheel.shot_type, commentary speech integ, TestShotTypeEngine
 
 ### Community 21 - "Pwa Offline Automated Test Suite"
 Cohesion: 0.17
-Nodes (4): Verify Web App Manifest and PWA icons are valid and properly structured, Verify sw.js contains proper caching lifecycle and index.html includes manifest, Verify network status indicator badge is visible in header with accessible toolt, TestPwaOffline
+Nodes (4): Verify S21 Milestone Badges render cards with proper unlocked/locked states and, Verify S23 Community Board renders listings, counts, and filters correctly, Verify posting a new classified listing prepends card and updates counts dynamic, TestCommunityAndBadges
 
 ### Community 22 - "Android Packaging Automated Test Suite"
 Cohesion: 0.17
-Nodes (4): Verify batter dropdown selector and 0ms atomic undo rollback on radial engine., Verify S14 Wagon Wheel renders 4 Radial KPI cards and the 8-Sector Spray Distrib, Verify 360 SVG turf displays both lofted flight paths and ground lines, with gro, TestRadialSprayEngine
+Nodes (4): Verify Web App Manifest and PWA icons are valid and properly structured, Verify sw.js contains proper caching lifecycle and index.html includes manifest, Verify network status indicator badge is visible in header with accessible toolt, TestPwaOffline
 
 ### Community 23 - "Match Ball Scoring & State Engine"
 Cohesion: 0.17
-Nodes (4): Verify Android TWA project structure, Gradle config, and Digital Asset Links, Verify Python Android packaging validator script executes cleanly, Verify Modal 10 opens via header CTA, displays TWA cards, toggles AssetLinks JSO, TestAndroidPackaging
+Nodes (4): Verify batter dropdown selector and 0ms atomic undo rollback on radial engine., Verify S14 Wagon Wheel renders 4 Radial KPI cards and the 8-Sector Spray Distrib, Verify 360 SVG turf displays both lofted flight paths and ground lines, with gro, TestRadialSprayEngine
 
 ### Community 24 - "Match Ball Scoring & State Engine"
 Cohesion: 0.17
-Nodes (4): Verify perspective filter buttons (All, Batting, Bowling, Swings) and breakdown, Verify S07 Live Turning Point Alert pill appears on high impact overs and naviga, Verify S14 Turning Points tab renders 4 KPI cards and interactive Momentum Index, TestTurningPointEngine
+Nodes (4): Verify Android TWA project structure, Gradle config, and Digital Asset Links, Verify Python Android packaging validator script executes cleanly, Verify Modal 10 opens via header CTA, displays TWA cards, toggles AssetLinks JSO, TestAndroidPackaging
 
 ### Community 25 - "3D WebGL Stadium & Visual Scene Engine"
 Cohesion: 0.17
-Nodes (4): Verify partnership completes on wicket, next partnership begins, and S13 scoreca, Verify initial S07 live partnership card layout, labels, and 0-score state, Verify live partnership updates runs, balls, boundaries, and batter splits as de, TestPartnershipsEngine
+Nodes (4): Verify perspective filter buttons (All, Batting, Bowling, Swings) and breakdown, Verify S07 Live Turning Point Alert pill appears on high impact overs and naviga, Verify S14 Turning Points tab renders 4 KPI cards and interactive Momentum Index, TestTurningPointEngine
 
 ### Community 26 - "Match Ball Scoring & State Engine"
 Cohesion: 0.17
-Nodes (4): Verify Length x Line matrix table, delivery type filter buttons, and 0ms atomic, Verify delivery automatically attaches pitchLength/pitchLine and Modal 3 display, Verify S14 Pitch Map tab renders 4 KPI cards and 2D Turf Heatmap SVG., TestPitchMapEngine
+Nodes (4): Verify partnership completes on wicket, next partnership begins, and S13 scoreca, Verify initial S07 live partnership card layout, labels, and 0-score state, Verify live partnership updates runs, balls, boundaries, and batter splits as de, TestPartnershipsEngine
 
 ### Community 27 - "Contributing Module Core"
 Cohesion: 0.17
-Nodes (4): Verify interactive matrix cell spotlight inspection, delivery chips, and 0ms ato, Verify S07 Live Face-Off HUD button, real-time stat updates, Modal 12 opening, s, Verify Screen S14 Face-Off Matrix tab, 4 KPI telemetry cards, matrix table, and, TestFaceOffEngine
+Nodes (4): Verify Length x Line matrix table, delivery type filter buttons, and 0ms atomic, Verify delivery automatically attaches pitchLength/pitchLine and Modal 3 display, Verify S14 Pitch Map tab renders 4 KPI cards and 2D Turf Heatmap SVG., TestPitchMapEngine
 
 ### Community 28 - "Wagon Wheel And Charts Automated Test Suite"
 Cohesion: 0.17
-Nodes (4): Verify 1-click pre-filling of S03 Match Setup from NRR simulator., Verify S18 NRR Calculator card renders with team selectors, presets, and telemet, Verify mathematical calculation of runs allowed, chase overs, and direct clash t, TestNrrScenarioEngine
+Nodes (4): Verify interactive matrix cell spotlight inspection, delivery chips, and 0ms ato, Verify S07 Live Face-Off HUD button, real-time stat updates, Modal 12 opening, s, Verify Screen S14 Face-Off Matrix tab, 4 KPI telemetry cards, matrix table, and, TestFaceOffEngine
 
 ### Community 29 - "Match Ball Scoring & State Engine"
 Cohesion: 0.17
@@ -321,14 +321,14 @@ Cohesion: 0.5
 Nodes (3): Reporting a Vulnerability, Security Policy, Supported Versions
 
 ## Knowledge Gaps
-- **295 isolated node(s):** `STATIC_ASSETS`, `url`, `responseToCache`, `Verify Compare VS container, default player comparison, 10 metrics, and marquee`, `Verify switching to Team vs Team mode, team selectors, and team benchmark metric` (+290 more)
+- **295 isolated node(s):** `1. Current Status & Milestone`, `2. Implemented Features`, `3. Core Architecture & Constraints`, `4. Active Roadmap`, `Test Inventory` (+290 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **What connects `STATIC_ASSETS`, `url`, `responseToCache` to the rest of the system?**
+- **What connects `1. Current Status & Milestone`, `2. Implemented Features`, `3. Core Architecture & Constraints` to the rest of the system?**
   _295 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `AST Parsing & Semantic Syntax Tree Engine` be split into smaller, more focused modules?**
   _Cohesion score 0.08 - nodes in this community are weakly interconnected._
