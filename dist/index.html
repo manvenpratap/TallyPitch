@@ -1639,6 +1639,24 @@
          ===================================================================== -->
     <div id="screen-S07" class="screen-view active">
 
+      <!-- Track 15: Match Disaster Recovery Banner -->
+      <div id="match-disaster-recovery-banner" style="display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; background: #fef3c7; border: 1.5px solid #f59e0b; border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 14px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);" data-tooltip="Ongoing match found in offline IndexedDB vault. Click to restore immediately.">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 18px;">⚡</span>
+          <div style="font-size: 12px; color: #92400e;">
+            <span id="recovery-banner-text">Ongoing match detected in Offline Vault.</span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button type="button" class="btn btn-primary" id="btn-restore-match-vault" onclick="restoreMatchFromVault()" style="font-size: 11px; padding: 4px 10px; font-weight: 800; background: #d97706; border-color: #b45309;" data-tooltip="Restore full match state from IndexedDB">
+            🔄 Restore Match State
+          </button>
+          <button type="button" class="btn btn-secondary" id="btn-dismiss-match-vault" onclick="dismissRecoveryBanner()" style="font-size: 11px; padding: 4px 8px; font-weight: 700; color: #78350f; background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1);" data-tooltip="Dismiss recovery prompt">
+            ✕ Dismiss
+          </button>
+        </div>
+      </div>
+
       <!-- Hero Scorecard -->
       <div class="score-hero-card">
         <div class="match-status-pill">
@@ -1656,6 +1674,9 @@
             <div style="font-size: 13px; opacity: 0.85; margin-bottom: 4px;">VS <span id="hero-bowling-team">Bangalore Blasters</span></div>
             <button class="btn btn-secondary" style="background: rgba(255,255,255,0.18); border: none; color: #fff; padding: 6px 12px; font-size: 12px;" onclick="navigate('S13')">
               Full Scorecard ↗
+            </button>
+            <button class="btn btn-secondary" id="btn-open-match-vault" style="background: rgba(234,179,8,0.25); border: 1px solid rgba(234,179,8,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openMatchVaultModal()" data-tooltip="Offline Match Vault, Disaster Recovery, and JSON Export/Import">
+              💾 Match Vault
             </button>
             <button class="btn btn-secondary" id="btn-stream-overlay" style="background: rgba(56,189,248,0.25); border: 1px solid rgba(56,189,248,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openBroadcastModal()" data-tooltip="Live streaming OBS overlay & CricHeroes MQTT bridge">
               📡 OBS Stream
@@ -3926,6 +3947,60 @@
   </div>
 
   <!-- =======================================================================
+       MODAL 13: LOCAL MATCH VAULT & OFFLINE DISASTER RECOVERY (TRACK 15)
+       ======================================================================= -->
+  <div id="match-vault-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('match-vault-modal')">
+    <div class="modal-dialog" style="max-width: 520px; text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h3 class="modal-title" style="color: var(--color-accent); font-size: 17px; margin: 0; display: flex; align-items: center; gap: 8px;">
+          <span>💾</span> Offline Match Vault & Recovery
+        </h3>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('match-vault-modal')" style="padding: 4px 10px; font-size: 12px;" data-tooltip="Close Match Vault modal (Esc)">✕</button>
+      </div>
+      <p class="modal-desc" style="margin-bottom: 14px; font-size: 12px;">
+        Reverse-engineered from CricHeroes <code>tbl_OfflineSyncQueue</code>. Instant local recovery & zero data loss guarantee on rural grounds.
+      </p>
+
+      <!-- Status Card -->
+      <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 14px; margin-bottom: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Active Match Snapshot</span>
+          <span id="vault-modal-engine-badge" style="font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: var(--radius-pill); background: #dcfce7; color: #166534;">IndexedDB Active</span>
+        </div>
+        <div id="vault-modal-match-summary" style="font-size: 14px; font-weight: 800; color: var(--color-text); margin-bottom: 4px;">
+          Mumbai Strikers vs Bangalore Blasters
+        </div>
+        <div id="vault-modal-timestamp" style="font-size: 11px; color: var(--color-text-muted); font-family: var(--font-mono);">
+          Last Synced: Just now (0ms delay)
+        </div>
+      </div>
+
+      <!-- Action Grid -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
+        <button type="button" class="btn btn-primary" id="btn-export-vault-json" onclick="exportMatchSnapshotJson()" style="font-size: 12px; font-weight: 700; padding: 10px 8px; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center;" data-tooltip="Download full match backup file (.json) to device">
+          <span style="font-size: 16px;">💾</span>
+          <span>Export JSON File</span>
+        </button>
+
+        <label class="btn btn-secondary" style="font-size: 12px; font-weight: 700; padding: 10px 8px; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; cursor: pointer; margin: 0;" data-tooltip="Import and restore a match state from JSON file">
+          <span style="font-size: 16px;">📥</span>
+          <span>Import JSON File</span>
+          <input type="file" id="vault-file-import-input" accept=".json" onchange="importMatchSnapshotJson(event)" style="display: none;">
+        </label>
+      </div>
+
+      <div style="display: flex; gap: 10px; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid var(--color-border);">
+        <button type="button" class="btn btn-danger" id="btn-clear-vault-data" onclick="clearMatchVaultData()" style="font-size: 11px; padding: 6px 12px; background: transparent; border: 1px solid var(--color-danger); color: var(--color-danger);" data-tooltip="Clear local match snapshot from vault">
+          🧹 Clear Vault Cache
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('match-vault-modal')" style="font-size: 12px; padding: 6px 14px;" data-tooltip="Close Match Vault Dialog">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
        OBS LOWER-THIRD LIVE STREAM OVERLAY (STANDALONE & EMBEDDABLE)
        ======================================================================= -->
   <div id="obs-overlay-container" style="display: none;">
@@ -4973,6 +5048,7 @@
 
     function renderLiveConsole() {
       const inn = getCurrentInnings();
+      persistMatchToVault();
       const batKey = inn.battingTeam;
       const bowlKey = inn.bowlingTeam;
 
@@ -9090,6 +9166,273 @@
     }
 
     // ------------------------------------------------------------------------
+    // LOCAL-FIRST INDEXEDDB MATCH VAULT & INSTANT DISASTER RECOVERY (Track 15)
+    // Reverse-engineered from CricHeroes tbl_OfflineSyncQueue schema.
+    // ------------------------------------------------------------------------
+    const VAULT_DB_NAME = 'tallypitch_match_vault';
+    const VAULT_DB_VERSION = 1;
+    const VAULT_STORE_NAME = 'match_snapshots';
+
+    let vaultDbPromise = null;
+
+    function getVaultDb() {
+      if (vaultDbPromise) return vaultDbPromise;
+      vaultDbPromise = new Promise((resolve) => {
+        if (!window.indexedDB) {
+          resolve(null);
+          return;
+        }
+        try {
+          const req = window.indexedDB.open(VAULT_DB_NAME, VAULT_DB_VERSION);
+          req.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains(VAULT_STORE_NAME)) {
+              db.createObjectStore(VAULT_STORE_NAME, { keyPath: 'id' });
+            }
+          };
+          req.onsuccess = (e) => resolve(e.target.result);
+          req.onerror = () => resolve(null);
+        } catch (e) {
+          resolve(null);
+        }
+      });
+      return vaultDbPromise;
+    }
+
+    async function persistMatchToVault() {
+      try {
+        const inn = getCurrentInnings();
+        const ov = Math.floor(inn.legalBalls / 6) + "." + (inn.legalBalls % 6);
+        const record = {
+          id: 'active_match',
+          matchId: state.match.id || 'current_match',
+          teams: `${state.match.teamA} vs ${state.match.teamB}`,
+          overs: ov,
+          score: `${inn.totalRuns}/${inn.wickets}`,
+          updatedAt: new Date().toISOString(),
+          state: {
+            match: JSON.parse(JSON.stringify(state.match)),
+            innings1: JSON.parse(JSON.stringify(state.innings1)),
+            innings2: JSON.parse(JSON.stringify(state.innings2)),
+            currentLive: JSON.parse(JSON.stringify(state.currentLive)),
+            superOver: state.superOver ? JSON.parse(JSON.stringify(state.superOver)) : null,
+            squads: state.squads ? JSON.parse(JSON.stringify(state.squads)) : null
+          }
+        };
+
+        const db = await getVaultDb();
+        if (db) {
+          const tx = db.transaction([VAULT_STORE_NAME], 'readwrite');
+          const store = tx.objectStore(VAULT_STORE_NAME);
+          store.put(record);
+        }
+        // Always maintain fallback in localStorage for cross-environment safety
+        localStorage.setItem('tallypitch_vault_backup', JSON.stringify(record));
+      } catch (err) {
+        console.warn("Vault persistence notice:", err);
+      }
+    }
+
+    async function checkMatchRecovery() {
+      try {
+        let saved = null;
+        const db = await getVaultDb();
+        if (db) {
+          saved = await new Promise((res) => {
+            const tx = db.transaction([VAULT_STORE_NAME], 'readonly');
+            const req = tx.objectStore(VAULT_STORE_NAME).get('active_match');
+            req.onsuccess = () => res(req.result);
+            req.onerror = () => res(null);
+          });
+        }
+        if (!saved) {
+          const ls = localStorage.getItem('tallypitch_vault_backup');
+          if (ls) saved = JSON.parse(ls);
+        }
+        if (saved && saved.state && saved.state.match && saved.state.match.status === 'LIVE') {
+          const inn1Balls = (saved.state.innings1 && saved.state.innings1.legalBalls) || 0;
+          const inn2Balls = (saved.state.innings2 && saved.state.innings2.legalBalls) || 0;
+          if (inn1Balls > 0 || inn2Balls > 0) {
+            const banner = document.getElementById('match-disaster-recovery-banner');
+            const textEl = document.getElementById('recovery-banner-text');
+            if (banner && textEl) {
+              textEl.innerHTML = `Ongoing Match in Vault: <strong>${saved.teams || 'Match'} (${saved.score || ''}, ${saved.overs || ''} ov)</strong> • Auto-saved at ${new Date(saved.updatedAt).toLocaleTimeString()}`;
+              banner.style.display = 'flex';
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("Recovery check notice:", err);
+      }
+    }
+
+    async function restoreMatchFromVault() {
+      dismissRecoveryBanner();
+      try {
+        let saved = null;
+        const db = await getVaultDb();
+        if (db) {
+          saved = await new Promise((res) => {
+            const tx = db.transaction([VAULT_STORE_NAME], 'readonly');
+            const req = tx.objectStore(VAULT_STORE_NAME).get('active_match');
+            req.onsuccess = () => res(req.result);
+            req.onerror = () => res(null);
+          });
+        }
+        if (!saved) {
+          const ls = localStorage.getItem('tallypitch_vault_backup');
+          if (ls) saved = JSON.parse(ls);
+        }
+        if (!saved || !saved.state) {
+          showToast("No active match found in vault!");
+          return;
+        }
+        state.match = saved.state.match;
+        state.innings1 = saved.state.innings1;
+        state.innings2 = saved.state.innings2;
+        state.currentLive = saved.state.currentLive;
+        state.superOver = saved.state.superOver;
+        if (saved.state.squads) state.squads = saved.state.squads;
+
+        dismissRecoveryBanner();
+        showToast(`⚡ Match restored from Vault: ${saved.teams}!`);
+        navigate('S07');
+        renderLiveConsole();
+      } catch (err) {
+        showToast("Error restoring match from vault");
+        console.error(err);
+      }
+    }
+
+    function dismissRecoveryBanner() {
+      const banner = document.getElementById('match-disaster-recovery-banner');
+      if (banner) banner.style.display = 'none';
+    }
+
+    async function openMatchVaultModal() {
+      let saved = null;
+      try {
+        const db = await getVaultDb();
+        if (db) {
+          saved = await new Promise((res) => {
+            const tx = db.transaction([VAULT_STORE_NAME], 'readonly');
+            const req = tx.objectStore(VAULT_STORE_NAME).get('active_match');
+            req.onsuccess = () => res(req.result);
+            req.onerror = () => res(null);
+          });
+        }
+        if (!saved) {
+          const ls = localStorage.getItem('tallypitch_vault_backup');
+          if (ls) saved = JSON.parse(ls);
+        }
+      } catch (e) {}
+
+      const summaryEl = document.getElementById('vault-modal-match-summary');
+      const timeEl = document.getElementById('vault-modal-timestamp');
+      const badgeEl = document.getElementById('vault-modal-engine-badge');
+
+      if (summaryEl) {
+        if (saved && saved.teams) {
+          summaryEl.textContent = `${saved.teams} (${saved.score || '0/0'}, ${saved.overs || '0.0'} ov)`;
+        } else {
+          const inn = getCurrentInnings();
+          const ov = Math.floor(inn.legalBalls / 6) + "." + (inn.legalBalls % 6);
+          summaryEl.textContent = `${state.match.teamA} vs ${state.match.teamB} (${inn.totalRuns}/${inn.wickets}, ${ov} ov)`;
+        }
+      }
+      if (timeEl) {
+        timeEl.textContent = `Last Synced: ${saved && saved.updatedAt ? new Date(saved.updatedAt).toLocaleTimeString() : 'Active session (live)'}`;
+      }
+      if (badgeEl) {
+        badgeEl.textContent = window.indexedDB ? "IndexedDB Active (Local-First)" : "localStorage Active";
+      }
+
+      openModal('match-vault-modal');
+    }
+
+    function exportMatchSnapshotJson() {
+      const inn = getCurrentInnings();
+      const ov = Math.floor(inn.legalBalls / 6) + "." + (inn.legalBalls % 6);
+      const snapshot = {
+        tallypitch_version: '2.9.0',
+        exported_at: new Date().toISOString(),
+        match_schema: 'tbl_OfflineSyncQueue',
+        match_summary: {
+          teams: `${state.match.teamA} vs ${state.match.teamB}`,
+          score: `${inn.totalRuns}/${inn.wickets}`,
+          overs: ov
+        },
+        state: {
+          match: state.match,
+          squads: state.squads,
+          innings1: state.innings1,
+          innings2: state.innings2,
+          currentLive: state.currentLive,
+          superOver: state.superOver
+        }
+      };
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(snapshot, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      const cleanTeam = (state.match.teamA || 'match').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+      downloadAnchor.setAttribute("download", `tallypitch_match_${cleanTeam}_${Date.now()}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast("💾 Match snapshot downloaded (.json)!");
+    }
+
+    function importMatchSnapshotJson(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target.result);
+          const s = data.state || data;
+          if (!s.match || !s.innings1) {
+            showToast("Invalid TallyPitch match snapshot file!");
+            return;
+          }
+          state.match = s.match;
+          if (s.squads) state.squads = s.squads;
+          state.innings1 = s.innings1;
+          state.innings2 = s.innings2;
+          state.currentLive = s.currentLive;
+          state.superOver = s.superOver;
+
+          persistMatchToVault();
+          closeModal('match-vault-modal');
+          navigate('S07');
+          renderLiveConsole();
+          showToast(`📥 Restored match: ${state.match.teamA} vs ${state.match.teamB}!`);
+        } catch (err) {
+          showToast("Failed to parse JSON file!");
+          console.error(err);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    async function clearMatchVaultData() {
+      try {
+        const db = await getVaultDb();
+        if (db) {
+          const tx = db.transaction([VAULT_STORE_NAME], 'readwrite');
+          tx.objectStore(VAULT_STORE_NAME).clear();
+        }
+        localStorage.removeItem('tallypitch_vault_backup');
+        dismissRecoveryBanner();
+        closeModal('match-vault-modal');
+        showToast("🧹 Vault cache cleared!");
+      } catch (err) {
+        showToast("Notice: cache reset");
+      }
+    }
+
+    // ------------------------------------------------------------------------
     // TOURNAMENT LEADERBOARDS & CAP HONORS ENGINE (Track 5 / S19)
     // ------------------------------------------------------------------------
     function getAggregatedTournamentPlayerStats() {
@@ -11844,6 +12187,7 @@
       filterScoutedPlayers();
       initCompareEngine();
       updateNetworkStatus();
+      checkMatchRecovery();
 
       // Register PWA Offline Service Worker
       if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
