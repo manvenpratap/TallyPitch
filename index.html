@@ -2558,6 +2558,113 @@
             </thead>
             <tbody id="tournament-standings-tbody"></tbody>
           </table>
+
+          <!-- Track 14: Dynamic Tournament NRR Qualification Scenario Calculator (Un-paywalled CricHeroes PRO) -->
+          <div id="nrr-calculator-card" style="margin-top: 20px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 18px; box-shadow: 0 4px 14px rgba(0,0,0,0.03);" data-tooltip="Simulate exact victory margins and chase overs needed to qualify on ICC Net Run Rate">
+            <!-- Header -->
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 20px;">⚡</span>
+                <div>
+                  <h4 style="font-size: 15px; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 6px;">
+                    NRR Qualification Scenario Calculator
+                    <span style="font-size: 10px; background: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: var(--radius-pill); font-weight: 700;">PRO UN-PAYWALLED</span>
+                  </h4>
+                  <p style="font-size: 11px; color: var(--color-text-muted); margin: 2px 0 0;">Reverse-engineered from CricHeroes TournamentScenarioActivityKt. Simulate exact balls/runs needed to qualify or surpass rivals.</p>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <label style="font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: var(--color-text);" data-tooltip="Simultaneously adjust rival team's NRR for a direct head-to-head match">
+                  <input type="checkbox" id="nrr-direct-clash-toggle" checked onchange="calculateNrrScenarios()" style="accent-color: var(--color-accent); cursor: pointer;">
+                  Direct Head-to-Head Clash
+                </label>
+                <button type="button" class="btn btn-secondary" id="btn-apply-nrr-setup" onclick="applyNrrScenarioToMatchSetup()" style="font-size: 11px; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Pre-fill S03 Match Setup with this simulated matchup">
+                  ⚡ Set Up This Match
+                </button>
+              </div>
+            </div>
+
+            <!-- Controls Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 14px;">
+              <div>
+                <label style="display: block; font-size: 11px; font-weight: 700; color: var(--color-text-muted); margin-bottom: 4px;">Subject Team (To Qualify)</label>
+                <select id="nrr-team-select" onchange="calculateNrrScenarios()" class="form-input" style="width: 100%; font-size: 12px; font-weight: 700; padding: 6px 8px; border-radius: var(--radius-md); border: 1px solid var(--color-border); background: var(--color-bg);" data-tooltip="Select team attempting to qualify or overtake rival"></select>
+              </div>
+              <div>
+                <label style="display: block; font-size: 11px; font-weight: 700; color: var(--color-text-muted); margin-bottom: 4px;">Target Rival (To Surpass)</label>
+                <select id="nrr-rival-select" onchange="calculateNrrScenarios()" class="form-input" style="width: 100%; font-size: 12px; font-weight: 700; padding: 6px 8px; border-radius: var(--radius-md); border: 1px solid var(--color-border); background: var(--color-bg);" data-tooltip="Select benchmark rival team to overtake"></select>
+              </div>
+              <div>
+                <label style="display: block; font-size: 11px; font-weight: 700; color: var(--color-text-muted); margin-bottom: 4px;">Match Overs</label>
+                <input type="number" id="nrr-match-overs-input" value="20" min="5" max="50" oninput="calculateNrrScenarios()" class="form-input" style="width: 100%; font-size: 12px; font-weight: 700; padding: 6px 8px; border-radius: var(--radius-md); border: 1px solid var(--color-border); background: var(--color-bg);" data-tooltip="Total match overs per side (default 20)">
+              </div>
+              <div>
+                <label style="display: block; font-size: 11px; font-weight: 700; color: var(--color-text-muted); margin-bottom: 4px;">Projected 1st Innings Runs</label>
+                <input type="number" id="nrr-projected-runs-input" value="160" min="30" max="350" oninput="calculateNrrScenarios()" class="form-input" style="width: 100%; font-size: 12px; font-weight: 700; padding: 6px 8px; border-radius: var(--radius-md); border: 1px solid var(--color-border); background: var(--color-bg);" data-tooltip="Projected 1st innings total runs scored">
+              </div>
+            </div>
+
+            <!-- Quick Presets -->
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+              <span style="font-size: 11px; font-weight: 700; color: var(--color-text-muted);">Quick Presets:</span>
+              <button type="button" class="btn btn-secondary" id="btn-nrr-preset-120" onclick="setNrrPreset(120, 20)" style="font-size: 11px; padding: 2px 8px;" data-tooltip="Simulate low-scoring match: 120 runs in 20 overs">120 Low-scoring</button>
+              <button type="button" class="btn btn-secondary" id="btn-nrr-preset-160" onclick="setNrrPreset(160, 20)" style="font-size: 11px; padding: 2px 8px;" data-tooltip="Simulate par score match: 160 runs in 20 overs">160 Par Score</button>
+              <button type="button" class="btn btn-secondary" id="btn-nrr-preset-200" onclick="setNrrPreset(200, 20)" style="font-size: 11px; padding: 2px 8px;" data-tooltip="Simulate high-scoring match: 200 runs in 20 overs">200 High Blast</button>
+            </div>
+
+            <!-- Scenario Telemetry Cards Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 14px;">
+              <!-- Defending Card -->
+              <div id="nrr-defend-card" style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;" data-tooltip="Defending target scenario metrics">
+                <div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                    <span style="font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;">🛡️ DEFENDING (Bat 1st)</span>
+                    <span id="nrr-defend-status-pill" style="font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: var(--radius-pill); background: #dcfce7; color: #166534;" data-tooltip="Qualification viability status">QUALIFIES [Q]</span>
+                  </div>
+                  <div id="nrr-defend-target-text" style="font-size: 15px; font-weight: 800; color: var(--color-text); margin-bottom: 4px;">
+                    Restrict to &le; 118 runs
+                  </div>
+                  <div id="nrr-defend-subtext" style="font-size: 11px; color: var(--color-text-muted); line-height: 1.4;">
+                    If scoring 160, must win by at least 42 runs to surpass rival NRR.
+                  </div>
+                </div>
+                <div style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--color-border); font-size: 11px; display: flex; justify-content: space-between; font-family: var(--font-mono);">
+                  <span>Proj NRR: <strong id="nrr-defend-proj-nrr" style="color: var(--color-accent);">+0.850</strong></span>
+                  <span>Rival NRR: <strong id="nrr-defend-rival-nrr">+0.420</strong></span>
+                </div>
+              </div>
+
+              <!-- Chasing Card -->
+              <div id="nrr-chase-card" style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 14px; display: flex; flex-direction: column; justify-content: space-between;" data-tooltip="Chasing target scenario metrics">
+                <div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                    <span style="font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;">🚀 CHASING (Bowl 1st)</span>
+                    <span id="nrr-chase-status-pill" style="font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: var(--radius-pill); background: #dcfce7; color: #166534;" data-tooltip="Qualification viability status">QUALIFIES [Q]</span>
+                  </div>
+                  <div id="nrr-chase-target-text" style="font-size: 15px; font-weight: 800; color: var(--color-text); margin-bottom: 4px;">
+                    Chase 161 in &le; 15.2 overs
+                  </div>
+                  <div id="nrr-chase-subtext" style="font-size: 11px; color: var(--color-text-muted); line-height: 1.4;">
+                    Chase target in 92 balls or fewer (Required Run Rate: 10.50 RPO).
+                  </div>
+                </div>
+                <div style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--color-border); font-size: 11px; display: flex; justify-content: space-between; font-family: var(--font-mono);">
+                  <span>Proj NRR: <strong id="nrr-chase-proj-nrr" style="color: var(--color-accent);">+0.865</strong></span>
+                  <span>Rival NRR: <strong id="nrr-chase-rival-nrr">+0.420</strong></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Comparison Telemetry Footer -->
+            <div id="nrr-comparison-meter" style="background: rgba(0,0,0,0.02); border-radius: var(--radius-md); padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 11px;" data-tooltip="Current tournament NRR deficit and needed swing">
+              <div id="nrr-current-gap-info" style="font-family: var(--font-mono);">
+                Current NRR Gap: <strong id="nrr-gap-val">-1.230</strong> • Required Net Swing: <strong id="nrr-swing-needed">+1.231</strong>
+              </div>
+              <div style="color: var(--color-text-muted); font-size: 10px;">
+                Based on official ICC Net Run Rate rules (Standard 6-ball overs)
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- S19: Tournament Leaderboard & Cap Honors Engine -->
@@ -8487,9 +8594,9 @@
           groupA: ["Mumbai Strikers", "Pune Warriors", "Ahmedabad Lions"],
           groupB: ["Bangalore Blasters", "Chennai Challengers", "Delhi Dynamos"],
           standings: [
-            { pos: 1, team: "Mumbai Strikers", p: 2, w: 2, l: 0, t: 0, nr: 0, pts: 4, nrr: "+1.650" },
-            { pos: 2, team: "Pune Warriors", p: 2, w: 1, l: 1, t: 0, nr: 0, pts: 2, nrr: "+0.420" },
-            { pos: 3, team: "Ahmedabad Lions", p: 2, w: 0, l: 2, t: 0, nr: 0, pts: 0, nrr: "-2.070" }
+            { pos: 1, team: "Mumbai Strikers", p: 2, w: 2, l: 0, t: 0, nr: 0, pts: 4, nrr: "+1.650", runsFor: 346, oversFor: "40.0", runsAgainst: 280, oversAgainst: "40.0" },
+            { pos: 2, team: "Pune Warriors", p: 2, w: 1, l: 1, t: 0, nr: 0, pts: 2, nrr: "+0.420", runsFor: 312, oversFor: "40.0", runsAgainst: 295, oversAgainst: "40.0" },
+            { pos: 3, team: "Ahmedabad Lions", p: 2, w: 0, l: 2, t: 0, nr: 0, pts: 0, nrr: "-2.070", runsFor: 252, oversFor: "40.0", runsAgainst: 335, oversAgainst: "40.0" }
           ],
           fixtures: [
             { id: "f1", match: "Mumbai Strikers vs Pune Warriors", date: "Oct 15, 09:30 AM", ground: "Oval Ground, Mumbai", status: "Completed" },
@@ -8612,6 +8719,7 @@
           </tr>
         `;
       });
+      initNrrCalculator();
     }
 
     function broadcastTournamentStandingsStream(tournId = 1045) {
@@ -8724,6 +8832,261 @@
       broadcastTournamentStandingsStream(1045);
       commitMatchPlayerStatsToTournament();
       renderTournamentLeaderboards();
+    }
+
+    // ------------------------------------------------------------------------
+    // DYNAMIC TOURNAMENT NRR QUALIFICATION SCENARIO CALCULATOR (Track 14 / S18)
+    // ------------------------------------------------------------------------
+    function initNrrCalculator() {
+      const t = tournamentState.tournaments[0];
+      if (!t || !Array.isArray(t.standings)) return;
+
+      const teamSel = document.getElementById('nrr-team-select');
+      const rivalSel = document.getElementById('nrr-rival-select');
+      if (!teamSel || !rivalSel) return;
+
+      const prevTeam = teamSel.value;
+      const prevRival = rivalSel.value;
+
+      teamSel.innerHTML = '';
+      rivalSel.innerHTML = '';
+
+      t.standings.forEach(s => {
+        teamSel.innerHTML += `<option value="${s.team}">${s.team} (${s.nrr || '0.000'} NRR, ${s.pts} pts)</option>`;
+        rivalSel.innerHTML += `<option value="${s.team}">${s.team} (${s.nrr || '0.000'} NRR, ${s.pts} pts)</option>`;
+      });
+
+      if (t.standings.length >= 2) {
+        teamSel.value = prevTeam && t.standings.some(s => s.team === prevTeam)
+          ? prevTeam
+          : (t.standings[1] ? t.standings[1].team : t.standings[0].team);
+        rivalSel.value = prevRival && t.standings.some(s => s.team === prevRival)
+          ? prevRival
+          : t.standings[0].team;
+      }
+
+      calculateNrrScenarios();
+    }
+
+    function setNrrPreset(runs, overs) {
+      const runsInput = document.getElementById('nrr-projected-runs-input');
+      const oversInput = document.getElementById('nrr-match-overs-input');
+      if (runsInput) runsInput.value = runs;
+      if (oversInput) oversInput.value = overs;
+      calculateNrrScenarios();
+    }
+
+    function oversToDecimal(ov) {
+      if (typeof ov === 'number') {
+        const whole = Math.floor(ov);
+        const balls = Math.round((ov - whole) * 10);
+        return whole + (balls / 6);
+      }
+      const parts = String(ov).split('.');
+      const whole = parseInt(parts[0], 10) || 0;
+      const balls = parseInt(parts[1] || '0', 10);
+      return whole + (balls / 6);
+    }
+
+    function getTeamNrrTelemetry(standing) {
+      const p = standing.p || 2;
+      const oversFor = oversToDecimal(standing.oversFor || (p * 20));
+      const oversAgainst = oversToDecimal(standing.oversAgainst || (p * 20));
+      const nrrVal = parseFloat(standing.nrr) || 0;
+
+      let runsFor = standing.runsFor;
+      let runsAgainst = standing.runsAgainst;
+
+      if (runsFor === undefined || runsAgainst === undefined) {
+        const baseRuns = Math.round(p * 150);
+        const diffRuns = Math.round(nrrVal * 20 * p);
+        runsFor = baseRuns + Math.round(diffRuns / 2);
+        runsAgainst = baseRuns - Math.round(diffRuns / 2);
+      }
+      return { runsFor, oversFor, runsAgainst, oversAgainst };
+    }
+
+    function calculateNrrScenarios() {
+      const t = tournamentState.tournaments[0];
+      if (!t || !Array.isArray(t.standings)) return;
+
+      const teamSel = document.getElementById('nrr-team-select');
+      const rivalSel = document.getElementById('nrr-rival-select');
+      const oversInput = document.getElementById('nrr-match-overs-input');
+      const runsInput = document.getElementById('nrr-projected-runs-input');
+      const directClashToggle = document.getElementById('nrr-direct-clash-toggle');
+
+      if (!teamSel || !rivalSel || !oversInput || !runsInput) return;
+
+      const subTeamName = teamSel.value;
+      const rivalTeamName = rivalSel.value;
+      const matchOvers = parseInt(oversInput.value, 10) || 20;
+      const projectedRuns = parseInt(runsInput.value, 10) || 160;
+      const isDirectClash = directClashToggle ? directClashToggle.checked : true;
+
+      const subStanding = t.standings.find(s => s.team === subTeamName);
+      const rivalStanding = t.standings.find(s => s.team === rivalTeamName);
+
+      if (!subStanding || !rivalStanding) return;
+
+      const subStats = getTeamNrrTelemetry(subStanding);
+      const rivalStats = getTeamNrrTelemetry(rivalStanding);
+
+      const currentSubNrr = parseFloat(subStanding.nrr) || 0;
+      const currentRivalNrr = parseFloat(rivalStanding.nrr) || 0;
+      const nrrGap = currentSubNrr - currentRivalNrr;
+
+      // Update Gap Meter
+      const gapValEl = document.getElementById('nrr-gap-val');
+      const swingNeededEl = document.getElementById('nrr-swing-needed');
+      if (gapValEl && swingNeededEl) {
+        gapValEl.textContent = (nrrGap >= 0 ? '+' : '') + nrrGap.toFixed(3);
+        gapValEl.style.color = nrrGap >= 0 ? 'var(--color-success)' : 'var(--color-danger)';
+        const needed = nrrGap < 0 ? Math.abs(nrrGap) + 0.001 : 0;
+        swingNeededEl.textContent = needed > 0 ? `+${needed.toFixed(3)} to surpass` : 'Leading (Maintain margin)';
+      }
+
+      // 1. DEFENDING SCENARIO (Subject Bats 1st, scores projectedRuns in matchOvers)
+      let maxAllowedRuns = -1;
+      let defendProjSubNrr = 0;
+      let defendProjRivalNrr = currentRivalNrr;
+      const newSubRfDefend = subStats.runsFor + projectedRuns;
+      const newSubOfDefend = subStats.oversFor + matchOvers;
+
+      for (let r = projectedRuns - 1; r >= 0; r--) {
+        const newSubRa = subStats.runsAgainst + r;
+        const newSubOa = subStats.oversAgainst + matchOvers;
+        const testSubNrr = (newSubRfDefend / newSubOfDefend) - (newSubRa / newSubOa);
+
+        let testRivalNrr = currentRivalNrr;
+        if (isDirectClash) {
+          const newRivalRf = rivalStats.runsFor + r;
+          const newRivalOf = rivalStats.oversFor + matchOvers;
+          const newRivalRa = rivalStats.runsAgainst + projectedRuns;
+          const newRivalOa = rivalStats.oversAgainst + matchOvers;
+          testRivalNrr = (newRivalRf / newRivalOf) - (newRivalRa / newRivalOa);
+        }
+
+        if (testSubNrr > testRivalNrr) {
+          maxAllowedRuns = r;
+          defendProjSubNrr = testSubNrr;
+          defendProjRivalNrr = testRivalNrr;
+          break;
+        }
+      }
+
+      const defendTargetText = document.getElementById('nrr-defend-target-text');
+      const defendSubtext = document.getElementById('nrr-defend-subtext');
+      const defendStatusPill = document.getElementById('nrr-defend-status-pill');
+      const defendProjNrrEl = document.getElementById('nrr-defend-proj-nrr');
+      const defendRivalNrrEl = document.getElementById('nrr-defend-rival-nrr');
+
+      if (maxAllowedRuns >= 0) {
+        const minMargin = projectedRuns - maxAllowedRuns;
+        if (defendTargetText) defendTargetText.innerHTML = `Restrict ${rivalTeamName} to &le; <strong>${maxAllowedRuns} runs</strong>`;
+        if (defendSubtext) defendSubtext.textContent = `Score ${projectedRuns} in ${matchOvers} ov, win by at least ${minMargin} run(s) to surpass rival NRR.`;
+        if (defendStatusPill) {
+          defendStatusPill.textContent = "QUALIFIES [Q] ✅";
+          defendStatusPill.style.background = "#dcfce7";
+          defendStatusPill.style.color = "#166534";
+        }
+        if (defendProjNrrEl) defendProjNrrEl.textContent = (defendProjSubNrr >= 0 ? '+' : '') + defendProjSubNrr.toFixed(3);
+        if (defendRivalNrrEl) defendRivalNrrEl.textContent = (defendProjRivalNrr >= 0 ? '+' : '') + defendProjRivalNrr.toFixed(3);
+      } else {
+        if (defendTargetText) defendTargetText.textContent = "Out of Reach in 1 Match";
+        if (defendSubtext) defendSubtext.textContent = `Even restricting to 0 runs will not bridge the current NRR deficit of ${Math.abs(nrrGap).toFixed(3)}.`;
+        if (defendStatusPill) {
+          defendStatusPill.textContent = "OUT OF REACH ❌";
+          defendStatusPill.style.background = "#fee2e2";
+          defendStatusPill.style.color = "#991b1b";
+        }
+        if (defendProjNrrEl) defendProjNrrEl.textContent = "--";
+        if (defendRivalNrrEl) defendRivalNrrEl.textContent = (currentRivalNrr >= 0 ? '+' : '') + currentRivalNrr.toFixed(3);
+      }
+
+      // 2. CHASING SCENARIO (Opponent scores projectedRuns in matchOvers, Subject needs projectedRuns + 1)
+      const targetChaseRuns = projectedRuns + 1;
+      let maxChaseBalls = -1;
+      let chaseProjSubNrr = 0;
+      let chaseProjRivalNrr = currentRivalNrr;
+
+      const newSubRaChase = subStats.runsAgainst + projectedRuns;
+      const newSubOaChase = subStats.oversAgainst + matchOvers;
+      const newSubRfChase = subStats.runsFor + targetChaseRuns;
+
+      for (let b = matchOvers * 6; b >= 1; b--) {
+        const chaseOversDec = b / 6;
+        const newSubOfChase = subStats.oversFor + chaseOversDec;
+        const testSubNrr = (newSubRfChase / newSubOfChase) - (newSubRaChase / newSubOaChase);
+
+        let testRivalNrr = currentRivalNrr;
+        if (isDirectClash) {
+          const newRivalRf = rivalStats.runsFor + projectedRuns;
+          const newRivalOf = rivalStats.oversFor + matchOvers;
+          const newRivalRa = rivalStats.runsAgainst + targetChaseRuns;
+          const newRivalOa = rivalStats.oversAgainst + chaseOversDec;
+          testRivalNrr = (newRivalRf / newRivalOf) - (newRivalRa / newRivalOa);
+        }
+
+        if (testSubNrr > testRivalNrr) {
+          maxChaseBalls = b;
+          chaseProjSubNrr = testSubNrr;
+          chaseProjRivalNrr = testRivalNrr;
+          break;
+        }
+      }
+
+      const chaseTargetText = document.getElementById('nrr-chase-target-text');
+      const chaseSubtext = document.getElementById('nrr-chase-subtext');
+      const chaseStatusPill = document.getElementById('nrr-chase-status-pill');
+      const chaseProjNrrEl = document.getElementById('nrr-chase-proj-nrr');
+      const chaseRivalNrrEl = document.getElementById('nrr-chase-rival-nrr');
+
+      if (maxChaseBalls >= 1) {
+        const wholeOvers = Math.floor(maxChaseBalls / 6);
+        const remBalls = maxChaseBalls % 6;
+        const oversFormatted = `${wholeOvers}.${remBalls}`;
+        const reqRunRate = (targetChaseRuns / (maxChaseBalls / 6)).toFixed(2);
+
+        if (chaseTargetText) chaseTargetText.innerHTML = `Chase ${targetChaseRuns} in &le; <strong>${oversFormatted} overs</strong>`;
+        if (chaseSubtext) chaseSubtext.textContent = `Reach ${targetChaseRuns} within ${maxChaseBalls} balls (Required Run Rate: ${reqRunRate} RPO).`;
+        if (chaseStatusPill) {
+          chaseStatusPill.textContent = "QUALIFIES [Q] ✅";
+          chaseStatusPill.style.background = "#dcfce7";
+          chaseStatusPill.style.color = "#166534";
+        }
+        if (chaseProjNrrEl) chaseProjNrrEl.textContent = (chaseProjSubNrr >= 0 ? '+' : '') + chaseProjSubNrr.toFixed(3);
+        if (chaseRivalNrrEl) chaseRivalNrrEl.textContent = (chaseProjRivalNrr >= 0 ? '+' : '') + chaseProjRivalNrr.toFixed(3);
+      } else {
+        if (chaseTargetText) chaseTargetText.textContent = "Out of Reach in 1 Match";
+        if (chaseSubtext) chaseSubtext.textContent = `Even chasing ${targetChaseRuns} in 1 ball will not overcome the current NRR gap.`;
+        if (chaseStatusPill) {
+          chaseStatusPill.textContent = "OUT OF REACH ❌";
+          chaseStatusPill.style.background = "#fee2e2";
+          chaseStatusPill.style.color = "#991b1b";
+        }
+        if (chaseProjNrrEl) chaseProjNrrEl.textContent = "--";
+        if (chaseRivalNrrEl) chaseRivalNrrEl.textContent = (currentRivalNrr >= 0 ? '+' : '') + currentRivalNrr.toFixed(3);
+      }
+    }
+
+    function applyNrrScenarioToMatchSetup() {
+      const teamSel = document.getElementById('nrr-team-select');
+      const rivalSel = document.getElementById('nrr-rival-select');
+      const oversInput = document.getElementById('nrr-match-overs-input');
+
+      if (!teamSel || !rivalSel) return;
+
+      const teamAInput = document.getElementById('team-a-name');
+      const teamBInput = document.getElementById('team-b-name');
+      const matchOversSelect = document.getElementById('match-overs');
+
+      if (teamAInput) teamAInput.value = teamSel.value;
+      if (teamBInput) teamBInput.value = rivalSel.value;
+      if (matchOversSelect && oversInput) matchOversSelect.value = oversInput.value;
+
+      navigate('S03');
+      showToast(`⚡ Match Setup pre-filled with ${teamSel.value} vs ${rivalSel.value}!`);
     }
 
     // ------------------------------------------------------------------------
