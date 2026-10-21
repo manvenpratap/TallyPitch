@@ -103,6 +103,10 @@
     "mtime": 1792379056.682003,
     "hash": "b8d32cb66fba15eb95407a422bff3045"
   },
+  "/Volumes/Study/Projects/TallyPitch/tests/test_scorebook_pdf_engine.py": {
+    "mtime": 1792540838.4063375,
+    "hash": "e868f031df6bd77c4149fe188f748a73"
+  },
   "/Volumes/Study/Projects/TallyPitch/server/db.js": {
     "mtime": 1791945776.0100553,
     "hash": "0c34dd97606c911c8b7ec4207a60621c"
@@ -160,16 +164,16 @@
     "hash": "6ea526fce908cb1052cf8d9d236e3cb1"
   },
   "/Volumes/Study/Projects/TallyPitch/PROJECT_CONTEXT.md": {
-    "mtime": 1792539899.6108356,
-    "hash": "7016e8712e0fdd105e76268280241fe4"
+    "mtime": 1792540990.063552,
+    "hash": "fbbf221daa632911c250139cace90b3e"
   },
   "/Volumes/Study/Projects/TallyPitch/PRODUCT.md": {
     "mtime": 1792173155.4435492,
     "hash": "312cad1cc5240f9d7659553c3382bb4b"
   },
   "/Volumes/Study/Projects/TallyPitch/index.html": {
-    "mtime": 1792539634.35881,
-    "hash": "5b9e9cc591aff80d495b372068ab56d7"
+    "mtime": 1792540809.3624446,
+    "hash": "f185ac6caf1df3c6103ad32028e06b5d"
   },
   "/Volumes/Study/Projects/TallyPitch/requirements.txt": {
     "mtime": 1792308119.261897,
@@ -200,8 +204,8 @@
     "hash": "d65a2462819436574644751e386e3c09"
   },
   "/Volumes/Study/Projects/TallyPitch/tests/README.md": {
-    "mtime": 1792539850.6908875,
-    "hash": "02a4efbbbcf8654e3d51d8feed91bdc1"
+    "mtime": 1792540952.6776497,
+    "hash": "61b20ef35b49b5d000d2e6e0ab3688d8"
   },
   "/Volumes/Study/Projects/TallyPitch/wiki/Scoring-Engine-and-Rollback.md": {
     "mtime": 1792175628.0438058,
@@ -308,43 +312,43 @@
     "hash": "aa01e746fa8f21a65667f9748b552721"
   },
   "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-mdpi/ic_launcher.png": {
-    "mtime": 1792539692.8208997,
+    "mtime": 1792540855.4371166,
     "hash": "72b5eecec9b7f2a8a139f9df8d57b5f9"
   },
   "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png": {
-    "mtime": 1792539692.821193,
+    "mtime": 1792540855.4376712,
     "hash": "72b5eecec9b7f2a8a139f9df8d57b5f9"
   },
   "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-hdpi/ic_launcher.png": {
-    "mtime": 1792539692.8216212,
+    "mtime": 1792540855.4380322,
     "hash": "72b5eecec9b7f2a8a139f9df8d57b5f9"
   },
   "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png": {
-    "mtime": 1792539692.8219886,
+    "mtime": 1792540855.4382572,
     "hash": "72b5eecec9b7f2a8a139f9df8d57b5f9"
   },
   "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png": {
-    "mtime": 1792539692.8240576,
+    "mtime": 1792540855.4395492,
     "hash": "aa01e746fa8f21a65667f9748b552721"
   },
   "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png": {
-    "mtime": 1792539692.82458,
+    "mtime": 1792540855.43974,
     "hash": "aa01e746fa8f21a65667f9748b552721"
   },
   "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png": {
-    "mtime": 1792539692.8234212,
+    "mtime": 1792540855.4391375,
     "hash": "aa01e746fa8f21a65667f9748b552721"
   },
   "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png": {
-    "mtime": 1792539692.823735,
+    "mtime": 1792540855.4393542,
     "hash": "aa01e746fa8f21a65667f9748b552721"
   },
   "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png": {
-    "mtime": 1792539692.8224268,
+    "mtime": 1792540855.4384677,
     "hash": "72b5eecec9b7f2a8a139f9df8d57b5f9"
   },
   "/Volumes/Study/Projects/TallyPitch/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png": {
-    "mtime": 1792539692.8228493,
+    "mtime": 1792540855.438649,
     "hash": "72b5eecec9b7f2a8a139f9df8d57b5f9"
   },
   "/Volumes/Study/Projects/TallyPitch/replica/clone-screens/S07.png": {

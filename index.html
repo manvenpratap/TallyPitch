@@ -1447,11 +1447,115 @@
       color: var(--color-text-muted);
       transition: all 150ms ease;
     }
-    .social-mode-tab.active {
-      background: var(--color-accent);
-      color: #fff;
-      border-color: var(--color-accent);
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+    /* Official ICC / BCCI Printable Match Scorebook (Track 16) */
+    .scorebook-modal-dialog {
+      background: var(--color-surface);
+      color: var(--color-text);
+      transition: all 0.2s ease;
+    }
+    .scorebook-print-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .scorebook-print-table th,
+    .scorebook-print-table td {
+      border: 1px solid #cbd5e1;
+      padding: 5px 8px;
+      text-align: left;
+      color: #0f172a;
+    }
+    .scorebook-print-table th {
+      background-color: #f1f5f9;
+      font-weight: 700;
+      color: #1e293b;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .scorebook-print-table th.num,
+    .scorebook-print-table td.num {
+      text-align: right;
+      font-family: var(--font-mono);
+    }
+    .scorebook-innings-block {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
+      }
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      body * {
+        visibility: hidden;
+      }
+      #scorebook-modal,
+      #scorebook-modal * {
+        visibility: visible;
+      }
+      #scorebook-modal {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+        display: block !important;
+        overflow: visible !important;
+        z-index: 999999 !important;
+      }
+      .scorebook-modal-dialog {
+        max-width: 100% !important;
+        width: 100% !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: #ffffff !important;
+        border-radius: 0 !important;
+      }
+      .scorebook-no-print {
+        display: none !important;
+      }
+      #scorebook-scroll-wrap {
+        padding: 0 !important;
+        background: #ffffff !important;
+        overflow: visible !important;
+      }
+      .scorebook-sheet {
+        box-shadow: none !important;
+        padding: 0 !important;
+        border: none !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        width: 100% !important;
+      }
+      .scorebook-print-table th,
+      .scorebook-print-table td {
+        border: 1px solid #334155 !important;
+        color: #000000 !important;
+        padding: 4px 6px !important;
+      }
+      .scorebook-print-table th {
+        background-color: #f1f5f9 !important;
+      }
+      .scorebook-officials-box {
+        page-break-inside: avoid !important;
+      }
     }
   </style>
 </head>
@@ -1899,6 +2003,9 @@
             <p class="card-subtitle" id="scorecard-header-sub">Mumbai Strikers vs Bangalore Blasters</p>
           </div>
           <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <button class="btn btn-secondary" id="btn-print-scorebook" onclick="openScorebookModal()" style="font-size: 13px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 6px;" data-tooltip="Generate and print official ICC / BCCI match scorebook (Print / PDF)">
+              📄 Official Scorebook
+            </button>
             <button class="btn btn-secondary" id="btn-open-social-s13" onclick="openSocialCardModal('summary')" style="font-size: 13px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 6px;" data-tooltip="Export high-resolution 1080x1080 match graphic for WhatsApp and Instagram">
               📸 Social Card (S16)
             </button>
@@ -3318,6 +3425,9 @@
       <button type="button" class="btn" id="btn-open-social-modal-result" style="width: 100%; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-weight: 700; padding: 9px 14px; display: flex; justify-content: center; align-items: center; gap: 8px;" onclick="openSocialCardModal('summary')" data-tooltip="Generate and share 1080x1080 match summary graphic">
         <span>📸</span> Share Match Graphic (S16)
       </button>
+      <button type="button" class="btn btn-secondary" id="btn-result-scorebook" style="width: 100%; margin-top: 8px; font-weight: 700; padding: 9px 14px; display: flex; justify-content: center; align-items: center; gap: 8px;" onclick="closeModal('match-result-modal'); openScorebookModal();" data-tooltip="Generate and print official ICC / BCCI scoresheet PDF">
+        <span>📄</span> Official Match Scorebook (PDF)
+      </button>
     </div>
   </div>
 
@@ -3996,6 +4106,50 @@
         <button type="button" class="btn btn-secondary" onclick="closeModal('match-vault-modal')" style="font-size: 12px; padding: 6px 14px;" data-tooltip="Close Match Vault Dialog">
           Close
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 14: OFFICIAL ICC / BCCI PRINTABLE SCOREBOOK GENERATOR (TRACK 16)
+       ======================================================================= -->
+  <div id="scorebook-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('scorebook-modal')">
+    <div class="modal-dialog scorebook-modal-dialog" style="max-width: 880px; width: 95vw; max-height: 92vh; display: flex; flex-direction: column; text-align: left; background: var(--color-surface); padding: 0; overflow: hidden; border: 1px solid var(--color-border); border-radius: var(--radius-lg);">
+      <!-- Non-printing header toolbar -->
+      <div class="scorebook-no-print" style="padding: 12px 18px; border-bottom: 1px solid var(--color-border); background: var(--color-bg); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 20px;">📄</span>
+          <div>
+            <h3 class="modal-title" style="color: var(--color-accent); font-size: 16px; margin: 0;">
+              Official Match Scorebook (ICC / BCCI Format)
+            </h3>
+            <p class="modal-desc" style="font-size: 11px; margin: 0; color: var(--color-text-muted);">
+              Reverse-engineered from CricHeroes <code>ScorecardPdfExportWorker</code> • Formatted for tournament audit & print / PDF
+            </p>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <select id="scorebook-filter-innings" class="form-select" style="font-size: 12px; padding: 4px 8px; width: auto;" onchange="renderOfficialScorebook()">
+            <option value="both" selected>Full Match (Both Innings)</option>
+            <option value="inn1">1st Innings Only</option>
+            <option value="inn2">2nd Innings Only</option>
+          </select>
+          <label style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--color-text);">
+            <input type="checkbox" id="scorebook-chk-officials" checked onchange="renderOfficialScorebook()">
+            <span>Signatures Box</span>
+          </label>
+          <button type="button" class="btn btn-primary" id="btn-trigger-scorebook-print" onclick="printOfficialScorebook()" style="font-size: 12px; font-weight: 700; padding: 6px 14px; display: inline-flex; align-items: center; gap: 6px;" data-tooltip="Print or export to PDF via browser print dialog">
+            <span>🖨️</span> Print / Save PDF
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('scorebook-modal')" style="padding: 4px 10px; font-size: 13px;" data-tooltip="Close Scorebook dialog (Esc)">✕</button>
+        </div>
+      </div>
+
+      <!-- Printable sheet preview wrapper -->
+      <div id="scorebook-scroll-wrap" style="flex: 1; overflow-y: auto; padding: 18px; background: #0f172a;">
+        <div id="scorebook-print-area">
+          <!-- Dynamically populated by renderOfficialScorebook() -->
+        </div>
       </div>
     </div>
   </div>
@@ -9430,6 +9584,314 @@
       } catch (err) {
         showToast("Notice: cache reset");
       }
+    }
+
+    // ------------------------------------------------------------------------
+    // OFFICIAL ICC / BCCI PRINTABLE SCOREBOOK GENERATOR (Track 16)
+    // Reverse-engineered from CricHeroes ScorecardPdfExportWorker
+    // ------------------------------------------------------------------------
+    function openScorebookModal() {
+      renderOfficialScorebook();
+      openModal('scorebook-modal');
+    }
+
+    function printOfficialScorebook() {
+      window.print();
+    }
+
+    function renderOfficialScorebook() {
+      const container = document.getElementById('scorebook-print-area');
+      if (!container) return;
+
+      const m = state.match || {};
+      const teamAName = m.teamA || "Mumbai Strikers";
+      const teamBName = m.teamB || "Bangalore Blasters";
+      const ground = m.ground || "Oval Maidan, Mumbai";
+      const overs = m.overs || 20;
+      const ballType = m.ballType || "Leather (White)";
+      const tournamentName = m.tournamentName || "TallyPitch Grassroots Championship 2026";
+      const matchDate = m.date || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      const matchId = m.id || "TP-2026-001";
+      
+      const filterEl = document.getElementById('scorebook-filter-innings');
+      const filter = filterEl ? filterEl.value : 'both';
+      const showOfficials = document.getElementById('scorebook-chk-officials') ? document.getElementById('scorebook-chk-officials').checked : true;
+
+      // Toss details
+      let tossText = "Toss information not recorded";
+      if (m.tossWinner && m.tossChoice) {
+        const winnerName = m.tossWinner === 'A' ? teamAName : teamBName;
+        tossText = `${winnerName} won the toss and elected to ${m.tossChoice}`;
+      }
+
+      // Result details
+      let resultText = "Match In Progress";
+      if (m.result) {
+        resultText = m.result;
+      } else if (m.status === 'completed') {
+        resultText = "Match Concluded";
+      }
+
+      // Helper to build an innings section
+      function buildInningsHtml(inn, innNum, batTeamName, bowlTeamName) {
+        if (!inn) return '';
+        const ext = inn.extras || { wides: 0, noBalls: 0, byes: 0, legByes: 0 };
+        const extTotal = (ext.wides || 0) + (ext.noBalls || 0) + (ext.byes || 0) + (ext.legByes || 0);
+        const ovStr = formatOvers(inn.legalBalls || 0);
+        const runRate = inn.legalBalls > 0 ? ((inn.totalRuns / inn.legalBalls) * 6).toFixed(2) : "0.00";
+
+        // Batting rows
+        let battingRows = '';
+        const batters = inn.batters || {};
+        const batterKeys = Object.keys(batters);
+        let hasActiveBatters = false;
+        if (batterKeys.length > 0) {
+          batterKeys.forEach(id => {
+            const b = batters[id];
+            if (b.balls > 0 || !b.isOut && (id === state.currentLive.strikerId || id === state.currentLive.nonStrikerId)) {
+              hasActiveBatters = true;
+              const sr = b.balls > 0 ? ((b.runs / b.balls) * 100).toFixed(1) : "0.0";
+              battingRows += `
+                <tr>
+                  <td><strong>${b.name}</strong> ${!b.isOut ? '*' : ''}</td>
+                  <td style="color: #475569; font-size: 8pt;">${b.dismissalText || 'not out'}</td>
+                  <td class="num"><strong>${b.runs}</strong></td>
+                  <td class="num">${b.balls}</td>
+                  <td class="num">${b.fours || 0}</td>
+                  <td class="num">${b.sixes || 0}</td>
+                  <td class="num">${sr}</td>
+                </tr>
+              `;
+            }
+          });
+        }
+        if (!hasActiveBatters) {
+          battingRows = `<tr><td colspan="7" style="text-align: center; color: #64748b; font-style: italic; padding: 10px;">Innings scheduled to commence (Yet to Bat)</td></tr>`;
+        }
+
+        // FOW string
+        let fowHtml = 'No wickets fallen yet';
+        if (inn.fow && inn.fow.length > 0) {
+          fowHtml = inn.fow.map(f => `<strong>${f.wicketNum}-${f.runs}</strong> (${f.batterName}, ${f.overs} ov)`).join(' • ');
+        }
+
+        // Bowling rows
+        let bowlingRows = '';
+        const bowlers = inn.bowlers || {};
+        const bowlerKeys = Object.keys(bowlers);
+        let hasActiveBowlers = false;
+        if (bowlerKeys.length > 0) {
+          bowlerKeys.forEach(id => {
+            const b = bowlers[id];
+            if ((b.legalBalls || 0) > 0) {
+              hasActiveBowlers = true;
+              const bOv = formatOvers(b.legalBalls);
+              const bDec = Math.floor(b.legalBalls / 6) + (b.legalBalls % 6) / 6;
+              const eco = bDec > 0 ? ((b.runsConceded || 0) / bDec).toFixed(2) : "0.00";
+              bowlingRows += `
+                <tr>
+                  <td><strong>${b.name}</strong></td>
+                  <td class="num">${bOv}</td>
+                  <td class="num">${b.maidens || 0}</td>
+                  <td class="num">${b.runsConceded || 0}</td>
+                  <td class="num"><strong>${b.wickets || 0}</strong></td>
+                  <td class="num">${eco}</td>
+                  <td class="num">${b.dots || 0}</td>
+                  <td class="num">${b.wides || 0}</td>
+                  <td class="num">${b.noBalls || 0}</td>
+                </tr>
+              `;
+            }
+          });
+        }
+        if (!hasActiveBowlers) {
+          bowlingRows = `<tr><td colspan="9" style="text-align: center; color: #64748b; font-style: italic; padding: 10px;">No overs bowled in this innings yet</td></tr>`;
+        }
+
+        return `
+          <div class="scorebook-innings-block">
+            <div style="background: #f1f5f9; padding: 6px 12px; border-bottom: 1px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+              <div style="font-weight: 800; color: #0f172a; font-size: 11pt;">
+                Innings ${innNum}: ${batTeamName}
+              </div>
+              <div style="font-weight: 800; color: #1e3a8a; font-size: 11pt; font-family: var(--font-mono);">
+                ${inn.totalRuns || 0} / ${inn.wickets || 0} (${ovStr} ov) • RR: ${runRate}
+              </div>
+            </div>
+
+            <!-- Batting Table -->
+            <table class="scorebook-print-table" style="margin-bottom: 0;">
+              <thead>
+                <tr>
+                  <th style="width: 28%;">Batter</th>
+                  <th style="width: 32%;">Dismissal</th>
+                  <th class="num" style="width: 8%;">R</th>
+                  <th class="num" style="width: 8%;">B</th>
+                  <th class="num" style="width: 8%;">4s</th>
+                  <th class="num" style="width: 8%;">6s</th>
+                  <th class="num" style="width: 8%;">SR</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${battingRows}
+              </tbody>
+              <tfoot>
+                <tr style="background: #f8fafc; font-weight: 600;">
+                  <td colspan="2">Extras: w ${ext.wides || 0}, nb ${ext.noBalls || 0}, b ${ext.byes || 0}, lb ${ext.legByes || 0}</td>
+                  <td colspan="5" class="num"><strong>${extTotal}</strong></td>
+                </tr>
+                <tr style="background: #f1f5f9; font-weight: 800;">
+                  <td colspan="2">TOTAL (${ovStr} Overs, RR: ${runRate})</td>
+                  <td colspan="5" class="num" style="font-size: 10pt;"><strong>${inn.totalRuns || 0} / ${inn.wickets || 0}</strong></td>
+                </tr>
+              </tfoot>
+            </table>
+
+            <!-- Fall of Wickets -->
+            <div style="padding: 6px 12px; background: #ffffff; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #cbd5e1; font-size: 8pt; color: #334155;">
+              <strong>Fall of Wickets:</strong> ${fowHtml}
+            </div>
+
+            <!-- Bowling Table -->
+            <table class="scorebook-print-table" style="margin-bottom: 0;">
+              <thead>
+                <tr>
+                  <th style="width: 32%;">Bowler (${bowlTeamName})</th>
+                  <th class="num" style="width: 9%;">O</th>
+                  <th class="num" style="width: 8%;">M</th>
+                  <th class="num" style="width: 9%;">R</th>
+                  <th class="num" style="width: 8%;">W</th>
+                  <th class="num" style="width: 10%;">Eco</th>
+                  <th class="num" style="width: 8%;">Dots</th>
+                  <th class="num" style="width: 8%;">Wd</th>
+                  <th class="num" style="width: 8%;">NB</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${bowlingRows}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      const inn1BatTeam = state.innings1.battingTeam === 'A' ? teamAName : teamBName;
+      const inn1BowlTeam = state.innings1.battingTeam === 'A' ? teamBName : teamAName;
+      const inn2BatTeam = state.innings2.battingTeam === 'A' ? teamAName : teamBName;
+      const inn2BowlTeam = state.innings2.battingTeam === 'A' ? teamBName : teamAName;
+
+      let inningsHtml = '';
+      if (filter === 'both' || filter === 'inn1') {
+        inningsHtml += buildInningsHtml(state.innings1, 1, inn1BatTeam, inn1BowlTeam);
+      }
+      if (filter === 'both' || filter === 'inn2') {
+        inningsHtml += buildInningsHtml(state.innings2, 2, inn2BatTeam, inn2BowlTeam);
+      }
+
+      // MVP & Honours
+      let honoursHtml = '';
+      const mvpEl = document.getElementById('mvp-player-name');
+      const mvpStatsEl = document.getElementById('mvp-player-stats');
+      if (mvpEl && mvpEl.textContent && mvpEl.textContent.trim()) {
+        honoursHtml = `
+          <div style="margin-bottom: 14px; padding: 8px 12px; border: 1px solid #f59e0b; background: #fffbeb; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <span style="font-size: 9pt; font-weight: 800; color: #b45309; text-transform: uppercase;">🏆 Player of the Match (MVP):</span>
+              <strong style="color: #0f172a; font-size: 10.5pt; margin-left: 6px;">${mvpEl.textContent}</strong>
+            </div>
+            <div style="font-size: 8.5pt; color: #78350f;">
+              ${mvpStatsEl ? mvpStatsEl.textContent : ''}
+            </div>
+          </div>
+        `;
+      }
+
+      // Officials Verification Signatures
+      let officialsHtml = '';
+      if (showOfficials) {
+        officialsHtml = `
+          <div class="scorebook-officials-box" style="margin-top: 14px; border: 1px solid #0f172a; border-radius: 4px; padding: 10px;">
+            <div style="font-size: 8.5pt; font-weight: 800; text-transform: uppercase; color: #0f172a; margin-bottom: 10px; border-bottom: 1px solid #cbd5e1; padding-bottom: 3px; display: flex; justify-content: space-between;">
+              <span>OFFICIAL MATCH SCRUTINY & VERIFICATION</span>
+              <span style="font-weight: 500; font-size: 7.5pt; color: #64748b;">MCC Laws of Cricket & BCCI Playing Conditions</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; text-align: center;">
+              <div>
+                <div style="height: 26px; border-bottom: 1px dashed #64748b; margin-bottom: 3px;"></div>
+                <div id="scorebook-sign-cap-a" style="font-size: 8pt; font-weight: 700; color: #0f172a;">${teamAName} Capt.</div>
+                <div style="font-size: 7pt; color: #64748b;">Verified Score</div>
+              </div>
+              <div>
+                <div style="height: 26px; border-bottom: 1px dashed #64748b; margin-bottom: 3px;"></div>
+                <div id="scorebook-sign-cap-b" style="font-size: 8pt; font-weight: 700; color: #0f172a;">${teamBName} Capt.</div>
+                <div style="font-size: 7pt; color: #64748b;">Verified Score</div>
+              </div>
+              <div>
+                <div style="height: 26px; border-bottom: 1px dashed #64748b; margin-bottom: 3px;"></div>
+                <div id="scorebook-sign-umpire-1" style="font-size: 8pt; font-weight: 700; color: #0f172a;">Umpire 1 (Field)</div>
+                <div style="font-size: 7pt; color: #64748b;">Rajesh Kumar (BCCI L1)</div>
+              </div>
+              <div>
+                <div style="height: 26px; border-bottom: 1px dashed #64748b; margin-bottom: 3px;"></div>
+                <div id="scorebook-sign-umpire-2" style="font-size: 8pt; font-weight: 700; color: #0f172a;">Umpire 2 (Field)</div>
+                <div style="font-size: 7pt; color: #64748b;">Sunil Sharma (BCCI L1)</div>
+              </div>
+              <div>
+                <div style="height: 26px; border-bottom: 1px dashed #64748b; margin-bottom: 3px;"></div>
+                <div id="scorebook-sign-scorer" style="font-size: 8pt; font-weight: 700; color: #0f172a;">Official Scorer</div>
+                <div style="font-size: 7pt; color: #64748b;">TallyPitch Digital Hub</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      container.innerHTML = `
+        <div class="scorebook-sheet" style="background: #ffffff; color: #0f172a; border-radius: 6px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 9pt; line-height: 1.35;">
+          <!-- Header Block -->
+          <div style="border-bottom: 2px solid #0f172a; padding-bottom: 10px; margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <div style="font-size: 8pt; font-weight: 800; letter-spacing: 1.5px; color: #1e3a8a; text-transform: uppercase;">
+                  OFFICIAL CRICKET MATCH SCORESHEET • ICC / BCCI STANDARD
+                </div>
+                <div id="scorebook-tournament-title" style="font-size: 15pt; font-weight: 900; color: #0f172a; margin-top: 2px;">
+                  ${tournamentName}
+                </div>
+                <div style="font-size: 8.5pt; color: #475569; margin-top: 2px;">
+                  <strong>Venue:</strong> ${ground} • <strong>Date:</strong> ${matchDate} • <strong>Ball:</strong> ${ballType}
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <span style="font-size: 8pt; font-weight: 800; background: #0f172a; color: #ffffff; padding: 2px 8px; border-radius: 3px; text-transform: uppercase;">
+                  T20 • ${overs} Overs per side
+                </span>
+                <div style="font-size: 8pt; color: #334155; margin-top: 3px;">
+                  <strong>Match ID:</strong> ${matchId}
+                </div>
+              </div>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 6px 10px; margin-top: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+              <div id="scorebook-toss-txt" style="font-size: 8.5pt; color: #0f172a;">
+                <strong>Toss:</strong> ${tossText}
+              </div>
+              <div id="scorebook-result-txt" style="font-size: 8.5pt; font-weight: 800; color: #1e3a8a;">
+                <strong>Result:</strong> ${resultText}
+              </div>
+            </div>
+          </div>
+
+          <!-- Innings tables -->
+          ${inningsHtml}
+
+          <!-- MVP & Honours -->
+          ${honoursHtml}
+
+          <!-- Officials Verification Box -->
+          ${officialsHtml}
+        </div>
+      `;
     }
 
     // ------------------------------------------------------------------------
