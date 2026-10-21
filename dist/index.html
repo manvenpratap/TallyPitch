@@ -502,6 +502,12 @@
       color: #ffffff;
     }
 
+    .ball-chip.penalty {
+      background: #ea580c;
+      color: #ffffff;
+      border: 1px solid #f97316;
+    }
+
     /* Scoring Controls Keypad */
     .scoring-console-card {
       background: var(--color-bg);
@@ -1862,6 +1868,9 @@
             <button class="btn btn-secondary" id="btn-open-soundboard" style="background: rgba(239,68,68,0.25); border: 1px solid rgba(239,68,68,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openSoundboardModal()" data-tooltip="Open interactive Stadium Audio Soundboard & Umpire SFX console">
               🎛️ Soundboard
             </button>
+            <button class="btn btn-secondary" id="btn-open-match-control" style="background: rgba(249,115,22,0.25); border: 1px solid rgba(249,115,22,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openMatchControlModal()" data-tooltip="ICC Penalty Runs (Law 28.3, 41, 42), Match Delay/Stoppage Calculator & Official Incident Log Diary">
+              ⚖️ Match Control
+            </button>
           </div>
         </div>
 
@@ -1880,6 +1889,17 @@
           <span id="hero-dls-diff-badge" style="font-size: 11px; padding: 2px 8px; border-radius: var(--radius-pill); font-weight: 700; background: rgba(56, 189, 248, 0.2); color: #38bdf8;">
             Par Tied
           </span>
+        </div>
+
+        <!-- ICC Penalty Runs Live Status -->
+        <div id="hero-penalty-wrap" style="display: none; margin-top: 8px; font-size: 12px; background: rgba(249, 115, 22, 0.12); border: 1px solid rgba(249, 115, 22, 0.3); border-radius: var(--radius-sm); padding: 5px 12px; align-items: center; justify-content: space-between;" data-tooltip="ICC Penalty Runs awarded in this innings under MCC Laws 28.3, 41, 42">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-weight: 700; color: #fb923c;">⚖️ Penalty Runs:</span>
+            <strong id="hero-penalty-score" style="font-size: 14px; color: #fff;">+0</strong>
+          </div>
+          <button type="button" class="btn btn-secondary" onclick="openMatchControlModal('penalty')" style="font-size: 10px; padding: 2px 8px; border-radius: var(--radius-pill); background: rgba(249, 115, 22, 0.25); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.4); font-weight: 700;" data-tooltip="View or manage penalty runs (Track 20)">
+            Manage ⚖️
+          </button>
         </div>
 
         <div id="hero-chase-banner" class="target-banner" style="display: none;">
@@ -2037,6 +2057,7 @@
           <button type="button" class="extra-btn" onclick="recordExtra('no_ball')">+1 No Ball (Nb)</button>
           <button type="button" class="extra-btn" onclick="recordExtra('bye')">+1 Bye (B)</button>
           <button type="button" class="extra-btn" onclick="recordExtra('leg_bye')">+1 Leg Bye (Lb)</button>
+          <button type="button" class="extra-btn" id="btn-extra-penalty" onclick="openMatchControlModal('penalty')" style="background: rgba(249,115,22,0.18); border-color: rgba(249,115,22,0.4); color: #ea580c; font-weight: 700;" data-tooltip="Award ICC Penalty Runs (Law 28.3, 41, 42) to Batting or Bowling team">+5 Penalty (Pen)</button>
         </div>
 
         <!-- Primary Action Grid: Wicket, Undo, Swap Strike, Wagon Wheel (S09), OBS Stream -->
@@ -2619,6 +2640,24 @@
           </div>
         </div>
         <div id="commentary-list"></div>
+
+        <!-- Official Match Incidents, Delays & Penalty Log (Track 20 / tbl_MatchNote) -->
+        <div id="scorecard-incidents-wrap" style="margin-top: 24px; padding: 16px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <h3 style="font-size: 15px; font-weight: 800; margin: 0;">Official Incidents, Delays & Penalty Log</h3>
+              <span id="scorecard-incidents-count-badge" class="badge" style="background: rgba(249, 115, 22, 0.15); color: #ea580c; font-weight: 800; font-size: 11px; padding: 2px 8px; border-radius: var(--radius-pill);">
+                0 Incidents Logged
+              </span>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="openMatchControlModal('diary')" style="font-size: 11px; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-pill); color: #fb923c; border-color: rgba(249, 115, 22, 0.3);" data-tooltip="Open Match Control & Incident Diary to add or manage incidents">
+              ⚖️ Match Diary
+            </button>
+          </div>
+          <div id="scorecard-incidents-list" style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 12px; color: var(--color-text-muted); font-style: italic;">No official incidents, penalties, or match delays recorded.</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -4551,6 +4590,221 @@
   </div>
 
   <!-- =======================================================================
+       MODAL 17: ICC PENALTY RUNS, MATCH DELAY STOPPAGE & OFFICIAL INCIDENT LOG (TRACK 20)
+       ======================================================================= -->
+  <div id="match-control-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('match-control-modal')">
+    <div class="modal-dialog" style="max-width: 680px; text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <h3 class="modal-title" style="color: #ea580c; font-size: 18px; margin: 0; display: flex; align-items: center; gap: 8px;">
+          <span>⚖️</span> Official Match Control &amp; Penalties
+        </h3>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('match-control-modal')" style="padding: 4px 10px; font-size: 12px;" data-tooltip="Close Match Control (Esc)">✕</button>
+      </div>
+      <p class="modal-desc" style="margin-bottom: 12px; font-size: 12px; color: var(--color-text-muted);">
+        Reverse-engineered from CricHeroes <code>PenaltyRunFragment</code>, <code>scoring_menu_penalty_run</code>, and <code>tbl_MatchNote</code>. Enforces MCC Laws 28.3, 41, 42, rain stoppage overs adjustments, and official umpire diaries.
+      </p>
+
+      <!-- Sub-Tab Switcher -->
+      <div style="display: flex; gap: 6px; margin-bottom: 14px; border-bottom: 1px solid var(--color-border); padding-bottom: 8px; flex-wrap: wrap;">
+        <button type="button" class="btn btn-secondary" id="btn-mc-tab-penalty" onclick="switchMatchControlTab('penalty')" style="font-size: 12px; font-weight: 700; padding: 6px 14px; background: rgba(249,115,22,0.2); color: #ea580c; border-color: rgba(249,115,22,0.4);" data-tooltip="Award or manage ICC Penalty Runs (MCC Laws 28.3, 41, 42)">
+          ⚡ ICC Penalty Runs
+        </button>
+        <button type="button" class="btn btn-secondary" id="btn-mc-tab-delay" onclick="switchMatchControlTab('delay')" style="font-size: 12px; font-weight: 700; padding: 6px 14px;" data-tooltip="Calculate match delays, lost overs & DLS targets">
+          ⏱️ Match Delay / Stoppage
+        </button>
+        <button type="button" class="btn btn-secondary" id="btn-mc-tab-diary" onclick="switchMatchControlTab('diary')" style="font-size: 12px; font-weight: 700; padding: 6px 14px;" data-tooltip="Official Umpire Incident Log and Warnings Timeline (tbl_MatchNote)">
+          📝 Incident Diary &amp; Notes
+        </button>
+      </div>
+
+      <!-- TAB 1: ICC PENALTY RUNS -->
+      <div id="mc-view-penalty" class="mc-tab-view">
+        <!-- Telemetry KPIs -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
+          <div class="card" style="padding: 10px 14px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+            <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">⚡ Current Innings Penalties</div>
+            <div id="mc-kpi-inn-penalties" style="font-size: 18px; font-weight: 800; margin-top: 4px; color: #ea580c;">+0 Runs</div>
+          </div>
+          <div class="card" style="padding: 10px 14px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+            <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🛡️ Match Total Incidents</div>
+            <div id="mc-kpi-match-penalties" style="font-size: 18px; font-weight: 800; margin-top: 4px; color: var(--color-text);">0 Incidents (+0)</div>
+          </div>
+        </div>
+
+        <!-- Award Form -->
+        <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 14px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 800; margin-bottom: 10px; color: var(--color-text);">
+            Award Penalty Runs to Team
+          </div>
+
+          <!-- Beneficiary Selection -->
+          <div style="margin-bottom: 12px;">
+            <label class="form-label" style="font-size: 11px; font-weight: 700;">Beneficiary Side (Who gets the runs?)</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <label style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; font-weight: 700;">
+                <input type="radio" name="mc-penalty-beneficiary" value="batting" checked style="accent-color: #ea580c;">
+                <span id="mc-beneficiary-batting-label">Batting Team (+Runs to Innings)</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; font-weight: 700;">
+                <input type="radio" name="mc-penalty-beneficiary" value="bowling" style="accent-color: #ea580c;">
+                <span id="mc-beneficiary-bowling-label">Bowling Team (+Runs to Opposition)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Penalty Run Amount -->
+          <div style="margin-bottom: 12px;">
+            <label class="form-label" for="mc-penalty-amount" style="font-size: 11px; font-weight: 700;">Penalty Runs</label>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <button type="button" class="btn btn-secondary" onclick="setPenaltyAmountChip(5)" style="font-size: 12px; font-weight: 800; padding: 6px 12px;" data-tooltip="Standard MCC 5 Penalty Runs">+5 Runs (Standard)</button>
+              <button type="button" class="btn btn-secondary" onclick="setPenaltyAmountChip(10)" style="font-size: 12px; font-weight: 800; padding: 6px 12px;" data-tooltip="Repeat / Level 2 Offence 10 Runs">+10 Runs</button>
+              <button type="button" class="btn btn-secondary" onclick="setPenaltyAmountChip(1)" style="font-size: 12px; font-weight: 700; padding: 6px 10px;">+1</button>
+              <input type="number" id="mc-penalty-amount" class="form-input" style="width: 80px; font-size: 13px; font-weight: 800; text-align: center;" value="5" min="1" max="50">
+            </div>
+          </div>
+
+          <!-- Official MCC Law Reason -->
+          <div style="margin-bottom: 12px;">
+            <label class="form-label" for="mc-penalty-reason" style="font-size: 11px; font-weight: 700;">MCC Law Infraction / Reason</label>
+            <select id="mc-penalty-reason" class="form-select" style="font-size: 12px;">
+              <option value="law_28_3" selected>Law 28.3: Ball struck fielder's helmet / equipment on ground (+5 to Batting)</option>
+              <option value="law_41_2">Law 41.2: Unfair actions / deliberate ball tampering (+5 to Opposition)</option>
+              <option value="law_41_14">Law 41.14: Batter running on pitch danger area after warning (+5 to Fielding)</option>
+              <option value="law_41_4">Law 41.4: Deliberate distraction or obstruction of batter (+5 to Batting)</option>
+              <option value="law_41_7">Law 41.7: Dangerous high full-pitch ball / Beamer (+5 to Batting)</option>
+              <option value="law_41_9">Law 41.9: Time-wasting by fielding side (+5 to Batting)</option>
+              <option value="law_41_10">Law 41.10: Time-wasting by batting side (+5 to Fielding)</option>
+              <option value="law_42">Law 42: Player Conduct / Dissent / Level 1-4 Offences (+5 to Opposition)</option>
+              <option value="custom">Official Umpire Discretionary Penalty Award</option>
+            </select>
+          </div>
+
+          <!-- Umpire Remarks -->
+          <div style="margin-bottom: 14px;">
+            <label class="form-label" for="mc-penalty-notes" style="font-size: 11px; font-weight: 700;">Umpire Notes &amp; Specifics (Optional)</label>
+            <input type="text" id="mc-penalty-notes" class="form-input" style="font-size: 12px;" placeholder="e.g. Ball hit keeper helmet at fine leg; bowler 2nd warning for pitch damage">
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <button type="button" class="btn btn-primary" id="btn-apply-penalty-run" onclick="applyPenaltyRun()" style="background: #ea580c; border-color: #c2410c; font-size: 13px; font-weight: 800; padding: 8px 18px; display: inline-flex; align-items: center; gap: 6px;" data-tooltip="Apply penalty runs instantly with 0ms rollback support">
+              ⚡ Award Penalty Runs Now
+            </button>
+            <span style="font-size: 11px; color: var(--color-text-muted);">MCC Laws 2017 Code • 0ms Atomic Undo</span>
+          </div>
+        </div>
+
+        <!-- Current Innings Penalty Log -->
+        <div style="font-size: 12px; font-weight: 800; margin-bottom: 6px; color: var(--color-text);">Innings Penalty Awards</div>
+        <div id="mc-innings-penalties-list" style="display: flex; flex-direction: column; gap: 6px; max-height: 160px; overflow-y: auto;">
+          <div style="font-size: 11px; color: var(--color-text-muted); font-style: italic;">No penalties awarded in this innings yet.</div>
+        </div>
+      </div>
+
+      <!-- TAB 2: MATCH DELAY / STOPPAGE CALCULATOR -->
+      <div id="mc-view-delay" class="mc-tab-view" style="display: none;">
+        <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 14px; margin-bottom: 14px;">
+          <div style="font-size: 13px; font-weight: 800; margin-bottom: 10px; color: var(--color-text);">
+            Match Delay &amp; Overs Stoppage Calculator
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+            <div>
+              <label class="form-label" for="mc-delay-reason" style="font-size: 11px; font-weight: 700;">Interruption Reason</label>
+              <select id="mc-delay-reason" class="form-select" style="font-size: 12px;">
+                <option value="Rain / Wet Outfield" selected>🌧️ Rain / Wet Outfield</option>
+                <option value="Bad Light">💡 Bad Light</option>
+                <option value="Player Injury / Medical">🩹 Player Medical / Injury</option>
+                <option value="Pitch / Ground Maintenance">🛠️ Pitch / Equipment Repair</option>
+                <option value="General Match Stoppage">⏸️ General Interruption</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label" for="mc-delay-minutes" style="font-size: 11px; font-weight: 700;">Stoppage Duration (Minutes)</label>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <input type="number" id="mc-delay-minutes" class="form-input" style="font-size: 12px; font-weight: 800; width: 80px; text-align: center;" value="20" min="1" max="300" oninput="updateDelayCalculation()">
+                <button type="button" class="btn btn-secondary" onclick="setDelayMinutesChip(15)" style="font-size: 11px; padding: 6px 8px;">15m</button>
+                <button type="button" class="btn btn-secondary" onclick="setDelayMinutesChip(30)" style="font-size: 11px; padding: 6px 8px;">30m</button>
+                <button type="button" class="btn btn-secondary" onclick="setDelayMinutesChip(45)" style="font-size: 11px; padding: 6px 8px;">45m</button>
+                <button type="button" class="btn btn-secondary" onclick="setDelayMinutesChip(60)" style="font-size: 11px; padding: 6px 8px;">60m</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stoppage Mathematical Calculations -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 10px;">
+            <div style="text-align: center;">
+              <div style="font-size: 10px; color: var(--color-text-muted); font-weight: 700;">LOST OVERS</div>
+              <div id="mc-delay-lost-overs-txt" style="font-size: 14px; font-weight: 800; color: #ef4444; margin-top: 2px;">5 Overs (2.5 / side)</div>
+            </div>
+            <div style="text-align: center; border-left: 1px solid var(--color-border); border-right: 1px solid var(--color-border);">
+              <div style="font-size: 10px; color: var(--color-text-muted); font-weight: 700;">CURRENT OVERS</div>
+              <div id="mc-delay-current-overs-txt" style="font-size: 14px; font-weight: 800; color: var(--color-text); margin-top: 2px;">20.0 Overs</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 10px; color: var(--color-text-muted); font-weight: 700;">REVISED RECOMMENDATION</div>
+              <div id="mc-delay-suggested-overs-txt" style="font-size: 14px; font-weight: 800; color: #0284c7; margin-top: 2px;">17 Overs / Side</div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-primary" id="btn-apply-delay-overs" onclick="applyDelayRevisedOvers()" style="background: #0284c7; border-color: #0369a1; font-size: 12px; font-weight: 800; padding: 6px 14px;" data-tooltip="Apply recommended overs reduction to match">
+              ⏱️ Apply Revised Overs
+            </button>
+            <button type="button" class="btn btn-secondary" id="btn-open-dls-from-delay" onclick="openDlsModal()" style="font-size: 12px; font-weight: 700; padding: 6px 12px;" data-tooltip="Open DLS Target Calculator for 2nd innings">
+              🌧️ Open DLS Target Calculator
+            </button>
+            <button type="button" class="btn btn-secondary" id="btn-log-delay-diary" onclick="logDelayToIncidentDiary()" style="font-size: 12px; padding: 6px 12px;" data-tooltip="Log this stoppage into official match notes without changing overs">
+              📝 Log Note Only
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: INCIDENT DIARY & UMPIRE NOTES -->
+      <div id="mc-view-diary" class="mc-tab-view" style="display: none;">
+        <!-- Add Quick Note Form -->
+        <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 14px;">
+          <div style="font-size: 12px; font-weight: 800; margin-bottom: 8px;">Record Official Umpire Note / Warning</div>
+          <div style="display: grid; grid-template-columns: 1fr 2fr auto; gap: 8px; align-items: center;">
+            <select id="mc-note-type" class="form-select" style="font-size: 12px;">
+              <option value="warning" selected>⚠️ Warning (Pitch Running)</option>
+              <option value="warning_overrate">⚠️ Warning (Slow Over Rate)</option>
+              <option value="injury">🩹 Injury / Medical Timeout</option>
+              <option value="drs">🎯 DRS / Umpire Review</option>
+              <option value="general">📝 General Match Observation</option>
+            </select>
+            <input type="text" id="mc-note-text" class="form-input" style="font-size: 12px;" placeholder="Umpire remarks (e.g. First warning issued to Virat for running on protected pitch area)">
+            <button type="button" class="btn btn-primary" id="btn-add-incident-note" onclick="addOfficialIncidentNote()" style="font-size: 12px; font-weight: 800; padding: 6px 12px; white-space: nowrap;" data-tooltip="Add incident note to official diary">
+              + Add Note
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Chips -->
+        <div style="display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap;">
+          <button type="button" class="btn btn-secondary mc-diary-filter active" id="btn-diary-filter-all" onclick="filterIncidentDiary('all')" style="font-size: 11px; padding: 3px 10px; font-weight: 700; border-radius: var(--radius-pill); background: var(--color-accent); color: #fff;">All Incidents</button>
+          <button type="button" class="btn btn-secondary mc-diary-filter" id="btn-diary-filter-penalty" onclick="filterIncidentDiary('penalty')" style="font-size: 11px; padding: 3px 10px; border-radius: var(--radius-pill);">⚖️ Penalties</button>
+          <button type="button" class="btn btn-secondary mc-diary-filter" id="btn-diary-filter-delay" onclick="filterIncidentDiary('delay')" style="font-size: 11px; padding: 3px 10px; border-radius: var(--radius-pill);">⏱️ Delays</button>
+          <button type="button" class="btn btn-secondary mc-diary-filter" id="btn-diary-filter-warning" onclick="filterIncidentDiary('warning')" style="font-size: 11px; padding: 3px 10px; border-radius: var(--radius-pill);">⚠️ Warnings</button>
+          <button type="button" class="btn btn-secondary mc-diary-filter" id="btn-diary-filter-general" onclick="filterIncidentDiary('general')" style="font-size: 11px; padding: 3px 10px; border-radius: var(--radius-pill);">📝 General</button>
+        </div>
+
+        <!-- Timeline container -->
+        <div id="mc-incident-timeline" style="display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto;">
+          <div style="font-size: 11px; color: var(--color-text-muted); font-style: italic;">No incident notes logged.</div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; padding-top: 10px; margin-top: 14px; border-top: 1px solid var(--color-border);">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('match-control-modal')" style="font-size: 12px; padding: 6px 14px;" data-tooltip="Close modal (Esc)">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
        OBS LOWER-THIRD LIVE STREAM OVERLAY (STANDALONE & EMBEDDABLE)
        ======================================================================= -->
   <div id="obs-overlay-container" style="display: none;">
@@ -5738,6 +5992,7 @@
         curOverDeliveries.forEach(d => {
           let chipClass = 'ball-chip';
           if (d.isWicket) chipClass += ' wicket';
+          else if (d.isPenalty) chipClass += ' penalty';
           else if (d.isExtra) chipClass += ' extra';
           else if (d.runs === 4 || d.runs === 6) chipClass += ' boundary';
           else if (d.runs === 0) chipClass += ' dot';
@@ -5761,6 +6016,18 @@
 
       // Update Live Turning Point Alert Pill (Track 11 / past_match_turning_point_overs)
       updateLiveTurningPointAlert();
+
+      // Update Live Penalty Runs HUD (Track 20 / PenaltyRunFragment)
+      const penWrap = document.getElementById('hero-penalty-wrap');
+      const penScore = document.getElementById('hero-penalty-score');
+      if (penWrap) {
+        if (inn.extras && inn.extras.penalty > 0) {
+          penWrap.style.display = 'flex';
+          if (penScore) penScore.textContent = `+${inn.extras.penalty}`;
+        } else {
+          penWrap.style.display = 'none';
+        }
+      }
 
       // Sync with OBS live overlay & CricHeroes MQTT bridge
       if (typeof broadcastLiveState === 'function') {
@@ -6722,9 +6989,10 @@
       }
 
       // Extras & Totals
-      const ext = inn.extras;
-      const extTotal = ext.wides + ext.noBalls + ext.byes + ext.legByes;
-      document.getElementById('scorecard-extras-txt').textContent = `${extTotal} (w ${ext.wides}, nb ${ext.noBalls}, b ${ext.byes}, lb ${ext.legByes})`;
+      const ext = inn.extras || { wides: 0, noBalls: 0, byes: 0, legByes: 0, penalty: 0 };
+      const penRuns = ext.penalty || 0;
+      const extTotal = (ext.wides || 0) + (ext.noBalls || 0) + (ext.byes || 0) + (ext.legByes || 0) + penRuns;
+      document.getElementById('scorecard-extras-txt').textContent = `${extTotal} (w ${ext.wides || 0}, nb ${ext.noBalls || 0}, b ${ext.byes || 0}, lb ${ext.legByes || 0}${penRuns > 0 ? `, pen ${penRuns}` : ''})`;
       document.getElementById('scorecard-total-txt').textContent = `${inn.totalRuns}/${inn.wickets} (${formatOvers(inn.legalBalls)} ov)`;
 
       // Bowling Table
@@ -6794,6 +7062,7 @@
       renderFaceOffMatrix();
       renderTurningPointsChart();
       renderPitchMapChart();
+      renderScorecardIncidents();
     }
 
     // ------------------------------------------------------------------------
@@ -13965,6 +14234,514 @@
       document.body.removeChild(a);
       URL.revokeObjectURL(a.href);
       showToast('📦 Downloaded tallypitch-twa-manifest.json');
+    }
+
+    // ========================================================================
+    // TRACK 20: ICC PENALTY RUNS, MATCH DELAY STOPPAGE & OFFICIAL INCIDENT LOG
+    // ========================================================================
+    let currentIncidentDiaryFilter = 'all';
+
+    function openMatchControlModal(initialTab = 'penalty') {
+      const inn = getCurrentInnings();
+      if (!inn) return;
+
+      const batName = state.match.teamA && inn.battingTeam === 'A' ? state.match.teamA : state.match.teamB;
+      const bowlName = state.match.teamA && inn.bowlingTeam === 'A' ? state.match.teamA : state.match.teamB;
+
+      const batLabel = document.getElementById('mc-beneficiary-batting-label');
+      const bowlLabel = document.getElementById('mc-beneficiary-bowling-label');
+      if (batLabel) batLabel.textContent = `${batName} (+Runs to Batting Innings)`;
+      if (bowlLabel) bowlLabel.textContent = `${bowlName} (+Runs to Opposition/Target)`;
+
+      const curOversTxt = document.getElementById('mc-delay-current-overs-txt');
+      if (curOversTxt) curOversTxt.textContent = `${state.match.totalOvers}.0 Overs`;
+
+      updateDelayCalculation();
+      switchMatchControlTab(initialTab);
+      renderMatchControlModal();
+      openModal('match-control-modal');
+    }
+
+    function switchMatchControlTab(tab) {
+      const tabs = ['penalty', 'delay', 'diary'];
+      tabs.forEach(t => {
+        const view = document.getElementById(`mc-view-${t}`);
+        const btn = document.getElementById(`btn-mc-tab-${t}`);
+        if (view) view.style.display = (t === tab) ? 'block' : 'none';
+        if (btn) {
+          if (t === tab) {
+            btn.style.background = 'rgba(249,115,22,0.2)';
+            btn.style.color = '#ea580c';
+            btn.style.borderColor = 'rgba(249,115,22,0.4)';
+          } else {
+            btn.style.background = 'var(--color-surface)';
+            btn.style.color = 'var(--color-text)';
+            btn.style.borderColor = 'var(--color-border)';
+          }
+        }
+      });
+      if (tab === 'diary') {
+        filterIncidentDiary(currentIncidentDiaryFilter);
+      }
+    }
+
+    function setPenaltyAmountChip(val) {
+      const input = document.getElementById('mc-penalty-amount');
+      if (input) input.value = val;
+    }
+
+    function setDelayMinutesChip(val) {
+      const input = document.getElementById('mc-delay-minutes');
+      if (input) {
+        input.value = val;
+        updateDelayCalculation();
+      }
+    }
+
+    function updateDelayCalculation() {
+      const mins = parseInt(document.getElementById('mc-delay-minutes')?.value, 10) || 0;
+      const lostOvers = Math.floor(mins / 4);
+      const lostPerSide = Math.floor(lostOvers / 2);
+      const currentOvers = state.match.totalOvers || 20;
+      const suggested = Math.max(5, currentOvers - lostPerSide);
+
+      const lostEl = document.getElementById('mc-delay-lost-overs-txt');
+      const sugEl = document.getElementById('mc-delay-suggested-overs-txt');
+      const curEl = document.getElementById('mc-delay-current-overs-txt');
+
+      if (curEl) curEl.textContent = `${currentOvers}.0 Overs`;
+      if (lostEl) lostEl.textContent = `${lostOvers} Overs (${(lostOvers / 2).toFixed(1)} / side)`;
+      if (sugEl) sugEl.textContent = `${suggested} Overs / Side`;
+    }
+
+    function applyPenaltyRun(options = {}) {
+      pushUndoSnapshot();
+
+      const inn = getCurrentInnings();
+      if (!inn) return;
+
+      const beneficiary = options.beneficiary || document.querySelector('input[name="mc-penalty-beneficiary"]:checked')?.value || 'batting';
+      const runs = parseInt(options.runs || document.getElementById('mc-penalty-amount')?.value || 5, 10);
+      const reasonKey = options.reasonKey || document.getElementById('mc-penalty-reason')?.value || 'law_28_3';
+      const notes = (options.notes !== undefined ? options.notes : (document.getElementById('mc-penalty-notes')?.value || '')).trim();
+
+      if (isNaN(runs) || runs <= 0) {
+        showToast("Please enter a valid penalty run amount (> 0)");
+        return;
+      }
+
+      const reasonLabels = {
+        law_28_3: "Ball struck helmet / field equipment (Law 28.3)",
+        law_41_2: "Unfair play / Ball tampering (Law 41.2)",
+        law_41_14: "Batter running on pitch danger area (Law 41.14)",
+        law_41_4: "Deliberate distraction of batter (Law 41.4)",
+        law_41_7: "Dangerous high full-pitch ball / Beamer (Law 41.7)",
+        law_41_9: "Time-wasting by fielding side (Law 41.9)",
+        law_41_10: "Time-wasting by batting side (Law 41.10)",
+        law_42: "Player conduct / Dissent (Law 42)",
+        custom: "Official Umpire Discretionary Penalty Award"
+      };
+      const reasonText = reasonLabels[reasonKey] || reasonKey;
+
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const overStr = formatOvers(inn.legalBalls);
+      const innNum = state.superOver?.active ? `Super Over Inn ${state.superOver.inningsNumber}` : `Inn ${state.match.currentInningsNumber}`;
+
+      const penaltyRecord = {
+        id: 'pen_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+        type: 'penalty',
+        beneficiary,
+        teamName: beneficiary === 'batting' ? (inn.battingTeam === 'A' ? state.match.teamA : state.match.teamB) : (inn.bowlingTeam === 'A' ? state.match.teamA : state.match.teamB),
+        runs,
+        reasonKey,
+        reasonText,
+        notes,
+        innings: state.match.currentInningsNumber,
+        overNum: Math.floor(inn.legalBalls / 6),
+        ballInOver: inn.legalBalls % 6,
+        oversFormatted: overStr,
+        timestamp: timeStr,
+        createdAt: now.toISOString()
+      };
+
+      if (beneficiary === 'batting') {
+        if (!inn.extras) inn.extras = { wides: 0, noBalls: 0, byes: 0, legByes: 0, penalty: 0 };
+        inn.extras.penalty = (inn.extras.penalty || 0) + runs;
+        inn.totalRuns += runs;
+
+        const deliveryRecord = {
+          overNum: Math.floor(inn.legalBalls / 6),
+          ballInOver: (inn.legalBalls % 6) || 6,
+          legalBallCount: inn.legalBalls,
+          strikerId: state.currentLive.strikerId,
+          nonStrikerId: state.currentLive.nonStrikerId,
+          bowlerId: state.currentLive.bowlerId,
+          runs: runs,
+          isExtra: true,
+          extraType: 'penalty',
+          isPenalty: true,
+          penaltyId: penaltyRecord.id,
+          text: `Pen ${runs}`,
+          pitchLength: 'Good Length',
+          pitchLine: 'Middle / Leg'
+        };
+        inn.deliveries.push(deliveryRecord);
+        state.currentLive.currentOverDeliveries.push(deliveryRecord);
+
+        if (inn.currentPartnership) {
+          inn.currentPartnership.runs += runs;
+          inn.currentPartnership.extras += runs;
+        }
+      } else {
+        if (state.match.currentInningsNumber === 2 && state.innings1) {
+          if (!state.innings1.extras) state.innings1.extras = { wides: 0, noBalls: 0, byes: 0, legByes: 0, penalty: 0 };
+          state.innings1.extras.penalty = (state.innings1.extras.penalty || 0) + runs;
+          state.innings1.totalRuns += runs;
+          if (inn.targetRuns) inn.targetRuns += runs;
+        } else {
+          if (!state.innings2.extras) state.innings2.extras = { wides: 0, noBalls: 0, byes: 0, legByes: 0, penalty: 0 };
+          state.innings2.extras.penalty = (state.innings2.extras.penalty || 0) + runs;
+          state.innings2.totalRuns += runs;
+        }
+      }
+
+      if (!inn.penalties) inn.penalties = [];
+      inn.penalties.push(penaltyRecord);
+
+      if (!state.match.incidentNotes) state.match.incidentNotes = [];
+      state.match.incidentNotes.push({
+        id: penaltyRecord.id,
+        noteType: 'penalty',
+        title: `⚖️ Penalty: +${runs} runs to ${penaltyRecord.teamName}`,
+        description: `${reasonText}${notes ? ' — ' + notes : ''}`,
+        inningsText: innNum,
+        overStr,
+        timestamp: timeStr,
+        rawRecord: penaltyRecord
+      });
+
+      if (state.match.currentInningsNumber === 2 && inn.targetRuns && inn.totalRuns >= inn.targetRuns) {
+        declareMatchWinner();
+      }
+
+      showToast(`⚖️ Awarded +${runs} Penalty Runs to ${penaltyRecord.teamName}!`);
+      closeModal('match-control-modal');
+      renderLiveConsole();
+      renderMatchControlModal();
+      saveMatchVaultState();
+    }
+
+    function removePenaltyRun(penaltyId) {
+      pushUndoSnapshot();
+      const inn = getCurrentInnings();
+      if (!inn || !inn.penalties) return;
+
+      const idx = inn.penalties.findIndex(p => p.id === penaltyId);
+      if (idx === -1) return;
+
+      const pen = inn.penalties[idx];
+      inn.penalties.splice(idx, 1);
+
+      if (pen.beneficiary === 'batting') {
+        inn.extras.penalty = Math.max(0, (inn.extras.penalty || 0) - pen.runs);
+        inn.totalRuns = Math.max(0, inn.totalRuns - pen.runs);
+        inn.deliveries = inn.deliveries.filter(d => d.penaltyId !== penaltyId);
+        state.currentLive.currentOverDeliveries = state.currentLive.currentOverDeliveries.filter(d => d.penaltyId !== penaltyId);
+        if (inn.currentPartnership) {
+          inn.currentPartnership.runs = Math.max(0, inn.currentPartnership.runs - pen.runs);
+          inn.currentPartnership.extras = Math.max(0, inn.currentPartnership.extras - pen.runs);
+        }
+      } else {
+        if (state.match.currentInningsNumber === 2 && state.innings1) {
+          state.innings1.extras.penalty = Math.max(0, (state.innings1.extras.penalty || 0) - pen.runs);
+          state.innings1.totalRuns = Math.max(0, state.innings1.totalRuns - pen.runs);
+          if (inn.targetRuns) inn.targetRuns = Math.max(0, inn.targetRuns - pen.runs);
+        } else {
+          state.innings2.extras.penalty = Math.max(0, (state.innings2.extras.penalty || 0) - pen.runs);
+          state.innings2.totalRuns = Math.max(0, state.innings2.totalRuns - pen.runs);
+        }
+      }
+
+      if (state.match.incidentNotes) {
+        state.match.incidentNotes = state.match.incidentNotes.filter(n => n.id !== penaltyId);
+      }
+
+      showToast("Penalty run removed");
+      renderLiveConsole();
+      renderMatchControlModal();
+      saveMatchVaultState();
+    }
+
+    function applyDelayRevisedOvers() {
+      pushUndoSnapshot();
+      const mins = parseInt(document.getElementById('mc-delay-minutes')?.value, 10) || 0;
+      const reason = document.getElementById('mc-delay-reason')?.value || 'Rain / Wet Outfield';
+      const lostOvers = Math.floor(mins / 4);
+      const lostPerSide = Math.floor(lostOvers / 2);
+      const oldOvers = state.match.totalOvers || 20;
+      const suggested = Math.max(5, oldOvers - lostPerSide);
+
+      state.match.totalOvers = suggested;
+
+      const inn = getCurrentInnings();
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const overStr = inn ? formatOvers(inn.legalBalls) : '0.0';
+      const innNum = state.match.currentInningsNumber ? `Inn ${state.match.currentInningsNumber}` : 'Match';
+
+      if (!state.match.incidentNotes) state.match.incidentNotes = [];
+      state.match.incidentNotes.push({
+        id: 'delay_' + Date.now(),
+        noteType: 'delay',
+        title: `⏱️ Match Delay: Shortened to ${suggested} Overs`,
+        description: `${mins} min stoppage due to ${reason}. Overs reduced from ${oldOvers} to ${suggested}.`,
+        inningsText: innNum,
+        overStr,
+        timestamp: timeStr
+      });
+
+      showToast(`⏱️ Match revised to ${suggested} overs per side`);
+      renderLiveConsole();
+      renderMatchControlModal();
+      saveMatchVaultState();
+    }
+
+    function logDelayToIncidentDiary() {
+      const mins = parseInt(document.getElementById('mc-delay-minutes')?.value, 10) || 0;
+      const reason = document.getElementById('mc-delay-reason')?.value || 'Rain / Wet Outfield';
+      const inn = getCurrentInnings();
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const overStr = inn ? formatOvers(inn.legalBalls) : '0.0';
+      const innNum = state.match.currentInningsNumber ? `Inn ${state.match.currentInningsNumber}` : 'Match';
+
+      if (!state.match.incidentNotes) state.match.incidentNotes = [];
+      state.match.incidentNotes.push({
+        id: 'stoppage_' + Date.now(),
+        noteType: 'delay',
+        title: `⏱️ Stoppage: ${reason} (${mins} mins)`,
+        description: `Play halted for ${mins} minutes. No overs lost.`,
+        inningsText: innNum,
+        overStr,
+        timestamp: timeStr
+      });
+
+      showToast("Stoppage logged in Incident Diary");
+      renderMatchControlModal();
+      saveMatchVaultState();
+    }
+
+    function addOfficialIncidentNote() {
+      const textInput = document.getElementById('mc-note-text');
+      const text = textInput ? textInput.value.trim() : '';
+      if (!text) {
+        showToast("Please enter note details");
+        return;
+      }
+      const type = document.getElementById('mc-note-type')?.value || 'general';
+      const inn = getCurrentInnings();
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const overStr = inn ? formatOvers(inn.legalBalls) : '0.0';
+      const innNum = state.match.currentInningsNumber ? `Inn ${state.match.currentInningsNumber}` : 'Match';
+
+      const typeLabels = {
+        warning: '⚠️ Pitch Running Warning',
+        warning_overrate: '⚠️ Slow Over Rate Warning',
+        injury: '🩹 Medical Timeout',
+        drs: '🎯 DRS / Umpire Review',
+        general: '📝 Official Note'
+      };
+
+      if (!state.match.incidentNotes) state.match.incidentNotes = [];
+      state.match.incidentNotes.push({
+        id: 'note_' + Date.now(),
+        noteType: type.startsWith('warning') ? 'warning' : type,
+        title: typeLabels[type] || 'Official Note',
+        description: text,
+        inningsText: innNum,
+        overStr,
+        timestamp: timeStr
+      });
+
+      if (textInput) textInput.value = '';
+      showToast("Incident note recorded");
+      renderMatchControlModal();
+      saveMatchVaultState();
+    }
+
+    function deleteIncidentNote(id) {
+      if (id && id.startsWith('pen_')) {
+        removePenaltyRun(id);
+        return;
+      }
+      if (state.match.incidentNotes) {
+        state.match.incidentNotes = state.match.incidentNotes.filter(n => n.id !== id);
+      }
+      showToast("Note deleted");
+      renderMatchControlModal();
+      saveMatchVaultState();
+    }
+
+    function filterIncidentDiary(filter) {
+      currentIncidentDiaryFilter = filter;
+      document.querySelectorAll('.mc-diary-filter').forEach(btn => {
+        const f = btn.id.replace('btn-diary-filter-', '');
+        if (f === filter) {
+          btn.style.background = 'var(--color-accent)';
+          btn.style.color = '#fff';
+        } else {
+          btn.style.background = 'var(--color-surface)';
+          btn.style.color = 'var(--color-text)';
+        }
+      });
+
+      const timelineEl = document.getElementById('mc-incident-timeline');
+      if (!timelineEl) return;
+
+      const notes = state.match.incidentNotes || [];
+      const filtered = filter === 'all' ? notes : notes.filter(n => {
+        if (filter === 'penalty') return n.noteType === 'penalty';
+        if (filter === 'delay') return n.noteType === 'delay';
+        if (filter === 'warning') return n.noteType === 'warning' || n.noteType === 'warning_overrate';
+        if (filter === 'general') return n.noteType === 'general' || n.noteType === 'injury' || n.noteType === 'drs';
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        timelineEl.innerHTML = `<div style="font-size: 11px; color: var(--color-text-muted); font-style: italic;">No incidents matching '${filter}' recorded.</div>`;
+        return;
+      }
+
+      timelineEl.innerHTML = filtered.map(n => {
+        let badgeBg = 'rgba(249,115,22,0.15)';
+        let badgeColor = '#ea580c';
+        let badgeIcon = '⚖️';
+        if (n.noteType === 'delay') {
+          badgeBg = 'rgba(56,189,248,0.15)';
+          badgeColor = '#0284c7';
+          badgeIcon = '⏱️';
+        } else if (n.noteType === 'warning' || n.noteType === 'warning_overrate') {
+          badgeBg = 'rgba(239,68,68,0.15)';
+          badgeColor = '#dc2626';
+          badgeIcon = '⚠️';
+        } else if (n.noteType === 'general' || n.noteType === 'injury' || n.noteType === 'drs') {
+          badgeBg = 'rgba(100,116,139,0.15)';
+          badgeColor = '#64748b';
+          badgeIcon = '📝';
+        }
+
+        return `
+          <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 8px 12px; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
+                <span style="font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: var(--radius-pill); background: ${badgeBg}; color: ${badgeColor};">
+                  ${badgeIcon} ${n.noteType.toUpperCase()}
+                </span>
+                <span style="font-size: 12px; font-weight: 700; color: var(--color-text);">${n.title}</span>
+              </div>
+              <div style="font-size: 11px; color: var(--color-text-muted); line-height: 1.4;">${n.description}</div>
+            </div>
+            <div style="text-align: right; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+              <span style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); font-family: var(--font-mono);">${n.inningsText || ''} Over ${n.overStr || '0.0'}</span>
+              <button type="button" class="btn btn-secondary" onclick="deleteIncidentNote('${n.id}')" style="font-size: 10px; padding: 2px 6px; color: #ef4444; border-color: rgba(239,68,68,0.3);" data-tooltip="Delete incident entry">✕</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderMatchControlModal() {
+      const inn = getCurrentInnings();
+      const innPen = (inn && inn.extras && inn.extras.penalty) ? inn.extras.penalty : 0;
+      const allNotes = state.match.incidentNotes || [];
+      const totalPenRuns = allNotes.filter(n => n.noteType === 'penalty').reduce((acc, n) => acc + (n.rawRecord?.runs || 0), 0);
+      const totalIncidents = allNotes.length;
+
+      const innEl = document.getElementById('mc-kpi-inn-penalties');
+      const matchEl = document.getElementById('mc-kpi-match-penalties');
+      if (innEl) innEl.textContent = `+${innPen} Runs`;
+      if (matchEl) matchEl.textContent = `${totalIncidents} Incident${totalIncidents === 1 ? '' : 's'} (+${totalPenRuns})`;
+
+      // Render Innings Penalties list
+      const penList = document.getElementById('mc-innings-penalties-list');
+      if (penList) {
+        const pens = (inn && inn.penalties) ? inn.penalties : [];
+        if (pens.length === 0) {
+          penList.innerHTML = `<div style="font-size: 11px; color: var(--color-text-muted); font-style: italic;">No penalties awarded in this innings yet.</div>`;
+        } else {
+          penList.innerHTML = pens.map(p => `
+            <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 6px 10px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span style="font-size: 12px; font-weight: 800; color: #ea580c;">+${p.runs} Runs to ${p.teamName}</span>
+                <div style="font-size: 10px; color: var(--color-text-muted);">${p.reasonText} (Over ${p.oversFormatted})</div>
+              </div>
+              <button type="button" class="btn btn-secondary" id="btn-revert-penalty-${p.id}" onclick="removePenaltyRun('${p.id}')" style="font-size: 10px; padding: 2px 8px; color: #ef4444; border-color: rgba(239,68,68,0.3); font-weight: 700;" data-tooltip="Revert this penalty award">
+                Revert ✕
+              </button>
+            </div>
+          `).join('');
+        }
+      }
+
+      filterIncidentDiary(currentIncidentDiaryFilter);
+      renderScorecardIncidents();
+    }
+
+    function renderScorecardIncidents() {
+      const listEl = document.getElementById('scorecard-incidents-list');
+      const countBadge = document.getElementById('scorecard-incidents-count-badge');
+      if (!listEl) return;
+
+      const notes = state.match.incidentNotes || [];
+      if (countBadge) {
+        countBadge.textContent = `${notes.length} Incident${notes.length === 1 ? '' : 's'} Logged`;
+      }
+
+      if (notes.length === 0) {
+        listEl.innerHTML = `<div style="font-size: 12px; color: var(--color-text-muted); font-style: italic;">No official incidents, penalties, or match delays recorded.</div>`;
+        return;
+      }
+
+      listEl.innerHTML = notes.map(n => {
+        let badgeBg = 'rgba(249,115,22,0.15)';
+        let badgeColor = '#ea580c';
+        let badgeIcon = '⚖️';
+        if (n.noteType === 'delay') {
+          badgeBg = 'rgba(56,189,248,0.15)';
+          badgeColor = '#0284c7';
+          badgeIcon = '⏱️';
+        } else if (n.noteType === 'warning' || n.noteType === 'warning_overrate') {
+          badgeBg = 'rgba(239,68,68,0.15)';
+          badgeColor = '#dc2626';
+          badgeIcon = '⚠️';
+        } else if (n.noteType === 'general' || n.noteType === 'injury' || n.noteType === 'drs') {
+          badgeBg = 'rgba(100,116,139,0.15)';
+          badgeColor = '#64748b';
+          badgeIcon = '📝';
+        }
+
+        return `
+          <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 8px 12px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 3px;">
+                <span style="font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: var(--radius-pill); background: ${badgeBg}; color: ${badgeColor};">
+                  ${badgeIcon} ${n.noteType.toUpperCase()}
+                </span>
+                <span style="font-size: 12px; font-weight: 700; color: var(--color-text);">${n.title || 'Official Note'}</span>
+              </div>
+              <div style="font-size: 11px; color: var(--color-text-muted); line-height: 1.4;">
+                ${n.description || ''}
+              </div>
+            </div>
+            <div style="text-align: right; flex-shrink: 0;">
+              <span style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); font-family: var(--font-mono);">${n.inningsText || ''} Over ${n.overStr || '0.0'}</span>
+              <div style="font-size: 9px; color: var(--color-text-muted);">${n.timestamp || ''}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     // Initialize on load
