@@ -1557,6 +1557,68 @@
         page-break-inside: avoid !important;
       }
     }
+
+    /* Stadium SFX & Interactive Soundboard (Track 17) */
+    .soundboard-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .soundboard-card-btn {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 150ms ease;
+      text-align: left;
+      color: var(--color-text);
+      font-family: inherit;
+    }
+    .soundboard-card-btn:hover {
+      background: var(--color-surface);
+      border-color: var(--color-accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+    .soundboard-card-btn:active {
+      transform: scale(0.97);
+    }
+    .soundboard-card-btn .sfx-icon {
+      font-size: 22px;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      flex-shrink: 0;
+    }
+    .soundboard-card-btn .sfx-info {
+      flex: 1;
+      overflow: hidden;
+    }
+    .soundboard-card-btn .sfx-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--color-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .soundboard-card-btn .sfx-desc {
+      font-size: 10px;
+      color: var(--color-text-muted);
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   </style>
 </head>
 <body>
@@ -1793,6 +1855,12 @@
             </button>
             <button class="btn btn-secondary" id="btn-voice-commentary-toggle" style="background: rgba(168,85,247,0.25); border: 1px solid rgba(168,85,247,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="toggleVoiceCommentary()" data-tooltip="Toggle live audio speech synthesis commentary for balls and wickets">
               🔇 Voice: OFF
+            </button>
+            <button class="btn btn-secondary" id="btn-sfx-toggle" style="background: rgba(245,158,11,0.25); border: 1px solid rgba(245,158,11,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="toggleStadiumSfx()" data-tooltip="Toggle automated stadium sound effects (sirens, crowd roars, and stump crashes)">
+              🔊 SFX: ON
+            </button>
+            <button class="btn btn-secondary" id="btn-open-soundboard" style="background: rgba(239,68,68,0.25); border: 1px solid rgba(239,68,68,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openSoundboardModal()" data-tooltip="Open interactive Stadium Audio Soundboard & Umpire SFX console">
+              🎛️ Soundboard
             </button>
           </div>
         </div>
@@ -4155,6 +4223,112 @@
   </div>
 
   <!-- =======================================================================
+       MODAL 15: STADIUM SFX & INTERACTIVE UMPIRE SOUNDBOARD (TRACK 17)
+       ======================================================================= -->
+  <div id="soundboard-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('soundboard-modal')">
+    <div class="modal-dialog" style="max-width: 540px; text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <h3 class="modal-title" style="color: var(--color-accent); font-size: 17px; margin: 0; display: flex; align-items: center; gap: 8px;">
+          <span>🏟️</span> Stadium SFX & Soundboard
+        </h3>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('soundboard-modal')" style="padding: 4px 10px; font-size: 12px;" data-tooltip="Close Soundboard modal (Esc)">✕</button>
+      </div>
+      <p class="modal-desc" style="margin-bottom: 12px; font-size: 12px;">
+        Reverse-engineered from CricHeroes <code>assets/sounds/</code> and <code>SoundManager</code>. Synthesized Web Audio API acoustic effects.
+      </p>
+
+      <!-- Master Audio Controls Bar -->
+      <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; cursor: pointer; color: var(--color-text);">
+          <input type="checkbox" id="sfx-master-toggle" checked onchange="toggleStadiumSfx(this.checked)">
+          <span>Auto-SFX Enabled</span>
+        </label>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 12px;">
+          <span style="color: var(--color-text-muted);">Volume:</span>
+          <input type="range" id="sfx-volume-slider" min="0" max="1" step="0.05" value="0.8" style="width: 90px; accent-color: var(--color-accent);" oninput="updateSfxVolume(this.value)">
+          <span id="sfx-volume-val" style="font-family: var(--font-mono); font-weight: 700; font-size: 11px;">80%</span>
+        </div>
+        <div id="sfx-active-pill" style="font-size: 11px; padding: 2px 8px; border-radius: var(--radius-pill); background: rgba(34, 197, 94, 0.15); color: var(--color-success); font-weight: 700;">
+          Status: Ready 🔈
+        </div>
+      </div>
+
+      <!-- 8-Card Interactive Soundboard Grid -->
+      <div class="soundboard-grid">
+        <button type="button" class="soundboard-card-btn" id="sfx-btn-four" onclick="playStadiumSfx('four')" data-tooltip="Play ascending boundary siren with echo">
+          <div class="sfx-icon">🎺</div>
+          <div class="sfx-info">
+            <div class="sfx-title">4s Boundary Siren</div>
+            <div class="sfx-desc">Dual ascending stadium horn</div>
+          </div>
+        </button>
+
+        <button type="button" class="soundboard-card-btn" id="sfx-btn-six" onclick="playStadiumSfx('six')" data-tooltip="Play stadium crowd eruption roar & sub-bass blast">
+          <div class="sfx-icon">🚀</div>
+          <div class="sfx-info">
+            <div class="sfx-title">6s Crowd Roar</div>
+            <div class="sfx-desc">Stadium cheer + bass impact</div>
+          </div>
+        </button>
+
+        <button type="button" class="soundboard-card-btn" id="sfx-btn-wicket" onclick="playStadiumSfx('wicket')" data-tooltip="Play wooden stump crash & timber rattle">
+          <div class="sfx-icon">🎯</div>
+          <div class="sfx-info">
+            <div class="sfx-title">Wicket Stump Crash</div>
+            <div class="sfx-desc">Timber shatter + umpire whistle</div>
+          </div>
+        </button>
+
+        <button type="button" class="soundboard-card-btn" id="sfx-btn-whistle" onclick="playStadiumSfx('over')" data-tooltip="Play official umpire whistle double pip">
+          <div class="sfx-icon">📢</div>
+          <div class="sfx-info">
+            <div class="sfx-title">Umpire Whistle</div>
+            <div class="sfx-desc">Double chirp over pip</div>
+          </div>
+        </button>
+
+        <button type="button" class="soundboard-card-btn" id="sfx-btn-toss" onclick="playStadiumSfx('toss')" data-tooltip="Play coin spin flutter & golden catch chime">
+          <div class="sfx-icon">🪙</div>
+          <div class="sfx-info">
+            <div class="sfx-title">Toss Coin Spin</div>
+            <div class="sfx-desc">Metallic flutter & chime</div>
+          </div>
+        </button>
+
+        <button type="button" class="soundboard-card-btn" id="sfx-btn-bat" onclick="playStadiumSfx('dot')" data-tooltip="Play crisp bat-on-ball English willow crack">
+          <div class="sfx-icon">🏏</div>
+          <div class="sfx-info">
+            <div class="sfx-title">Willow Bat Crack</div>
+            <div class="sfx-desc">Crisp leather wood impulse</div>
+          </div>
+        </button>
+
+        <button type="button" class="soundboard-card-btn" id="sfx-btn-dhol" onclick="playStadiumSfx('dhol')" data-tooltip="Play stadium celebration dhol rhythm">
+          <div class="sfx-icon">🥁</div>
+          <div class="sfx-info">
+            <div class="sfx-title">Stadium Dhol Beat</div>
+            <div class="sfx-desc">Bass boom & celebratory roll</div>
+          </div>
+        </button>
+
+        <button type="button" class="soundboard-card-btn" id="sfx-btn-fanfare" onclick="playStadiumSfx('fanfare')" data-tooltip="Play triumphant victory fanfare">
+          <div class="sfx-icon">🏆</div>
+          <div class="sfx-info">
+            <div class="sfx-title">Victory Fanfare</div>
+            <div class="sfx-desc">Triumphant brass chords</div>
+          </div>
+        </button>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; padding-top: 8px; border-top: 1px solid var(--color-border);">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('soundboard-modal')" style="font-size: 12px; padding: 6px 14px;" data-tooltip="Close Stadium Soundboard (Esc)">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
        OBS LOWER-THIRD LIVE STREAM OVERLAY (STANDALONE & EMBEDDABLE)
        ======================================================================= -->
   <div id="obs-overlay-container" style="display: none;">
@@ -4531,6 +4705,7 @@
     // Screen S05: The Toss Actions
     // ------------------------------------------------------------------------
     function spinCoin() {
+      playStadiumSfx('toss');
       const coin = document.getElementById('coin-disc');
       coin.classList.add('spinning');
       setTimeout(() => {
@@ -4707,6 +4882,12 @@
       if (runs % 2 !== 0) {
         swapStrike();
       }
+
+      // Stadium SFX acoustic trigger (Track 17)
+      if (runs === 4) playStadiumSfx('four');
+      else if (runs === 6) playStadiumSfx('six');
+      else if (runs === 0) playStadiumSfx('dot');
+      else playStadiumSfx('single');
 
       // Check Match / Innings Status
       checkInningsOrOverCompletion();
@@ -4933,6 +5114,7 @@
 
       closeModal('wicket-modal');
       showToast(`WICKET! ${outBatter.name} is ${dismissalType}!`);
+      playStadiumSfx('wicket');
 
       checkInningsOrOverCompletion();
       renderLiveConsole();
@@ -4994,6 +5176,7 @@
       const runsInOver = state.currentLive.currentOverDeliveries.reduce((sum, d) => sum + d.runs, 0);
       const wktsInOver = state.currentLive.currentOverDeliveries.filter(d => d.isWicket).length;
       document.getElementById('over-modal-sub').textContent = `Over summary: ${runsInOver} runs • ${wktsInOver} wicket(s)`;
+      playStadiumSfx('over');
 
       // Populate next bowler select (exclude current bowler)
       const bowlSelect = document.getElementById('next-bowler-select');
@@ -5118,6 +5301,7 @@
 
       document.getElementById('winner-modal-title').textContent = winnerName === "Match Tied" ? "Match Tied!" : `${winnerName} Victory!`;
       document.getElementById('winner-modal-desc').textContent = `${winnerName} ${margin}`;
+      playStadiumSfx('fanfare');
 
       // Auto-update Tournament Standings & Broadcast stream
       if (winnerName === "Match Tied") {
@@ -5889,6 +6073,7 @@
       // Update Match Result Modal
       document.getElementById('winner-modal-title').textContent = winnerName === "Match Tied" ? "Super Over Tied!" : `⚡ ${winnerName} Super Over Victory!`;
       document.getElementById('winner-modal-desc').textContent = so.result;
+      playStadiumSfx('fanfare');
 
       computeMVP();
       document.getElementById('match-result-modal').classList.add('open');
@@ -9895,6 +10080,300 @@
     }
 
     // ------------------------------------------------------------------------
+    // STADIUM SFX & INTERACTIVE UMPIRE SOUNDBOARD (Track 17)
+    // Reverse-engineered from CricHeroes assets/sounds & SoundManager
+    // ------------------------------------------------------------------------
+    let stadiumAudioCtx = null;
+    const sfxConfig = {
+      enabled: localStorage.getItem('tallypitch_sfx_enabled') !== 'false',
+      volume: parseFloat(localStorage.getItem('tallypitch_sfx_volume') || '0.8')
+    };
+
+    function getStadiumAudioContext() {
+      if (!stadiumAudioCtx) {
+        try {
+          const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtxClass) {
+            stadiumAudioCtx = new AudioCtxClass();
+          }
+        } catch (e) {
+          stadiumAudioCtx = null;
+        }
+      }
+      if (stadiumAudioCtx && stadiumAudioCtx.state === 'suspended') {
+        try { stadiumAudioCtx.resume(); } catch (e) {}
+      }
+      return stadiumAudioCtx;
+    }
+
+    function toggleStadiumSfx(forceVal) {
+      if (typeof forceVal === 'boolean') {
+        sfxConfig.enabled = forceVal;
+      } else {
+        sfxConfig.enabled = !sfxConfig.enabled;
+      }
+      localStorage.setItem('tallypitch_sfx_enabled', sfxConfig.enabled);
+
+      const btn = document.getElementById('btn-sfx-toggle');
+      if (btn) {
+        btn.textContent = sfxConfig.enabled ? "🔊 SFX: ON" : "🔇 SFX: OFF";
+        btn.style.background = sfxConfig.enabled ? "rgba(245,158,11,0.25)" : "rgba(100,116,139,0.25)";
+      }
+      const chk = document.getElementById('sfx-master-toggle');
+      if (chk) chk.checked = sfxConfig.enabled;
+
+      showToast(sfxConfig.enabled ? "🔊 Stadium SFX: ON" : "🔇 Stadium SFX: Muted");
+    }
+
+    function updateSfxVolume(val) {
+      sfxConfig.volume = Math.max(0, Math.min(1, parseFloat(val)));
+      localStorage.setItem('tallypitch_sfx_volume', sfxConfig.volume);
+      const valEl = document.getElementById('sfx-volume-val');
+      if (valEl) valEl.textContent = `${Math.round(sfxConfig.volume * 100)}%`;
+    }
+
+    function openSoundboardModal() {
+      const chk = document.getElementById('sfx-master-toggle');
+      if (chk) chk.checked = sfxConfig.enabled;
+      const slider = document.getElementById('sfx-volume-slider');
+      if (slider) slider.value = sfxConfig.volume;
+      const valEl = document.getElementById('sfx-volume-val');
+      if (valEl) valEl.textContent = `${Math.round(sfxConfig.volume * 100)}%`;
+      openModal('soundboard-modal');
+    }
+
+    function playStadiumSfx(type) {
+      if (!sfxConfig.enabled && type !== 'preview') return;
+      
+      const ctx = getStadiumAudioContext();
+      if (!ctx) return;
+
+      const now = ctx.currentTime;
+      const masterVol = sfxConfig.volume || 0.8;
+
+      // Status pill update in soundboard modal if visible
+      const statusPill = document.getElementById('sfx-active-pill');
+      if (statusPill) {
+        statusPill.textContent = `Playing: ${type.toUpperCase()} 🔊`;
+        statusPill.style.color = "var(--color-accent)";
+        setTimeout(() => {
+          if (statusPill) {
+            statusPill.textContent = "Status: Ready 🔈";
+            statusPill.style.color = "var(--color-success)";
+          }
+        }, 1200);
+      }
+
+      try {
+        if (type === 'four') {
+          // Boundary 4: Dual ascending horn siren
+          const osc1 = ctx.createOscillator();
+          const osc2 = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc1.type = 'sawtooth';
+          osc2.type = 'triangle';
+
+          osc1.frequency.setValueAtTime(440, now);
+          osc1.frequency.exponentialRampToValueAtTime(880, now + 0.35);
+          osc1.frequency.exponentialRampToValueAtTime(660, now + 0.7);
+
+          osc2.frequency.setValueAtTime(444, now);
+          osc2.frequency.exponentialRampToValueAtTime(888, now + 0.35);
+          osc2.frequency.exponentialRampToValueAtTime(664, now + 0.7);
+
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.3 * masterVol, now + 0.05);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.75);
+
+          osc1.connect(gain);
+          osc2.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc1.start(now);
+          osc2.start(now);
+          osc1.stop(now + 0.8);
+          osc2.stop(now + 0.8);
+
+        } else if (type === 'six') {
+          // Boundary 6: Stadium Crowd Roar & Sub-Bass Impact
+          const subOsc = ctx.createOscillator();
+          const subGain = ctx.createGain();
+          subOsc.type = 'sine';
+          subOsc.frequency.setValueAtTime(90, now);
+          subOsc.frequency.exponentialRampToValueAtTime(40, now + 0.6);
+          subGain.gain.setValueAtTime(0.4 * masterVol, now);
+          subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+          subOsc.connect(subGain);
+          subGain.connect(ctx.destination);
+          subOsc.start(now);
+          subOsc.stop(now + 0.75);
+
+          const bufferSize = ctx.sampleRate * 1.0;
+          const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+          const output = noiseBuffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            output[i] = Math.random() * 2 - 1;
+          }
+          const whiteNoise = ctx.createBufferSource();
+          whiteNoise.buffer = noiseBuffer;
+
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(300, now);
+          filter.frequency.linearRampToValueAtTime(1000, now + 0.4);
+          filter.frequency.linearRampToValueAtTime(400, now + 1.0);
+          filter.Q.value = 1.8;
+
+          const noiseGain = ctx.createGain();
+          noiseGain.gain.setValueAtTime(0.01, now);
+          noiseGain.gain.linearRampToValueAtTime(0.35 * masterVol, now + 0.25);
+          noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 1.0);
+
+          whiteNoise.connect(filter);
+          filter.connect(noiseGain);
+          noiseGain.connect(ctx.destination);
+
+          whiteNoise.start(now);
+          whiteNoise.stop(now + 1.05);
+
+        } else if (type === 'wicket') {
+          // Timber Stump Crash + Umpire Whistle
+          const osc = ctx.createOscillator();
+          const oscGain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.exponentialRampToValueAtTime(60, now + 0.15);
+          oscGain.gain.setValueAtTime(0.5 * masterVol, now);
+          oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+          osc.connect(oscGain);
+          oscGain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.22);
+
+          const bSize = ctx.sampleRate * 0.25;
+          const nBuf = ctx.createBuffer(1, bSize, ctx.sampleRate);
+          const out = nBuf.getChannelData(0);
+          for (let i = 0; i < bSize; i++) out[i] = Math.random() * 2 - 1;
+          const nSrc = ctx.createBufferSource();
+          nSrc.buffer = nBuf;
+          const nFilter = ctx.createBiquadFilter();
+          nFilter.type = 'bandpass';
+          nFilter.frequency.value = 1400;
+          const nGain = ctx.createGain();
+          nGain.gain.setValueAtTime(0.4 * masterVol, now);
+          nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          nSrc.connect(nFilter);
+          nFilter.connect(nGain);
+          nGain.connect(ctx.destination);
+          nSrc.start(now);
+          nSrc.stop(now + 0.26);
+
+          const wOsc = ctx.createOscillator();
+          const wGain = ctx.createGain();
+          wOsc.type = 'sine';
+          wOsc.frequency.setValueAtTime(2800, now + 0.25);
+          wGain.gain.setValueAtTime(0.001, now + 0.25);
+          wGain.gain.linearRampToValueAtTime(0.3 * masterVol, now + 0.3);
+          wGain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+          wOsc.connect(wGain);
+          wGain.connect(ctx.destination);
+          wOsc.start(now + 0.25);
+          wOsc.stop(now + 0.7);
+
+        } else if (type === 'over') {
+          // Double Umpire Whistle Pip
+          [0, 0.18].forEach(delay => {
+            const wOsc = ctx.createOscillator();
+            const wGain = ctx.createGain();
+            wOsc.type = 'sine';
+            wOsc.frequency.setValueAtTime(2600, now + delay);
+            wGain.gain.setValueAtTime(0.001, now + delay);
+            wGain.gain.linearRampToValueAtTime(0.3 * masterVol, now + delay + 0.02);
+            wGain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.12);
+            wOsc.connect(wGain);
+            wGain.connect(ctx.destination);
+            wOsc.start(now + delay);
+            wOsc.stop(now + delay + 0.14);
+          });
+
+        } else if (type === 'toss') {
+          // Coin Spin Metallic Flutter & Chime
+          for (let i = 0; i < 6; i++) {
+            const delay = i * 0.07;
+            const tOsc = ctx.createOscillator();
+            const tGain = ctx.createGain();
+            tOsc.type = 'sine';
+            tOsc.frequency.setValueAtTime(1800 + (i % 2) * 400, now + delay);
+            tGain.gain.setValueAtTime(0.18 * masterVol, now + delay);
+            tGain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.08);
+            tOsc.connect(tGain);
+            tGain.connect(ctx.destination);
+            tOsc.start(now + delay);
+            tOsc.stop(now + delay + 0.09);
+          }
+          const cOsc = ctx.createOscillator();
+          const cGain = ctx.createGain();
+          cOsc.type = 'triangle';
+          cOsc.frequency.setValueAtTime(2400, now + 0.45);
+          cGain.gain.setValueAtTime(0.25 * masterVol, now + 0.45);
+          cGain.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+          cOsc.connect(cGain);
+          cGain.connect(ctx.destination);
+          cOsc.start(now + 0.45);
+          cOsc.stop(now + 0.95);
+
+        } else if (type === 'dot' || type === 'single') {
+          // Crisp Willow Bat Crack
+          const bOsc = ctx.createOscillator();
+          const bGain = ctx.createGain();
+          bOsc.type = 'triangle';
+          bOsc.frequency.setValueAtTime(750, now);
+          bOsc.frequency.exponentialRampToValueAtTime(250, now + 0.05);
+          bGain.gain.setValueAtTime(0.35 * masterVol, now);
+          bGain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+          bOsc.connect(bGain);
+          bGain.connect(ctx.destination);
+          bOsc.start(now);
+          bOsc.stop(now + 0.07);
+
+        } else if (type === 'dhol') {
+          // Stadium Dhol Drum Beat
+          const drumOsc = ctx.createOscillator();
+          const drumGain = ctx.createGain();
+          drumOsc.type = 'sine';
+          drumOsc.frequency.setValueAtTime(140, now);
+          drumOsc.frequency.exponentialRampToValueAtTime(55, now + 0.25);
+          drumGain.gain.setValueAtTime(0.5 * masterVol, now);
+          drumGain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          drumOsc.connect(drumGain);
+          drumGain.connect(ctx.destination);
+          drumOsc.start(now);
+          drumOsc.stop(now + 0.36);
+
+        } else if (type === 'fanfare') {
+          // Victory Fanfare
+          const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+          notes.forEach((freq, idx) => {
+            const delay = idx * 0.12;
+            const fOsc = ctx.createOscillator();
+            const fGain = ctx.createGain();
+            fOsc.type = 'triangle';
+            fOsc.frequency.setValueAtTime(freq, now + delay);
+            fGain.gain.setValueAtTime(0.25 * masterVol, now + delay);
+            fGain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.45);
+            fOsc.connect(fGain);
+            fGain.connect(ctx.destination);
+            fOsc.start(now + delay);
+            fOsc.stop(now + delay + 0.5);
+          });
+        }
+      } catch (err) {
+        console.warn("Web Audio SFX playback note:", err);
+      }
+    }
+
+    // ------------------------------------------------------------------------
     // TOURNAMENT LEADERBOARDS & CAP HONORS ENGINE (Track 5 / S19)
     // ------------------------------------------------------------------------
     function getAggregatedTournamentPlayerStats() {
@@ -12650,6 +13129,13 @@
       initCompareEngine();
       updateNetworkStatus();
       checkMatchRecovery();
+
+      // Initialize SFX button state
+      const sfxBtn = document.getElementById('btn-sfx-toggle');
+      if (sfxBtn) {
+        sfxBtn.textContent = sfxConfig.enabled ? "🔊 SFX: ON" : "🔇 SFX: OFF";
+        sfxBtn.style.background = sfxConfig.enabled ? "rgba(245,158,11,0.25)" : "rgba(100,116,139,0.25)";
+      }
 
       // Register PWA Offline Service Worker
       if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
