@@ -7,9 +7,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = scene as? UIWindowScene else { return }
 
-        window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = CAPBridgeViewController()
-        window?.makeKeyAndVisible()
+        if window == nil {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let rootVC = storyboard.instantiateInitialViewController() {
+                window = UIWindow(windowScene: windowScene)
+                window?.rootViewController = rootVC
+                window?.makeKeyAndVisible()
+            }
+        }
 
         SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connectionOptions)
     }

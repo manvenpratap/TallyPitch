@@ -546,16 +546,42 @@ class PackagingManager:
                 log_success(f"Synchronized {primary_html} -> dist/index.html ({size_bytes:,} bytes)")
                 synced = True
 
+                # Synchronize auxiliary web assets into dist/
+                aux_files = ["tooltip.css", "tooltip.js", "manifest.json", "sw.js"]
+                for af in aux_files:
+                    p = self.root / af
+                    if p.exists():
+                        shutil.copyfile(p, dist_dir / af)
+
+                # Copy icon images
+                for icon in self.root.glob("icon-*.png"):
+                    shutil.copyfile(icon, dist_dir / icon.name)
+
+                # Copy replica design tokens
+                tokens_src = self.root / "replica" / "design" / "tokens.css"
+                if tokens_src.exists():
+                    (dist_dir / "replica" / "design").mkdir(parents=True, exist_ok=True)
+                    shutil.copyfile(tokens_src, dist_dir / "replica" / "design" / "tokens.css")
+
+                # Copy .well-known
+                wk_dir = self.root / ".well-known"
+                if wk_dir.exists():
+                    shutil.copytree(wk_dir, dist_dir / ".well-known", dirs_exist_ok=True)
+
         # 1b. Capacitor Mobile Assets Synchronization (iOS & Android)
         if (self.root / "capacitor.config.json").exists():
             cap_ios_dir = self.root / "ios" / "App" / "App" / "public"
             cap_android_dir = self.root / "android" / "app" / "src" / "main" / "assets" / "public"
-            dist_index = self.root / "dist" / "index.html"
-            if dist_index.exists():
-                if cap_ios_dir.exists():
-                    shutil.copyfile(dist_index, cap_ios_dir / "index.html")
-                if cap_android_dir.exists():
-                    shutil.copyfile(dist_index, cap_android_dir / "index.html")
+            dist_dir = self.root / "dist"
+            if dist_dir.exists():
+                for target_dir in [cap_ios_dir, cap_android_dir]:
+                    if target_dir.exists():
+                        for item in dist_dir.iterdir():
+                            dest = target_dir / item.name
+                            if item.is_dir():
+                                shutil.copytree(item, dest, dirs_exist_ok=True)
+                            else:
+                                shutil.copyfile(item, dest)
                 log_success("Synchronized Capacitor mobile assets (iOS & Android)")
                 synced = True
 
