@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">TallyPitch</string>
-    <string name="package_name">app.tallypitch.twa</string>
-    <string name="host_name">tallypitch.app</string>
-    <string name="app_description">Zero-Ad Cricket Scoring &amp; Tournament Management</string>
-</resources>
