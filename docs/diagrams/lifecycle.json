@@ -1,0 +1,37 @@
+{
+  "schema_version": 2,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "TallyPitch - Match & Tournament Lifecycle",
+    "output": "lifecycle.html",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase"
+  },
+  "lanes": [
+    { "id": "main", "label": "Match Scoring Phases" },
+    { "id": "tiebreaker", "label": "ICC Tie-Breaker & Rain" },
+    { "id": "tournament", "label": "Tournament Table" }
+  ],
+  "states": [
+    { "id": "fixture", "type": "start", "label": "Fixture Setup", "sublabel": "teams, ground, overs", "lane": "main", "col": 0, "step": "01", "tag": "setup" },
+    { "id": "toss", "type": "active", "label": "Toss & Openers", "sublabel": "openers & strike locked", "lane": "main", "col": 1, "step": "02", "tag": "toss" },
+    { "id": "innings1", "type": "active", "label": "Innings 1 Live", "sublabel": "first innings scoring", "lane": "main", "col": 2, "step": "03", "tag": "live" },
+    { "id": "innings2", "type": "active", "label": "Innings 2 Chase", "sublabel": "chasing target & RRR", "lane": "main", "col": 3, "step": "04", "tag": "chase" },
+    { "id": "concluded", "type": "success", "label": "Match Concluded", "sublabel": "winner determined", "lane": "main", "col": 4, "step": "05", "tag": "result" },
+    { "id": "super_over", "type": "waiting", "label": "ICC Super Over", "sublabel": "1-over tie-breaker", "lane": "tiebreaker", "col": 3, "tag": "tie" },
+    { "id": "standings", "type": "success", "label": "Standings Streamed", "sublabel": "points & NRR recalculated", "lane": "tournament", "col": 4, "tag": "nrr" }
+  ],
+  "transitions": [
+    { "from": "fixture", "to": "toss", "label": "toss conducted" },
+    { "from": "toss", "to": "innings1", "label": "play begins" },
+    { "from": "innings1", "to": "innings2", "label": "innings break" },
+    { "from": "innings2", "to": "concluded", "label": "target reached / 20 ov" },
+    { "from": "innings2", "to": "super_over", "label": "scores tied", "variant": "dashed" },
+    { "from": "super_over", "to": "concluded", "label": "super over winner" },
+    { "from": "concluded", "to": "standings", "label": "recalculate NRR", "variant": "emphasis" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Automated NRR Recalculation", "items": ["Calculates Net Run Rate dynamically to 3 decimal places on match completion", "Broadcasts updated standings table to all connected clients"] }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "TallyPitch - System Architecture",
+    "output": "architecture.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    { "id": "scorer", "type": "frontend", "label": "Scorer Mobile PWA", "sublabel": "Offline-First Keypad", "pos": [40, 260], "size": [150, 60] },
+    { "id": "pwa_engine", "type": "frontend", "label": "TallyPitch SPA Core", "sublabel": "In-Memory Undo Stack", "pos": [270, 260], "size": [150, 60], "tag": "0ms Latency" },
+    { "id": "realtime", "type": "messagebus", "label": "MQTT & WS Broker", "sublabel": "Node.js :1884/:8884", "pos": [520, 140], "size": [150, 60] },
+    { "id": "api", "type": "backend", "label": "Node.js REST API", "sublabel": "Express :4000", "pos": [520, 360], "size": [150, 60] },
+    { "id": "postgres", "type": "database", "label": "Supabase PostgreSQL", "sublabel": "16 Tables with RLS", "pos": [780, 360], "size": [150, 60] },
+    { "id": "obs", "type": "external", "label": "Live OBS Overlays", "sublabel": "Transparent Lower-Third", "pos": [780, 140], "size": [150, 60] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "TallyPitch Platform (100% Offline-Resilient)", "wraps": ["scorer", "pwa_engine", "realtime", "api", "postgres", "obs"] }
+  ],
+  "connections": [
+    { "id": "c1", "from": "scorer", "to": "pwa_engine", "label": "0ms touch", "variant": "emphasis" },
+    { "id": "c2", "from": "pwa_engine", "to": "realtime", "label": "MQTT publish", "variant": "emphasis" },
+    { "id": "c3", "from": "pwa_engine", "to": "api", "label": "async sync" },
+    { "id": "c4", "from": "api", "to": "postgres", "label": "persist match" },
+    { "id": "c5", "from": "realtime", "to": "obs", "label": "live stream", "variant": "emphasis" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "Zero-Ad Grassroots Scoring", "items": ["100% uninterrupted matchday scoring", "0ms deep-clone undo stack rollback"] }
+  ]
+}

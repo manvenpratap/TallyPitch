@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "TallyPitch - Match Data Flow Pipeline",
+    "output": "dataflow.html",
+    "viewBox": [1080, 520],
+    "animation": "trace",
+    "quality_profile": "showcase"
+  },
+  "stages": [
+    { "label": "Scorer Input" },
+    { "label": "State Mutation" },
+    { "label": "History & Streaming" },
+    { "label": "Spectator Display" }
+  ],
+  "nodes": [
+    { "id": "input", "type": "frontend", "label": "Touch Keypad", "sublabel": "runs & extras", "stage": 0, "row": 1, "tag": "entry" },
+    { "id": "engine", "type": "backend", "label": "State Engine", "sublabel": "innings, strike, DLS", "stage": 1, "row": 1, "tag": "core" },
+    { "id": "stack", "type": "database", "label": "Snapshot Stack", "sublabel": "immutable clones", "stage": 2, "row": 0, "tag": "rollback" },
+    { "id": "mqtt", "type": "messagebus", "label": "MQTT Broker", "sublabel": "Node.js streaming", "stage": 2, "row": 2, "tag": "stream" },
+    { "id": "audio", "type": "frontend", "label": "Voice Synthesizer", "sublabel": "Web Speech API", "stage": 3, "row": 0, "tag": "audio" },
+    { "id": "obs", "type": "frontend", "label": "OBS Lower-Third", "sublabel": "live stream overlay", "stage": 3, "row": 2, "tag": "broadcast" }
+  ],
+  "flows": [
+    { "id": "f1", "from": "input", "to": "engine", "label": "ball event", "classification": "payload", "variant": "emphasis" },
+    { "id": "f2", "from": "engine", "to": "stack", "label": "clone state", "classification": "history", "variant": "emphasis" },
+    { "id": "f3", "from": "engine", "to": "mqtt", "label": "publish ball", "classification": "realtime", "variant": "emphasis" },
+    { "id": "f4", "from": "stack", "to": "audio", "label": "speak action", "classification": "speech", "variant": "default" },
+    { "id": "f5", "from": "mqtt", "to": "obs", "label": "stream payload", "classification": "graphics", "variant": "emphasis" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "Zero Cloud Latency", "items": ["Local memory stack guarantees 0ms scoring feedback", "Realtime MQTT fanout propagates to OBS in under 50ms"] }
+  ]
+}

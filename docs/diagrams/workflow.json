@@ -1,0 +1,40 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "TallyPitch - Ball Scoring & Rollback Workflow",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "workflow.html"
+  },
+  "lanes": [
+    { "id": "scorer", "label": "Scorer Device" },
+    { "id": "engine", "label": "State & Rollback Engine" },
+    { "id": "stream", "label": "Realtime Broadcast" }
+  ],
+  "phases": [
+    { "id": "p1", "label": "1. Key Delivery", "fromCol": 0, "toCol": 1 },
+    { "id": "p2", "label": "2. Snapshot & State", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "p3", "label": "3. Broadcast & Rollback", "fromCol": 4, "toCol": 5 }
+  ],
+  "mainPath": ["log_ball", "clone_state", "update_dom", "speech_synth", "mqtt_publish", "rollback_ready"],
+  "nodes": [
+    { "id": "log_ball", "lane": "scorer", "col": 0, "type": "frontend", "label": "Key In Delivery", "sublabel": "runs, extras, wicket", "width": 140 },
+    { "id": "clone_state", "lane": "engine", "col": 1, "type": "database", "label": "Push Snapshot", "sublabel": "immutable memory clone", "tag": "0ms latency", "width": 140 },
+    { "id": "update_dom", "lane": "engine", "col": 2, "type": "backend", "label": "Mutate State", "sublabel": "overs, strike, DLS par", "width": 140 },
+    { "id": "speech_synth", "lane": "engine", "col": 3, "type": "frontend", "label": "Voice Audio", "sublabel": "Web Speech synthesis", "width": 140 },
+    { "id": "mqtt_publish", "lane": "stream", "col": 4, "type": "messagebus", "label": "MQTT Stream", "sublabel": "broadcast to OBS", "width": 140 },
+    { "id": "rollback_ready", "lane": "scorer", "col": 5, "type": "frontend", "label": "0ms Rollback", "sublabel": "pop snapshot stack", "tag": "undo ready", "width": 140 }
+  ],
+  "edges": [
+    { "id": "e1", "from": "log_ball", "to": "clone_state", "variant": "emphasis" },
+    { "id": "e2", "from": "clone_state", "to": "update_dom", "variant": "emphasis" },
+    { "id": "e3", "from": "update_dom", "to": "speech_synth", "variant": "default" },
+    { "id": "e4", "from": "speech_synth", "to": "mqtt_publish", "label": "live payload", "variant": "emphasis" },
+    { "id": "e5", "from": "mqtt_publish", "to": "rollback_ready", "label": "atomic undo", "variant": "emphasis" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "Zero-Ad Offline Scoring", "items": ["Local-first write with 0ms UI feedback", "Instant deep-clone undo stack rollback"] }
+  ]
+}

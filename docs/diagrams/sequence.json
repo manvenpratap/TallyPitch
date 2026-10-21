@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "TallyPitch - Realtime OBS Broadcast Sequence",
+    "output": "sequence.html",
+    "column_fit": "spread",
+    "animation": "trace",
+    "quality_profile": "showcase"
+  },
+  "participants": [
+    { "id": "scorer", "type": "frontend", "label": "Scorer Device", "sublabel": "Mobile PWA" },
+    { "id": "ui", "type": "frontend", "label": "UI Engine", "sublabel": "index.html" },
+    { "id": "stack", "type": "database", "label": "Undo Stack", "sublabel": "In-Memory Clones" },
+    { "id": "mqtt", "type": "messagebus", "label": "MQTT Broker", "sublabel": "server/realtime.js" },
+    { "id": "obs", "type": "frontend", "label": "OBS Graphics", "sublabel": "Lower-Third Screen" }
+  ],
+  "messages": [
+    { "id": "m1", "from": "scorer", "to": "ui", "y": 160, "label": "Key In Delivery (4 Runs)", "variant": "emphasis" },
+    { "id": "m2", "from": "ui", "to": "stack", "y": 200, "label": "Push Deep Snapshot", "variant": "emphasis" },
+    { "id": "m3", "from": "stack", "to": "ui", "y": 240, "label": "Snapshot Committed (0ms)", "variant": "return" },
+    { "id": "m4", "from": "ui", "to": "mqtt", "y": 290, "label": "MQTT PUBLISH 'cricheroes/matches/:id/ball'", "variant": "emphasis" },
+    { "id": "m5", "from": "mqtt", "to": "obs", "y": 340, "label": "Broadcast Delivery Payload", "variant": "emphasis" },
+    { "id": "m6", "from": "scorer", "to": "ui", "y": 400, "label": "Click Undo (Rollback)", "variant": "security" },
+    { "id": "m7", "from": "ui", "to": "stack", "y": 440, "label": "Pop Previous Snapshot", "variant": "emphasis" },
+    { "id": "m8", "from": "stack", "to": "ui", "y": 480, "label": "State Restored (0ms)", "variant": "return" },
+    { "id": "m9", "from": "ui", "to": "mqtt", "y": 520, "label": "MQTT PUBLISH 'cricheroes/matches/:id/score'", "variant": "emphasis" }
+  ]
+}

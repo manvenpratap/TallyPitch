@@ -11,6 +11,20 @@
 
 > 📚 **Complete Documentation**: Explore the [**TallyPitch GitHub Wiki**](https://github.com/manvenpratap/TallyPitch/wiki) for matchday scoring guides, OBS streaming setups, tournament NRR mathematics, and database specifications.
 
+---
+
+## 🏛️ System Architecture & Compiled Diagrams
+
+TallyPitch architecture, offline rollback workflows, realtime streaming sequences, and match lifecycles are formally compiled via [Archify](https://github.com/tt-a1i/archify):
+
+* 📐 **System Architecture**: [Interactive HTML View](./docs/diagrams/architecture.html) | [Spec](./docs/diagrams/architecture.json)
+* 🔄 **Scoring Workflow**: [Interactive HTML View](./docs/diagrams/workflow.html) | [Spec](./docs/diagrams/workflow.json)
+* ⚡ **Realtime OBS Sequence**: [Interactive HTML View](./docs/diagrams/sequence.html) | [Spec](./docs/diagrams/sequence.json)
+* 🌊 **Data Flow Pipeline**: [Interactive HTML View](./docs/diagrams/dataflow.html) | [Spec](./docs/diagrams/dataflow.json)
+* ⏱️ **Match Lifecycle**: [Interactive HTML View](./docs/diagrams/lifecycle.html) | [Spec](./docs/diagrams/lifecycle.json)
+
+Native embedded vector diagrams are available directly on the [**GitHub Wiki: Offline Resilience & Architecture**](https://github.com/manvenpratap/TallyPitch/wiki/Offline-Resilience-and-Architecture).
+
 ### Key Features
 
 - **Zero-Ad Scoring Console**: 100% ad-free scoring interface so scorers never miss a ball to an unskippable video popup.
