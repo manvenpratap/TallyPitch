@@ -3257,6 +3257,9 @@
                   Milestone Badges & Honors (S21)
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px;">
+                  <button type="button" class="btn btn-secondary" id="btn-open-form-guide" onclick="openPlayerFormModal()" style="padding: 3px 8px; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Inspect 5-match form guide & trajectory in modal (CurrentFormViewAllActivity)">
+                    <span>📈</span> Form Guide
+                  </button>
                   <button type="button" class="btn btn-secondary" id="btn-compare-from-profile" onclick="openCompareWithCurrentProfile()" style="padding: 3px 8px; font-size: 11px; display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Compare this player head-to-head in VS Engine">
                     <span>⚡</span> Compare VS
                   </button>
@@ -3269,6 +3272,95 @@
                 </div>
               </div>
               <div class="badges-grid" id="profile-badges-wrap"></div>
+            </div>
+
+            <!-- Track 21: Player Career Form Guide & Momentum Trajectory Engine (CurrentFormViewAllActivity / player_batting_current_form) -->
+            <div id="player-form-guide-card" style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--color-border);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                <div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <h4 style="font-size: 15px; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 6px;">
+                      <span>📈</span> Player Career Form Guide &amp; Momentum Trajectory
+                    </h4>
+                    <span id="player-form-badge" class="badge" style="background: rgba(234,88,12,0.15); color: #ea580c; font-weight: 800; font-size: 10px; padding: 2px 8px; border-radius: var(--radius-pill); text-transform: uppercase;">
+                      🔥 RED HOT
+                    </span>
+                    <span class="badge" style="background: rgba(37,99,235,0.15); color: var(--color-accent); font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: var(--radius-pill);">
+                      PRO UN-PAYWALLED
+                    </span>
+                  </div>
+                  <p style="font-size: 11px; color: var(--color-text-muted); margin: 2px 0 0;">
+                    Last 5 match sequence, momentum trajectory trendline, and dismissal vulnerability radar.
+                  </p>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <!-- Batting vs Bowling Form Switcher -->
+                  <div class="btn-group" style="display: inline-flex; background: var(--color-bg); padding: 2px; border-radius: var(--radius-md); border: 1px solid var(--color-border);" role="tablist">
+                    <button type="button" class="btn btn-sm active" id="btn-form-type-batting" onclick="switchPlayerFormType('batting')" style="padding: 3px 10px; font-size: 11px; font-weight: 700;" data-tooltip="Inspect recent batting innings form">
+                      🏏 Batting
+                    </button>
+                    <button type="button" class="btn btn-sm" id="btn-form-type-bowling" onclick="switchPlayerFormType('bowling')" style="padding: 3px 10px; font-size: 11px; font-weight: 700;" data-tooltip="Inspect recent bowling figures form">
+                      🎯 Bowling
+                    </button>
+                  </div>
+                  <button type="button" class="btn btn-secondary" id="btn-open-form-modal" onclick="openPlayerFormModal()" style="padding: 4px 10px; font-size: 11px; display: inline-flex; align-items: center; gap: 4px; font-weight: 700;" data-tooltip="Open full-screen form guide dialog (CurrentFormViewAllActivity)">
+                    <span>🔍</span> View All
+                  </button>
+                </div>
+              </div>
+
+              <!-- 4 Telemetry KPI Cards -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 14px;">
+                <div class="card" style="padding: 8px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid var(--color-accent);">
+                  <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Recent Average</div>
+                  <div id="form-kpi-avg" style="font-size: 16px; font-weight: 800; font-family: var(--font-mono); margin-top: 2px; color: var(--color-text);">52.4</div>
+                  <div id="form-kpi-avg-sub" style="font-size: 10px; color: var(--color-text-muted);">Last 5 Innings</div>
+                </div>
+                <div class="card" style="padding: 8px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid #10b981;">
+                  <div id="form-kpi-sr-econ-title" style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Strike Rate</div>
+                  <div id="form-kpi-sr-econ" style="font-size: 16px; font-weight: 800; font-family: var(--font-mono); margin-top: 2px; color: #10b981;">164.2</div>
+                  <div id="form-kpi-sr-econ-sub" style="font-size: 10px; color: var(--color-text-muted);">Runs / 100b</div>
+                </div>
+                <div class="card" style="padding: 8px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid #f59e0b;">
+                  <div id="form-kpi-bnd-dot-title" style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Boundary %</div>
+                  <div id="form-kpi-boundary-dot" style="font-size: 16px; font-weight: 800; font-family: var(--font-mono); margin-top: 2px; color: #f59e0b;">68.4%</div>
+                  <div id="form-kpi-bnd-dot-sub" style="font-size: 10px; color: var(--color-text-muted);">In 4s &amp; 6s</div>
+                </div>
+                <div class="card" style="padding: 8px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid #8b5cf6;">
+                  <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Momentum Trend</div>
+                  <div id="form-kpi-trend" style="font-size: 14px; font-weight: 800; margin-top: 2px; color: #10b981;">↗ Surge (+28%)</div>
+                  <div id="form-kpi-trend-sub" style="font-size: 10px; color: var(--color-text-muted);">vs 3-Match Baseline</div>
+                </div>
+              </div>
+
+              <!-- Sparkline Trajectory Chart -->
+              <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <span style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">5-Match Momentum Trajectory Sparkline</span>
+                  <span style="font-size: 10px; color: var(--color-text-muted);" id="form-sparkline-note">Rolling Avg: 52.4</span>
+                </div>
+                <div id="form-sparkline-container" style="width: 100%; height: 90px;"></div>
+                <div id="form-sparkline-match-labels" style="display: flex; justify-content: space-between; margin-top: 4px; font-size: 10px; color: var(--color-text-muted);"></div>
+              </div>
+
+              <!-- Dismissal Vulnerability / Hazard Radar Bar -->
+              <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 10px 12px; margin-bottom: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <span id="form-radar-title" style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Recent Dismissal Vulnerability Radar</span>
+                  <span style="font-size: 10px; color: var(--color-text-muted);">Last 5 Outings</span>
+                </div>
+                <div id="form-radar-bar" style="height: 10px; width: 100%; border-radius: 999px; overflow: hidden; display: flex; margin-bottom: 6px;"></div>
+                <div id="form-radar-legend" style="display: flex; gap: 10px; font-size: 10px; color: var(--color-text-muted); flex-wrap: wrap;"></div>
+              </div>
+
+              <!-- 5 Match Cards Reel -->
+              <div>
+                <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 8px;">
+                  Recent Matches Breakdown (5 Innings)
+                </div>
+                <div id="form-matches-reel" style="display: flex; flex-direction: column; gap: 6px;"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -4798,6 +4890,51 @@
       <!-- Modal Footer -->
       <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; padding-top: 10px; margin-top: 14px; border-top: 1px solid var(--color-border);">
         <button type="button" class="btn btn-secondary" onclick="closeModal('match-control-modal')" style="font-size: 12px; padding: 6px 14px;" data-tooltip="Close modal (Esc)">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 18: PLAYER CAREER FORM GUIDE & MOMENTUM TRAJECTORY HUB (TRACK 21)
+       ======================================================================= -->
+  <div id="player-form-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('player-form-modal')">
+    <div class="modal-dialog" style="max-width: 720px; text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <h3 class="modal-title" style="color: #10b981; font-size: 18px; margin: 0; display: flex; align-items: center; gap: 8px;">
+          <span>📈</span> Player Career Form Guide (CurrentFormViewAllActivity)
+        </h3>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('player-form-modal')" style="padding: 4px 10px; font-size: 12px;" data-tooltip="Close Form Guide (Esc)">✕</button>
+      </div>
+      <p class="modal-desc" style="margin-bottom: 12px; font-size: 12px; color: var(--color-text-muted);">
+        Reverse-engineered from CricHeroes <code>CurrentFormViewAllActivity</code>, <code>player_batting_current_form</code>, and <code>player_bowling_current_form</code>. Inspect rolling match performance, trajectory curves, and dismissal radars.
+      </p>
+
+      <!-- Player Selector in Modal -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; background: var(--color-surface); padding: 10px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div id="modal-form-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: var(--color-accent); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 18px;">R</div>
+          <div>
+            <h4 id="modal-form-player-name" style="margin: 0; font-size: 15px; font-weight: 800;">Rohit Sharma</h4>
+            <div id="modal-form-player-sub" style="font-size: 11px; color: var(--color-text-muted);">Opening Batter • Mumbai Strikers</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <label for="modal-form-player-select" style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); margin: 0;">Player:</label>
+          <select id="modal-form-player-select" class="form-select" style="width: auto; padding: 4px 10px; font-size: 12px;" onchange="onModalFormPlayerSelect(this.value)"></select>
+        </div>
+      </div>
+
+      <!-- Modal Content Body -->
+      <div id="modal-form-content-wrap"></div>
+
+      <!-- Modal Footer -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; margin-top: 14px; border-top: 1px solid var(--color-border);">
+        <span style="font-size: 11px; color: var(--color-text-muted);">
+          ⚡ CricInsights PRO Un-Paywalled • Realtime Live Match Sync
+        </span>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('player-form-modal')" style="font-size: 12px; padding: 6px 14px;" data-tooltip="Close dialog (Esc)">
           Close
         </button>
       </div>
@@ -11804,6 +11941,7 @@
       document.getElementById('prof-bat-sr').textContent = isBatter ? '146.2' : '112.5';
 
       renderPlayerMilestoneBadges(p);
+      renderPlayerFormGuide(p.id);
     }
 
     // ------------------------------------------------------------------------
@@ -12694,6 +12832,9 @@
               </button>
               <button type="button" class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px; color: var(--color-accent); font-weight: 700;" onclick="openCompareWithPlayer('${p.id}')" data-tooltip="Compare ${p.name} head-to-head in VS Engine">
                 ⚡ VS
+              </button>
+              <button type="button" class="btn btn-secondary" id="btn-scout-form-${p.id}" style="padding: 4px 8px; font-size: 11px; color: #10b981; font-weight: 700;" onclick="openPlayerFormModal('${p.id}')" data-tooltip="Inspect ${p.name}'s 5-match form guide & trajectory (Track 21)">
+                📈 Form
               </button>
             </div>
           </td>
@@ -14687,6 +14828,549 @@
 
       filterIncidentDiary(currentIncidentDiaryFilter);
       renderScorecardIncidents();
+    }
+
+    // ========================================================================
+    // TRACK 21: PLAYER RECENT FORM GUIDE & MOMENTUM TRAJECTORY ENGINE
+    // Forensic Origin: CurrentFormViewAllActivity / player_batting_current_form / getBattingCurrentForm / getBowlingCurrentForm / team_current_form
+    // ========================================================================
+    const playerFormState = {
+      playerId: 'A1',
+      formType: 'batting' // 'batting' | 'bowling'
+    };
+
+    function getPlayerRecentFormMatches(playerId, formType) {
+      const allPlayers = [...(state.squads.A || []), ...(state.squads.B || [])];
+      const p = allPlayers.find(x => x.id === playerId) || { id: playerId, name: 'Player', role: 'Batter' };
+      const isBatter = p.role === 'Batter' || p.role === 'Keeper';
+      const isBowler = p.role === 'Bowler';
+      const team = (state.squads.A || []).some(x => x.id === p.id) ? (state.match.teamA || 'Mumbai Strikers') : (state.match.teamB || 'Bangalore Blasters');
+      const oppTeam = team === (state.match.teamA || 'Mumbai Strikers') ? (state.match.teamB || 'Bangalore Blasters') : (state.match.teamA || 'Mumbai Strikers');
+
+      const inn1 = state.innings1;
+      const inn2 = state.innings2;
+      const liveBat = (inn1 && inn1.batters && inn1.batters[playerId]) || (inn2 && inn2.batters && inn2.batters[playerId]);
+      const liveBowl = (inn1 && inn1.bowlers && inn1.bowlers[playerId]) || (inn2 && inn2.bowlers && inn2.bowlers[playerId]);
+
+      const venues = ['Wankhede Turf', 'Oval Maidan', 'Gymkhana Ground', 'Azad Maidan', 'Chinnaswamy Arena'];
+
+      if (formType === 'batting') {
+        let baseRuns = isBatter ? [48, 62, 14, 85, 32] : (isBowler ? [6, 12, 0, 18, 4] : [28, 45, 12, 54, 22]);
+        if (p.name.includes('Rohit')) baseRuns = [74, 52, 14, 88, 36];
+        else if (p.name.includes('Virat')) baseRuns = [82, 65, 42, 94, 51];
+        else if (p.name.includes('Bumrah')) baseRuns = [4, 8, 2, 15, 0];
+        else if (p.name.includes('Maxwell') || p.name.includes('Hardik')) baseRuns = [38, 64, 18, 52, 44];
+
+        const matches = [
+          { matchId: 'm1', vsTeam: oppTeam, date: 'Oct 04', venue: venues[0], runs: baseRuns[0], balls: Math.max(1, Math.round(baseRuns[0] * (isBatter ? 0.68 : 1.1))), fours: Math.round(baseRuns[0] * 0.1), sixes: Math.round(baseRuns[0] * 0.05), dismissal: 'caught', dismissalDesc: 'c Deep Mid-Wkt b Pace', result: 'W', resultLabel: 'WON' },
+          { matchId: 'm2', vsTeam: 'Chennai Kings', date: 'Oct 08', venue: venues[1], runs: baseRuns[1], balls: Math.max(1, Math.round(baseRuns[1] * (isBatter ? 0.65 : 1.0))), fours: Math.round(baseRuns[1] * 0.12), sixes: Math.round(baseRuns[1] * 0.04), dismissal: 'not_out', dismissalDesc: 'Not Out', result: 'W', resultLabel: 'WON' },
+          { matchId: 'm3', vsTeam: 'Delhi Capitals', date: 'Oct 11', venue: venues[2], runs: baseRuns[2], balls: Math.max(1, Math.round(baseRuns[2] * (isBatter ? 0.8 : 1.2))), fours: Math.round(baseRuns[2] * 0.08), sixes: 0, dismissal: 'bowled', dismissalDesc: 'b In-Swinging Yorker', result: 'L', resultLabel: 'LOST' },
+          { matchId: 'm4', vsTeam: 'Kolkata Knights', date: 'Oct 15', venue: venues[3], runs: baseRuns[3], balls: Math.max(1, Math.round(baseRuns[3] * (isBatter ? 0.62 : 0.9))), fours: Math.round(baseRuns[3] * 0.14), sixes: Math.round(baseRuns[3] * 0.06), dismissal: 'lbw', dismissalDesc: 'lbw b Arm Ball', result: 'W', resultLabel: 'WON' },
+          { matchId: 'm5', vsTeam: 'Gujarat Titans', date: 'Oct 18', venue: venues[4], runs: baseRuns[4], balls: Math.max(1, Math.round(baseRuns[4] * (isBatter ? 0.72 : 1.1))), fours: Math.round(baseRuns[4] * 0.09), sixes: Math.round(baseRuns[4] * 0.03), dismissal: 'caught', dismissalDesc: 'c Wicketkeeper b Cutter', result: 'L', resultLabel: 'LOST' }
+        ];
+
+        if (liveBat && liveBat.balls > 0) {
+          matches[4] = {
+            matchId: 'm_live',
+            vsTeam: oppTeam,
+            date: 'Today (Live)',
+            venue: state.match.ground || 'Wankhede Turf',
+            runs: liveBat.runs,
+            balls: liveBat.balls,
+            fours: liveBat.fours,
+            sixes: liveBat.sixes,
+            dismissal: liveBat.isOut ? (liveBat.dismissalType || 'caught') : 'not_out',
+            dismissalDesc: liveBat.isOut ? (liveBat.dismissalDesc || 'Dismissed') : 'Active Not Out',
+            result: 'LIVE',
+            resultLabel: 'LIVE',
+            isLive: true
+          };
+        }
+
+        matches.forEach(m => {
+          m.sr = m.balls > 0 ? ((m.runs / m.balls) * 100).toFixed(1) : "0.0";
+          m.bndRuns = (m.fours * 4) + (m.sixes * 6);
+          m.bndPct = m.runs > 0 ? Math.min(100, Math.round((m.bndRuns / m.runs) * 100)) : 0;
+        });
+
+        return matches;
+      } else {
+        let baseWkts = isBowler ? [3, 2, 0, 4, 1] : (isBatter ? [0, 1, 0, 0, 1] : [2, 1, 1, 3, 0]);
+        let baseRuns = isBowler ? [24, 18, 34, 15, 28] : [16, 22, 18, 14, 25];
+        if (p.name.includes('Bumrah')) { baseWkts = [3, 2, 1, 4, 2]; baseRuns = [18, 14, 22, 12, 16]; }
+        else if (p.name.includes('Siraj')) { baseWkts = [2, 3, 0, 2, 1]; baseRuns = [26, 20, 36, 18, 30]; }
+
+        const matches = [
+          { matchId: 'm1', vsTeam: oppTeam, date: 'Oct 04', venue: venues[0], wickets: baseWkts[0], overs: '4.0', legalBalls: 24, runsConceded: baseRuns[0], maidens: baseWkts[0] >= 3 ? 1 : 0, dots: 14, result: 'W', resultLabel: 'WON' },
+          { matchId: 'm2', vsTeam: 'Chennai Kings', date: 'Oct 08', venue: venues[1], wickets: baseWkts[1], overs: '4.0', legalBalls: 24, runsConceded: baseRuns[1], maidens: 0, dots: 12, result: 'W', resultLabel: 'WON' },
+          { matchId: 'm3', vsTeam: 'Delhi Capitals', date: 'Oct 11', venue: venues[2], wickets: baseWkts[2], overs: '3.0', legalBalls: 18, runsConceded: baseRuns[2], maidens: 0, dots: 7, result: 'L', resultLabel: 'LOST' },
+          { matchId: 'm4', vsTeam: 'Kolkata Knights', date: 'Oct 15', venue: venues[3], wickets: baseWkts[3], overs: '4.0', legalBalls: 24, runsConceded: baseRuns[3], maidens: baseWkts[3] >= 3 ? 1 : 0, dots: 16, result: 'W', resultLabel: 'WON' },
+          { matchId: 'm5', vsTeam: 'Gujarat Titans', date: 'Oct 18', venue: venues[4], wickets: baseWkts[4], overs: '4.0', legalBalls: 24, runsConceded: baseRuns[4], maidens: 0, dots: 11, result: 'L', resultLabel: 'LOST' }
+        ];
+
+        if (liveBowl && liveBowl.legalBalls > 0) {
+          matches[4] = {
+            matchId: 'm_live',
+            vsTeam: oppTeam,
+            date: 'Today (Live)',
+            venue: state.match.ground || 'Wankhede Turf',
+            wickets: liveBowl.wickets,
+            overs: formatOvers(liveBowl.legalBalls),
+            legalBalls: liveBowl.legalBalls,
+            runsConceded: liveBowl.runsConceded,
+            maidens: liveBowl.maidens,
+            dots: liveBowl.dots || Math.round(liveBowl.legalBalls * 0.5),
+            result: 'LIVE',
+            resultLabel: 'LIVE',
+            isLive: true
+          };
+        }
+
+        matches.forEach(m => {
+          const ovDec = m.legalBalls / 6;
+          m.econ = ovDec > 0 ? (m.runsConceded / ovDec).toFixed(2) : "0.00";
+          m.dotPct = m.legalBalls > 0 ? Math.min(100, Math.round((m.dots / m.legalBalls) * 100)) : 0;
+        });
+
+        return matches;
+      }
+    }
+
+    function calculatePlayerFormSummary(matches, formType) {
+      if (!matches || !matches.length) return null;
+
+      let avgVal = 0, rateVal = 0, bndOrDotVal = 0, formScore = 50;
+      let trendText = "→ Stable (±0%)";
+      let trendColor = "var(--color-text)";
+
+      if (formType === 'batting') {
+        const totalRuns = matches.reduce((acc, m) => acc + m.runs, 0);
+        const totalBalls = matches.reduce((acc, m) => acc + m.balls, 0);
+        const outs = matches.filter(m => m.dismissal !== 'not_out').length || 1;
+        avgVal = (totalRuns / outs).toFixed(1);
+        rateVal = totalBalls > 0 ? ((totalRuns / totalBalls) * 100).toFixed(1) : "0.0";
+        const totalBndRuns = matches.reduce((acc, m) => acc + m.bndRuns, 0);
+        bndOrDotVal = totalRuns > 0 ? ((totalBndRuns / totalRuns) * 100).toFixed(1) : "0.0";
+
+        const earlyAvg = (matches.slice(0, 3).reduce((a, b) => a + b.runs, 0)) / 3;
+        const recentAvg = (matches.slice(3).reduce((a, b) => a + b.runs, 0)) / (matches.length - 3 || 1);
+        const diffPct = earlyAvg > 0 ? Math.round(((recentAvg - earlyAvg) / earlyAvg) * 100) : 0;
+
+        if (diffPct >= 15) {
+          trendText = `↗ Surge (+${diffPct}%)`;
+          trendColor = "#10b981";
+        } else if (diffPct <= -15) {
+          trendText = `↘ Dip (${diffPct}%)`;
+          trendColor = "#ef4444";
+        } else {
+          trendText = `→ Stable (${diffPct >= 0 ? '+' : ''}${diffPct}%)`;
+          trendColor = "#f59e0b";
+        }
+
+        const winCount = matches.filter(m => m.result === 'W').length;
+        formScore = Math.min(100, Math.max(15, Math.round((parseFloat(avgVal) * 0.9) + (parseFloat(rateVal) * 0.25) + (winCount * 4))));
+      } else {
+        const totalWkts = matches.reduce((acc, m) => acc + m.wickets, 0);
+        const totalBalls = matches.reduce((acc, m) => acc + m.legalBalls, 0);
+        const totalRuns = matches.reduce((acc, m) => acc + m.runsConceded, 0);
+        const totalDots = matches.reduce((acc, m) => acc + m.dots, 0);
+
+        avgVal = totalWkts > 0 ? (totalRuns / totalWkts).toFixed(1) : "N/A";
+        const ovDec = totalBalls / 6;
+        rateVal = ovDec > 0 ? (totalRuns / ovDec).toFixed(2) : "0.00";
+        bndOrDotVal = totalBalls > 0 ? ((totalDots / totalBalls) * 100).toFixed(1) : "0.0";
+
+        const earlyWkts = (matches.slice(0, 3).reduce((a, b) => a + b.wickets, 0)) / 3;
+        const recentWkts = (matches.slice(3).reduce((a, b) => a + b.wickets, 0)) / (matches.length - 3 || 1);
+        const diffPct = earlyWkts > 0 ? Math.round(((recentWkts - earlyWkts) / earlyWkts) * 100) : 0;
+
+        if (diffPct >= 15) {
+          trendText = `↗ Surge (+${diffPct}%)`;
+          trendColor = "#10b981";
+        } else if (diffPct <= -15) {
+          trendText = `↘ Dip (${diffPct}%)`;
+          trendColor = "#ef4444";
+        } else {
+          trendText = `→ Stable (${diffPct >= 0 ? '+' : ''}${diffPct}%)`;
+          trendColor = "#f59e0b";
+        }
+
+        const winCount = matches.filter(m => m.result === 'W').length;
+        const econNum = parseFloat(rateVal) || 7.0;
+        formScore = Math.min(100, Math.max(15, Math.round((totalWkts * 7) + (Math.max(0, 10 - econNum) * 5) + (winCount * 4))));
+      }
+
+      let tierBadge = { text: '🔥 RED HOT', bg: 'rgba(234,88,12,0.15)', color: '#ea580c', border: 'rgba(234,88,12,0.4)' };
+      if (formScore < 50) {
+        tierBadge = { text: '🧊 COLD SLUMP', bg: 'rgba(56,189,248,0.15)', color: '#0284c7', border: 'rgba(56,189,248,0.4)' };
+      } else if (formScore < 75) {
+        tierBadge = { text: '⚡ CONSISTENT', bg: 'rgba(16,185,129,0.15)', color: '#10b981', border: 'rgba(16,185,129,0.4)' };
+      }
+
+      return {
+        avgVal,
+        rateVal,
+        bndOrDotVal,
+        formScore,
+        tierBadge,
+        trendText,
+        trendColor
+      };
+    }
+
+    function generateFormSparklineSVG(matches, formType, summary) {
+      const W = 320, H = 70, padL = 25, padR = 25, padT = 14, padB = 18;
+      const plotW = W - padL - padR;
+      const plotH = H - padT - padB;
+
+      const values = matches.map(m => formType === 'batting' ? m.runs : m.wickets);
+      const maxVal = Math.max(...values, formType === 'batting' ? 50 : 3);
+
+      const points = matches.map((m, i) => {
+        const x = padL + (i * (plotW / (matches.length - 1 || 1)));
+        const v = formType === 'batting' ? m.runs : m.wickets;
+        const y = padT + (plotH - ((v / maxVal) * plotH));
+        return { x: Math.round(x), y: Math.round(y), val: v, match: m };
+      });
+
+      const pathStr = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+      const areaStr = `${pathStr} L ${points[points.length - 1].x} ${H - padB} L ${points[0].x} ${H - padB} Z`;
+      const color = formType === 'batting' ? '#3b82f6' : '#10b981';
+      const gradId = `sparkGrad_${formType}_${Math.random().toString(36).substr(2, 4)}`;
+
+      const circles = points.map(p => `
+        <circle cx="${p.x}" cy="${p.y}" r="4" fill="${color}" stroke="#ffffff" stroke-width="2"
+          data-tooltip="${p.match.isLive ? '🔴 LIVE: ' : ''}vs ${p.match.vsTeam}: ${formType === 'batting' ? p.val + ' runs (' + p.match.balls + 'b)' : p.val + ' wkts (' + p.match.overs + ' ov)'}">
+        </circle>
+        <text x="${p.x}" y="${p.y - 6}" font-size="9" font-weight="700" text-anchor="middle" fill="var(--color-text)">
+          ${p.val}${formType === 'batting' && p.match.dismissal === 'not_out' ? '*' : ''}
+        </text>
+      `).join('');
+
+      return `
+        <svg viewBox="0 0 ${W} ${H}" style="width: 100%; height: 100%; overflow: visible;" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="${color}" stop-opacity="0.35" />
+              <stop offset="100%" stop-color="${color}" stop-opacity="0.0" />
+            </linearGradient>
+          </defs>
+          <line x1="${padL}" y1="${H - padB}" x2="${W - padR}" y2="${H - padB}" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+          <path d="${areaStr}" fill="url(#${gradId})" />
+          <path d="${pathStr}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+          ${circles}
+        </svg>
+      `;
+    }
+
+    function renderPlayerFormGuide(playerId) {
+      const pId = playerId || playerFormState.playerId || document.getElementById('profile-player-select')?.value || 'A1';
+      playerFormState.playerId = pId;
+      const formType = playerFormState.formType || 'batting';
+
+      const matches = getPlayerRecentFormMatches(pId, formType);
+      const summary = calculatePlayerFormSummary(matches, formType);
+      if (!summary) return;
+
+      const allPlayers = [...(state.squads.A || []), ...(state.squads.B || [])];
+      const player = allPlayers.find(x => x.id === pId) || { name: 'Player', role: 'Batter' };
+
+      // Update Form Badge on S20
+      const badgeEl = document.getElementById('player-form-badge');
+      if (badgeEl) {
+        badgeEl.textContent = `${summary.tierBadge.text} (${summary.formScore}/100)`;
+        badgeEl.style.background = summary.tierBadge.bg;
+        badgeEl.style.color = summary.tierBadge.color;
+        badgeEl.style.borderColor = summary.tierBadge.border;
+      }
+
+      // Update Toggle Buttons active states
+      const batBtn = document.getElementById('btn-form-type-batting');
+      const bowlBtn = document.getElementById('btn-form-type-bowling');
+      if (batBtn && bowlBtn) {
+        if (formType === 'batting') {
+          batBtn.classList.add('active');
+          bowlBtn.classList.remove('active');
+        } else {
+          bowlBtn.classList.add('active');
+          batBtn.classList.remove('active');
+        }
+      }
+
+      // Update 4 Telemetry KPI Cards
+      const avgEl = document.getElementById('form-kpi-avg');
+      const srEconTitleEl = document.getElementById('form-kpi-sr-econ-title');
+      const srEconEl = document.getElementById('form-kpi-sr-econ');
+      const srEconSubEl = document.getElementById('form-kpi-sr-econ-sub');
+      const bndDotTitleEl = document.getElementById('form-kpi-bnd-dot-title');
+      const bndDotEl = document.getElementById('form-kpi-boundary-dot');
+      const bndDotSubEl = document.getElementById('form-kpi-bnd-dot-sub');
+      const trendEl = document.getElementById('form-kpi-trend');
+
+      if (avgEl) avgEl.textContent = summary.avgVal;
+      if (srEconTitleEl) srEconTitleEl.textContent = formType === 'batting' ? 'Strike Rate' : 'Economy Rate';
+      if (srEconEl) {
+        srEconEl.textContent = summary.rateVal;
+        srEconEl.style.color = formType === 'batting' ? (parseFloat(summary.rateVal) >= 140 ? '#10b981' : 'var(--color-text)') : (parseFloat(summary.rateVal) <= 7.0 ? '#10b981' : '#f59e0b');
+      }
+      if (srEconSubEl) srEconSubEl.textContent = formType === 'batting' ? 'Runs / 100 Balls' : 'Runs / Over';
+
+      if (bndDotTitleEl) bndDotTitleEl.textContent = formType === 'batting' ? 'Boundary %' : 'Dot Ball %';
+      if (bndDotEl) bndDotEl.textContent = `${summary.bndOrDotVal}%`;
+      if (bndDotSubEl) bndDotSubEl.textContent = formType === 'batting' ? 'In 4s & 6s' : 'Non-Scoring Deliveries';
+
+      if (trendEl) {
+        trendEl.textContent = summary.trendText;
+        trendEl.style.color = summary.trendColor;
+      }
+
+      // Sparkline Note
+      const noteEl = document.getElementById('form-sparkline-note');
+      if (noteEl) noteEl.textContent = `Rolling Avg: ${summary.avgVal} • Form Index: ${summary.formScore}/100`;
+
+      // Sparkline SVG
+      const sparkContainer = document.getElementById('form-sparkline-container');
+      if (sparkContainer) {
+        sparkContainer.innerHTML = generateFormSparklineSVG(matches, formType, summary);
+      }
+
+      // Sparkline Match Outcome Labels
+      const labelsEl = document.getElementById('form-sparkline-match-labels');
+      if (labelsEl) {
+        labelsEl.innerHTML = matches.map(m => `
+          <div style="text-align: center; flex: 1;">
+            <span style="display: inline-block; padding: 1px 6px; border-radius: var(--radius-pill); font-size: 9px; font-weight: 700; ${m.result === 'W' ? 'background: rgba(16,185,129,0.15); color: #10b981;' : (m.result === 'L' ? 'background: rgba(239,68,68,0.15); color: #ef4444;' : 'background: rgba(245,158,11,0.2); color: #f59e0b;')}">
+              ${m.result === 'W' ? '🟢 W' : (m.result === 'L' ? '🔴 L' : '⚡ LIVE')}
+            </span>
+            <div style="font-size: 9px; color: var(--color-text-muted); margin-top: 2px;">${m.date}</div>
+          </div>
+        `).join('');
+      }
+
+      // Dismissal / Hazard Radar Bar
+      const radarTitle = document.getElementById('form-radar-title');
+      const radarBar = document.getElementById('form-radar-bar');
+      const radarLegend = document.getElementById('form-radar-legend');
+
+      if (formType === 'batting') {
+        if (radarTitle) radarTitle.textContent = "Recent Dismissal Vulnerability Radar";
+        const cCount = matches.filter(m => m.dismissal === 'caught').length;
+        const bCount = matches.filter(m => m.dismissal === 'bowled').length;
+        const lCount = matches.filter(m => m.dismissal === 'lbw').length;
+        const rCount = matches.filter(m => m.dismissal === 'run_out').length;
+        const noCount = matches.filter(m => m.dismissal === 'not_out').length;
+        const total = matches.length || 5;
+
+        const cPct = Math.round((cCount / total) * 100);
+        const bPct = Math.round((bCount / total) * 100);
+        const lPct = Math.round((lCount / total) * 100);
+        const rPct = Math.round((rCount / total) * 100);
+        const noPct = Math.round((noCount / total) * 100);
+
+        if (radarBar) {
+          radarBar.innerHTML = `
+            <div style="width: ${cPct}%; background: #3b82f6;" data-tooltip="Caught: ${cPct}% (${cCount})"></div>
+            <div style="width: ${bPct}%; background: #ef4444;" data-tooltip="Bowled: ${bPct}% (${bCount})"></div>
+            <div style="width: ${lPct}%; background: #f59e0b;" data-tooltip="LBW: ${lPct}% (${lCount})"></div>
+            <div style="width: ${rPct}%; background: #8b5cf6;" data-tooltip="Run Out: ${rPct}% (${rCount})"></div>
+            <div style="width: ${noPct}%; background: #10b981;" data-tooltip="Not Out: ${noPct}% (${noCount})"></div>
+          `;
+        }
+
+        if (radarLegend) {
+          radarLegend.innerHTML = `
+            <span><span style="display: inline-block; width: 8px; height: 8px; background: #3b82f6; border-radius: 50%;"></span> Caught (${cPct}%)</span>
+            <span><span style="display: inline-block; width: 8px; height: 8px; background: #ef4444; border-radius: 50%;"></span> Bowled (${bPct}%)</span>
+            <span><span style="display: inline-block; width: 8px; height: 8px; background: #f59e0b; border-radius: 50%;"></span> LBW (${lPct}%)</span>
+            <span><span style="display: inline-block; width: 8px; height: 8px; background: #8b5cf6; border-radius: 50%;"></span> Run Out (${rPct}%)</span>
+            <span><span style="display: inline-block; width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></span> Not Out (${noPct}%)</span>
+          `;
+        }
+      } else {
+        if (radarTitle) radarTitle.textContent = "Wickets Taken by Match Phase";
+        if (radarBar) {
+          radarBar.innerHTML = `
+            <div style="width: 45%; background: #3b82f6;" data-tooltip="Powerplay Wickets: 45%"></div>
+            <div style="width: 25%; background: #f59e0b;" data-tooltip="Middle Overs Wickets: 25%"></div>
+            <div style="width: 30%; background: #ef4444;" data-tooltip="Death Overs Wickets: 30%"></div>
+          `;
+        }
+        if (radarLegend) {
+          radarLegend.innerHTML = `
+            <span><span style="display: inline-block; width: 8px; height: 8px; background: #3b82f6; border-radius: 50%;"></span> Powerplay (45%)</span>
+            <span><span style="display: inline-block; width: 8px; height: 8px; background: #f59e0b; border-radius: 50%;"></span> Middle (25%)</span>
+            <span><span style="display: inline-block; width: 8px; height: 8px; background: #ef4444; border-radius: 50%;"></span> Death Overs (30%)</span>
+          `;
+        }
+      }
+
+      // 5 Match Cards Reel
+      const reelEl = document.getElementById('form-matches-reel');
+      if (reelEl) {
+        reelEl.innerHTML = matches.map(m => {
+          let scoreHtml = '';
+          if (formType === 'batting') {
+            scoreHtml = `
+              <div style="display: flex; align-items: baseline; gap: 6px;">
+                <strong style="font-size: 15px; font-family: var(--font-mono); color: var(--color-accent);">${m.runs}${m.dismissal === 'not_out' ? '*' : ''}</strong>
+                <span style="font-size: 11px; color: var(--color-text-muted);">(${m.balls}b, SR ${m.sr})</span>
+              </div>
+              <div style="font-size: 10px; color: var(--color-text-muted);">
+                ${m.fours}x4, ${m.sixes}x6 • <span style="color: ${m.dismissal === 'not_out' ? '#10b981' : 'inherit'}; font-weight: 600;">${m.dismissalDesc}</span>
+              </div>
+            `;
+          } else {
+            scoreHtml = `
+              <div style="display: flex; align-items: baseline; gap: 6px;">
+                <strong style="font-size: 15px; font-family: var(--font-mono); color: #10b981;">${m.wickets}/${m.runsConceded}</strong>
+                <span style="font-size: 11px; color: var(--color-text-muted);">(${m.overs} ov, Eco ${m.econ})</span>
+              </div>
+              <div style="font-size: 10px; color: var(--color-text-muted);">
+                ${m.dots} dots (${m.dotPct}%) • ${m.maidens} maiden(s)
+              </div>
+            `;
+          }
+
+          return `
+            <div class="card" style="margin: 0; padding: 10px 12px; background: var(--color-surface); border: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
+                  <span style="font-size: 12px; font-weight: 700; color: var(--color-text);">vs ${m.vsTeam}</span>
+                  <span class="badge" style="font-size: 9px; padding: 1px 6px; ${m.result === 'W' ? 'background: rgba(16,185,129,0.15); color: #10b981;' : (m.result === 'L' ? 'background: rgba(239,68,68,0.15); color: #ef4444;' : 'background: rgba(245,158,11,0.2); color: #f59e0b;')}">
+                    ${m.resultLabel}
+                  </span>
+                </div>
+                <div style="font-size: 10px; color: var(--color-text-muted);">${m.date} • ${m.venue}</div>
+              </div>
+              <div style="text-align: right;">
+                ${scoreHtml}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      renderModalFormGuide(pId);
+    }
+
+    function renderModalFormGuide(pId) {
+      const modalWrap = document.getElementById('modal-form-content-wrap');
+      if (!modalWrap) return;
+      const formType = playerFormState.formType || 'batting';
+      const matches = getPlayerRecentFormMatches(pId, formType);
+      const summary = calculatePlayerFormSummary(matches, formType);
+      if (!summary) return;
+
+      modalWrap.innerHTML = `
+        <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span id="modal-form-badge" class="badge" style="background: ${summary.tierBadge.bg}; color: ${summary.tierBadge.color}; border: 1px solid ${summary.tierBadge.border}; font-weight: 800; font-size: 11px; padding: 3px 10px; border-radius: var(--radius-pill); text-transform: uppercase;">
+              ${summary.tierBadge.text} (${summary.formScore}/100)
+            </span>
+            <span style="font-size: 12px; color: var(--color-text-muted);">
+              Rolling Avg: <strong>${summary.avgVal}</strong> • Momentum: <strong style="color: ${summary.trendColor};">${summary.trendText}</strong>
+            </span>
+          </div>
+          <div class="btn-group" style="display: inline-flex; background: var(--color-bg); padding: 2px; border-radius: var(--radius-md); border: 1px solid var(--color-border);" role="tablist">
+            <button type="button" class="btn btn-sm ${formType === 'batting' ? 'active' : ''}" onclick="switchPlayerFormType('batting')" style="padding: 3px 10px; font-size: 11px; font-weight: 700;">
+              🏏 Batting
+            </button>
+            <button type="button" class="btn btn-sm ${formType === 'bowling' ? 'active' : ''}" onclick="switchPlayerFormType('bowling')" style="padding: 3px 10px; font-size: 11px; font-weight: 700;">
+              🎯 Bowling
+            </button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px;">
+          <div class="card" style="padding: 8px 12px; background: var(--color-bg); margin: 0;">
+            <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Recent Average</div>
+            <div style="font-size: 16px; font-weight: 800; font-family: var(--font-mono); margin-top: 2px;">${summary.avgVal}</div>
+          </div>
+          <div class="card" style="padding: 8px 12px; background: var(--color-bg); margin: 0;">
+            <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">${formType === 'batting' ? 'Strike Rate' : 'Economy Rate'}</div>
+            <div style="font-size: 16px; font-weight: 800; font-family: var(--font-mono); margin-top: 2px; color: #10b981;">${summary.rateVal}</div>
+          </div>
+          <div class="card" style="padding: 8px 12px; background: var(--color-bg); margin: 0;">
+            <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">${formType === 'batting' ? 'Boundary %' : 'Dot Ball %'}</div>
+            <div style="font-size: 16px; font-weight: 800; font-family: var(--font-mono); margin-top: 2px; color: #f59e0b;">${summary.bndOrDotVal}%</div>
+          </div>
+          <div class="card" style="padding: 8px 12px; background: var(--color-bg); margin: 0;">
+            <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Momentum Trend</div>
+            <div style="font-size: 14px; font-weight: 800; margin-top: 2px; color: ${summary.trendColor};">${summary.trendText}</div>
+          </div>
+        </div>
+
+        <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 12px;">
+          <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 6px;">5-Match Momentum Trajectory Curve</div>
+          <div style="width: 100%; height: 80px;">${generateFormSparklineSVG(matches, formType, summary)}</div>
+        </div>
+
+        <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 6px;">Recent 5 Innings Performance Log</div>
+        <div style="display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto;">
+          ${matches.map(m => `
+            <div class="card" style="margin: 0; padding: 8px 12px; background: var(--color-surface); border: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <span style="font-size: 12px; font-weight: 700;">vs ${m.vsTeam}</span>
+                <span class="badge" style="font-size: 9px; padding: 1px 6px; ${m.result === 'W' ? 'background: rgba(16,185,129,0.15); color: #10b981;' : (m.result === 'L' ? 'background: rgba(239,68,68,0.15); color: #ef4444;' : 'background: rgba(245,158,11,0.2); color: #f59e0b;')}">${m.resultLabel}</span>
+                <div style="font-size: 10px; color: var(--color-text-muted);">${m.date} • ${m.venue}</div>
+              </div>
+              <div style="text-align: right;">
+                ${formType === 'batting' ? `
+                  <strong style="font-size: 14px; font-family: var(--font-mono); color: var(--color-accent);">${m.runs}${m.dismissal === 'not_out' ? '*' : ''}</strong>
+                  <span style="font-size: 11px; color: var(--color-text-muted);">(${m.balls}b)</span>
+                  <div style="font-size: 10px; color: var(--color-text-muted);">${m.fours}x4, ${m.sixes}x6 • ${m.dismissalDesc}</div>
+                ` : `
+                  <strong style="font-size: 14px; font-family: var(--font-mono); color: #10b981;">${m.wickets}/${m.runsConceded}</strong>
+                  <span style="font-size: 11px; color: var(--color-text-muted);">(${m.overs} ov)</span>
+                  <div style="font-size: 10px; color: var(--color-text-muted);">${m.dots} dots • Eco ${m.econ}</div>
+                `}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function switchPlayerFormType(type) {
+      playerFormState.formType = type;
+      renderPlayerFormGuide(playerFormState.playerId);
+    }
+
+    function openPlayerFormModal(playerId) {
+      const pId = playerId || playerFormState.playerId || document.getElementById('profile-player-select')?.value || 'A1';
+      playerFormState.playerId = pId;
+
+      const allPlayers = [...(state.squads.A || []), ...(state.squads.B || [])];
+      const p = allPlayers.find(x => x.id === pId) || allPlayers[0];
+
+      const av = document.getElementById('modal-form-avatar');
+      const nameEl = document.getElementById('modal-form-player-name');
+      const subEl = document.getElementById('modal-form-player-sub');
+      const sel = document.getElementById('modal-form-player-select');
+
+      if (av) av.textContent = p.name.charAt(0);
+      if (nameEl) nameEl.textContent = p.name;
+      if (subEl) subEl.textContent = `${p.role} • Professional Grassroots Player`;
+
+      if (sel) {
+        sel.innerHTML = allPlayers.map(item => `
+          <option value="${item.id}" ${item.id === pId ? 'selected' : ''}>${item.name} (${item.role})</option>
+        `).join('');
+      }
+
+      const profSel = document.getElementById('profile-player-select');
+      if (profSel && profSel.value !== pId) {
+        profSel.value = pId;
+        renderSelectedPlayerCareer();
+      } else {
+        renderPlayerFormGuide(pId);
+      }
+
+      openModal('player-form-modal');
+    }
+
+    function onModalFormPlayerSelect(pId) {
+      openPlayerFormModal(pId);
     }
 
     function renderScorecardIncidents() {
