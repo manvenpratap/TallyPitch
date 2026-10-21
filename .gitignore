@@ -87,3 +87,5 @@ android/app/build/
 graphify-out/cache/
 graphify-out/.rebuild.lock
 
+
+graphify-out/
