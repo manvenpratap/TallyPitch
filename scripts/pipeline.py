@@ -546,6 +546,19 @@ class PackagingManager:
                 log_success(f"Synchronized {primary_html} -> dist/index.html ({size_bytes:,} bytes)")
                 synced = True
 
+        # 1b. Capacitor Mobile Assets Synchronization (iOS & Android)
+        if (self.root / "capacitor.config.json").exists():
+            cap_ios_dir = self.root / "ios" / "App" / "App" / "public"
+            cap_android_dir = self.root / "android" / "app" / "src" / "main" / "assets" / "public"
+            dist_index = self.root / "dist" / "index.html"
+            if dist_index.exists():
+                if cap_ios_dir.exists():
+                    shutil.copyfile(dist_index, cap_ios_dir / "index.html")
+                if cap_android_dir.exists():
+                    shutil.copyfile(dist_index, cap_android_dir / "index.html")
+                log_success("Synchronized Capacitor mobile assets (iOS & Android)")
+                synced = True
+
         # 2. Node / Vite bundling
         if "npm-build" in targets and not ("dist-sync" in targets and "rust-tauri" in self.stack_info["stacks"]):
             log_step("Executing npm run build...")

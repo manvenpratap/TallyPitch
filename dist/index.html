@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>TallyPitch - Live Cricket Scoring & Tournament Management</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -75,6 +75,9 @@
       position: sticky;
       top: 0;
       z-index: 40;
+      padding-top: max(0px, env(safe-area-inset-top));
+      padding-left: max(0px, env(safe-area-inset-left));
+      padding-right: max(0px, env(safe-area-inset-right));
     }
 
     .header-inner {
@@ -156,7 +159,9 @@
       max-width: 900px;
       width: 100%;
       margin: 0 auto;
-      padding: 20px 16px 40px;
+      padding: 20px 16px max(40px, env(safe-area-inset-bottom) + 20px);
+      padding-left: max(16px, env(safe-area-inset-left));
+      padding-right: max(16px, env(safe-area-inset-right));
     }
 
     /* Screen Wrappers */
@@ -5262,6 +5267,62 @@
       });
     }
 
+    // ------------------------------------------------------------------------
+    // Mobile Native Bridge: Capacitor 6 (iOS / Android / Web WakeLock & Haptics)
+    // ------------------------------------------------------------------------
+    let activeWakeLockSentinel = null;
+
+    function triggerNativeHaptic(type) {
+      try {
+        if (window.Capacitor && window.Capacitor.isPluginAvailable && window.Capacitor.isPluginAvailable('Haptics')) {
+          const H = window.Capacitor.Plugins.Haptics;
+          if (type === 'wicket') {
+            H.notification({ type: 'WARNING' });
+          } else if (type === 'boundary') {
+            H.impact({ style: 'HEAVY' });
+          } else {
+            H.impact({ style: 'LIGHT' });
+          }
+          return;
+        }
+        if (navigator.vibrate) {
+          if (type === 'wicket') navigator.vibrate([100, 50, 100]);
+          else if (type === 'boundary') navigator.vibrate([40, 30, 40]);
+          else navigator.vibrate(25);
+        }
+      } catch (e) {}
+    }
+
+    async function triggerNativeWakeLock(enable) {
+      try {
+        if (window.Capacitor && window.Capacitor.isPluginAvailable && window.Capacitor.isPluginAvailable('KeepAwake')) {
+          if (enable) {
+            await window.Capacitor.Plugins.KeepAwake.keepAwake();
+          } else {
+            await window.Capacitor.Plugins.KeepAwake.allowSleep();
+          }
+          return;
+        }
+        if ('wakeLock' in navigator) {
+          if (enable && !activeWakeLockSentinel) {
+            activeWakeLockSentinel = await navigator.wakeLock.request('screen');
+          } else if (!enable && activeWakeLockSentinel) {
+            await activeWakeLockSentinel.release();
+            activeWakeLockSentinel = null;
+          }
+        }
+      } catch (e) {}
+    }
+
+    function initNativeMobileApp() {
+      try {
+        if (window.Capacitor && window.Capacitor.isPluginAvailable && window.Capacitor.isPluginAvailable('StatusBar')) {
+          window.Capacitor.Plugins.StatusBar.setStyle({ style: 'DARK' });
+          window.Capacitor.Plugins.StatusBar.setBackgroundColor({ color: '#0f172a' });
+        }
+      } catch (e) {}
+    }
+
     function navigate(screenId) {
       document.querySelectorAll('.screen-view').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-tab-btn').forEach(el => el.classList.remove('active'));
@@ -5275,6 +5336,7 @@
         renderScorecard();
       } else if (screenId === 'S07') {
         renderLiveConsole();
+        triggerNativeWakeLock(true);
       } else if (screenId === 'community') {
         renderCommunityBoard();
       } else if (screenId === 'teams-profiles') {
@@ -5283,6 +5345,11 @@
       } else if (screenId === 'tournaments') {
         renderTournamentView();
       }
+
+      if (screenId !== 'S07') {
+        triggerNativeWakeLock(false);
+      }
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -5428,6 +5495,8 @@
 
     function recordBall(runs) {
       pushUndoSnapshot();
+      if (runs === 4 || runs === 6) triggerNativeHaptic('boundary');
+      else triggerNativeHaptic('tap');
 
       const inn = getCurrentInnings();
       const sId = state.currentLive.strikerId;
@@ -5509,6 +5578,7 @@
 
     function recordExtra(type) {
       pushUndoSnapshot();
+      triggerNativeHaptic('tap');
 
       const inn = getCurrentInnings();
       const bId = state.currentLive.bowlerId;
@@ -5637,6 +5707,7 @@
 
     function confirmWicketDismissal() {
       pushUndoSnapshot();
+      triggerNativeHaptic('wicket');
 
       const inn = getCurrentInnings();
       const dismissalType = document.querySelector('input[name="dismissal_type"]:checked').value;
@@ -15431,6 +15502,7 @@
     // Initialize on load
     window.addEventListener('DOMContentLoaded', () => {
       initApp();
+      initNativeMobileApp();
       renderTournamentView();
       renderTeamRosterTable();
       populateProfilePlayerDropdown();
