@@ -36,5 +36,5 @@ Legacy cricket scoring applications subject grassroots clubs to aggressive monet
 ## 🚀 Quick Links
 - **Repository**: [github.com/manvenpratap/TallyPitch](https://github.com/manvenpratap/TallyPitch)
 - **Live Scoring App**: [`index.html`](https://github.com/manvenpratap/TallyPitch/blob/main/index.html)
-- **Marketing Page**: [`landing.html`](https://github.com/manvenpratap/TallyPitch/blob/main/landing.html)
+- **Marketing Landing**: [`landing.html`](https://github.com/manvenpratap/TallyPitch/blob/main/landing.html)
 - **License**: [MIT License](https://github.com/manvenpratap/TallyPitch/blob/main/LICENSE)
