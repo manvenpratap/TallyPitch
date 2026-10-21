@@ -1,41 +1,12 @@
 # Offline Resilience & Realtime Architecture
 
-Grassroots cricket matches are frequently played on rural grounds, municipal parks, or farm pitches where cellular connectivity is intermittent or non-existent. Traditional cloud-first scoring apps freeze, lose deliveries, or drop connections. TallyPitch was built with an offline-first foundation.
+> **Executive Overview**: Production-grade grassroots cricket scoring platform, digital scorebook, and live OBS broadcast engine. Engineered with an offline-first architecture to guarantee 0ms latency scoring, zero dropped balls, instant atomic rollback, automated ICC Net Run Rate (NRR) computation, and real-time MQTT/WebSocket streaming.
+
+All system architectures, scoring workflows, OBS sequence broadcasts, data pipelines, and match lifecycles are embedded below as native Mermaid diagrams with full architectural explanations.
 
 ---
 
-## 1. Offline-First Lifecycle & Data Flow
-
-```mermaid
-flowchart LR
-    A["Ball Keyed In\n(Scorer Input)"] --> B["Local Memory & Cache\n(Immutable Stack)"]
-    B --> C["Instant UI Update\n(0ms Latency)"]
-    B -.->|"When connection is live"| D["WebSocket / REST\n(Remote Database Sync)"]
-```
-
-1. **Local-First Write**: Every ball scored is immediately committed to in-memory state and local browser storage.
-2. **0ms UI Feedback**: UI updates instantaneously; scorers never wait on network responses.
-3. **Queue & Sync**: If a network connection is available, deliveries are transmitted asynchronously to the backend REST API (`POST /api/matches/:id/deliveries`).
-4. **Offline Resilience**: If cellular signal drops completely, scoring continues uninterrupted for the full 20 overs. When back in range, the offline log can be synced to PostgreSQL.
-
----
-
-## 2. Technology Stack & Component Responsibilities
-
-| Layer | Technology | Primary Role |
-| :--- | :--- | :--- |
-| **Frontend** | Vanilla JS / Modular HTML / Tailored Tokens | Single-file zero-dependency scoring console and tournament dashboard (`index.html`). |
-| **Styling** | Royal Pitch Sapphire Tokens (`tooltip.css`, tokens) | Daylight-readable high-contrast theme with dark-mode parity. |
-| **Realtime Engine** | Node.js + `ws` (`server/realtime.js`) | Low-latency delivery broadcasting for spectators and live OBS overlays. |
-| **REST API** | Node.js HTTP (`server/api.js`) | Match setup, squads, toss, deliveries, undo, and tournament points endpoints. |
-| **Database** | PostgreSQL / Supabase (`supabase/migrations/`) | ACID relational data with Row-Level Security (RLS) policies. |
-| **Billing** | Stripe (`server/stripe.js`) | Pro subscription handling and webhook processing. |
-
----
-
-## 3. Formal System Visualizations
-
-### 📐 1. System Architecture
+## 🏛️ 1. System Architecture
 
 ```mermaid
 flowchart TD
@@ -63,7 +34,17 @@ flowchart TD
     Realtime -->|"live push"| Spectators
 ```
 
-### 🔄 2. Scoring Engine & 0ms Atomic Rollback Workflow
+### Architectural Breakdown & Component Responsibilities
+* **Offline-First PWA Sandbox**: Grassroots matches are played in open municipal grounds and rural fields where 4G/5G signal frequently drops. TallyPitch runs locally in the scorer's browser cache via Service Worker, executing all cricket scoring rules with zero reliance on cloud connectivity.
+* **Scoring Console & DOM HUD (`index.html`)**: Single-file high-contrast UI with daylight mode readability. Features full numeric keypad, extras selectors (Wide, No Ball, Bye, Leg Bye, Penalty), Wagon Wheel shot direction coordinates, and pitch trajectory maps.
+* **In-Memory Snapshot Ring Buffer**: Every single scored delivery triggers an immutable deep clone of the match state pushed to an in-memory stack, enabling instantaneous, 0-millisecond single-click Undo without network roundtrips.
+* **Node.js REST API & PostgreSQL**: Provides centralized match registration, tournament fixtures, official team rosters, and historical tournament points tables.
+* **MQTT 3.1.1 & WebSocket Streaming Broker**: Low-latency message broker streaming live ball-by-ball updates to spectators and streaming OBS broadcast overlays in real time.
+* **OBS Broadcast Overlay**: Standalone transparent webview (`/?overlay=true`) designed for live streaming overlays with dynamic animated lower-thirds, partnership worms, and striker stats.
+
+---
+
+## 🔄 2. Scoring Engine & 0ms Atomic Rollback Workflow
 
 ```mermaid
 flowchart LR
@@ -74,7 +55,17 @@ flowchart LR
     E --> F["6. Rollback Available\n(Undo button pops stack)"]
 ```
 
-### ⚡ 3. Realtime Ingestion & OBS Broadcast Sequence
+### Operational Workflow Stages
+1. **Delivery Input**: Scorer taps a runs button, extras chip, or wicket modal button.
+2. **Immutable Snapshot Push**: Before modifying state, a structured snapshot of `state.currentLive` is pushed onto the `undoStack`.
+3. **State Mutation**: Deliveries count, total runs increment, striker/non-striker positions swap on odd runs, bowler statistics update, and over boundaries (6 legal balls) trigger automatic bowler change alerts.
+4. **Instant HUD Refresh**: Total score, current run rate (CRR), required run rate (RRR), partnership runs, and wagon wheels re-render instantly at 0ms latency.
+5. **Voice Commentary & Stream Publish**: Uses Web Speech API to speak the delivery score (e.g. *"Four runs to Rohit Sharma"*) and broadcasts the MQTT payload.
+6. **Instant Rollback**: If an umpire signal is corrected or a scorer misclicks, tapping "Undo" pops the previous snapshot from the stack and restores match state with zero database roundtrips.
+
+---
+
+## ⚡ 3. Realtime Ingestion & OBS Broadcast Sequence
 
 ```mermaid
 sequenceDiagram
@@ -97,7 +88,15 @@ sequenceDiagram
     UI->>Bridge: MQTT PUBLISH 'cricheroes/matches/{id}/score'
 ```
 
-### 🌊 4. Match Data Flow Pipeline
+### Execution Sequence Details
+* **Steps 1–3**: The scorer logs a boundary. The local state commits the delivery, updates batsman and bowler figures, and pushes the undo snapshot.
+* **Step 4**: The PWA publishes a lightweight binary/JSON payload to the MQTT topic `cricheroes/matches/{id}/ball`.
+* **Step 5–6**: The OBS stream browser source receives the payload over WebSocket, triggering CSS keyframe animations to display the boundary banner and updated total.
+* **Steps 7–10**: When Undo is triggered, the rollback payload is published immediately to synchronize the OBS screen with the corrected score.
+
+---
+
+## 🌊 4. Match Data Flow Pipeline
 
 ```mermaid
 flowchart LR
@@ -109,7 +108,14 @@ flowchart LR
     MQTTBridge --> OBS["OBS Overlays & Standings"]
 ```
 
-### ⏱️ 5. Match & Tournament Lifecycle
+### Data Pipeline Mechanics & Invariants
+* **Deterministic Cricket Engine**: MCC Law compliance for extras (no ball re-bowls, free hits, byes, leg-byes, penalty runs under Laws 28.3, 41, and 42).
+* **Automated DLS Par Calculator**: Mathematical Duckworth-Lewis-Stern resource table calculation for rain-curtailed run chases.
+* **Social Matchday Exporter**: Direct client-side rendering to an HTML5 `<canvas>` producing high-resolution 1080x1080 social media match cards with player scores, wagon wheels, and team logos.
+
+---
+
+## ⏱️ 5. Match & Tournament Lifecycle
 
 ```mermaid
 stateDiagram-v2
@@ -127,3 +133,12 @@ stateDiagram-v2
     Concluded --> TournamentStandings: Points Table & NRR Updated
     TournamentStandings --> [*]
 ```
+
+### Lifecycle State Machine Transitions
+* **`FixtureSetup`**: Teams, venue dimensions, ball type (leather/tennis), and scheduled overs (T20, 10 overs) configured.
+* **`TossConducted`**: Interactive 3D coin toss animation records toss winner and decision (bat/bowl).
+* **`Innings1Live`**: Scorer tracks first innings balls, maidens, partnerships, and wagon placements until 10 wickets fall or overs expire.
+* **`InningsBreak`**: Target score and required run rate (RRR) locked in.
+* **`Innings2Chase`**: Live run chase tracking balls remaining vs. runs required. Supports mid-innings DLS rain adjustments.
+* **`SuperOver`**: Official ICC 1-over tie-breaker mode activated if scores are level at the end of both innings.
+* **`TournamentStandings`**: On match conclusion, Net Run Rate (NRR) is recomputed across the entire tournament points table using ICC rules: `NRR = (Total Runs Scored / Total Overs Faced) - (Total Runs Conceded / Total Overs Bowled)`.
