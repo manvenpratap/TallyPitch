@@ -1876,6 +1876,9 @@
             <button class="btn btn-secondary" id="btn-open-match-control" style="background: rgba(249,115,22,0.25); border: 1px solid rgba(249,115,22,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openMatchControlModal()" data-tooltip="ICC Penalty Runs (Law 28.3, 41, 42), Match Delay/Stoppage Calculator & Official Incident Log Diary">
               ⚖️ Match Control
             </button>
+            <button class="btn btn-secondary" id="btn-open-field-map" style="background: rgba(16,185,129,0.25); border: 1px solid rgba(16,185,129,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openFieldPlacementModal()" data-tooltip="Open 2D Tactical Field Placement Ground & ICC/MCC Compliance Inspector (Track 22)">
+              🗺️ Field Setup
+            </button>
           </div>
         </div>
 
@@ -1904,6 +1907,20 @@
           </div>
           <button type="button" class="btn btn-secondary" onclick="openMatchControlModal('penalty')" style="font-size: 10px; padding: 2px 8px; border-radius: var(--radius-pill); background: rgba(249, 115, 22, 0.25); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.4); font-weight: 700;" data-tooltip="View or manage penalty runs (Track 20)">
             Manage ⚖️
+          </button>
+        </div>
+
+        <!-- Live Field Placement & Ring Compliance Status (Track 22) -->
+        <div id="hero-field-placement-wrap" style="margin-top: 8px; font-size: 12px; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-sm); padding: 5px 12px; display: flex; align-items: center; justify-content: space-between;" data-tooltip="Live field placement summary and MCC Law 28.4 / Powerplay ring compliance">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-weight: 700; color: #34d399;">🗺️ Field:</span>
+            <span id="hero-field-preset-name" style="font-size: 12px; color: #fff; font-weight: 600;">Powerplay 1</span>
+            <span id="hero-field-compliance-badge" style="font-size: 11px; padding: 2px 8px; border-radius: var(--radius-pill); font-weight: 700; background: rgba(16, 185, 129, 0.25); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4);">
+              🟢 Legal (2/2 Outside)
+            </span>
+          </div>
+          <button type="button" class="btn btn-secondary" onclick="openFieldPlacementModal()" style="font-size: 10px; padding: 2px 8px; border-radius: var(--radius-pill); background: rgba(16, 185, 129, 0.25); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); font-weight: 700;" data-tooltip="Adjust field positions or select tactical preset">
+            Edit 🗺️
           </button>
         </div>
 
@@ -2203,6 +2220,7 @@
               <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-faceoff" onclick="switchChartTab('faceoff')" data-tooltip="Batter vs Bowler head-to-head face-off matrix and duels">⚔️ Face-Off Matrix</button>
               <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-turning" onclick="switchChartTab('turning')" data-tooltip="Game-changing turning point overs and match momentum shifts">⚡ Turning Points</button>
               <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-pitch" onclick="switchChartTab('pitch')" data-tooltip="Delivery Pitch Map line and length matrix and bowler heatmaps">🏏 Pitch Map</button>
+              <button type="button" class="btn btn-secondary chart-toggle-btn" id="btn-chart-field" onclick="switchChartTab('field')" data-tooltip="Field Placement Map overlay with shot vectors, fielder pins, and gap analysis (Track 22)">🗺️ Field Map</button>
             </div>
           </div>
 
@@ -2627,6 +2645,76 @@
                   Length × Line Breakdown Table
                 </div>
                 <div id="pitch-matrix-table-wrap"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Field Map View (Track 22: Live Field Placement & 2D Tactical Turf Map) -->
+          <div id="chart-view-field" class="chart-tab-view" style="display: none;">
+            <!-- Field Map Filters & Presets Bar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 12px; margin-bottom: 12px; color: var(--color-text-muted);">
+              <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <label for="field-chart-preset-select" style="font-weight: 600; color: #fff;">Preset:</label>
+                <select id="field-chart-preset-select" class="form-control" style="font-size: 11px; padding: 4px 8px; width: auto; background: var(--color-bg); color: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-sm);" onchange="applyFieldPresetFromChart(this.value)">
+                  <option value="powerplay">Powerplay 1 (2 Out)</option>
+                  <option value="middle">Middle Overs (4 Out)</option>
+                  <option value="death">Death Overs (5 Out Deep)</option>
+                  <option value="spin">Spin Trap (Close Catchers)</option>
+                  <option value="custom">Custom Setup</option>
+                </select>
+                <span id="field-chart-compliance-badge" style="font-size: 11px; padding: 2px 8px; border-radius: var(--radius-pill); font-weight: 700; background: rgba(16, 185, 129, 0.25); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4);">
+                  🟢 Legal (2/2 Outside)
+                </span>
+              </div>
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <button type="button" class="btn btn-secondary" id="btn-edit-field-from-chart" onclick="openFieldPlacementModal()" style="font-size: 11px; padding: 4px 10px; background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); border-radius: var(--radius-sm); font-weight: 600;" data-tooltip="Open full field editor with interactive drag-and-drop pins">
+                  ✏️ Edit Positions
+                </button>
+              </div>
+            </div>
+
+            <!-- Field 4 KPIs Summary Bar -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 14px;">
+              <div class="card" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 10px; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700;">Infield Ring</div>
+                <div id="field-kpi-infield" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: #38bdf8;">9 Fielders</div>
+              </div>
+              <div class="card" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 10px; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700;">Boundary Riders</div>
+                <div id="field-kpi-deep" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: #a855f7;">2 Deep</div>
+              </div>
+              <div class="card" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 10px; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700;">Off / Leg Split</div>
+                <div id="field-kpi-split" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: #34d399;">6 Off / 5 Leg</div>
+              </div>
+              <div class="card" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 10px; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700;">Gap Pierce Rate</div>
+                <div id="field-kpi-gaps" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: #f59e0b;">0% (0/0)</div>
+              </div>
+            </div>
+
+            <!-- Field 2D Turf Chart + Tactical Breakdown Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 14px;">
+              <!-- Left: 2D Field Turf Overlay with Shot Vectors -->
+              <div class="card" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+                <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                  <span>Tactical Turf Ground (2D View)</span>
+                  <div style="display: flex; gap: 8px; font-size: 10px;">
+                    <span style="color: #38bdf8; font-weight: 700;">● Infield</span>
+                    <span style="color: #a855f7; font-weight: 700;">● Boundary</span>
+                    <span style="color: #f59e0b; font-weight: 700;">● Bowler/Keeper</span>
+                  </div>
+                </div>
+                <div id="field-chart-svg-wrap" style="width: 100%; display: flex; justify-content: center; overflow-x: auto;"></div>
+              </div>
+
+              <!-- Right: Tactical Positions Breakdown Table -->
+              <div class="card" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); overflow-x: auto;">
+                <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+                  <span>11 Tactical Positions</span>
+                  <span id="field-chart-catcher-count" style="font-size: 10px; color: #94a3b8;">1 Catcher(s)</span>
+                </div>
+                <div id="field-positions-table-wrap"></div>
               </div>
             </div>
           </div>
@@ -4947,6 +5035,227 @@
   </div>
 
   <!-- =======================================================================
+       MODAL 19: LIVE FIELD PLACEMENT & 2D TACTICAL TURF MAP (TRACK 22)
+       ======================================================================= -->
+  <div id="field-placement-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('field-placement-modal')">
+    <div class="modal-dialog" style="max-width: 920px; width: 95%; max-height: 90vh; overflow-y: auto; text-align: left; padding: 18px;">
+      <!-- Modal Header -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; border-bottom: 1px solid var(--color-border); padding-bottom: 10px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <h3 style="margin: 0; font-size: 18px; font-weight: 800; color: #fff;">🗺️ Live Field Placement & 2D Tactical Turf Map</h3>
+            <span style="background: rgba(16,185,129,0.2); color: #34d399; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill); border: 1px solid rgba(16,185,129,0.4);">
+              Track 22 PRO
+            </span>
+          </div>
+          <p style="margin: 4px 0 0; font-size: 12px; color: var(--color-text-muted);">
+            Interactive 2D turf ground • Drag pins to position fielders • MCC Law 28.4 & ICC Powerplay ring compliance
+          </p>
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('field-placement-modal')" style="font-size: 16px; padding: 4px 10px; line-height: 1;" data-tooltip="Close dialog (Esc)">✕</button>
+      </div>
+
+      <!-- Warning & Infraction Banner -->
+      <div id="field-modal-warning-wrap" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: 12px; align-items: center; gap: 10px;">
+        <span style="font-size: 18px;">⚠️</span>
+        <div style="font-size: 12px; color: #fca5a5;" id="field-modal-warning-text">
+          Illegal Field Setting: Exceeds allowed boundary riders for current Powerplay phase!
+        </div>
+      </div>
+
+      <!-- Presets & Controls Header Bar -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; background: var(--color-bg); padding: 10px 14px; border-radius: var(--radius-md); border: 1px solid var(--color-border); margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <label for="field-modal-preset-select" style="font-size: 12px; font-weight: 700; color: #fff; margin: 0;">Tactical Preset:</label>
+          <select id="field-modal-preset-select" class="form-select" style="width: auto; padding: 4px 10px; font-size: 12px; background: var(--color-surface); color: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-sm);" onchange="applyFieldPreset(this.value)">
+            <option value="powerplay">Powerplay 1 (2 Out • Attacking Slip)</option>
+            <option value="middle">Middle Overs (4 Out • Defensive Ring)</option>
+            <option value="death">Death Overs (5 Out • Boundary Fence)</option>
+            <option value="spin">Spin Trap (Close Catchers & Slips)</option>
+            <option value="custom">Custom Position Setup</option>
+          </select>
+
+          <div style="display: flex; gap: 4px;">
+            <button type="button" class="btn btn-secondary" id="btn-quick-pp" onclick="applyFieldPreset('powerplay')" style="font-size: 11px; padding: 3px 8px;" data-tooltip="Set Powerplay 1 field (2 outside ring)">PP 1</button>
+            <button type="button" class="btn btn-secondary" id="btn-quick-mid" onclick="applyFieldPreset('middle')" style="font-size: 11px; padding: 3px 8px;" data-tooltip="Set Middle Overs field (4 outside ring)">Middle</button>
+            <button type="button" class="btn btn-secondary" id="btn-quick-death" onclick="applyFieldPreset('death')" style="font-size: 11px; padding: 3px 8px;" data-tooltip="Set Death Overs field (5 outside ring)">Death</button>
+            <button type="button" class="btn btn-secondary" id="btn-quick-spin" onclick="applyFieldPreset('spin')" style="font-size: 11px; padding: 3px 8px;" data-tooltip="Set Spin Trap with close catchers">Spin</button>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <label for="field-modal-batter-hand" style="font-size: 11px; font-weight: 700; color: var(--color-text-muted);">Facing:</label>
+            <select id="field-modal-batter-hand" class="form-select" style="width: auto; padding: 3px 8px; font-size: 11px; background: var(--color-surface); color: #fff; border: 1px solid var(--color-border);" onchange="toggleFieldBatterHand(this.value)">
+              <option value="RHB" selected>Right-Handed (RHB)</option>
+              <option value="LHB">Left-Handed (LHB)</option>
+            </select>
+          </div>
+          <span id="field-modal-compliance-badge" style="font-size: 11px; padding: 3px 10px; border-radius: var(--radius-pill); font-weight: 700; background: rgba(16, 185, 129, 0.25); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4);">
+            🟢 Legal (2/2 Outside)
+          </span>
+        </div>
+      </div>
+
+      <!-- Main Layout: 2D Turf Ground (Left) + Inspector & Rules (Right) -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px; margin-bottom: 14px;">
+        <!-- Left: 2D Interactive Turf SVG -->
+        <div class="card" style="margin: 0; padding: 12px; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 11px; font-weight: 700; color: var(--color-text-muted);">
+            <span>Interactive 2D Turf Ground</span>
+            <span>💡 Drag pins or click to inspect</span>
+          </div>
+
+          <!-- SVG Turf Container -->
+          <div id="field-modal-svg-wrap" style="width: 100%; display: flex; justify-content: center; overflow: hidden; touch-action: none; user-select: none;"></div>
+
+          <!-- Legend -->
+          <div style="display: flex; justify-content: center; gap: 12px; font-size: 10px; margin-top: 10px; flex-wrap: wrap;">
+            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; background: #ea580c; border-radius: 50%;"></span> Wicketkeeper</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; background: #dc2626; border-radius: 50%;"></span> Bowler</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; background: #0284c7; border-radius: 50%;"></span> Infield (30yd Ring)</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; background: #9333ea; border-radius: 50%;"></span> Deep Boundary</span>
+          </div>
+        </div>
+
+        <!-- Right: Selected Fielder Inspector + MCC Compliance Checklist -->
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <!-- Selected Fielder Inspector -->
+          <div class="card" id="field-inspector-card" style="margin: 0; padding: 14px; background: var(--color-bg); border: 1px solid var(--color-border);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid var(--color-border); padding-bottom: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span id="field-inspector-badge" style="width: 26px; height: 26px; border-radius: 50%; background: #0284c7; color: #fff; font-weight: 800; font-size: 11px; display: inline-flex; align-items: center; justify-content: center;">3</span>
+                <strong id="field-inspector-title" style="font-size: 14px; color: #fff;">First Slip (SL1)</strong>
+              </div>
+              <span id="field-inspector-zone-pill" style="font-size: 11px; padding: 2px 8px; border-radius: var(--radius-pill); font-weight: 700; background: rgba(56, 189, 248, 0.2); color: #38bdf8;">
+                Infield Ring
+              </span>
+            </div>
+
+            <!-- Fielder Form -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; margin-bottom: 10px;">
+              <div>
+                <label for="field-inspector-player-select" style="display: block; font-size: 11px; color: var(--color-text-muted); margin-bottom: 4px; font-weight: 700;">Assigned Player:</label>
+                <select id="field-inspector-player-select" class="form-select" style="font-size: 12px; width: 100%; padding: 4px 8px; background: var(--color-surface); color: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-sm);" onchange="onFieldInspectorPlayerChange(this.value)">
+                  <!-- Populated dynamically -->
+                </select>
+              </div>
+
+              <div>
+                <label for="field-inspector-role-select" style="display: block; font-size: 11px; color: var(--color-text-muted); margin-bottom: 4px; font-weight: 700;">Field Position Name:</label>
+                <select id="field-inspector-role-select" class="form-select" style="font-size: 12px; width: 100%; padding: 4px 8px; background: var(--color-surface); color: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-sm);" onchange="onFieldInspectorRoleChange(this.value)">
+                  <option value="First Slip">First Slip</option>
+                  <option value="Second Slip">Second Slip</option>
+                  <option value="Gully">Gully</option>
+                  <option value="Point">Point</option>
+                  <option value="Cover">Cover</option>
+                  <option value="Extra Cover">Extra Cover</option>
+                  <option value="Mid-Off">Mid-Off</option>
+                  <option value="Mid-On">Mid-On</option>
+                  <option value="Mid-Wicket">Mid-Wicket</option>
+                  <option value="Square Leg">Square Leg</option>
+                  <option value="Short Fine Leg">Short Fine Leg</option>
+                  <option value="Short Third Man">Short Third Man</option>
+                  <option value="Deep Third Man">Deep Third Man</option>
+                  <option value="Deep Point">Deep Point</option>
+                  <option value="Deep Cover">Deep Cover / Sweeper</option>
+                  <option value="Long Off">Long Off</option>
+                  <option value="Long On">Long On</option>
+                  <option value="Deep Mid-Wicket">Deep Mid-Wicket</option>
+                  <option value="Deep Square Leg">Deep Square Leg</option>
+                  <option value="Deep Fine Leg">Deep Fine Leg</option>
+                  <option value="Silly Point">Silly Point</option>
+                  <option value="Short Leg">Short Leg</option>
+                  <option value="Wicketkeeper">Wicketkeeper</option>
+                  <option value="Bowler">Bowler</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Position Coordinates & Angle Telemetry -->
+            <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 8px 10px; font-size: 11px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; text-align: center;">
+              <div>
+                <div style="color: var(--color-text-muted); font-size: 10px; font-weight: 700;">SIDE</div>
+                <div id="field-inspector-side" style="font-weight: 800; color: #fff; margin-top: 2px;">Off Side</div>
+              </div>
+              <div>
+                <div style="color: var(--color-text-muted); font-size: 10px; font-weight: 700;">DISTANCE</div>
+                <div id="field-inspector-dist" style="font-weight: 800; color: #38bdf8; margin-top: 2px;">54 Yds</div>
+              </div>
+              <div>
+                <div style="color: var(--color-text-muted); font-size: 10px; font-weight: 700;">COORDINATES</div>
+                <div id="field-inspector-coords" style="font-weight: 800; color: #a855f7; margin-top: 2px;">(180, 250)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MCC Law 28.4 & ICC Rules Compliance Checklist -->
+          <div class="card" style="margin: 0; padding: 14px; background: var(--color-bg); border: 1px solid var(--color-border);">
+            <div style="font-size: 12px; font-weight: 800; color: #fff; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+              <span>Official Compliance Checklist</span>
+              <span style="font-size: 10px; color: var(--color-text-muted);">MCC Law 28.4 & ICC Standard</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 11px;">
+              <!-- Leg side limit -->
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; border-radius: var(--radius-sm); background: var(--color-surface); border: 1px solid var(--color-border);">
+                <div>
+                  <span style="font-weight: 700; color: #fff;">MCC Law 28.4.1:</span>
+                  <span style="color: var(--color-text-muted);">Max 5 fielders on Leg Side</span>
+                </div>
+                <strong id="field-rule-leg-count" style="color: #34d399;">4 / 5 (Legal)</strong>
+              </div>
+
+              <!-- Behind crease leg limit -->
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; border-radius: var(--radius-sm); background: var(--color-surface); border: 1px solid var(--color-border);">
+                <div>
+                  <span style="font-weight: 700; color: #fff;">MCC Law 28.4.2:</span>
+                  <span style="color: var(--color-text-muted);">Max 2 behind crease on Leg Side</span>
+                </div>
+                <strong id="field-rule-crease-count" style="color: #34d399;">1 / 2 (Legal)</strong>
+              </div>
+
+              <!-- Powerplay ring boundary limit -->
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; border-radius: var(--radius-sm); background: var(--color-surface); border: 1px solid var(--color-border);">
+                <div>
+                  <span style="font-weight: 700; color: #fff;">ICC Field Restrictions:</span>
+                  <span style="color: var(--color-text-muted);" id="field-rule-ring-label">Powerplay 1 (Max 2 Outside)</span>
+                </div>
+                <strong id="field-rule-ring-count" style="color: #34d399;">2 / 2 (Legal)</strong>
+              </div>
+
+              <!-- Total fielders on pitch -->
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; border-radius: var(--radius-sm); background: var(--color-surface); border: 1px solid var(--color-border);">
+                <div>
+                  <span style="font-weight: 700; color: #fff;">Fielder Count:</span>
+                  <span style="color: var(--color-text-muted);">Total players on ground</span>
+                </div>
+                <strong id="field-rule-total-count" style="color: #38bdf8;">11 / 11 Players</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--color-border); flex-wrap: wrap; gap: 8px;">
+        <button type="button" class="btn btn-secondary" id="btn-reset-field-preset" onclick="resetFieldPreset()" style="font-size: 12px; padding: 6px 12px;" data-tooltip="Reset to current preset default coordinates">
+          🔄 Reset to Preset
+        </button>
+
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('field-placement-modal')" style="font-size: 12px; padding: 6px 14px;" data-tooltip="Discard unapplied changes (Esc)">
+            Cancel
+          </button>
+          <button type="button" class="btn btn-primary" id="btn-save-field-setup" onclick="applyFieldSetupAndClose()" style="background: #10b981; border-color: #059669; font-size: 12px; font-weight: 800; padding: 6px 18px;" data-tooltip="Save field placement and synchronize with live console">
+            💾 Apply & Save Field
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
        OBS LOWER-THIRD LIVE STREAM OVERLAY (STANDALONE & EMBEDDABLE)
        ======================================================================= -->
   <div id="obs-overlay-container" style="display: none;">
@@ -5117,6 +5426,12 @@
         wagonScorecardFilter: "all"
       },
       superOver: null, // Track 7: Official ICC Super Over tie-breaker engine
+      fieldPlacement: {
+        preset: 'powerplay',
+        batterHand: 'RHB',
+        selectedFielderId: 3,
+        positions: null
+      },
       undoStack: [], // Rollback snapshot of states
       communityFilter: "all",
       communityListings: [
@@ -5472,7 +5787,8 @@
         innings1: state.innings1,
         innings2: state.innings2,
         currentLive: state.currentLive,
-        superOver: state.superOver
+        superOver: state.superOver,
+        fieldPlacement: state.fieldPlacement
       });
       state.undoStack.push(snapshot);
       if (state.undoStack.length > 30) state.undoStack.shift();
@@ -5489,6 +5805,7 @@
       state.innings2 = prev.innings2;
       state.currentLive = prev.currentLive;
       state.superOver = prev.superOver;
+      if (prev.fieldPlacement) state.fieldPlacement = prev.fieldPlacement;
       showToast("Last delivery undone!");
       renderLiveConsole();
     }
@@ -6235,6 +6552,11 @@
         } else {
           penWrap.style.display = 'none';
         }
+      }
+
+      // Update Live Field Placement & Ring Compliance HUD (Track 22)
+      if (typeof updateFieldPlacementHud === 'function') {
+        updateFieldPlacementHud();
       }
 
       // Sync with OBS live overlay & CricHeroes MQTT bridge
@@ -7514,7 +7836,7 @@
 
     function switchChartTab(tab) {
       state.currentLive.activeChartTab = tab;
-      ['manhattan', 'worm', 'wagon', 'phases', 'venue', 'shots', 'faceoff', 'turning', 'pitch'].forEach(t => {
+      ['manhattan', 'worm', 'wagon', 'phases', 'venue', 'shots', 'faceoff', 'turning', 'pitch', 'field'].forEach(t => {
         const btn = document.getElementById(`btn-chart-${t}`);
         const view = document.getElementById(`chart-view-${t}`);
         if (btn) btn.classList.toggle('active', t === tab);
@@ -7529,6 +7851,7 @@
       else if (tab === 'faceoff') renderFaceOffMatrix();
       else if (tab === 'turning') renderTurningPointsChart();
       else if (tab === 'pitch') renderPitchMapChart();
+      else if (tab === 'field') renderFieldMapChart();
     }
 
     function renderManhattanChart() {
@@ -15499,10 +15822,865 @@
       }).join('');
     }
 
+    // ========================================================================
+    // TRACK 22: LIVE FIELD PLACEMENT & 2D TACTICAL TURF MAP ENGINE
+    // ========================================================================
+
+    const CANONICAL_FIELD_PRESETS = {
+      powerplay: {
+        id: "powerplay",
+        name: "Powerplay 1 (2 Out)",
+        description: "Attacking 2-outside ring field under ICC Powerplay 1 rules with catching slip",
+        positions: [
+          { id: 1, name: "Wicketkeeper", code: "WK", role: "keeper", x: 200, y: 258, isFixed: false },
+          { id: 2, name: "Bowler", code: "BW", role: "bowler", x: 200, y: 155, isFixed: false },
+          { id: 3, name: "First Slip", code: "SL1", role: "catcher", x: 180, y: 250, isFixed: false },
+          { id: 4, name: "Point", code: "PT", role: "infield", x: 125, y: 215, isFixed: false },
+          { id: 5, name: "Cover", code: "CV", role: "infield", x: 135, y: 175, isFixed: false },
+          { id: 6, name: "Mid-Off", code: "MO", role: "infield", x: 165, y: 140, isFixed: false },
+          { id: 7, name: "Mid-On", code: "MN", role: "infield", x: 235, y: 140, isFixed: false },
+          { id: 8, name: "Mid-Wicket", code: "MW", role: "infield", x: 265, y: 175, isFixed: false },
+          { id: 9, name: "Square Leg", code: "SL", role: "infield", x: 275, y: 215, isFixed: false },
+          { id: 10, name: "Deep Third Man", code: "3M", role: "boundary", x: 80, y: 275, isFixed: false },
+          { id: 11, name: "Deep Fine Leg", code: "FL", role: "boundary", x: 320, y: 275, isFixed: false }
+        ]
+      },
+      middle: {
+        id: "middle",
+        name: "Middle Overs (4 Out)",
+        description: "Balanced defensive spread with 4 boundary riders and tight ring",
+        positions: [
+          { id: 1, name: "Wicketkeeper", code: "WK", role: "keeper", x: 200, y: 258, isFixed: false },
+          { id: 2, name: "Bowler", code: "BW", role: "bowler", x: 200, y: 155, isFixed: false },
+          { id: 3, name: "Point", code: "PT", role: "infield", x: 125, y: 215, isFixed: false },
+          { id: 4, name: "Cover", code: "CV", role: "infield", x: 135, y: 170, isFixed: false },
+          { id: 5, name: "Mid-Off", code: "MO", role: "infield", x: 165, y: 145, isFixed: false },
+          { id: 6, name: "Short Mid-Wicket", code: "SMW", role: "infield", x: 255, y: 185, isFixed: false },
+          { id: 7, name: "Square Leg", code: "SL", role: "infield", x: 275, y: 220, isFixed: false },
+          { id: 8, name: "Deep Cover Sweeper", code: "DCV", role: "boundary", x: 55, y: 160, isFixed: false },
+          { id: 9, name: "Long Off", code: "LO", role: "boundary", x: 140, y: 45, isFixed: false },
+          { id: 10, name: "Long On", code: "LN", role: "boundary", x: 260, y: 45, isFixed: false },
+          { id: 11, name: "Deep Mid-Wicket", code: "DMW", role: "boundary", x: 335, y: 155, isFixed: false }
+        ]
+      },
+      death: {
+        id: "death",
+        name: "Death Overs (5 Out)",
+        description: "Boundary protection ring with 5 boundary riders protecting fences",
+        positions: [
+          { id: 1, name: "Wicketkeeper", code: "WK", role: "keeper", x: 200, y: 258, isFixed: false },
+          { id: 2, name: "Bowler", code: "BW", role: "bowler", x: 200, y: 155, isFixed: false },
+          { id: 3, name: "Point", code: "PT", role: "infield", x: 125, y: 215, isFixed: false },
+          { id: 4, name: "Cover", code: "CV", role: "infield", x: 135, y: 170, isFixed: false },
+          { id: 5, name: "Short Third Man", code: "S3M", role: "infield", x: 135, y: 250, isFixed: false },
+          { id: 6, name: "Short Fine Leg", code: "SFL", role: "infield", x: 265, y: 245, isFixed: false },
+          { id: 7, name: "Deep Extra Cover", code: "DEC", role: "boundary", x: 60, y: 135, isFixed: false },
+          { id: 8, name: "Long Off", code: "LO", role: "boundary", x: 145, y: 45, isFixed: false },
+          { id: 9, name: "Long On", code: "LN", role: "boundary", x: 255, y: 45, isFixed: false },
+          { id: 10, name: "Deep Mid-Wicket", code: "DMW", role: "boundary", x: 340, y: 160, isFixed: false },
+          { id: 11, name: "Deep Square Leg", code: "DSL", role: "boundary", x: 335, y: 220, isFixed: false }
+        ]
+      },
+      spin: {
+        id: "spin",
+        name: "Spin Trap (Attack)",
+        description: "Close attacking field with double slips, silly point, and short leg",
+        positions: [
+          { id: 1, name: "Wicketkeeper", code: "WK", role: "keeper", x: 200, y: 258, isFixed: false },
+          { id: 2, name: "Bowler", code: "BW", role: "bowler", x: 200, y: 155, isFixed: false },
+          { id: 3, name: "First Slip", code: "SL1", role: "catcher", x: 185, y: 250, isFixed: false },
+          { id: 4, name: "Second Slip", code: "SL2", role: "catcher", x: 172, y: 246, isFixed: false },
+          { id: 5, name: "Silly Point", code: "SPT", role: "catcher", x: 165, y: 215, isFixed: false },
+          { id: 6, name: "Short Leg", code: "SHL", role: "catcher", x: 235, y: 215, isFixed: false },
+          { id: 7, name: "Cover", code: "CV", role: "infield", x: 130, y: 170, isFixed: false },
+          { id: 8, name: "Mid-Off", code: "MO", role: "infield", x: 165, y: 140, isFixed: false },
+          { id: 9, name: "Mid-On", code: "MN", role: "infield", x: 235, y: 140, isFixed: false },
+          { id: 10, name: "Deep Mid-Wicket", code: "DMW", role: "boundary", x: 335, y: 155, isFixed: false },
+          { id: 11, name: "Long Off", code: "LO", role: "boundary", x: 140, y: 48, isFixed: false }
+        ]
+      }
+    };
+
+    let activeDraggedFielderId = null;
+
+    function initFieldPlacementEngine() {
+      if (!state.fieldPlacement) {
+        state.fieldPlacement = {
+          preset: 'powerplay',
+          batterHand: 'RHB',
+          selectedFielderId: 3,
+          positions: null
+        };
+      }
+      if (!state.fieldPlacement.positions || state.fieldPlacement.positions.length !== 11) {
+        applyFieldPreset(state.fieldPlacement.preset || 'powerplay', false);
+      } else {
+        syncFieldRosterAssignments();
+      }
+      updateFieldPlacementHud();
+    }
+
+    function syncFieldRosterAssignments() {
+      if (!state.fieldPlacement || !state.fieldPlacement.positions) return;
+      const inn = getCurrentInnings();
+      const bowlKey = (inn && inn.bowlingTeam) ? inn.bowlingTeam : (state.match.currentInningsNumber === 1 ? "B" : "A");
+      const squad = (state.squads && state.squads[bowlKey]) ? state.squads[bowlKey] : [];
+      if (!squad.length) return;
+
+      const currentBowlerId = (state.currentLive && state.currentLive.bowlerId) ? state.currentLive.bowlerId : null;
+      const keeper = squad.find(p => p.isKeeper) || squad[1] || squad[0];
+      const bowler = (currentBowlerId && squad.find(p => p.id === currentBowlerId)) || squad.find(p => p.role === 'Bowler') || squad[7] || squad[0];
+
+      // Assign WK (id 1) and Bowler (id 2)
+      const p1 = state.fieldPlacement.positions.find(p => p.id === 1);
+      if (p1 && (!p1.playerId || !p1.playerName)) {
+        p1.playerId = keeper.id;
+        p1.playerName = keeper.name;
+      }
+      const p2 = state.fieldPlacement.positions.find(p => p.id === 2);
+      if (p2 && (!p2.playerId || !p2.playerName)) {
+        p2.playerId = bowler.id;
+        p2.playerName = bowler.name;
+      }
+
+      // Assign remaining fielders
+      let squadIdx = 0;
+      state.fieldPlacement.positions.forEach(p => {
+        if (!p.playerId || !p.playerName) {
+          while (squadIdx < squad.length && (squad[squadIdx].id === p1?.playerId || squad[squadIdx].id === p2?.playerId)) {
+            squadIdx++;
+          }
+          if (squadIdx < squad.length) {
+            p.playerId = squad[squadIdx].id;
+            p.playerName = squad[squadIdx].name;
+            squadIdx++;
+          } else {
+            p.playerId = `FLD${p.id}`;
+            p.playerName = p.name;
+          }
+        }
+      });
+    }
+
+    function validateFieldRules(positions, currentLegalBalls = 0) {
+      const pos = positions || (state.fieldPlacement && state.fieldPlacement.positions) || [];
+      const overs = Math.floor(currentLegalBalls / 6);
+      const isPowerplayPhase = (overs < 6) || (state.fieldPlacement && state.fieldPlacement.preset === 'powerplay');
+      const maxAllowedOutside = isPowerplayPhase ? 2 : 5;
+      const isRHB = (state.fieldPlacement && state.fieldPlacement.batterHand) !== 'LHB';
+
+      let outsideCount = 0;
+      let infieldCount = 0;
+      let legCount = 0;
+      let offCount = 0;
+      let legBehindCrease = 0;
+      const reasons = [];
+
+      pos.forEach(p => {
+        const dx = p.x - 200;
+        const dy = p.y - 200;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist > 95) outsideCount++;
+        else infieldCount++;
+
+        // Side determination
+        const isLeg = isRHB ? (p.x > 200) : (p.x < 200);
+        const isOff = isRHB ? (p.x < 200) : (p.x > 200);
+
+        if (isLeg) legCount++;
+        if (isOff) offCount++;
+
+        // Behind popping crease on leg side (Crease at y = 220)
+        if (isLeg && p.y > 220) {
+          legBehindCrease++;
+        }
+      });
+
+      // MCC Law 28.4.1: At delivery, max 5 on leg side
+      if (legCount > 5) {
+        reasons.push(`MCC 28.4.1: ${legCount} on Leg Side (Max 5)`);
+      }
+
+      // MCC Law 28.4.2: Max 2 behind popping crease on leg side
+      if (legBehindCrease > 2) {
+        reasons.push(`MCC 28.4.2: ${legBehindCrease} behind crease on Leg (Max 2)`);
+      }
+
+      // ICC Powerplay field restrictions
+      if (outsideCount > maxAllowedOutside) {
+        reasons.push(`${isPowerplayPhase ? 'Powerplay' : 'Field Limit'}: ${outsideCount} Outside 30yd Ring (Max ${maxAllowedOutside})`);
+      }
+
+      // Squad count
+      if (pos.length !== 11) {
+        reasons.push(`Incomplete Field: ${pos.length}/11 Fielders Placed`);
+      }
+
+      const isLegal = reasons.length === 0;
+
+      return {
+        isLegal,
+        outsideCount,
+        maxAllowedOutside,
+        infieldCount,
+        legCount,
+        offCount,
+        legBehindCrease,
+        totalCount: pos.length,
+        isPowerplayPhase,
+        reasons
+      };
+    }
+
+    function updateFieldPlacementHud() {
+      const pos = (state.fieldPlacement && state.fieldPlacement.positions);
+      if (!pos) return;
+      const inn = getCurrentInnings();
+      const legalBalls = inn ? inn.legalBalls : 0;
+      const val = validateFieldRules(pos, legalBalls);
+
+      const presetNameEl = document.getElementById('hero-field-preset-name');
+      if (presetNameEl) {
+        const currentPreset = state.fieldPlacement.preset;
+        const presetObj = CANONICAL_FIELD_PRESETS[currentPreset];
+        presetNameEl.textContent = presetObj ? presetObj.name : "Custom Setup";
+      }
+
+      const badge = document.getElementById('hero-field-compliance-badge');
+      if (badge) {
+        if (val.isLegal) {
+          badge.textContent = `🟢 Legal (${val.outsideCount}/${val.maxAllowedOutside} Outside)`;
+          badge.style.background = "rgba(16, 185, 129, 0.25)";
+          badge.style.color = "#34d399";
+          badge.style.borderColor = "rgba(16, 185, 129, 0.4)";
+        } else {
+          badge.textContent = `🔴 Illegal (${val.reasons[0] || 'Infraction'})`;
+          badge.style.background = "rgba(239, 68, 68, 0.25)";
+          badge.style.color = "#f87171";
+          badge.style.borderColor = "rgba(239, 68, 68, 0.4)";
+        }
+      }
+    }
+
+    function applyFieldPreset(presetKey, shouldPersist = true) {
+      if (!state.fieldPlacement) initFieldPlacementEngine();
+      const preset = CANONICAL_FIELD_PRESETS[presetKey];
+      if (!preset) return;
+
+      state.fieldPlacement.preset = presetKey;
+      // Deep copy preset positions
+      state.fieldPlacement.positions = JSON.parse(JSON.stringify(preset.positions));
+      syncFieldRosterAssignments();
+
+      if (shouldPersist) {
+        persistMatchToVault();
+        updateFieldPlacementHud();
+      }
+
+      // If modal open, re-render
+      const modal = document.getElementById('field-placement-modal');
+      if (modal && modal.classList.contains('open')) {
+        const sel = document.getElementById('field-modal-preset-select');
+        if (sel) sel.value = presetKey;
+        renderFieldPlacementModalSvg();
+        updateFieldInspector();
+        updateFieldModalComplianceChecklist();
+      }
+
+      // If S14 chart view is open, re-render
+      if (state.currentLive && state.currentLive.activeChartTab === 'field') {
+        renderFieldMapChart();
+      }
+    }
+
+    function applyFieldPresetFromChart(presetKey) {
+      applyFieldPreset(presetKey, true);
+      renderFieldMapChart();
+    }
+
+    function resetFieldPreset() {
+      const curPreset = (state.fieldPlacement && state.fieldPlacement.preset) || 'powerplay';
+      applyFieldPreset(curPreset, true);
+      showToast(`Field reset to ${CANONICAL_FIELD_PRESETS[curPreset]?.name || 'default'}`);
+    }
+
+    function toggleFieldBatterHand(hand) {
+      if (!state.fieldPlacement) initFieldPlacementEngine();
+      state.fieldPlacement.batterHand = hand;
+      renderFieldPlacementModalSvg();
+      updateFieldInspector();
+      updateFieldModalComplianceChecklist();
+      updateFieldPlacementHud();
+      if (state.currentLive && state.currentLive.activeChartTab === 'field') {
+        renderFieldMapChart();
+      }
+    }
+
+    function openFieldPlacementModal() {
+      initFieldPlacementEngine();
+      const modal = document.getElementById('field-placement-modal');
+      if (!modal) return;
+
+      const sel = document.getElementById('field-modal-preset-select');
+      if (sel) sel.value = state.fieldPlacement.preset || 'powerplay';
+
+      const handSel = document.getElementById('field-modal-batter-hand');
+      if (handSel) handSel.value = state.fieldPlacement.batterHand || 'RHB';
+
+      populateFieldInspectorPlayerSelect();
+      renderFieldPlacementModalSvg();
+      updateFieldInspector();
+      updateFieldModalComplianceChecklist();
+
+      openModal('field-placement-modal');
+    }
+
+    function populateFieldInspectorPlayerSelect() {
+      const select = document.getElementById('field-inspector-player-select');
+      if (!select) return;
+      const inn = getCurrentInnings();
+      const bowlKey = (inn && inn.bowlingTeam) ? inn.bowlingTeam : (state.match.currentInningsNumber === 1 ? "B" : "A");
+      const squad = (state.squads && state.squads[bowlKey]) ? state.squads[bowlKey] : [];
+
+      select.innerHTML = squad.map(p => `
+        <option value="${p.id}">${p.name} (${p.role}${p.isKeeper ? ' • WK' : ''}${p.isCaptain ? ' • C' : ''})</option>
+      `).join('');
+    }
+
+    function selectFielderForInspector(fielderId) {
+      if (!state.fieldPlacement) return;
+      state.fieldPlacement.selectedFielderId = fielderId;
+      renderFieldPlacementModalSvg();
+      updateFieldInspector();
+    }
+
+    function updateFieldInspector() {
+      const posList = state.fieldPlacement?.positions || [];
+      const selId = state.fieldPlacement?.selectedFielderId || 3;
+      const f = posList.find(p => p.id === selId) || posList[0];
+      if (!f) return;
+
+      const badge = document.getElementById('field-inspector-badge');
+      if (badge) badge.textContent = f.id;
+
+      const title = document.getElementById('field-inspector-title');
+      if (title) title.textContent = `${f.name} (${f.code || f.name.substring(0, 3).toUpperCase()})`;
+
+      const isRHB = state.fieldPlacement.batterHand !== 'LHB';
+      const dx = f.x - 200;
+      const dy = f.y - 200;
+      const dist = Math.round(Math.sqrt(dx * dx + dy * dy));
+      const distYards = Math.round((dist / 175) * 75);
+      const isOutside = dist > 95;
+      const isLeg = isRHB ? (f.x > 200) : (f.x < 200);
+
+      const zonePill = document.getElementById('field-inspector-zone-pill');
+      if (zonePill) {
+        if (isOutside) {
+          zonePill.textContent = "Boundary Rider (Deep)";
+          zonePill.style.background = "rgba(168, 85, 247, 0.25)";
+          zonePill.style.color = "#c084fc";
+        } else {
+          zonePill.textContent = "Infield Ring (30yd)";
+          zonePill.style.background = "rgba(56, 189, 248, 0.25)";
+          zonePill.style.color = "#38bdf8";
+        }
+      }
+
+      const pSel = document.getElementById('field-inspector-player-select');
+      if (pSel && f.playerId) pSel.value = f.playerId;
+
+      const rSel = document.getElementById('field-inspector-role-select');
+      if (rSel) rSel.value = f.name;
+
+      const sideEl = document.getElementById('field-inspector-side');
+      if (sideEl) {
+        if (f.x === 200) sideEl.textContent = "Straight";
+        else sideEl.textContent = isLeg ? "Leg Side" : "Off Side";
+      }
+
+      const distEl = document.getElementById('field-inspector-dist');
+      if (distEl) distEl.textContent = `${distYards} Yds`;
+
+      const coordsEl = document.getElementById('field-inspector-coords');
+      if (coordsEl) coordsEl.textContent = `(${f.x}, ${f.y})`;
+    }
+
+    function onFieldInspectorPlayerChange(playerId) {
+      const posList = state.fieldPlacement?.positions || [];
+      const selId = state.fieldPlacement?.selectedFielderId || 3;
+      const f = posList.find(p => p.id === selId);
+      if (!f) return;
+
+      const inn = getCurrentInnings();
+      const bowlKey = (inn && inn.bowlingTeam) ? inn.bowlingTeam : (state.match.currentInningsNumber === 1 ? "B" : "A");
+      const squad = (state.squads && state.squads[bowlKey]) ? state.squads[bowlKey] : [];
+      const pObj = squad.find(p => p.id === playerId);
+      if (pObj) {
+        f.playerId = pObj.id;
+        f.playerName = pObj.name;
+        renderFieldPlacementModalSvg();
+        updateFieldInspector();
+      }
+    }
+
+    function onFieldInspectorRoleChange(roleName) {
+      const posList = state.fieldPlacement?.positions || [];
+      const selId = state.fieldPlacement?.selectedFielderId || 3;
+      const f = posList.find(p => p.id === selId);
+      if (!f) return;
+
+      f.name = roleName;
+      f.code = roleName.split(' ').map(w => w[0]).join('').toUpperCase();
+      renderFieldPlacementModalSvg();
+      updateFieldInspector();
+    }
+
+    function updateFieldModalComplianceChecklist() {
+      const pos = state.fieldPlacement?.positions || [];
+      const inn = getCurrentInnings();
+      const legalBalls = inn ? inn.legalBalls : 0;
+      const val = validateFieldRules(pos, legalBalls);
+
+      // Rule 1: Leg Side
+      const legCountEl = document.getElementById('field-rule-leg-count');
+      if (legCountEl) {
+        legCountEl.textContent = `${val.legCount} / 5 (${val.legCount <= 5 ? 'Legal' : 'Illegal!'})`;
+        legCountEl.style.color = val.legCount <= 5 ? "#34d399" : "#f87171";
+      }
+
+      // Rule 2: Behind Crease
+      const creaseEl = document.getElementById('field-rule-crease-count');
+      if (creaseEl) {
+        creaseEl.textContent = `${val.legBehindCrease} / 2 (${val.legBehindCrease <= 2 ? 'Legal' : 'Illegal!'})`;
+        creaseEl.style.color = val.legBehindCrease <= 2 ? "#34d399" : "#f87171";
+      }
+
+      // Rule 3: Ring Outside
+      const ringLabel = document.getElementById('field-rule-ring-label');
+      if (ringLabel) {
+        ringLabel.textContent = val.isPowerplayPhase ? "Powerplay 1 (Max 2 Outside)" : "Non-Powerplay (Max 5 Outside)";
+      }
+      const ringCountEl = document.getElementById('field-rule-ring-count');
+      if (ringCountEl) {
+        ringCountEl.textContent = `${val.outsideCount} / ${val.maxAllowedOutside} (${val.outsideCount <= val.maxAllowedOutside ? 'Legal' : 'Illegal!'})`;
+        ringCountEl.style.color = val.outsideCount <= val.maxAllowedOutside ? "#34d399" : "#f87171";
+      }
+
+      // Rule 4: Total
+      const totalEl = document.getElementById('field-rule-total-count');
+      if (totalEl) {
+        totalEl.textContent = `${val.totalCount} / 11 Players`;
+        totalEl.style.color = val.totalCount === 11 ? "#38bdf8" : "#f87171";
+      }
+
+      // Header Compliance Badge
+      const modalBadge = document.getElementById('field-modal-compliance-badge');
+      if (modalBadge) {
+        if (val.isLegal) {
+          modalBadge.textContent = `🟢 Legal (${val.outsideCount}/${val.maxAllowedOutside} Outside)`;
+          modalBadge.style.background = "rgba(16, 185, 129, 0.25)";
+          modalBadge.style.color = "#34d399";
+        } else {
+          modalBadge.textContent = `🔴 Illegal (${val.reasons[0]})`;
+          modalBadge.style.background = "rgba(239, 68, 68, 0.25)";
+          modalBadge.style.color = "#f87171";
+        }
+      }
+
+      // Warning Banner
+      const warnWrap = document.getElementById('field-modal-warning-wrap');
+      const warnTxt = document.getElementById('field-modal-warning-text');
+      if (warnWrap && warnTxt) {
+        if (!val.isLegal) {
+          warnWrap.style.display = "flex";
+          warnTxt.textContent = `Field Setting Infraction: ${val.reasons.join(' • ')}`;
+        } else {
+          warnWrap.style.display = "none";
+        }
+      }
+    }
+
+    function renderFieldPlacementModalSvg() {
+      const container = document.getElementById('field-modal-svg-wrap');
+      if (!container) return;
+
+      const posList = state.fieldPlacement?.positions || [];
+      const selId = state.fieldPlacement?.selectedFielderId || 3;
+      const isRHB = state.fieldPlacement?.batterHand !== 'LHB';
+
+      let svg = `<svg id="field-editor-svg" viewBox="0 0 400 400" width="370" height="370" style="background: radial-gradient(circle, #1e3a1e 0%, #112411 75%, #0a160a 100%); border-radius: 50%; box-shadow: inset 0 0 25px rgba(0,0,0,0.8), 0 4px 20px rgba(0,0,0,0.5); cursor: crosshair;">`;
+
+      // Turf Grass Rings
+      svg += `<circle cx="200" cy="200" r="185" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>`;
+      svg += `<circle cx="200" cy="200" r="140" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>`;
+
+      // Boundary Rope
+      svg += `<circle cx="200" cy="200" r="175" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="6,4" opacity="0.75"/>`;
+      svg += `<text x="200" y="392" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="9" font-weight="700" letter-spacing="1">BOUNDARY ROPE</text>`;
+
+      // 30-Yard Circle (r = 95)
+      svg += `<circle cx="200" cy="200" r="95" fill="rgba(251, 191, 36, 0.05)" stroke="#fbbf24" stroke-width="1.8" stroke-dasharray="5,4" opacity="0.9"/>`;
+      svg += `<text x="200" y="100" text-anchor="middle" fill="#fde68a" font-size="8" font-weight="700" letter-spacing="0.5">30-YARD INNER CIRCLE</text>`;
+
+      // Side Labels
+      const offLabel = isRHB ? "OFF SIDE" : "LEG SIDE";
+      const legLabel = isRHB ? "LEG SIDE" : "OFF SIDE";
+      svg += `<text x="45" y="204" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="10" font-weight="800" letter-spacing="1">${offLabel}</text>`;
+      svg += `<text x="355" y="204" text-anchor="middle" fill="rgba(255,255,255,0.3)" font-size="10" font-weight="800" letter-spacing="1">${legLabel}</text>`;
+
+      // Pitch Rectangle (x=188, y=166, w=24, h=68)
+      svg += `<rect x="188" y="166" width="24" height="68" rx="2" fill="#855b32" stroke="#a27b5c" stroke-width="1"/>`;
+      // Crease lines
+      svg += `<line x1="184" y1="180" x2="216" y2="180" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>`; // Bowler crease
+      svg += `<line x1="184" y1="220" x2="216" y2="220" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>`; // Popping crease
+      // Stumps
+      svg += `<circle cx="197" cy="177" r="1.5" fill="#ffffff"/>`;
+      svg += `<circle cx="200" cy="177" r="1.5" fill="#ffffff"/>`;
+      svg += `<circle cx="203" cy="177" r="1.5" fill="#ffffff"/>`;
+      svg += `<circle cx="197" cy="223" r="1.5" fill="#ffffff"/>`;
+      svg += `<circle cx="200" cy="223" r="1.5" fill="#ffffff"/>`;
+      svg += `<circle cx="203" cy="223" r="1.5" fill="#ffffff"/>`;
+
+      // Striker Indicator
+      svg += `<circle cx="200" cy="217" r="3" fill="#22c55e" stroke="#ffffff" stroke-width="1"/>`;
+      svg += `<text x="200" y="233" text-anchor="middle" fill="#86efac" font-size="7" font-weight="700">BATTER</text>`;
+
+      // 11 Fielder Pins
+      posList.forEach(p => {
+        const isSelected = p.id === selId;
+        const dx = p.x - 200;
+        const dy = p.y - 200;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const isDeep = dist > 95;
+
+        let fill = "#0284c7"; // Infield cyan/blue
+        if (p.id === 1 || p.role === 'keeper') fill = "#ea580c"; // Keeper
+        else if (p.id === 2 || p.role === 'bowler') fill = "#dc2626"; // Bowler
+        else if (p.role === 'catcher') fill = "#f59e0b"; // Slip/Catcher
+        else if (isDeep) fill = "#9333ea"; // Boundary rider
+
+        const stroke = isSelected ? "#ffffff" : "rgba(255,255,255,0.7)";
+        const strokeWidth = isSelected ? 3 : 1.5;
+        const radius = isSelected ? 13 : 11;
+
+        svg += `<g id="field-pin-group-${p.id}" class="field-pin-drag-target" style="cursor: grab;" onmousedown="onFieldPinPointerDown(event, ${p.id})" ontouchstart="onFieldPinPointerDown(event, ${p.id})">`;
+
+        // Pulse ring if selected
+        if (isSelected) {
+          svg += `<circle cx="${p.x}" cy="${p.y}" r="17" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.6" stroke-dasharray="3,3"/>`;
+        }
+
+        // Pin body circle
+        svg += `<circle id="field-pin-circle-${p.id}" cx="${p.x}" cy="${p.y}" r="${radius}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.6))"/>`;
+
+        // Number/code text inside pin
+        svg += `<text cx="${p.x}" cy="${p.y + 3.5}" x="${p.x}" y="${p.y + 3.5}" text-anchor="middle" fill="#ffffff" font-size="9" font-weight="800" pointer-events="none">${p.id}</text>`;
+
+        // Name label pill underneath pin
+        const labelText = p.code || p.name.substring(0, 4);
+        svg += `<rect x="${p.x - 16}" y="${p.y + 13}" width="32" height="11" rx="3" fill="rgba(15,23,42,0.85)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5" pointer-events="none"/>`;
+        svg += `<text x="${p.x}" y="${p.y + 21}" text-anchor="middle" fill="#f8fafc" font-size="7.5" font-weight="700" pointer-events="none">${labelText}</text>`;
+
+        svg += `</g>`;
+      });
+
+      svg += `</svg>`;
+      container.innerHTML = svg;
+
+      setupFieldSvgDragListeners();
+    }
+
+    function setupFieldSvgDragListeners() {
+      const svg = document.getElementById('field-editor-svg');
+      if (!svg) return;
+
+      const handleMove = (clientX, clientY) => {
+        if (!activeDraggedFielderId) return;
+        const pt = svg.createSVGPoint();
+        pt.x = clientX;
+        pt.y = clientY;
+        const ctm = svg.getScreenCTM();
+        if (!ctm) return;
+        const svgPt = pt.matrixTransform(ctm.inverse());
+
+        // Center is 200, 200. Radius limit is 175 (inside boundary)
+        let dx = svgPt.x - 200;
+        let dy = svgPt.y - 200;
+        let dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > 175) {
+          dx = (dx / dist) * 175;
+          dy = (dy / dist) * 175;
+        }
+
+        const newX = Math.round(200 + dx);
+        const newY = Math.round(200 + dy);
+
+        const posList = state.fieldPlacement?.positions || [];
+        const f = posList.find(p => p.id === activeDraggedFielderId);
+        if (f) {
+          f.x = newX;
+          f.y = newY;
+          if (state.fieldPlacement.preset !== 'custom') {
+            state.fieldPlacement.preset = 'custom';
+            const sel = document.getElementById('field-modal-preset-select');
+            if (sel) sel.value = 'custom';
+          }
+          renderFieldPlacementModalSvg();
+          updateFieldInspector();
+          updateFieldModalComplianceChecklist();
+        }
+      };
+
+      const handleUp = () => {
+        activeDraggedFielderId = null;
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
+        window.removeEventListener('touchmove', onTouchMove);
+        window.removeEventListener('touchend', onTouchEnd);
+      };
+
+      const onMouseMove = (e) => handleMove(e.clientX, e.clientY);
+      const onMouseUp = () => handleUp();
+      const onTouchMove = (e) => {
+        if (e.touches && e.touches[0]) {
+          handleMove(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      };
+      const onTouchEnd = () => handleUp();
+
+      window.__fieldDragHandlers = { onMouseMove, onMouseUp, onTouchMove, onTouchEnd };
+    }
+
+    function onFieldPinPointerDown(event, fielderId) {
+      event.preventDefault();
+      event.stopPropagation();
+      activeDraggedFielderId = fielderId;
+      selectFielderForInspector(fielderId);
+
+      if (window.__fieldDragHandlers) {
+        window.addEventListener('mousemove', window.__fieldDragHandlers.onMouseMove);
+        window.addEventListener('mouseup', window.__fieldDragHandlers.onMouseUp);
+        window.addEventListener('touchmove', window.__fieldDragHandlers.onTouchMove, { passive: false });
+        window.addEventListener('touchend', window.__fieldDragHandlers.onTouchEnd);
+      }
+    }
+
+    function applyFieldSetupAndClose() {
+      initFieldPlacementEngine();
+      const pos = state.fieldPlacement?.positions || [];
+      const inn = getCurrentInnings();
+      const legalBalls = inn ? inn.legalBalls : 0;
+      const val = validateFieldRules(pos, legalBalls);
+
+      persistMatchToVault();
+      updateFieldPlacementHud();
+
+      if (state.currentLive && state.currentLive.activeChartTab === 'field') {
+        renderFieldMapChart();
+      }
+
+      closeModal('field-placement-modal');
+
+      if (!val.isLegal) {
+        showToast(`⚠️ Saved with warnings: ${val.reasons[0]}`);
+      } else {
+        showToast(`Field setup saved! (${val.outsideCount}/${val.maxAllowedOutside} outside ring)`);
+      }
+    }
+
+    // ------------------------------------------------------------------------
+    // S14 10th TAB: FIELD MAP CHART & 2D TACTICAL OVERLAY
+    // ------------------------------------------------------------------------
+    function renderFieldMapChart() {
+      initFieldPlacementEngine();
+      const posList = state.fieldPlacement?.positions || [];
+      const inn = getCurrentInnings();
+      const deliveries = (inn && inn.deliveries) ? inn.deliveries : [];
+      const val = validateFieldRules(posList, inn ? inn.legalBalls : 0);
+
+      // Preset select sync
+      const pSel = document.getElementById('field-chart-preset-select');
+      if (pSel) pSel.value = state.fieldPlacement.preset || 'powerplay';
+
+      // Compliance badge
+      const badge = document.getElementById('field-chart-compliance-badge');
+      if (badge) {
+        if (val.isLegal) {
+          badge.textContent = `🟢 Legal (${val.outsideCount}/${val.maxAllowedOutside} Outside)`;
+          badge.style.background = "rgba(16, 185, 129, 0.25)";
+          badge.style.color = "#34d399";
+        } else {
+          badge.textContent = `🔴 Illegal (${val.reasons[0]})`;
+          badge.style.background = "rgba(239, 68, 68, 0.25)";
+          badge.style.color = "#f87171";
+        }
+      }
+
+      // Calculate 4 KPIs
+      // 1. Infield
+      const infEl = document.getElementById('field-kpi-infield');
+      if (infEl) infEl.textContent = `${val.infieldCount} Fielders`;
+
+      // 2. Boundary Riders
+      const deepEl = document.getElementById('field-kpi-deep');
+      if (deepEl) deepEl.textContent = `${val.outsideCount} Deep`;
+
+      // 3. Off / Leg Split
+      const splitEl = document.getElementById('field-kpi-split');
+      if (splitEl) splitEl.textContent = `${val.offCount} Off / ${val.legCount} Leg`;
+
+      // 4. Gap Pierce Rate
+      let scoringDeliveries = 0;
+      let gapsPierced = 0;
+
+      const scoredShots = [];
+
+      deliveries.forEach(d => {
+        const runs = d.runs || 0;
+        if (runs > 0) {
+          scoringDeliveries++;
+          const ww = d.wagonWheel || getDefaultWagonWheel(runs);
+          const deg = parseInt(ww.wagon_degrees || ww.degrees || 0, 10);
+          const pct = parseInt(ww.wagon_percentage || ww.distance_pct || 75, 10);
+          const r = (pct / 100) * 175;
+          const rad = (deg * Math.PI) / 180;
+          const sx = 200 + r * Math.sin(rad);
+          const sy = 220 - r * Math.cos(rad);
+
+          // Find min distance to any of the 11 fielders
+          let minDist = 999;
+          posList.forEach(p => {
+            const dist = Math.hypot(p.x - sx, p.y - sy);
+            if (dist < minDist) minDist = dist;
+          });
+
+          const isPierced = minDist >= 35;
+          if (isPierced) gapsPierced++;
+
+          scoredShots.push({
+            x: sx,
+            y: sy,
+            runs,
+            isPierced,
+            tooltip: `${d.strikerId || 'Batter'}: ${runs} run(s) • Gap: ${isPierced ? 'Pierced ⚡' : 'Covered 🛡️'}`
+          });
+        }
+      });
+
+      const gapPct = scoringDeliveries > 0 ? Math.round((gapsPierced / scoringDeliveries) * 100) : 0;
+      const gapsEl = document.getElementById('field-kpi-gaps');
+      if (gapsEl) {
+        gapsEl.textContent = `${gapPct}% (${gapsPierced}/${scoringDeliveries})`;
+        gapsEl.style.color = gapPct >= 60 ? "#ef4444" : (gapPct >= 40 ? "#f59e0b" : "#34d399");
+      }
+
+      // Render Left 2D Turf SVG
+      const svgWrap = document.getElementById('field-chart-svg-wrap');
+      if (svgWrap) {
+        let svg = `<svg viewBox="0 0 400 400" width="340" height="340" style="background: radial-gradient(circle, #1e3a1e 0%, #112411 75%, #0a160a 100%); border-radius: 50%; box-shadow: inset 0 0 20px rgba(0,0,0,0.8); user-select: none;">`;
+        svg += `<circle cx="200" cy="200" r="175" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="6,4" opacity="0.75"/>`;
+        svg += `<circle cx="200" cy="200" r="95" fill="rgba(251, 191, 36, 0.05)" stroke="#fbbf24" stroke-width="1.8" stroke-dasharray="5,4" opacity="0.9"/>`;
+        svg += `<rect x="188" y="166" width="24" height="68" rx="2" fill="#855b32" stroke="#a27b5c" stroke-width="1"/>`;
+        svg += `<line x1="184" y1="220" x2="216" y2="220" stroke="#ffffff" stroke-width="1.5" opacity="0.8"/>`;
+
+        // Render Delivery Shot Lines
+        scoredShots.forEach(s => {
+          let col = "#38bdf8";
+          if (s.runs === 4) col = "#22c55e";
+          else if (s.runs === 6) col = "#a855f7";
+
+          svg += `<line x1="200" y1="220" x2="${s.x.toFixed(1)}" y2="${s.y.toFixed(1)}" stroke="${col}" stroke-width="${s.runs >= 4 ? 2 : 1.2}" opacity="0.65" data-tooltip="${s.tooltip}"/>`;
+          svg += `<circle cx="${s.x.toFixed(1)}" cy="${s.y.toFixed(1)}" r="${s.runs >= 4 ? 3.5 : 2.5}" fill="${col}" stroke="#ffffff" stroke-width="0.8" data-tooltip="${s.tooltip}"/>`;
+        });
+
+        // Render 11 Fielder Pins
+        posList.forEach(p => {
+          const dx = p.x - 200;
+          const dy = p.y - 200;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const isDeep = dist > 95;
+
+          let fill = "#0284c7";
+          if (p.id === 1 || p.role === 'keeper') fill = "#ea580c";
+          else if (p.id === 2 || p.role === 'bowler') fill = "#dc2626";
+          else if (isDeep) fill = "#9333ea";
+
+          svg += `<circle cx="${p.x}" cy="${p.y}" r="9" fill="${fill}" stroke="#ffffff" stroke-width="1.5" data-tooltip="${p.name}: ${p.playerName || 'Fielder'}"/>`;
+          svg += `<text x="${p.x}" y="${p.y + 3}" text-anchor="middle" fill="#ffffff" font-size="7.5" font-weight="800" pointer-events="none">${p.id}</text>`;
+        });
+
+        svg += `</svg>`;
+        svgWrap.innerHTML = svg;
+      }
+
+      // Render Right Tactical Positions Table
+      const tableWrap = document.getElementById('field-positions-table-wrap');
+      if (tableWrap) {
+        const isRHB = state.fieldPlacement?.batterHand !== 'LHB';
+        let catchers = 0;
+
+        let html = `
+          <table style="width: 100%; border-collapse: collapse; font-size: 11px; text-align: left;">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--color-border); color: var(--color-text-muted); font-size: 10px; text-transform: uppercase;">
+                <th style="padding: 6px 4px;">#</th>
+                <th style="padding: 6px 8px;">Position</th>
+                <th style="padding: 6px 8px;">Assigned Player</th>
+                <th style="padding: 6px 8px;">Ring Zone</th>
+                <th style="padding: 6px 4px; text-align: center;">Side</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        posList.forEach(p => {
+          const dx = p.x - 200;
+          const dy = p.y - 200;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const isDeep = dist > 95;
+          const isLeg = isRHB ? (p.x > 200) : (p.x < 200);
+
+          let zoneBadge = `<span style="padding: 1px 6px; border-radius: var(--radius-pill); font-size: 9px; font-weight: 700; background: rgba(56, 189, 248, 0.2); color: #38bdf8;">Infield</span>`;
+          if (isDeep) {
+            zoneBadge = `<span style="padding: 1px 6px; border-radius: var(--radius-pill); font-size: 9px; font-weight: 700; background: rgba(168, 85, 247, 0.2); color: #c084fc;">Boundary</span>`;
+          } else if (p.role === 'catcher' || p.name.includes('Slip') || p.name.includes('Silly') || p.name.includes('Short Leg')) {
+            catchers++;
+            zoneBadge = `<span style="padding: 1px 6px; border-radius: var(--radius-pill); font-size: 9px; font-weight: 700; background: rgba(245, 158, 11, 0.2); color: #fbbf24;">Catcher</span>`;
+          }
+
+          const sideText = p.x === 200 ? "Pitch" : (isLeg ? "Leg" : "Off");
+          const sideColor = p.x === 200 ? "#94a3b8" : (isLeg ? "#34d399" : "#38bdf8");
+
+          html += `
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer;" onclick="openFieldPlacementModal(); selectFielderForInspector(${p.id});">
+              <td style="padding: 5px 4px; font-weight: 700; color: #fff;">${p.id}</td>
+              <td style="padding: 5px 8px; font-weight: 600; color: #fff;">${p.name}</td>
+              <td style="padding: 5px 8px; color: var(--color-text-muted);">${p.playerName || 'Squad Member'}</td>
+              <td style="padding: 5px 8px;">${zoneBadge}</td>
+              <td style="padding: 5px 4px; text-align: center; font-weight: 700; color: ${sideColor};">${sideText}</td>
+            </tr>
+          `;
+        });
+
+        html += `
+            </tbody>
+          </table>
+        `;
+
+        tableWrap.innerHTML = html;
+
+        const catcherEl = document.getElementById('field-chart-catcher-count');
+        if (catcherEl) catcherEl.textContent = `${catchers} Catcher(s)`;
+      }
+    }
+
     // Initialize on load
     window.addEventListener('DOMContentLoaded', () => {
       initApp();
       initNativeMobileApp();
+      initFieldPlacementEngine();
       renderTournamentView();
       renderTeamRosterTable();
       populateProfilePlayerDropdown();
