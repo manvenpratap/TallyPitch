@@ -8,216 +8,216 @@
       "file_type": "document",
       "source_file": "PROJECT_CONTEXT.md",
       "source_location": "L1",
-      "id": "project_context_md",
       "community": 50,
-      "norm_label": "project_context.md"
+      "norm_label": "project_context.md",
+      "id": "project_context_md"
     },
     {
       "label": "Project Context & Working Memory",
       "file_type": "document",
       "source_file": "PROJECT_CONTEXT.md",
       "source_location": "L1",
-      "id": "tallypitch_project_context_project_context_working_memory",
       "community": 50,
-      "norm_label": "project context & working memory"
+      "norm_label": "project context & working memory",
+      "id": "tallypitch_project_context_project_context_working_memory"
     },
     {
       "label": "1. Current Status & Milestone",
       "file_type": "document",
       "source_file": "PROJECT_CONTEXT.md",
       "source_location": "L9",
-      "id": "tallypitch_project_context_1_current_status_milestone",
       "community": 50,
-      "norm_label": "1. current status & milestone"
+      "norm_label": "1. current status & milestone",
+      "id": "tallypitch_project_context_1_current_status_milestone"
     },
     {
       "label": "2. Implemented Features",
       "file_type": "document",
       "source_file": "PROJECT_CONTEXT.md",
       "source_location": "L17",
-      "id": "tallypitch_project_context_2_implemented_features",
       "community": 50,
-      "norm_label": "2. implemented features"
+      "norm_label": "2. implemented features",
+      "id": "tallypitch_project_context_2_implemented_features"
     },
     {
       "label": "3. Core Architecture & Constraints",
       "file_type": "document",
       "source_file": "PROJECT_CONTEXT.md",
       "source_location": "L62",
-      "id": "tallypitch_project_context_3_core_architecture_constraints",
       "community": 50,
-      "norm_label": "3. core architecture & constraints"
+      "norm_label": "3. core architecture & constraints",
+      "id": "tallypitch_project_context_3_core_architecture_constraints"
     },
     {
       "label": "4. Active Roadmap",
       "file_type": "document",
       "source_file": "PROJECT_CONTEXT.md",
       "source_location": "L70",
-      "id": "tallypitch_project_context_4_active_roadmap",
       "community": 50,
-      "norm_label": "4. active roadmap"
+      "norm_label": "4. active roadmap",
+      "id": "tallypitch_project_context_4_active_roadmap"
     },
     {
       "label": "README.md",
       "file_type": "document",
       "source_file": "tests/README.md",
       "source_location": "L1",
-      "id": "tests_readme_md",
       "community": 51,
-      "norm_label": "readme.md"
+      "norm_label": "readme.md",
+      "id": "tests_readme_md"
     },
     {
       "label": "Test Suite: TallyPitch",
       "file_type": "document",
       "source_file": "tests/README.md",
       "source_location": "L1",
-      "id": "tests_readme_test_suite_tallypitch",
       "community": 51,
-      "norm_label": "test suite: tallypitch"
+      "norm_label": "test suite: tallypitch",
+      "id": "tests_readme_test_suite_tallypitch"
     },
     {
       "label": "Test Inventory",
       "file_type": "document",
       "source_file": "tests/README.md",
       "source_location": "L5",
-      "id": "tests_readme_test_inventory",
       "community": 51,
-      "norm_label": "test inventory"
+      "norm_label": "test inventory",
+      "id": "tests_readme_test_inventory"
     },
     {
       "label": "Running Tests",
       "file_type": "document",
       "source_file": "tests/README.md",
       "source_location": "L34",
-      "id": "tests_readme_running_tests",
       "community": 51,
-      "norm_label": "running tests"
+      "norm_label": "running tests",
+      "id": "tests_readme_running_tests"
     },
     {
       "label": "code:bash (# Token-efficient summary (recommended for agents & CI))",
       "file_type": "document",
       "source_file": "tests/README.md",
       "source_location": "L38",
-      "id": "tests_readme_codeblock_1",
       "community": 51,
-      "norm_label": "code:bash (# token-efficient summary (recommended for agents & ci))"
+      "norm_label": "code:bash (# token-efficient summary (recommended for agents & ci))",
+      "id": "tests_readme_codeblock_1"
     },
     {
       "label": "Test Harness Helpers",
       "file_type": "document",
       "source_file": "tests/README.md",
       "source_location": "L49",
-      "id": "tests_readme_test_harness_helpers",
       "community": 51,
-      "norm_label": "test harness helpers"
+      "norm_label": "test harness helpers",
+      "id": "tests_readme_test_harness_helpers"
     },
     {
       "label": "test_stadium_sfx_engine.py",
       "file_type": "code",
       "source_file": "tests/test_stadium_sfx_engine.py",
       "source_location": "L1",
-      "id": "tests_test_stadium_sfx_engine_py",
       "community": 17,
-      "norm_label": "test_stadium_sfx_engine.py"
+      "norm_label": "test_stadium_sfx_engine.py",
+      "id": "tests_test_stadium_sfx_engine_py"
     },
     {
       "label": "TestStadiumSfxEngine",
       "file_type": "code",
       "source_file": "tests/test_stadium_sfx_engine.py",
       "source_location": "L12",
-      "id": "tests_test_stadium_sfx_engine_teststadiumsfxengine",
       "community": 17,
-      "norm_label": "teststadiumsfxengine"
+      "norm_label": "teststadiumsfxengine",
+      "id": "tests_test_stadium_sfx_engine_teststadiumsfxengine"
     },
     {
       "label": "setUpClass()",
       "file_type": "code",
       "source_file": "tests/test_stadium_sfx_engine.py",
       "source_location": "L14",
-      "id": "tests_test_stadium_sfx_engine_setupclass",
       "community": 17,
-      "norm_label": "setupclass()"
+      "norm_label": "setupclass()",
+      "id": "tests_test_stadium_sfx_engine_setupclass"
     },
     {
       "label": "tearDownClass()",
       "file_type": "code",
       "source_file": "tests/test_stadium_sfx_engine.py",
       "source_location": "L19",
-      "id": "tests_test_stadium_sfx_engine_teardownclass",
       "community": 17,
-      "norm_label": "teardownclass()"
+      "norm_label": "teardownclass()",
+      "id": "tests_test_stadium_sfx_engine_teardownclass"
     },
     {
       "label": ".setUp()",
       "file_type": "code",
       "source_file": "tests/test_stadium_sfx_engine.py",
       "source_location": "L23",
-      "id": "tests_test_stadium_sfx_engine_teststadiumsfxengine_setup",
       "community": 17,
-      "norm_label": ".setup()"
+      "norm_label": ".setup()",
+      "id": "tests_test_stadium_sfx_engine_teststadiumsfxengine_setup"
     },
     {
       "label": ".tearDown()",
       "file_type": "code",
       "source_file": "tests/test_stadium_sfx_engine.py",
       "source_location": "L29",
-      "id": "tests_test_stadium_sfx_engine_teststadiumsfxengine_teardown",
       "community": 17,
-      "norm_label": ".teardown()"
+      "norm_label": ".teardown()",
+      "id": "tests_test_stadium_sfx_engine_teststadiumsfxengine_teardown"
     },
     {
       "label": ".test_sfx_header_controls_and_soundboard_modal()",
       "file_type": "code",
       "source_file": "tests/test_stadium_sfx_engine.py",
       "source_location": "L34",
-      "id": "tests_test_stadium_sfx_engine_teststadiumsfxengine_test_sfx_header_controls_and_soundboard_modal",
       "community": 17,
-      "norm_label": ".test_sfx_header_controls_and_soundboard_modal()"
+      "norm_label": ".test_sfx_header_controls_and_soundboard_modal()",
+      "id": "tests_test_stadium_sfx_engine_teststadiumsfxengine_test_sfx_header_controls_and_soundboard_modal"
     },
     {
       "label": ".test_soundboard_grid_audio_triggers()",
       "file_type": "code",
       "source_file": "tests/test_stadium_sfx_engine.py",
       "source_location": "L73",
-      "id": "tests_test_stadium_sfx_engine_teststadiumsfxengine_test_soundboard_grid_audio_triggers",
       "community": 17,
-      "norm_label": ".test_soundboard_grid_audio_triggers()"
+      "norm_label": ".test_soundboard_grid_audio_triggers()",
+      "id": "tests_test_stadium_sfx_engine_teststadiumsfxengine_test_soundboard_grid_audio_triggers"
     },
     {
       "label": ".test_in_match_automatic_sfx_scoring_triggers()",
       "file_type": "code",
       "source_file": "tests/test_stadium_sfx_engine.py",
       "source_location": "L117",
-      "id": "tests_test_stadium_sfx_engine_teststadiumsfxengine_test_in_match_automatic_sfx_scoring_triggers",
       "community": 17,
-      "norm_label": ".test_in_match_automatic_sfx_scoring_triggers()"
+      "norm_label": ".test_in_match_automatic_sfx_scoring_triggers()",
+      "id": "tests_test_stadium_sfx_engine_teststadiumsfxengine_test_in_match_automatic_sfx_scoring_triggers"
     },
     {
       "label": "Verify S07 header contains SFX toggle and Soundboard button opening Modal 15.",
       "file_type": "rationale",
       "source_file": "tests/test_stadium_sfx_engine.py",
       "source_location": "L35",
-      "id": "tests_test_stadium_sfx_engine_rationale_35",
       "community": 17,
-      "norm_label": "verify s07 header contains sfx toggle and soundboard button opening modal 15."
+      "norm_label": "verify s07 header contains sfx toggle and soundboard button opening modal 15.",
+      "id": "tests_test_stadium_sfx_engine_rationale_35"
     },
     {
       "label": "Verify all 8 soundboard acoustic trigger cards invoke Web Audio API synthesizer.",
       "file_type": "rationale",
       "source_file": "tests/test_stadium_sfx_engine.py",
       "source_location": "L74",
-      "id": "tests_test_stadium_sfx_engine_rationale_74",
       "community": 17,
-      "norm_label": "verify all 8 soundboard acoustic trigger cards invoke web audio api synthesizer."
+      "norm_label": "verify all 8 soundboard acoustic trigger cards invoke web audio api synthesizer.",
+      "id": "tests_test_stadium_sfx_engine_rationale_74"
     },
     {
       "label": "Verify boundary 4s, 6s, dots, and coin toss automatically trigger acoustic sound",
       "file_type": "rationale",
       "source_file": "tests/test_stadium_sfx_engine.py",
       "source_location": "L118",
-      "id": "tests_test_stadium_sfx_engine_rationale_118",
       "community": 17,
-      "norm_label": "verify boundary 4s, 6s, dots, and coin toss automatically trigger acoustic sound"
+      "norm_label": "verify boundary 4s, 6s, dots, and coin toss automatically trigger acoustic sound",
+      "id": "tests_test_stadium_sfx_engine_rationale_118"
     },
     {
       "label": "tooltip.js",
@@ -14182,5 +14182,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "5d52628c527d19f4a4e88dd2816fde1533475101"
+  "built_at_commit": "c0fe9f477f96f950f9540f7c0a8c5b2577d31d4e"
 }
