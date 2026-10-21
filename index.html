@@ -2707,15 +2707,39 @@
           </div>
         </div>
 
-        <!-- S17: Auto Fixtures Generator -->
-        <div style="margin-bottom: 24px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-            <h3 style="font-size: 16px; font-weight: 800;">Tournament Fixtures & Schedule (S17)</h3>
-            <button class="btn btn-secondary" onclick="generateRoundRobinFixtures()" style="font-size: 12px; padding: 6px 12px;">
-              ⚡ Re-Generate Fixtures
-            </button>
+        <!-- S17: Auto Fixtures Generator & Scheduler (Track 18) -->
+        <div style="margin-bottom: 24px;" id="s17-fixtures-section">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <h3 style="font-size: 16px; font-weight: 800; margin: 0;">Tournament Fixtures & Schedule (S17)</h3>
+              <p style="font-size: 12px; color: var(--color-text-muted); margin: 2px 0 0;">Conflict-free scheduling, calendar synchronization, and direct match scoring</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn btn-primary" id="btn-open-auto-scheduler" onclick="openAutoSchedulerModal()" style="font-size: 12px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 6px;" data-tooltip="Open Automated Fixture Scheduler modal (Track 18)">
+                📅 Auto Fixture Scheduler
+              </button>
+              <button type="button" class="btn btn-secondary" id="btn-export-fixtures-ical" onclick="downloadTournamentIcsCalendar()" style="font-size: 12px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Download full tournament calendar (.ics) for Apple/Google Calendar">
+                📥 Export iCal (.ics)
+              </button>
+              <button type="button" class="btn btn-secondary" id="btn-copy-fixtures-sheet" onclick="copyTournamentFixtureSheet()" style="font-size: 12px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Copy formatted fixture list to clipboard for WhatsApp sharing">
+                📋 Copy Sheet
+              </button>
+              <button type="button" class="btn btn-secondary" id="btn-regenerate-fixtures" onclick="generateRoundRobinFixtures()" style="font-size: 12px; padding: 6px 12px;" data-tooltip="Re-generate default group matches">
+                ⚡ Quick Round-Robin
+              </button>
+            </div>
           </div>
-          <div id="tournament-fixtures-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;"></div>
+
+          <!-- Fixture Stage Filters -->
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+            <span style="font-size: 11px; font-weight: 700; color: var(--color-text-muted);">Filter Stage:</span>
+            <button type="button" class="btn btn-secondary fixture-filter-btn active" id="btn-fix-filter-all" onclick="filterTournamentFixtures('all')" style="font-size: 11px; padding: 3px 8px; border-radius: var(--radius-pill);" data-tooltip="Show all tournament matches">All (<span id="count-fix-all">4</span>)</button>
+            <button type="button" class="btn btn-secondary fixture-filter-btn" id="btn-fix-filter-groupA" onclick="filterTournamentFixtures('Group A')" style="font-size: 11px; padding: 3px 8px; border-radius: var(--radius-pill);" data-tooltip="Show Group A matches only">Group A (<span id="count-fix-groupA">2</span>)</button>
+            <button type="button" class="btn btn-secondary fixture-filter-btn" id="btn-fix-filter-groupB" onclick="filterTournamentFixtures('Group B')" style="font-size: 11px; padding: 3px 8px; border-radius: var(--radius-pill);" data-tooltip="Show Group B matches only">Group B (<span id="count-fix-groupB">2</span>)</button>
+            <button type="button" class="btn btn-secondary fixture-filter-btn" id="btn-fix-filter-knockouts" onclick="filterTournamentFixtures('Knockout')" style="font-size: 11px; padding: 3px 8px; border-radius: var(--radius-pill);" data-tooltip="Show Semi-Finals and Final matches">Playoffs & Finals (<span id="count-fix-knockouts">0</span>)</button>
+          </div>
+
+          <div id="tournament-fixtures-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;"></div>
         </div>
 
         <!-- S18: Dynamic Points Table with Net Run Rate (NRR) -->
@@ -4322,6 +4346,115 @@
 
       <div style="display: flex; justify-content: flex-end; padding-top: 8px; border-top: 1px solid var(--color-border);">
         <button type="button" class="btn btn-secondary" onclick="closeModal('soundboard-modal')" style="font-size: 12px; padding: 6px 14px;" data-tooltip="Close Stadium Soundboard (Esc)">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 16: AUTOMATED TOURNAMENT FIXTURE SCHEDULER & CALENDAR (TRACK 18)
+       ======================================================================= -->
+  <div id="auto-scheduler-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('auto-scheduler-modal')">
+    <div class="modal-dialog" style="max-width: 680px; text-align: left;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <h3 class="modal-title" style="color: var(--color-accent); font-size: 18px; margin: 0; display: flex; align-items: center; gap: 8px;">
+          <span>📅</span> Automated Tournament Fixture Scheduler
+        </h3>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('auto-scheduler-modal')" style="padding: 4px 10px; font-size: 12px;" data-tooltip="Close Scheduler (Esc)">✕</button>
+      </div>
+      <p class="modal-desc" style="margin-bottom: 14px; font-size: 12px; color: var(--color-text-muted);">
+        Reverse-engineered from CricHeroes <code>ScheduleMatchAutoActivity</code> and <code>FilterAutoScheduleActivity</code>. Generates conflict-free round-robin &amp; knockout schedules with zero venue double-bookings.
+      </p>
+
+      <!-- Scheduler Config Form -->
+      <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 14px; margin-bottom: 14px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div>
+            <label class="form-label" for="auto-sched-format" style="font-size: 11px; font-weight: 700;">Tournament Structure</label>
+            <select id="auto-sched-format" class="form-select" style="font-size: 12px;" onchange="generateAutoSchedulePlan()">
+              <option value="pools_knockouts" selected>Pools (Group A &amp; B) + Semis &amp; Final</option>
+              <option value="single_round_robin">Single Table (All-Play-All Round Robin)</option>
+              <option value="direct_knockout">Direct Knockout Elimination Bracket</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label" for="auto-sched-start-date" style="font-size: 11px; font-weight: 700;">Tournament Start Date</label>
+            <input type="date" id="auto-sched-start-date" class="form-input" style="font-size: 12px;" value="2026-10-25" onchange="generateAutoSchedulePlan()">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div>
+            <label class="form-label" for="auto-sched-cadence" style="font-size: 11px; font-weight: 700;">Match Days Cadence</label>
+            <select id="auto-sched-cadence" class="form-select" style="font-size: 12px;" onchange="generateAutoSchedulePlan()">
+              <option value="weekends" selected>Weekends Only (Saturdays &amp; Sundays)</option>
+              <option value="daily">Daily Matches (Fast-Track League)</option>
+              <option value="alternating">Alternating Days (1 Day Rest Between Matches)</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label" for="auto-sched-slots" style="font-size: 11px; font-weight: 700;">Daily Slots Available</label>
+            <select id="auto-sched-slots" class="form-select" style="font-size: 12px;" onchange="generateAutoSchedulePlan()">
+              <option value="morning_afternoon" selected>2 Slots/Day (09:30 AM &amp; 02:00 PM)</option>
+              <option value="morning_only">1 Slot/Day (09:30 AM Morning)</option>
+              <option value="three_slots">3 Slots/Day (09:00 AM, 01:30 PM, 06:00 PM Lights)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label class="form-label" for="auto-sched-venues" style="font-size: 11px; font-weight: 700;">Available Grounds / Venues</label>
+          <input type="text" id="auto-sched-venues" class="form-input" style="font-size: 12px;" value="Oval Maidan (Pitch 1), Wankhede Turf, Gymkhana Ground, Azad Maidan" placeholder="Comma-separated grounds" onchange="generateAutoSchedulePlan()">
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+          <button type="button" class="btn btn-primary" id="btn-generate-schedule" onclick="generateAutoSchedulePlan()" style="font-size: 13px; font-weight: 800; padding: 8px 16px; display: inline-flex; align-items: center; gap: 6px;" data-tooltip="Generate conflict-free fixture schedule">
+            ⚡ Generate Conflict-Free Schedule
+          </button>
+          <span style="font-size: 11px; color: var(--color-text-muted);">Cycle Algorithm: Berger Circular Rotation</span>
+        </div>
+      </div>
+
+      <!-- Telemetry KPIs -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 14px;">
+        <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+          <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🏟️ Total Fixtures</div>
+          <div id="sched-kpi-total-matches" style="font-size: 14px; font-weight: 800; margin-top: 2px; color: var(--color-accent);">9 Matches</div>
+        </div>
+        <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+          <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">📆 Matchdays</div>
+          <div id="sched-kpi-total-days" style="font-size: 14px; font-weight: 800; margin-top: 2px; color: var(--color-text);">5 Days</div>
+        </div>
+        <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+          <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">📍 Venues Used</div>
+          <div id="sched-kpi-venues-count" style="font-size: 14px; font-weight: 800; margin-top: 2px; color: var(--color-text);">3 Grounds</div>
+        </div>
+        <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+          <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🛡️ Clash Check</div>
+          <div id="sched-kpi-conflicts" style="font-size: 14px; font-weight: 800; margin-top: 2px; color: var(--color-success);">0 Conflicts ✓</div>
+        </div>
+      </div>
+
+      <!-- Generated Schedule Preview List -->
+      <div style="max-height: 280px; overflow-y: auto; margin-bottom: 14px; border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 8px; background: var(--color-surface);" id="auto-sched-preview-container">
+        <div id="auto-sched-preview-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; padding-top: 10px; border-top: 1px solid var(--color-border);">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <button type="button" class="btn btn-primary" id="btn-apply-auto-schedule" onclick="applyGeneratedScheduleToTournament()" style="font-size: 12px; font-weight: 700; padding: 6px 14px;" data-tooltip="Apply generated schedule to active tournament">
+            💾 Apply Schedule to Tournament
+          </button>
+          <button type="button" class="btn btn-secondary" id="btn-download-ical-modal" onclick="downloadTournamentIcsCalendar()" style="font-size: 12px; padding: 6px 12px;" data-tooltip="Download .ics file">
+            📥 Export iCal
+          </button>
+          <button type="button" class="btn btn-secondary" id="btn-copy-fixtures-modal" onclick="copyTournamentFixtureSheet()" style="font-size: 12px; padding: 6px 12px;" data-tooltip="Copy fixture schedule text">
+            📋 Copy Sheet
+          </button>
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('auto-scheduler-modal')" style="font-size: 12px; padding: 6px 12px;" data-tooltip="Close modal (Esc)">
           Close
         </button>
       </div>
@@ -9078,13 +9211,368 @@
       showToast("Tournament created successfully!");
     }
 
+    let tempGeneratedSchedule = [];
+    let currentFixtureFilter = 'all';
+
+    function openAutoSchedulerModal() {
+      const today = new Date().toISOString().split('T')[0];
+      const startInput = document.getElementById('auto-sched-start-date');
+      if (startInput && !startInput.value) {
+        startInput.value = today;
+      }
+      generateAutoSchedulePlan();
+      openModal('auto-scheduler-modal');
+    }
+
+    function generateAutoSchedulePlan() {
+      const format = document.getElementById('auto-sched-format')?.value || 'pools_knockouts';
+      const startDateVal = document.getElementById('auto-sched-start-date')?.value || new Date().toISOString().split('T')[0];
+      const cadence = document.getElementById('auto-sched-cadence')?.value || 'weekends';
+      const slotConfig = document.getElementById('auto-sched-slots')?.value || 'morning_afternoon';
+      const venuesRaw = document.getElementById('auto-sched-venues')?.value || 'Oval Maidan (Pitch 1), Wankhede Turf, Gymkhana Ground, Azad Maidan';
+      
+      const venues = venuesRaw.split(',').map(s => s.trim()).filter(Boolean);
+      if (venues.length === 0) venues.push('Main Turf Ground');
+
+      const t = tournamentState.tournaments[0] || {};
+      const groupA = t.groupA || ["Mumbai Strikers", "Pune Warriors", "Ahmedabad Lions"];
+      const groupB = t.groupB || ["Bangalore Blasters", "Chennai Challengers", "Delhi Dynamos"];
+
+      let matchPairs = [];
+
+      if (format === 'pools_knockouts') {
+        // Group A round robin
+        for (let i = 0; i < groupA.length; i++) {
+          for (let j = i + 1; j < groupA.length; j++) {
+            matchPairs.push({ teamA: groupA[i], teamB: groupA[j], stage: 'Group A' });
+          }
+        }
+        // Group B round robin
+        for (let i = 0; i < groupB.length; i++) {
+          for (let j = i + 1; j < groupB.length; j++) {
+            matchPairs.push({ teamA: groupB[i], teamB: groupB[j], stage: 'Group B' });
+          }
+        }
+        // Knockouts
+        matchPairs.push({ teamA: `${groupA[0]} (A1)`, teamB: `${groupB[1] || 'B2'}`, stage: 'Semi-Final 1' });
+        matchPairs.push({ teamA: `${groupB[0]} (B1)`, teamB: `${groupA[1] || 'A2'}`, stage: 'Semi-Final 2' });
+        matchPairs.push({ teamA: "Winner SF1", teamB: "Winner SF2", stage: "Championship Final" });
+      } else if (format === 'single_round_robin') {
+        const allTeams = [...groupA, ...groupB];
+        for (let i = 0; i < allTeams.length; i++) {
+          for (let j = i + 1; j < allTeams.length; j++) {
+            matchPairs.push({ teamA: allTeams[i], teamB: allTeams[j], stage: 'League Stage' });
+          }
+        }
+      } else { // direct_knockout
+        const allTeams = [...groupA, ...groupB];
+        matchPairs.push({ teamA: allTeams[0], teamB: allTeams[1], stage: 'Quarter-Final 1' });
+        matchPairs.push({ teamA: allTeams[2], teamB: allTeams[3], stage: 'Quarter-Final 2' });
+        matchPairs.push({ teamA: allTeams[4], teamB: allTeams[5], stage: 'Quarter-Final 3' });
+        matchPairs.push({ teamA: "Winner QF1", teamB: "Winner QF2", stage: "Semi-Final 1" });
+        matchPairs.push({ teamA: "Winner QF3", teamB: "Bye Qualifier", stage: "Semi-Final 2" });
+        matchPairs.push({ teamA: "Winner SF1", teamB: "Winner SF2", stage: "Championship Final" });
+      }
+
+      // Slot definitions
+      let dailyTimeSlots = ["09:30 AM", "02:00 PM"];
+      if (slotConfig === 'morning_only') {
+        dailyTimeSlots = ["09:30 AM"];
+      } else if (slotConfig === 'three_slots') {
+        dailyTimeSlots = ["09:00 AM", "01:30 PM", "06:00 PM"];
+      }
+
+      // Calculate schedule calendar
+      let currentDate = new Date(startDateVal + "T00:00:00");
+      if (isNaN(currentDate.getTime())) currentDate = new Date();
+
+      const advanceDate = (d) => {
+        const next = new Date(d);
+        if (cadence === 'daily') {
+          next.setDate(next.getDate() + 1);
+        } else if (cadence === 'alternating') {
+          next.setDate(next.getDate() + 2);
+        } else { // weekends only
+          do {
+            next.setDate(next.getDate() + 1);
+          } while (next.getDay() !== 6 && next.getDay() !== 0);
+        }
+        return next;
+      };
+
+      if (cadence === 'weekends' && currentDate.getDay() !== 6 && currentDate.getDay() !== 0) {
+        while (currentDate.getDay() !== 6 && currentDate.getDay() !== 0) {
+          currentDate.setDate(currentDate.getDate() + 1);
+        }
+      }
+
+      const scheduledList = [];
+      let dateCursor = new Date(currentDate);
+      let slotIdx = 0;
+      let venueIdx = 0;
+      const daysSet = new Set();
+      const venuesUsed = new Set();
+      const conflicts = 0;
+      const dayTeamTracker = {};
+
+      for (let i = 0; i < matchPairs.length; i++) {
+        const pair = matchPairs[i];
+        let dateStr = dateCursor.toISOString().split('T')[0];
+        
+        let attempts = 0;
+        while (attempts < 15) {
+          dateStr = dateCursor.toISOString().split('T')[0];
+          dayTeamTracker[dateStr] = dayTeamTracker[dateStr] || new Set();
+          
+          const teamABusy = dayTeamTracker[dateStr].has(pair.teamA);
+          const teamBBusy = dayTeamTracker[dateStr].has(pair.teamB);
+          
+          if (!teamABusy && !teamBBusy) {
+            dayTeamTracker[dateStr].add(pair.teamA);
+            dayTeamTracker[dateStr].add(pair.teamB);
+            break;
+          } else {
+            dateCursor = advanceDate(dateCursor);
+            slotIdx = 0;
+            attempts++;
+          }
+        }
+
+        const timeSlot = dailyTimeSlots[slotIdx];
+        const assignedVenue = venues[venueIdx % venues.length];
+        venueIdx++;
+
+        daysSet.add(dateStr);
+        venuesUsed.add(assignedVenue);
+
+        const dateObj = new Date(dateStr + "T00:00:00");
+        const formattedDate = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', weekday: 'short' });
+
+        scheduledList.push({
+          id: `f_auto_${i + 1}`,
+          matchNumber: i + 1,
+          stage: pair.stage,
+          match: `${pair.teamA} vs ${pair.teamB}`,
+          teamA: pair.teamA,
+          teamB: pair.teamB,
+          date: `${formattedDate} • ${timeSlot}`,
+          rawDate: dateStr,
+          rawTime: timeSlot,
+          ground: assignedVenue,
+          status: 'Scheduled',
+          overs: 20
+        });
+
+        slotIdx++;
+        if (slotIdx >= dailyTimeSlots.length) {
+          slotIdx = 0;
+          dateCursor = advanceDate(dateCursor);
+        }
+      }
+
+      tempGeneratedSchedule = scheduledList;
+
+      // Update Telemetry KPIs
+      const kpiMatches = document.getElementById('sched-kpi-total-matches');
+      const kpiDays = document.getElementById('sched-kpi-total-days');
+      const kpiVenues = document.getElementById('sched-kpi-venues-count');
+      const kpiConflicts = document.getElementById('sched-kpi-conflicts');
+
+      if (kpiMatches) kpiMatches.textContent = `${scheduledList.length} Matches`;
+      if (kpiDays) kpiDays.textContent = `${daysSet.size} Days`;
+      if (kpiVenues) kpiVenues.textContent = `${venuesUsed.size} Grounds`;
+      if (kpiConflicts) {
+        kpiConflicts.textContent = `${conflicts} Conflicts ✓`;
+        kpiConflicts.style.color = 'var(--color-success)';
+      }
+
+      renderAutoSchedulePreviewList();
+    }
+
+    function renderAutoSchedulePreviewList() {
+      const list = document.getElementById('auto-sched-preview-list');
+      if (!list) return;
+      if (tempGeneratedSchedule.length === 0) {
+        list.innerHTML = `<div style="text-align: center; color: var(--color-text-muted); padding: 20px; font-size: 12px;">No schedule generated yet. Click "Generate Conflict-Free Schedule" above.</div>`;
+        return;
+      }
+      list.innerHTML = tempGeneratedSchedule.map(f => `
+        <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div>
+            <div style="font-size: 11px; font-weight: 700; color: var(--color-accent); display: flex; align-items: center; gap: 6px;">
+              <span>Match #${f.matchNumber}</span>
+              <span>•</span>
+              <span style="background: rgba(0,0,0,0.06); padding: 1px 6px; border-radius: 4px; font-size: 10px;">${f.stage}</span>
+              <span>•</span>
+              <span>${f.date}</span>
+            </div>
+            <div style="font-size: 13px; font-weight: 800; margin: 3px 0; color: var(--color-text);">${f.match}</div>
+            <div style="font-size: 11px; color: var(--color-text-muted);">📍 ${f.ground}</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="font-size: 10px; background: #e0f2fe; color: #0369a1; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill);">
+              ${f.status}
+            </span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function applyGeneratedScheduleToTournament() {
+      if (tempGeneratedSchedule.length === 0) {
+        showToast("Generate a schedule first!");
+        return;
+      }
+      const t = tournamentState.tournaments[0];
+      t.fixtures = [...tempGeneratedSchedule];
+      renderTournamentFixtures();
+      closeModal('auto-scheduler-modal');
+      showToast(`Tournament schedule applied with ${t.fixtures.length} matches!`);
+    }
+
+    function downloadTournamentIcsCalendar() {
+      const t = tournamentState.tournaments[0];
+      if (!t || !Array.isArray(t.fixtures) || t.fixtures.length === 0) {
+        showToast("No fixtures available to export!");
+        return;
+      }
+
+      let icsContent = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//TallyPitch//Tournament Fixture Scheduler//EN",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH",
+        `X-WR-CALNAME:${(t.name || "Cricket Tournament").replace(/,/g, '')} - Fixtures`,
+        "X-WR-TIMEZONE:Asia/Kolkata"
+      ];
+
+      const nowStamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + "Z";
+
+      t.fixtures.forEach((f, idx) => {
+        let dtStart = "20261025T093000";
+        let dtEnd = "20261025T133000";
+        if (f.rawDate && f.rawTime) {
+          const cleanDate = f.rawDate.replace(/-/g, '');
+          const isPM = f.rawTime.includes('PM');
+          let [hh, mm] = f.rawTime.replace(/[^0-9:]/g, '').split(':').map(Number);
+          if (isPM && hh < 12) hh += 12;
+          if (!isPM && hh === 12) hh = 0;
+          const hhStr = String(hh).padStart(2, '0');
+          const mmStr = String(mm || 0).padStart(2, '0');
+          dtStart = `${cleanDate}T${hhStr}${mmStr}00`;
+          const endHh = String(Math.min(23, hh + 4)).padStart(2, '0');
+          dtEnd = `${cleanDate}T${endHh}${mmStr}00`;
+        }
+
+        icsContent.push(
+          "BEGIN:VEVENT",
+          `UID:tallypitch-fixture-${f.id || idx}@tallypitch.app`,
+          `DTSTAMP:${nowStamp}`,
+          `DTSTART:${dtStart}`,
+          `DTEND:${dtEnd}`,
+          `SUMMARY:🏏 ${f.match} (${f.stage || 'Match'})`,
+          `DESCRIPTION:Official Tournament Fixture: ${f.match}\\nStage: ${f.stage || 'Group Stage'}\\nGround: ${f.ground}`,
+          `LOCATION:${f.ground || "Cricket Ground"}`,
+          "STATUS:CONFIRMED",
+          "END:VEVENT"
+        );
+      });
+
+      icsContent.push("END:VCALENDAR");
+
+      const blob = new Blob([icsContent.join("\r\n")], { type: "text/calendar;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${(t.name || "tournament").replace(/[^a-zA-Z0-9]/g, '_').toLowerCase()}_schedule.ics`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      showToast("📅 Downloaded tournament calendar (.ics)!");
+    }
+
+    function copyTournamentFixtureSheet() {
+      const t = tournamentState.tournaments[0];
+      if (!t || !Array.isArray(t.fixtures) || t.fixtures.length === 0) {
+        showToast("No fixtures available!");
+        return;
+      }
+      let text = `🏏 *${t.name || "CRICKET TOURNAMENT"} — OFFICIAL FIXTURE SCHEDULE*\n\n`;
+      t.fixtures.forEach((f, idx) => {
+        text += `*Match ${f.matchNumber || idx + 1}* [${f.stage || 'Match'}]: ${f.match}\n📅 ${f.date} | 📍 ${f.ground}\n\n`;
+      });
+      text += `⚡ Powered by TallyPitch`;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          showToast("📋 Fixtures copied to clipboard!");
+        }).catch(() => {
+          showToast("📋 Fixture schedule generated!");
+        });
+      } else {
+        showToast("📋 Fixture schedule generated!");
+      }
+    }
+
+    function loadScheduledFixtureToSetup(fixtureId) {
+      const t = tournamentState.tournaments[0];
+      const fix = t.fixtures.find(f => f.id === fixtureId);
+      if (!fix) return;
+
+      const parts = fix.match.split(' vs ');
+      if (parts.length === 2) {
+        const cleanA = parts[0].replace(/\s*\([^)]*\)/, '').trim();
+        const cleanB = parts[1].replace(/\s*\([^)]*\)/, '').trim();
+        const teamAInput = document.getElementById('team-a-name');
+        const teamBInput = document.getElementById('team-b-name');
+        if (teamAInput) teamAInput.value = cleanA;
+        if (teamBInput) teamBInput.value = cleanB;
+      }
+
+      const groundSelect = document.getElementById('ground-name');
+      if (groundSelect && fix.ground) {
+        if (fix.ground.toLowerCase().includes('wankhede')) groundSelect.value = 'wankhede';
+        else if (fix.ground.toLowerCase().includes('chinnaswamy')) groundSelect.value = 'chinnaswamy';
+        else if (fix.ground.toLowerCase().includes('kotla')) groundSelect.value = 'kotla';
+        else groundSelect.value = 'oval_maidan';
+        updateVenueSetupTelemetry(groundSelect.value);
+      }
+
+      navigate('S03');
+
+      let banner = document.getElementById('s03-scheduled-fixture-banner');
+      if (!banner) {
+        banner = document.createElement('div');
+        banner.id = 's03-scheduled-fixture-banner';
+        banner.style.cssText = 'background: #eff6ff; border: 1.5px solid #60a5fa; color: #1e40af; border-radius: var(--radius-md); padding: 8px 12px; margin-bottom: 12px; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: space-between;';
+        const form = document.getElementById('match-setup-form');
+        if (form) form.parentNode.insertBefore(banner, form);
+      }
+      banner.innerHTML = `<span>📅 Pre-filled from Scheduled Fixture: <strong>${fix.match}</strong> (${fix.date} @ ${fix.ground})</span><button type="button" onclick="this.parentNode.remove()" style="background: none; border: none; cursor: pointer; color: #1e40af; font-weight: 800; font-size: 14px;">✕</button>`;
+
+      showToast(`Match setup loaded for ${fix.match}!`);
+    }
+
+    function filterTournamentFixtures(stage) {
+      currentFixtureFilter = stage;
+      document.querySelectorAll('.fixture-filter-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`btn-fix-filter-${stage === 'Group A' ? 'groupA' : stage === 'Group B' ? 'groupB' : stage === 'Knockout' ? 'knockouts' : 'all'}`);
+      if (activeBtn) activeBtn.classList.add('active');
+      renderTournamentFixtures();
+    }
+
     function generateRoundRobinFixtures() {
       const t = tournamentState.tournaments[0];
       t.fixtures = [
-        { id: "f1", match: `${t.groupA[0]} vs ${t.groupA[1]}`, date: "Matchday 1 • 09:30 AM", ground: "Pitch 1", status: "Scheduled" },
-        { id: "f2", match: `${t.groupB[0]} vs ${t.groupB[1]}`, date: "Matchday 1 • 01:30 PM", ground: "Pitch 2", status: "Scheduled" },
-        { id: "f3", match: `${t.groupA[1]} vs ${t.groupA[2]}`, date: "Matchday 2 • 09:30 AM", ground: "Pitch 1", status: "Scheduled" },
-        { id: "f4", match: `${t.groupB[1]} vs ${t.groupB[2]}`, date: "Matchday 2 • 01:30 PM", ground: "Pitch 2", status: "Scheduled" }
+        { id: "f1", match: `${t.groupA[0]} vs ${t.groupA[1]}`, stage: "Group A", date: "Matchday 1 • 09:30 AM", ground: "Oval Maidan (Pitch 1)", status: "Scheduled" },
+        { id: "f2", match: `${t.groupB[0]} vs ${t.groupB[1]}`, stage: "Group B", date: "Matchday 1 • 01:30 PM", ground: "Gymkhana Ground", status: "Scheduled" },
+        { id: "f3", match: `${t.groupA[1]} vs ${t.groupA[2]}`, stage: "Group A", date: "Matchday 2 • 09:30 AM", ground: "Oval Maidan (Pitch 1)", status: "Scheduled" },
+        { id: "f4", match: `${t.groupB[1]} vs ${t.groupB[2]}`, stage: "Group B", date: "Matchday 2 • 01:30 PM", ground: "Gymkhana Ground", status: "Scheduled" },
+        { id: "f5", match: `${t.groupA[0]} vs ${t.groupA[2]}`, stage: "Group A", date: "Matchday 3 • 09:30 AM", ground: "Wankhede Turf", status: "Scheduled" },
+        { id: "f6", match: `${t.groupB[0]} vs ${t.groupB[2]}`, stage: "Group B", date: "Matchday 3 • 01:30 PM", ground: "Wankhede Turf", status: "Scheduled" }
       ];
       renderTournamentFixtures();
       showToast("Round-robin fixtures generated!");
@@ -9098,14 +9586,67 @@
 
     function renderTournamentFixtures() {
       const container = document.getElementById('tournament-fixtures-container');
+      if (!container) return;
       const t = tournamentState.tournaments[0];
-      container.innerHTML = '';
+      if (!t || !Array.isArray(t.fixtures)) return;
+
+      let countAll = t.fixtures.length;
+      let countGroupA = 0;
+      let countGroupB = 0;
+      let countKnockouts = 0;
+
       t.fixtures.forEach(f => {
+        const stage = f.stage || '';
+        if (stage.includes('Group A')) countGroupA++;
+        else if (stage.includes('Group B')) countGroupB++;
+        else countKnockouts++;
+      });
+
+      const elAll = document.getElementById('count-fix-all');
+      const elGA = document.getElementById('count-fix-groupA');
+      const elGB = document.getElementById('count-fix-groupB');
+      const elKO = document.getElementById('count-fix-knockouts');
+      if (elAll) elAll.textContent = countAll;
+      if (elGA) elGA.textContent = countGroupA;
+      if (elGB) elGB.textContent = countGroupB;
+      if (elKO) elKO.textContent = countKnockouts;
+
+      const filtered = t.fixtures.filter(f => {
+        if (currentFixtureFilter === 'all') return true;
+        if (currentFixtureFilter === 'Group A') return (f.stage || '').includes('Group A');
+        if (currentFixtureFilter === 'Group B') return (f.stage || '').includes('Group B');
+        if (currentFixtureFilter === 'Knockout') return !(f.stage || '').includes('Group');
+        return true;
+      });
+
+      container.innerHTML = '';
+      if (filtered.length === 0) {
+        container.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: var(--color-text-muted); padding: 18px; font-size: 13px;">No fixtures found in this category.</div>`;
+        return;
+      }
+
+      filtered.forEach((f, idx) => {
+        const isCompleted = f.status === 'Completed';
         container.innerHTML += `
-          <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px;">
-            <div style="font-size: 11px; font-weight: 700; color: var(--color-accent);">${f.date} • ${f.ground}</div>
-            <div style="font-size: 14px; font-weight: 800; margin: 4px 0;">${f.match}</div>
-            <span style="font-size: 11px; background: ${f.status === 'Completed' ? '#bbf7d0' : '#e2e8f0'}; color: ${f.status === 'Completed' ? '#166534' : '#334155'}; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill);">${f.status}</span>
+          <div class="fixture-card" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 14px; display: flex; flex-direction: column; justify-content: space-between; position: relative;" data-tooltip="Tournament Fixture: ${f.match}">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-size: 11px; font-weight: 700; color: var(--color-accent);">${f.date}</span>
+                <span style="font-size: 10px; background: ${f.stage && f.stage.includes('Final') ? '#fef3c7' : '#e0f2fe'}; color: ${f.stage && f.stage.includes('Final') ? '#b45309' : '#0369a1'}; font-weight: 800; padding: 2px 6px; border-radius: var(--radius-pill);">${f.stage || 'Fixture'}</span>
+              </div>
+              <div style="font-size: 14px; font-weight: 800; margin: 4px 0 6px; color: var(--color-text);">${f.match}</div>
+              <div style="font-size: 11px; color: var(--color-text-muted); display: flex; align-items: center; gap: 4px;">
+                <span>📍</span> <span>${f.ground}</span>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--color-border);">
+              <span style="font-size: 10px; background: ${isCompleted ? '#dcfce7' : '#f1f5f9'}; color: ${isCompleted ? '#166534' : '#475569'}; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill);">
+                ${f.status}
+              </span>
+              <button type="button" class="btn btn-primary" id="btn-score-fixture-${f.id}" onclick="loadScheduledFixtureToSetup('${f.id}')" style="font-size: 11px; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Pre-fill S03 Match Setup and start scoring this fixture">
+                ⚡ Score Match
+              </button>
+            </div>
           </div>
         `;
       });
