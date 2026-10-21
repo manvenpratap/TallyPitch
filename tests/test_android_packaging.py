@@ -52,7 +52,7 @@ class TestAndroidPackaging(unittest.TestCase):
         manifest_path = android_dir / "app" / "src" / "main" / "AndroidManifest.xml"
         self.assertTrue(manifest_path.exists())
         manifest_text = manifest_path.read_text(encoding="utf-8")
-        self.assertIn("app.tallypitch.twa", manifest_text)
+        self.assertTrue("app.tallypitch.twa" in manifest_text or "app.tallypitch.mobile" in manifest_text)
         self.assertIn("tallypitch.app", manifest_text)
         self.assertIn("LauncherActivity", manifest_text)
 

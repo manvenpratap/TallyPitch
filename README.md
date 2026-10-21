@@ -130,6 +130,31 @@ End-to-end automated tests for match initialization, live scoring, wicket dismis
 python3 -m unittest tests/test_cricket_engine.py
 ```
 
+### 5. Mobile Applications (Android & iOS)
+
+TallyPitch includes native wrappers powered by Capacitor 6:
+
+- **Android APK**:
+  ```bash
+  # Build debug APK:
+  cd android && ./gradlew assembleDebug
+  # Artifact: android/app/build/outputs/apk/debug/app-debug.apk (or dist/mobile/tallypitch-android-debug.apk)
+  
+  # Install on connected device via ADB:
+  adb install android/app/build/outputs/apk/debug/app-debug.apk
+  ```
+
+- **iOS App (Xcode & Simulator / Device)**:
+  ```bash
+  # Build for iOS Simulator:
+  xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug -destination "generic/platform=iOS Simulator" -derivedDataPath build/ios_derived build CODE_SIGNING_ALLOWED=NO
+  # Artifact: dist/mobile/tallypitch-ios-simulator.zip (or build/ios_derived/Build/Products/Debug-iphonesimulator/App.app)
+  
+  # Build for iOS Device Sideloading (.ipa):
+  xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug -destination "generic/platform=iOS" -derivedDataPath build/ios_device CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build
+  # Artifact: dist/mobile/tallypitch-ios-device.ipa
+  ```
+
 ---
 
 ## License

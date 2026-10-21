@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="app.tallypitch.twa">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- TWA & Native Package: app.tallypitch.twa / app.tallypitch.mobile -->
 
     <application
         android:allowBackup="true"

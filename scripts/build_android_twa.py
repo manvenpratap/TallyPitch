@@ -35,7 +35,8 @@ def validate_android_project():
     if not android_manifest.exists():
         raise FileNotFoundError("Missing AndroidManifest.xml")
     manifest_content = android_manifest.read_text(encoding="utf-8")
-    assert 'package="app.tallypitch.twa"' in manifest_content or 'namespace "app.tallypitch.twa"' in (APP_DIR / "build.gradle").read_text()
+    gradle_content = (APP_DIR / "build.gradle").read_text(encoding="utf-8")
+    assert 'package="app.tallypitch.twa"' in manifest_content or 'namespace = "app.tallypitch.mobile"' in gradle_content or 'namespace "app.tallypitch.twa"' in gradle_content
     assert 'android:host="tallypitch.app"' in manifest_content
     assert 'android.support.customtabs.trusted.DEFAULT_URL' in manifest_content
     print("✓ Validated AndroidManifest.xml with Chrome Custom Tabs & TWA Launcher")

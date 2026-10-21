@@ -76,9 +76,11 @@ htmlcov/
 *.temp
 *.bak
 
-# Android Packages, Gradle Cache & REA Binaries
+# Android & iOS Packages, Gradle Cache & REA Binaries
 *.xapk
 *.apk
+*.ipa
+dist/mobile/
 .gradle/
 android/.gradle/
 android/app/build/
