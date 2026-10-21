@@ -1,7 +1,7 @@
 # Graph Report - TallyPitch  (2026-10-21)
 
 ## Corpus Check
-- 75 files · ~137,578 words
+- 75 files · ~138,209 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b96fa9f0`
+- Built from commit: `89434a6e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

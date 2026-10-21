@@ -2887,6 +2887,95 @@
           </div>
         </div>
 
+        <!-- Track 19: Tournament Boundary Tracker & Boundarometer (tournaments_boundary_tracker) -->
+        <div id="tournament-boundary-tracker-card" style="margin-top: 24px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 18px; box-shadow: 0 4px 14px rgba(0,0,0,0.03);" data-tooltip="Tournament Boundary Analytics, Boundarometer &amp; Hand Splits">
+          <!-- Header -->
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 22px;">🚀</span>
+              <div>
+                <h4 style="font-size: 15px; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 6px;">
+                  Tournament Boundary Tracker &amp; Boundarometer
+                  <span style="font-size: 10px; background: #fae8ff; color: #86198f; padding: 2px 8px; border-radius: var(--radius-pill); font-weight: 700;">TOURNAMENT INTEL</span>
+                </h4>
+                <p style="font-size: 11px; color: var(--color-text-muted); margin: 2px 0 0;">Reverse-engineered from CricHeroes BoundaryTrackerFragment &amp; tournaments_boundary_tracker. Aggregate 4s, 6s, and efficiency splits.</p>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button type="button" class="btn btn-secondary" id="btn-refresh-boundary-tracker" onclick="renderTournamentBoundaryTracker()" style="font-size: 11px; padding: 4px 10px; font-weight: 700; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Recalculate tournament boundary statistics">
+                🔄 Recalculate Boundaries
+              </button>
+            </div>
+          </div>
+
+          <!-- 4 Boundarometer Hero KPI Telemetry Cards -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 16px;">
+            <div class="card" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🚀 Total Sixes</div>
+              <div id="bnd-kpi-total-sixes" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: #9333ea;">38 Sixes</div>
+              <div style="font-size: 10px; color: var(--color-text-muted); margin-top: 2px;">228 runs in sixes</div>
+            </div>
+            <div class="card" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🎺 Total Fours</div>
+              <div id="bnd-kpi-total-fours" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: var(--color-accent);">86 Fours</div>
+              <div style="font-size: 10px; color: var(--color-text-muted); margin-top: 2px;">344 runs in fours</div>
+            </div>
+            <div class="card" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">⚡ Boundary Yield</div>
+              <div id="bnd-kpi-runs-pct" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: var(--color-success);">69.3%</div>
+              <div style="font-size: 10px; color: var(--color-text-muted); margin-top: 2px;">572 / 825 total runs</div>
+            </div>
+            <div class="card" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">📏 Frequency</div>
+              <div id="bnd-kpi-balls-per-bnd" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: var(--color-text);">1 / 4.3 b</div>
+              <div style="font-size: 10px; color: var(--color-text-muted); margin-top: 2px;">124 bnds in 539 balls</div>
+            </div>
+          </div>
+
+          <!-- Boundary Tracker Sub-Tab Switcher -->
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px; border-bottom: 1px solid var(--color-border); padding-bottom: 8px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-secondary bnd-tab-btn active" id="btn-bnd-tab-teams" onclick="switchBoundaryTrackerTab('teams')" style="font-size: 11px; padding: 4px 10px; border-radius: var(--radius-pill); font-weight: 700;" data-tooltip="Franchise boundary comparison">
+              Franchise Boundary Share
+            </button>
+            <button type="button" class="btn btn-secondary bnd-tab-btn" id="btn-bnd-tab-hands" onclick="switchBoundaryTrackerTab('hands')" style="font-size: 11px; padding: 4px 10px; border-radius: var(--radius-pill); font-weight: 700;" data-tooltip="Right-hand vs Left-hand boundary splits">
+              Batting Hand Splits (RH vs LH)
+            </button>
+            <button type="button" class="btn btn-secondary bnd-tab-btn" id="btn-bnd-tab-podium" onclick="switchBoundaryTrackerTab('podium')" style="font-size: 11px; padding: 4px 10px; border-radius: var(--radius-pill); font-weight: 700;" data-tooltip="Top 5 Six &amp; Four hitters">
+              Boundary Kings Podium
+            </button>
+          </div>
+
+          <!-- Tab Content 1: Franchise Boundary Comparison -->
+          <div id="bnd-panel-teams" class="bnd-panel-content">
+            <div id="bnd-teams-container" style="display: flex; flex-direction: column; gap: 10px;"></div>
+          </div>
+
+          <!-- Tab Content 2: Batting Hand Splits (RH vs LH) -->
+          <div id="bnd-panel-hands" class="bnd-panel-content" style="display: none;">
+            <div id="bnd-hands-container" style="display: flex; flex-direction: column; gap: 12px;"></div>
+          </div>
+
+          <!-- Tab Content 3: Boundary Kings Podium -->
+          <div id="bnd-panel-podium" class="bnd-panel-content" style="display: none;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
+              <!-- Sixes Leaders -->
+              <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px;">
+                <h5 style="font-size: 13px; font-weight: 800; color: #9333ea; margin: 0 0 10px; display: flex; align-items: center; gap: 6px;">
+                  <span>🚀</span> Top 5 Six-Hitters
+                </h5>
+                <div id="bnd-podium-sixes" style="display: flex; flex-direction: column; gap: 6px;"></div>
+              </div>
+              <!-- Fours Leaders -->
+              <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px;">
+                <h5 style="font-size: 13px; font-weight: 800; color: var(--color-accent); margin: 0 0 10px; display: flex; align-items: center; gap: 6px;">
+                  <span>🎺</span> Top 5 Four-Hitters
+                </h5>
+                <div id="bnd-podium-fours" style="display: flex; flex-direction: column; gap: 6px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- S19: Tournament Leaderboard & Cap Honors Engine -->
         <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--color-border);">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
@@ -9581,7 +9670,228 @@
     function renderTournamentView() {
       renderTournamentFixtures();
       renderTournamentStandings();
+      renderTournamentBoundaryTracker();
       renderTournamentLeaderboards();
+    }
+
+    let currentBoundaryTab = 'teams';
+
+    function switchBoundaryTrackerTab(tab) {
+      currentBoundaryTab = tab;
+      document.querySelectorAll('.bnd-tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`btn-bnd-tab-${tab}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      document.querySelectorAll('.bnd-panel-content').forEach(p => p.style.display = 'none');
+      const activePanel = document.getElementById(`bnd-panel-${tab}`);
+      if (activePanel) activePanel.style.display = 'block';
+    }
+
+    function renderTournamentBoundaryTracker() {
+      const card = document.getElementById('tournament-boundary-tracker-card');
+      if (!card) return;
+
+      const t = tournamentState.tournaments[0] || {};
+      const playerStats = t.playerStats || [];
+
+      let totalFours = 0;
+      let totalSixes = 0;
+      let totalRuns = 0;
+      let totalBalls = 0;
+
+      const teamMap = {};
+      const rhStats = { fours: 0, sixes: 0, runs: 0, balls: 0 };
+      const lhStats = { fours: 0, sixes: 0, runs: 0, balls: 0 };
+
+      const leftHanders = new Set(["Trent Boult", "Ravindra Jadeja", "Rishabh Pant", "Ishan Kishan", "Quinton de Kock", "Shikhar Dhawan", "Nicholas Pooran"]);
+
+      playerStats.forEach(p => {
+        const fours = Number(p.fours) || 0;
+        const sixes = Number(p.sixes) || 0;
+        const runs = Number(p.runs) || 0;
+        const balls = Number(p.balls) || 0;
+
+        totalFours += fours;
+        totalSixes += sixes;
+        totalRuns += runs;
+        totalBalls += balls;
+
+        const teamName = p.team || "Independent";
+        if (!teamMap[teamName]) {
+          teamMap[teamName] = { team: teamName, fours: 0, sixes: 0, runs: 0, balls: 0, players: [] };
+        }
+        teamMap[teamName].fours += fours;
+        teamMap[teamName].sixes += sixes;
+        teamMap[teamName].runs += runs;
+        teamMap[teamName].balls += balls;
+        teamMap[teamName].players.push(p);
+
+        if (leftHanders.has(p.name)) {
+          lhStats.fours += fours;
+          lhStats.sixes += sixes;
+          lhStats.runs += runs;
+          lhStats.balls += balls;
+        } else {
+          rhStats.fours += fours;
+          rhStats.sixes += sixes;
+          rhStats.runs += runs;
+          rhStats.balls += balls;
+        }
+      });
+
+      if (typeof activeMatch !== 'undefined' && activeMatch && activeMatch.innings) {
+        activeMatch.innings.forEach(inn => {
+          if (Array.isArray(inn.deliveries)) {
+            inn.deliveries.forEach(d => {
+              if (d.runs === 4) {
+                totalFours++;
+                totalRuns += 4;
+              } else if (d.runs === 6) {
+                totalSixes++;
+                totalRuns += 6;
+              }
+              if (d.legal) totalBalls++;
+            });
+          }
+        });
+      }
+
+      const boundaryRuns = (totalFours * 4) + (totalSixes * 6);
+      const totalBoundaries = totalFours + totalSixes;
+      const bndYieldPct = totalRuns > 0 ? ((boundaryRuns / totalRuns) * 100).toFixed(1) : "0.0";
+      const ballsPerBnd = totalBoundaries > 0 ? (totalBalls / totalBoundaries).toFixed(1) : "0.0";
+
+      const elSixes = document.getElementById('bnd-kpi-total-sixes');
+      const elFours = document.getElementById('bnd-kpi-total-fours');
+      const elYield = document.getElementById('bnd-kpi-runs-pct');
+      const elFreq = document.getElementById('bnd-kpi-balls-per-bnd');
+
+      if (elSixes) elSixes.textContent = `${totalSixes} Sixes`;
+      if (elFours) elFours.textContent = `${totalFours} Fours`;
+      if (elYield) elYield.textContent = `${bndYieldPct}%`;
+      if (elFreq) elFreq.textContent = `1 / ${ballsPerBnd} b`;
+
+      // 1. Franchise Boundary Share
+      const teamsContainer = document.getElementById('bnd-teams-container');
+      if (teamsContainer) {
+        const teamList = Object.values(teamMap).sort((a, b) => ((b.fours * 4) + (b.sixes * 6)) - ((a.fours * 4) + (a.sixes * 6)));
+        teamsContainer.innerHTML = teamList.map(tData => {
+          const tBndRuns = (tData.fours * 4) + (tData.sixes * 6);
+          const tBndPct = tData.runs > 0 ? Math.min(100, Math.round((tBndRuns / tData.runs) * 100)) : 0;
+          const foursRuns = tData.fours * 4;
+          const sixesRuns = tData.sixes * 6;
+          const otherRuns = Math.max(0, tData.runs - tBndRuns);
+          const foursPct = tData.runs > 0 ? ((foursRuns / tData.runs) * 100).toFixed(1) : 0;
+          const sixesPct = tData.runs > 0 ? ((sixesRuns / tData.runs) * 100).toFixed(1) : 0;
+
+          return `
+            <div class="bnd-team-row" style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px;" data-tooltip="${tData.team}: ${tData.fours} fours, ${tData.sixes} sixes">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                <span style="font-size: 13px; font-weight: 800; color: var(--color-text);">${tData.team}</span>
+                <span style="font-size: 11px; font-weight: 700; color: var(--color-accent); font-family: var(--font-mono);">
+                  ${tData.fours} x 4s • ${tData.sixes} x 6s (${tBndRuns}r in boundaries / ${tBndPct}%)
+                </span>
+              </div>
+              <div style="height: 12px; background: rgba(0,0,0,0.06); border-radius: var(--radius-pill); overflow: hidden; display: flex;">
+                <div style="width: ${foursPct}%; background: var(--color-accent);" data-tooltip="Fours: ${tData.fours} (${foursRuns} runs, ${foursPct}%)"></div>
+                <div style="width: ${sixesPct}%; background: #9333ea;" data-tooltip="Sixes: ${tData.sixes} (${sixesRuns} runs, ${sixesPct}%)"></div>
+                <div style="flex: 1; background: rgba(0,0,0,0.1);" data-tooltip="Running &amp; Extras: ${otherRuns} runs"></div>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--color-text-muted); margin-top: 4px;">
+                <span>Total: ${tData.runs} runs in ${tData.balls} balls</span>
+                <span style="font-family: var(--font-mono);">Boundary RR: ${(tData.balls > 0 ? (tBndRuns / (tData.balls / 6)).toFixed(2) : '0.00')} RPO</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 2. Batting Hand Splits (RH vs LH)
+      const handsContainer = document.getElementById('bnd-hands-container');
+      if (handsContainer) {
+        const rhBndRuns = (rhStats.fours * 4) + (rhStats.sixes * 6);
+        const lhBndRuns = (lhStats.fours * 4) + (lhStats.sixes * 6);
+        const totalHandsBndRuns = rhBndRuns + lhBndRuns;
+        const rhPct = totalHandsBndRuns > 0 ? ((rhBndRuns / totalHandsBndRuns) * 100).toFixed(1) : "50.0";
+        const lhPct = totalHandsBndRuns > 0 ? ((lhBndRuns / totalHandsBndRuns) * 100).toFixed(1) : "50.0";
+
+        handsContainer.innerHTML = `
+          <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 14px;" data-tooltip="RH vs LH Boundary Production Split">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 13px; font-weight: 800;">🏏 Right-Hand vs Left-Hand Boundary Production</span>
+              <span style="font-size: 11px; font-weight: 700; color: var(--color-text-muted);">From CricHeroes foursixRighthand &amp; foursixLefthand</span>
+            </div>
+            <div style="height: 16px; background: rgba(0,0,0,0.06); border-radius: var(--radius-pill); overflow: hidden; display: flex; margin-bottom: 8px;">
+              <div style="width: ${rhPct}%; background: #2563eb; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: 800;" data-tooltip="Right-Hand: ${rhPct}% (${rhBndRuns} runs)">
+                RH ${rhPct}%
+              </div>
+              <div style="width: ${lhPct}%; background: #059669; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: 800;" data-tooltip="Left-Hand: ${lhPct}% (${lhBndRuns} runs)">
+                LH ${lhPct}%
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px;">
+              <div style="background: rgba(37, 99, 235, 0.05); border: 1px solid rgba(37, 99, 235, 0.2); border-radius: var(--radius-sm); padding: 10px;">
+                <div style="font-size: 12px; font-weight: 800; color: #1d4ed8; margin-bottom: 4px;">Right-Hand Batters</div>
+                <div style="font-size: 11px; color: var(--color-text); line-height: 1.5;">
+                  • <strong>${rhStats.fours}</strong> Fours (${rhStats.fours * 4} runs)<br>
+                  • <strong>${rhStats.sixes}</strong> Sixes (${rhStats.sixes * 6} runs)<br>
+                  • <strong>${rhBndRuns}</strong> Total Boundary Runs (${rhPct}%)
+                </div>
+              </div>
+              <div style="background: rgba(5, 150, 105, 0.05); border: 1px solid rgba(5, 150, 105, 0.2); border-radius: var(--radius-sm); padding: 10px;">
+                <div style="font-size: 12px; font-weight: 800; color: #047857; margin-bottom: 4px;">Left-Hand Batters</div>
+                <div style="font-size: 11px; color: var(--color-text); line-height: 1.5;">
+                  • <strong>${lhStats.fours}</strong> Fours (${lhStats.fours * 4} runs)<br>
+                  • <strong>${lhStats.sixes}</strong> Sixes (${lhStats.sixes * 6} runs)<br>
+                  • <strong>${lhBndRuns}</strong> Total Boundary Runs (${lhPct}%)
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // 3. Boundary Kings Podium
+      const podiumSixes = document.getElementById('bnd-podium-sixes');
+      const podiumFours = document.getElementById('bnd-podium-fours');
+
+      if (podiumSixes) {
+        const topSixes = [...playerStats].sort((a, b) => b.sixes - a.sixes).slice(0, 5);
+        podiumSixes.innerHTML = topSixes.map((p, idx) => `
+          <div class="podium-six-row" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-radius: var(--radius-sm); background: ${idx === 0 ? 'rgba(147, 51, 234, 0.1)' : 'var(--color-surface)'}; border: 1px solid var(--color-border);" data-tooltip="#${idx + 1} Sixes: ${p.name}">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 11px; font-weight: 800; color: #9333ea; width: 14px;">#${idx + 1}</span>
+              <div>
+                <div style="font-size: 12px; font-weight: 800;">${p.name}</div>
+                <div style="font-size: 10px; color: var(--color-text-muted);">${p.team}</div>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <span style="font-size: 13px; font-weight: 800; color: #9333ea;">${p.sixes} 🚀</span>
+              <div style="font-size: 10px; color: var(--color-text-muted); font-family: var(--font-mono);">${p.sixes * 6} runs</div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      if (podiumFours) {
+        const topFours = [...playerStats].sort((a, b) => b.fours - a.fours).slice(0, 5);
+        podiumFours.innerHTML = topFours.map((p, idx) => `
+          <div class="podium-four-row" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-radius: var(--radius-sm); background: ${idx === 0 ? 'rgba(37, 99, 235, 0.1)' : 'var(--color-surface)'}; border: 1px solid var(--color-border);" data-tooltip="#${idx + 1} Fours: ${p.name}">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="font-size: 11px; font-weight: 800; color: var(--color-accent); width: 14px;">#${idx + 1}</span>
+              <div>
+                <div style="font-size: 12px; font-weight: 800;">${p.name}</div>
+                <div style="font-size: 10px; color: var(--color-text-muted);">${p.team}</div>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <span style="font-size: 13px; font-weight: 800; color: var(--color-accent);">${p.fours} 🎺</span>
+              <div style="font-size: 10px; color: var(--color-text-muted); font-family: var(--font-mono);">${p.fours * 4} runs</div>
+            </div>
+          </div>
+        `).join('');
+      }
     }
 
     function renderTournamentFixtures() {
