@@ -59,18 +59,28 @@
 
     body {
       font-family: var(--font-sans);
-      background-color: var(--color-surface);
+      background-color: var(--color-bg);
+      background-image: radial-gradient(at 50% 0%, rgba(30, 58, 138, 0.22) 0px, transparent 65%);
+      background-attachment: fixed;
       color: var(--color-text);
       line-height: 1.5;
       -webkit-font-smoothing: antialiased;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      transition: background-color var(--motion-base), color var(--motion-base);
     }
 
-    /* Header Nav */
+    [data-theme="light"] body {
+      background-color: var(--color-bg);
+      background-image: radial-gradient(at 50% 0%, rgba(29, 78, 216, 0.08) 0px, transparent 60%);
+    }
+
+    /* Header Nav — Translucent Stadium Top Bar */
     header.app-header {
-      background: var(--color-bg);
+      background: var(--color-surface-translucent);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--color-border);
       position: sticky;
       top: 0;
@@ -78,6 +88,8 @@
       padding-top: max(0px, env(safe-area-inset-top));
       padding-left: max(0px, env(safe-area-inset-left));
       padding-right: max(0px, env(safe-area-inset-right));
+      box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.35);
+      transition: background-color var(--motion-base), border-color var(--motion-base);
     }
 
     .header-inner {
@@ -99,34 +111,46 @@
     }
 
     .brand-badge {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: var(--radius-md);
-      background: var(--color-accent);
-      color: var(--color-on-accent);
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 18px;
+      font-size: 20px;
+      box-shadow: 0 0 14px rgba(37, 99, 235, 0.45);
     }
 
     .brand-title {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: var(--color-text);
     }
 
     .brand-title span {
       color: var(--color-accent);
+      text-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
     }
 
+    /* Athletic Navigation Tabs Bar */
     .nav-tabs {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       overflow-x: auto;
-      padding-bottom: 2px;
+      padding: 4px 6px;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--color-border);
+      scrollbar-width: none;
+    }
+
+    [data-theme="light"] .nav-tabs {
+      background: rgba(226, 232, 240, 0.7);
     }
 
     .nav-tab-btn {
@@ -140,10 +164,13 @@
       cursor: pointer;
       white-space: nowrap;
       transition: all var(--motion-fast) var(--motion-ease);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .nav-tab-btn:hover {
-      background: var(--color-surface);
+      background: var(--color-surface-hover);
       color: var(--color-text);
     }
 
@@ -151,6 +178,15 @@
       background: var(--color-accent);
       color: var(--color-on-accent);
       border-color: var(--color-accent);
+      font-weight: 700;
+      box-shadow: 0 2px 10px rgba(56, 189, 248, 0.35);
+    }
+
+    [data-theme="light"] .nav-tab-btn.active {
+      background: #1d4ed8;
+      color: #ffffff;
+      border-color: #1d4ed8;
+      box-shadow: 0 2px 8px rgba(29, 78, 216, 0.25);
     }
 
     /* Main Container */
@@ -179,22 +215,23 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Cards */
+    /* Broadcast Cards & Telemetry Surfaces */
     .card,
     .screen-card {
-      background: var(--color-bg);
+      background: var(--color-surface);
       border: 1px solid var(--color-border);
-      border-radius: var(--radius-lg);
-      padding: 20px;
+      border-radius: var(--radius-xl);
+      padding: 22px;
       box-shadow: var(--shadow-card);
       margin-bottom: 20px;
+      transition: background-color var(--motion-base), border-color var(--motion-base);
     }
 
     .stat-tile {
-      background: var(--color-surface);
+      background: var(--color-surface-hover);
       border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
-      padding: 10px 12px;
+      padding: 12px 14px;
       margin: 0;
     }
 
@@ -208,9 +245,10 @@
     }
 
     .card-title {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--color-text);
     }
 
     .card-subtitle {
@@ -226,7 +264,7 @@
     .form-label {
       display: block;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--color-text);
       margin-bottom: 6px;
     }
@@ -236,130 +274,139 @@
       padding: 10px 14px;
       border-radius: var(--radius-md);
       border: 1px solid var(--color-border-input);
-      background: var(--color-bg);
+      background: var(--color-surface-hover);
       color: var(--color-text);
       font-family: inherit;
       font-size: 15px;
       outline: none;
-      transition: border-color var(--motion-fast);
+      transition: border-color var(--motion-fast), box-shadow var(--motion-fast);
     }
 
     .form-input:focus, .form-select:focus {
       border-color: var(--color-accent);
-      box-shadow: 0 0 0 3px rgba(10, 110, 56, 0.15);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
     }
 
+    /* Athletic Buttons */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 10px 18px;
+      padding: 9px 16px;
       border-radius: var(--radius-md);
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       border: 1px solid transparent;
       transition: all var(--motion-fast) var(--motion-ease);
       text-decoration: none;
       gap: 8px;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
     }
 
     .btn-primary {
-      background: var(--color-accent);
-      color: var(--color-on-accent);
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
     }
 
     .btn-primary:hover {
-      background: #1d4ed8;
-      color: #ffffff;
-    }
-    @media (prefers-color-scheme: dark) {
-      .btn-primary {
-        background: #2563eb;
-        color: #ffffff;
-      }
-      .btn-primary:hover {
-        background: #1d4ed8;
-        color: #ffffff;
-      }
-    }
-    [data-theme="dark"] .btn-primary {
-      background: #2563eb;
-      color: #ffffff;
-    }
-    [data-theme="dark"] .btn-primary:hover {
-      background: #1d4ed8;
-      color: #ffffff;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.5);
+      transform: translateY(-1px);
     }
 
     .btn-secondary {
-      background: var(--color-surface);
+      background: var(--color-surface-hover);
       border-color: var(--color-border);
       color: var(--color-text);
     }
 
     .btn-secondary:hover {
-      background: var(--color-surface-hover, #e2e8f0);
-    }
-    .btn-secondary[style*="#ef4444"]:hover,
-    button[style*="#ef4444"]:hover {
-      color: #991b1b !important;
-    }
-    @media (prefers-color-scheme: dark) {
-      .btn-secondary[style*="#ef4444"]:hover,
-      button[style*="#ef4444"]:hover {
-        color: #fca5a5 !important;
-      }
-    }
-    [data-theme="dark"] .btn-secondary[style*="#ef4444"]:hover,
-    [data-theme="dark"] button[style*="#ef4444"]:hover {
-      color: #fca5a5 !important;
+      background: var(--color-surface);
+      border-color: var(--color-border-input);
+      color: var(--color-text);
+      transform: translateY(-1px);
     }
 
     .btn-danger {
-      background: var(--color-danger);
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
       color: #ffffff;
+      border-color: #ef4444;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
     }
 
     .btn-danger:hover {
-      background: #a91e1e;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(220, 38, 38, 0.5);
     }
 
     .btn-full {
       width: 100%;
     }
 
-    /* S07: Live Scoring Console Layout */
+    /* =========================================================================
+       S07: STADIUM BROADCAST PRO — LIVE SCOREBOARD & TELEMETRY
+       ========================================================================= */
     .score-hero-card {
-      background: linear-gradient(135deg, #1d4ed8 0%, #172554 100%);
+      background: radial-gradient(120% 120% at 50% 0%, #1e3a8a 0%, #0f172a 60%, #080d1a 100%);
       color: #ffffff;
-      border-radius: var(--radius-lg);
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       padding: 24px;
-      box-shadow: var(--shadow-elevated);
-      margin-bottom: 16px;
+      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.65), 0 0 35px -8px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      margin-bottom: 20px;
       position: relative;
       overflow: hidden;
+    }
+
+    .score-hero-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #38bdf8, #10b981, transparent);
+      opacity: 0.9;
     }
 
     .match-status-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      background: rgba(255, 255, 255, 0.18);
+      gap: 7px;
+      padding: 5px 12px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: var(--radius-pill);
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 10px;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
 
     .match-status-dot {
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #4ade80;
+      background: #10b981;
+      box-shadow: 0 0 8px #10b981;
+      animation: pulseLiveDot 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseLiveDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
     }
 
     .score-hero-grid {
@@ -370,61 +417,131 @@
     }
 
     .batting-team-title {
-      font-size: 20px;
-      font-weight: 800;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
       margin-bottom: 4px;
+      color: #ffffff;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
 
     .hero-big-score {
       font-family: var(--font-mono);
-      font-size: var(--type-display-size);
-      font-weight: 800;
+      font-size: 60px;
+      font-weight: 900;
       line-height: 1;
-      letter-spacing: -0.03em;
+      letter-spacing: -2px;
+      color: #ffffff;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 35px rgba(56, 189, 248, 0.35);
+      display: inline-block;
     }
 
     .hero-overs-stat {
       font-family: var(--font-mono);
-      font-size: 18px;
-      opacity: 0.9;
-      margin-top: 4px;
+      font-size: 17px;
+      font-weight: 700;
+      color: #93c5fd;
+      margin-top: 6px;
+      letter-spacing: -0.01em;
     }
 
+    /* Broadcast Match Tools Ribbon */
+    .hero-tools-dock {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 10px 2px 4px;
+      margin-top: 14px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    }
+
+    .hero-dock-btn {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #ffffff !important;
+      padding: 6px 13px !important;
+      border-radius: var(--radius-pill) !important;
+      font-size: 12px !important;
+      font-weight: 700 !important;
+      white-space: nowrap !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      cursor: pointer !important;
+      transition: all var(--motion-fast) var(--motion-ease) !important;
+    }
+
+    .hero-dock-btn:hover {
+      background: rgba(255, 255, 255, 0.22) !important;
+      border-color: rgba(255, 255, 255, 0.35) !important;
+      transform: translateY(-1px) !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    /* Telemetry LCD Strip */
     .run-rate-row {
       display: flex;
-      gap: 16px;
+      align-items: center;
+      gap: 10px;
       font-size: 13px;
       font-family: var(--font-mono);
-      opacity: 0.85;
-      margin-top: 12px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+      flex-wrap: wrap;
+    }
+
+    .telemetry-chip {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+
+    .telemetry-chip strong {
+      color: #38bdf8;
+      font-weight: 800;
+      font-size: 14px;
     }
 
     .target-banner {
-      background: rgba(255, 255, 255, 0.12);
-      padding: 8px 12px;
+      background: rgba(245, 158, 11, 0.18);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fef08a;
+      padding: 8px 14px;
       border-radius: var(--radius-md);
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       margin-top: 10px;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
     }
 
-    /* Batters & Bowler Status */
+    /* =========================================================================
+       ACTIVE BATTERS & BOWLER TELEMETRY
+       ========================================================================= */
     .player-stats-card {
-      background: var(--color-bg);
+      background: var(--color-surface);
       border: 1px solid var(--color-border);
-      border-radius: var(--radius-lg);
-      padding: 16px;
+      border-radius: var(--radius-xl);
+      padding: 18px 20px;
       margin-bottom: 16px;
       box-shadow: var(--shadow-card);
+      transition: background-color var(--motion-base), border-color var(--motion-base);
     }
 
     .player-stat-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 0;
+      padding: 12px 0;
       border-bottom: 1px solid var(--color-border);
     }
 
@@ -440,196 +557,261 @@
     .player-identity {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
     }
 
     .strike-indicator {
-      width: 18px;
-      height: 18px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
-      background: var(--color-accent);
+      background: #059669;
       color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 800;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.55);
     }
 
     .player-name {
       font-size: 15px;
       font-weight: 700;
+      color: var(--color-text);
     }
 
     .player-name.on-strike {
-      color: var(--color-accent);
+      color: var(--color-turf);
+      font-weight: 800;
     }
 
     .player-digits {
       font-family: var(--font-mono);
       font-size: 14px;
       text-align: right;
+      color: var(--color-text);
     }
 
     .player-digits strong {
-      font-size: 16px;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--color-text);
     }
 
-    /* Over Reel */
-    .over-reel-card {
-      background: var(--color-bg);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-lg);
-      padding: 14px 16px;
-      margin-bottom: 16px;
-      display: flex;
+    .cricket-ball-badge {
+      display: inline-flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+      color: #ffffff;
+      font-size: 11px;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.45);
+    }
+
+    /* =========================================================================
+       OVER REEL CARD & ATHLETIC DELIVERY CHIPS
+       ========================================================================= */
+    .over-reel-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-card);
+      transition: background-color var(--motion-base), border-color var(--motion-base);
     }
 
     .over-reel-label {
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--color-text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
     }
 
     .delivery-chips-wrap {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       overflow-x: auto;
+      padding: 6px 0;
     }
 
     .ball-chip {
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: var(--font-mono);
-      font-size: 12px;
-      font-weight: 700;
+      font-size: 13px;
+      font-weight: 800;
       flex-shrink: 0;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: transform var(--motion-fast) var(--motion-ease);
+    }
+
+    .ball-chip:hover {
+      transform: scale(1.1);
     }
 
     .ball-chip.dot {
-      background: var(--color-ball-dot);
+      background: var(--color-surface-hover);
+      border: 1px solid var(--color-border);
       color: var(--color-text-muted);
     }
 
     .ball-chip.single {
       background: var(--color-surface);
-      border: 1px solid var(--color-border);
+      border: 1px solid var(--color-border-input);
       color: var(--color-text);
     }
 
     .ball-chip.boundary {
-      background: var(--color-accent);
-      color: var(--color-on-accent);
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
     }
 
     .ball-chip.wicket {
-      background: var(--color-danger);
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
       color: #ffffff;
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
     }
 
     .ball-chip.extra {
-      background: var(--color-warning);
+      background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
       color: #ffffff;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
     }
 
     .ball-chip.penalty {
-      background: #ea580c;
+      background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
       color: #ffffff;
-      border: 1px solid #f97316;
+      border: 1px solid #fdba74;
+      box-shadow: 0 0 10px rgba(249, 115, 22, 0.4);
     }
 
-    /* Scoring Controls Keypad */
+    /* =========================================================================
+       SCORING KEYPAD CONSOLE — TACTILE PHYSICAL HARDWARE AESTHETICS
+       ========================================================================= */
     .scoring-console-card {
-      background: var(--color-bg);
+      background: var(--color-surface);
       border: 1px solid var(--color-border);
-      border-radius: var(--radius-lg);
-      padding: 20px;
-      box-shadow: var(--shadow-card);
+      border-radius: var(--radius-xl);
+      padding: 22px;
+      box-shadow: var(--shadow-elevated);
+      transition: background-color var(--motion-base), border-color var(--motion-base);
     }
 
     .keypad-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 14px;
+      gap: 12px;
+      margin-bottom: 16px;
     }
 
     .keypad-btn {
-      height: 56px;
+      height: 64px;
       border-radius: var(--radius-md);
       border: 1px solid var(--color-border);
-      background: var(--color-surface);
+      background: var(--color-surface-hover);
       font-family: var(--font-mono);
-      font-size: 22px;
-      font-weight: 800;
+      font-size: 24px;
+      font-weight: 900;
       color: var(--color-text);
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      transition: all var(--motion-fast);
-      box-shadow: var(--shadow-card);
+      position: relative;
+      box-shadow: var(--shadow-keypad-btn);
+      transition: all var(--motion-fast) var(--motion-ease);
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .keypad-btn span.sub {
       font-family: var(--font-sans);
-      font-size: 10px;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 700;
       color: var(--color-text-muted);
-      margin-top: -2px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-top: 1px;
     }
 
     .keypad-btn:hover {
-      background: var(--color-surface-hover, #e2e8f0);
+      background: var(--color-surface);
       border-color: var(--color-border-input);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35), 0 8px 16px rgba(0, 0, 0, 0.2);
     }
 
     .keypad-btn:active {
-      transform: scale(0.97);
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
     }
 
-    .keypad-btn.primary-run {
-      background: #f0fdf4;
-      border-color: #bbf7d0;
-      color: #166534;
+    /* Dedicated 4 Boundary Button — Lush Turf Emerald */
+    .keypad-btn.boundary-four-btn,
+    .keypad-btn[onclick*="recordBall(4)"] {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+      border-color: #10b981 !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 0 #064e3b, 0 8px 20px rgba(16, 185, 129, 0.35) !important;
     }
 
-    .keypad-btn.primary-run:hover {
-      background: #dcfce7;
-      color: #14532d;
+    .keypad-btn.boundary-four-btn span.sub,
+    .keypad-btn[onclick*="recordBall(4)"] span.sub {
+      color: #a7f3d0 !important;
+      font-weight: 800 !important;
     }
-    @media (prefers-color-scheme: dark) {
-      .keypad-btn.primary-run {
-        background: rgba(22, 101, 52, 0.2);
-        border-color: rgba(34, 197, 94, 0.4);
-        color: #86efac;
-      }
-      .keypad-btn.primary-run:hover {
-        background: rgba(22, 101, 52, 0.35);
-        color: #bbf7d0;
-      }
+
+    .keypad-btn.boundary-four-btn:hover,
+    .keypad-btn[onclick*="recordBall(4)"]:hover {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+      box-shadow: 0 6px 0 #064e3b, 0 10px 24px rgba(16, 185, 129, 0.5) !important;
+      transform: translateY(-2px) !important;
     }
-    [data-theme="dark"] .keypad-btn.primary-run {
-      background: rgba(22, 101, 52, 0.2);
-      border-color: rgba(34, 197, 94, 0.4);
-      color: #86efac;
+
+    .keypad-btn.boundary-four-btn:active,
+    .keypad-btn[onclick*="recordBall(4)"]:active {
+      transform: translateY(3px) !important;
+      box-shadow: 0 1px 0 #064e3b !important;
     }
-    [data-theme="dark"] .keypad-btn.primary-run:hover {
-      background: rgba(22, 101, 52, 0.35);
-      color: #bbf7d0;
+
+    /* Dedicated 6 Boundary Button — Electric Sapphire */
+    .keypad-btn.boundary-six-btn,
+    .keypad-btn[onclick*="recordBall(6)"] {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+      border-color: #38bdf8 !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 0 #1e3a8a, 0 8px 20px rgba(56, 189, 248, 0.35) !important;
+    }
+
+    .keypad-btn.boundary-six-btn span.sub,
+    .keypad-btn[onclick*="recordBall(6)"] span.sub {
+      color: #bae6fd !important;
+      font-weight: 800 !important;
+    }
+
+    .keypad-btn.boundary-six-btn:hover,
+    .keypad-btn[onclick*="recordBall(6)"]:hover {
+      background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%) !important;
+      box-shadow: 0 6px 0 #1e3a8a, 0 10px 24px rgba(56, 189, 248, 0.5) !important;
+      transform: translateY(-2px) !important;
+    }
+
+    .keypad-btn.boundary-six-btn:active,
+    .keypad-btn[onclick*="recordBall(6)"]:active {
+      transform: translateY(3px) !important;
+      box-shadow: 0 1px 0 #1e3a8a !important;
     }
 
     /* Extras & Actions Bar */
@@ -637,44 +819,77 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     .extra-btn {
-      padding: 10px 4px;
+      padding: 10px 6px;
       border-radius: var(--radius-md);
       border: 1px solid var(--color-border);
-      background: var(--color-surface);
+      background: var(--color-surface-hover);
       font-size: 12px;
       font-weight: 700;
       color: var(--color-text);
       cursor: pointer;
       text-align: center;
       transition: all var(--motion-fast);
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .extra-btn:hover {
-      border-color: #d97706;
-      color: #78350f;
-      background: #fef3c7;
-    }
-    @media (prefers-color-scheme: dark) {
-      .extra-btn:hover {
-        border-color: #f59e0b;
-        color: #fef08a;
-        background: rgba(245, 158, 11, 0.2);
-      }
-    }
-    [data-theme="dark"] .extra-btn:hover {
       border-color: #f59e0b;
       color: #fef08a;
       background: rgba(245, 158, 11, 0.2);
+      transform: translateY(-1px);
     }
 
+    .extra-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* Primary Actions Grid */
     .primary-actions-grid {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr;
       gap: 10px;
+    }
+
+    /* Hero Wicket Action Button */
+    #btn-wicket-action {
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+      border: 1px solid #ef4444 !important;
+      color: #ffffff !important;
+      font-size: 15px !important;
+      font-weight: 900 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+      box-shadow: 0 4px 0 #7f1d1d, 0 8px 20px rgba(239, 68, 68, 0.4) !important;
+      transition: all var(--motion-fast) var(--motion-ease);
+    }
+
+    #btn-wicket-action:hover {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+      transform: translateY(-2px) !important;
+      box-shadow: 0 6px 0 #7f1d1d, 0 10px 24px rgba(239, 68, 68, 0.6) !important;
+    }
+
+    #btn-wicket-action:active {
+      transform: translateY(3px) !important;
+      box-shadow: 0 1px 0 #7f1d1d !important;
+    }
+
+    #undo-btn {
+      font-weight: 800;
+      border-color: rgba(245, 158, 11, 0.35);
+      background: rgba(245, 158, 11, 0.12);
+      color: #fbbf24;
+    }
+
+    #undo-btn:hover {
+      background: rgba(245, 158, 11, 0.22);
+      border-color: rgba(245, 158, 11, 0.5);
+      color: #fef08a;
     }
 
     /* Modals */
@@ -2081,19 +2296,22 @@
         <div class="brand-title">Tally<span>Pitch</span></div>
       </a>
       <nav class="nav-tabs" aria-label="Workflow Steps">
-        <button class="nav-tab-btn" id="tab-S03" onclick="navigate('S03')">1. Setup (S03)</button>
-        <button class="nav-tab-btn" id="tab-S05" onclick="navigate('S05')">2. Toss (S05)</button>
-        <button class="nav-tab-btn" id="tab-S06" onclick="navigate('S06')">3. Openers (S06)</button>
-        <button class="nav-tab-btn active" id="tab-S07" onclick="navigate('S07')">4. Scoring Console (S07)</button>
-        <button class="nav-tab-btn" id="tab-S13" onclick="navigate('S13')">5. Scorecard (S13)</button>
-        <button class="nav-tab-btn" id="tab-tournaments" onclick="navigate('tournaments')">6. Tournaments (S15-S19)</button>
-        <button class="nav-tab-btn" id="tab-teams-profiles" onclick="navigate('teams-profiles')">7. Teams & Profiles (S20, S21)</button>
-        <button class="nav-tab-btn" id="tab-community" onclick="navigate('community')">8. Community (S23)</button>
-        <a href="landing.html" class="nav-tab-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--color-border);" target="_blank">🌐 Landing Page ↗</a>
+        <button class="nav-tab-btn" id="tab-S03" onclick="navigate('S03')">⚙️ Setup</button>
+        <button class="nav-tab-btn" id="tab-S05" onclick="navigate('S05')">🪙 Toss</button>
+        <button class="nav-tab-btn" id="tab-S06" onclick="navigate('S06')">🏏 Openers</button>
+        <button class="nav-tab-btn active" id="tab-S07" onclick="navigate('S07')">⚡ Scoring</button>
+        <button class="nav-tab-btn" id="tab-S13" onclick="navigate('S13')">📊 Scorecard</button>
+        <button class="nav-tab-btn" id="tab-tournaments" onclick="navigate('tournaments')">🏆 Tournaments</button>
+        <button class="nav-tab-btn" id="tab-teams-profiles" onclick="navigate('teams-profiles')">👥 Teams</button>
+        <button class="nav-tab-btn" id="tab-community" onclick="navigate('community')">💬 Community</button>
+        <a href="landing.html" class="nav-tab-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--color-border);" target="_blank">🌐 Landing ↗</a>
       </nav>
       <div style="display: flex; align-items: center; gap: 8px; margin-left: 8px;">
         <span id="network-status-badge" class="badge-status-online" data-tooltip="Network Status: Connected to local/cloud services (Offline-Ready)">🟢 Online</span>
-        <button type="button" class="btn btn-secondary" id="btn-open-android-modal" onclick="openModal('android-apk-modal')" style="font-size: 11px; padding: 4px 8px; font-weight: 700; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Android TWA & Native APK Packaging (app.tallypitch.twa)">
+        <button type="button" class="btn btn-secondary theme-toggle-btn" id="btn-theme-toggle" onclick="toggleTheme()" style="font-size: 11px; padding: 5px 10px; font-weight: 700; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Switch between Day Ground and Night Stadium floodlights theme">
+          🌙 Stadium Lights
+        </button>
+        <button type="button" class="btn btn-secondary" id="btn-open-android-modal" onclick="openModal('android-apk-modal')" style="font-size: 11px; padding: 5px 8px; font-weight: 700; border-radius: var(--radius-pill); display: inline-flex; align-items: center; gap: 4px;" data-tooltip="Android TWA & Native APK Packaging (app.tallypitch.twa)">
           📱 Android App
         </button>
       </div>

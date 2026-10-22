@@ -58,6 +58,6 @@ pytest -v tests/
 - `helpers.py`: Bounding-box collision detection, viewport overflow checking, and zero console error assertion.
 
 ---
-**Total Active Test Modules:** 30
+**Total Active Test Modules:** 31
 **Total Passing E2E Tests:** 105 (100% passing)  
 

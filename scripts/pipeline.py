@@ -13,7 +13,6 @@ import shutil
 import time
 import hashlib
 from pathlib import Path
-from typing import Any
 
 # ANSI color and style helpers
 GREEN = "\033[92m"
@@ -58,7 +57,7 @@ class StackDetector:
         self.root = root
 
     def detect(self) -> dict:
-        info: dict[str, Any] = {
+        info = {
             "root": str(self.root),
             "is_git": (self.root / ".git").is_dir(),
             "stacks": [],
@@ -143,7 +142,16 @@ class StackDetector:
             elif (self.root / ".agents" / doc).exists():
                 info["doc_files"].append(f".agents/{doc}")
 
-        # 10. Primary Stack Resolution
+        # 10. Mobile Apps (Android APK & iOS App) Delivery Plan Detection
+        info["mobile"] = self.detect_mobile_delivery()
+        if info["mobile"]["has_android"]:
+            info["stacks"].append("android")
+            info["package_targets"].append("mobile-apk")
+        if info["mobile"]["has_ios"]:
+            info["stacks"].append("ios")
+            info["package_targets"].append("mobile-ios")
+
+        # 11. Primary Stack Resolution
         if "single-file-web" in info["stacks"] and len(info["stacks"]) <= 2:
             info["primary_stack"] = "single-file-web"
         elif "node-ts" in info["stacks"] and any(f in os.listdir(self.root) for f in ["vite.config.ts", "vite.config.js"]):
@@ -162,6 +170,64 @@ class StackDetector:
             info["primary_stack"] = info["stacks"][0]
 
         return info
+
+    def detect_mobile_delivery(self) -> dict:
+        result = {
+            "has_android": False,
+            "has_ios": False,
+            "android_path": None,
+            "ios_path": None,
+            "android_type": None,
+            "ios_type": None,
+            "is_part_of_plan": False,
+            "plan_docs": []
+        }
+
+        # 1. Android Candidates
+        android_candidates = [
+            self.root / "android",
+            self.root / "apps" / "mobile" / "android",
+            self.root / "frontend" / "android",
+            self.root / "mobile" / "android"
+        ]
+        for cand in android_candidates:
+            if cand.is_dir() and ((cand / "build.gradle").exists() or (cand / "build-apk.sh").exists() or (cand / "gradlew").exists() or (cand / "app" / "build.gradle").exists()):
+                result["has_android"] = True
+                result["android_path"] = cand
+                result["android_type"] = "script" if (cand / "build-apk.sh").exists() else "gradle"
+                break
+
+        # 2. iOS Candidates
+        ios_candidates = [
+            self.root / "ios",
+            self.root / "apps" / "mobile" / "ios",
+            self.root / "frontend" / "ios",
+            self.root / "mobile" / "ios"
+        ]
+        for cand in ios_candidates:
+            if cand.is_dir():
+                xcode_projs = list(cand.glob("**/*.xcodeproj"))
+                if xcode_projs or (cand / "build-ios.sh").exists():
+                    result["has_ios"] = True
+                    result["ios_path"] = cand
+                    result["ios_type"] = "script" if (cand / "build-ios.sh").exists() else "xcode"
+                    break
+
+        # 3. Delivery Plan documentation references
+        for doc_name in ["PROJECT_CONTEXT.md", "PRODUCT.md", "README.md", "AGENTS.md"]:
+            doc_file = self.root / doc_name
+            if doc_file.exists():
+                try:
+                    txt = doc_file.read_text(encoding="utf-8", errors="ignore").lower()
+                    if any(w in txt for w in ["apk", "ios app", "mobile app", "twa", "capacitor", "targetsdk", "xcode"]):
+                        result["plan_docs"].append(doc_name)
+                except Exception:
+                    pass
+
+        if result["has_android"] or result["has_ios"] or len(result["plan_docs"]) > 0:
+            result["is_part_of_plan"] = True
+
+        return result
 
 
 class ProjectDoctor:
@@ -297,6 +363,36 @@ class ProjectDoctor:
         else:
             diagnosis["checks"].append("Standalone runner: ./pipeline.sh present")
 
+        # Check 7: Mobile App Delivery Health & Pre-Push Hook
+        mobile_info = self.stack_info.get("mobile", {})
+        if mobile_info.get("is_part_of_plan"):
+            if self.stack_info["is_git"]:
+                pre_push = self.root / ".git" / "hooks" / "pre-push"
+                if not pre_push.exists():
+                    diagnosis["discrepancies"].append({
+                        "category": "mobile-delivery",
+                        "issue": "Missing pre-push git hook (.git/hooks/pre-push) to ensure mobile apps update with every git push.",
+                        "heal_action": "install_pre_push_hook"
+                    })
+                else:
+                    diagnosis["checks"].append("Mobile delivery pre-push hook: Installed (.git/hooks/pre-push)")
+
+            if mobile_info.get("has_android"):
+                apk_found = list((self.root / "dist").glob("**/*.apk")) + list(self.root.glob("*.apk"))
+                if not apk_found:
+                    diagnosis["discrepancies"].append({
+                        "category": "mobile-delivery",
+                        "issue": "Android APK delivery artifact is missing from dist/.",
+                        "heal_action": "build_mobile_apps"
+                    })
+                else:
+                    diagnosis["checks"].append(f"Android APK artifact: Present ({apk_found[0].name})")
+
+            if mobile_info.get("has_ios"):
+                ios_found = list((self.root / "dist").glob("**/*ios*.zip")) + list(self.root.glob("**/*.xcodeproj"))
+                if ios_found:
+                    diagnosis["checks"].append("iOS delivery artifact / project: Present")
+
         if diagnosis["discrepancies"]:
             diagnosis["healthy"] = False
 
@@ -337,24 +433,6 @@ class SelfHealingEngine:
                     dist_target = dist_dir / "index.html"
                     shutil.copyfile(src_path, dist_target)
                     healed_actions.append(f"Healed distribution: Synchronized {primary_html} -> dist/index.html ({dist_target.stat().st_size:,} bytes)")
-
-        # 2b. Heal Capacitor Mobile Assets
-        if (self.root / "capacitor.config.json").exists():
-            cap_ios_dir = self.root / "ios" / "App" / "App" / "public"
-            cap_android_dir = self.root / "android" / "app" / "src" / "main" / "assets" / "public"
-            dist_dir = self.root / "dist"
-            if dist_dir.exists():
-                for target_dir in [cap_ios_dir, cap_android_dir]:
-                    target_dir.mkdir(parents=True, exist_ok=True)
-                    for item in dist_dir.iterdir():
-                        if item.name == "mobile":
-                            continue
-                        dest = target_dir / item.name
-                        if item.is_dir():
-                            shutil.copytree(item, dest, dirs_exist_ok=True)
-                        else:
-                            shutil.copyfile(item, dest)
-                healed_actions.append("Healed mobile assets: Synchronized Capacitor iOS & Android assets")
 
         # 3. Heal .gitignore
         gitignore = self.root / ".gitignore"
@@ -424,7 +502,107 @@ class SelfHealingEngine:
                 tests_readme.write_text(content, encoding="utf-8")
                 healed_actions.append("Healed documentation: Recalibrated tests/README.md test coverage count")
 
+        # 7. Heal Mobile Delivery Infrastructure & Git Pre-Push Hook
+        if self.stack_info.get("mobile", {}).get("is_part_of_plan") and self.stack_info["is_git"]:
+            pre_push_hook = self.root / ".git" / "hooks" / "pre-push"
+            hook_content = self.get_pre_push_hook_script()
+            needs_install = False
+            if not pre_push_hook.exists():
+                needs_install = True
+            else:
+                try:
+                    existing_hook = pre_push_hook.read_text(encoding="utf-8", errors="ignore")
+                    if "universal-pipeline pre-push hook" not in existing_hook:
+                        needs_install = True
+                except Exception:
+                    needs_install = True
+
+            if needs_install:
+                pre_push_hook.parent.mkdir(parents=True, exist_ok=True)
+                pre_push_hook.write_text(hook_content, encoding="utf-8")
+                pre_push_hook.chmod(0o755)
+                healed_actions.append("Healed git hooks: Installed mobile delivery pre-push guard (.git/hooks/pre-push)")
+
+            # Auto-build mobile apps if missing from dist/
+            apk_found = list((self.root / "dist").glob("**/*.apk")) + list(self.root.glob("*.apk"))
+            if not apk_found:
+                mobile_mgr = MobileAppManager(self.root, self.stack_info["mobile"])
+                mobile_mgr.build_all()
+                healed_actions.append("Healed mobile delivery: Built initial APK and iOS app delivery packages")
+
         return healed_actions
+
+    def get_pre_push_hook_script(self) -> str:
+        return """#!/bin/sh
+# ==============================================================================
+# universal-pipeline pre-push hook
+# Enforces: Mobile apps (APK and iOS app), if present in delivery plan,
+# must be updated with every git push.
+# ==============================================================================
+
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
+[ -z "$REPO_ROOT" ] && REPO_ROOT="$(pwd)"
+
+# Detect if mobile apps are part of the delivery plan
+HAS_MOBILE=false
+if [ -d "$REPO_ROOT/android" ] || [ -d "$REPO_ROOT/apps/mobile/android" ] || [ -d "$REPO_ROOT/frontend/android" ] || [ -f "$REPO_ROOT/capacitor.config.json" ] || [ -f "$REPO_ROOT/frontend/capacitor.config.ts" ]; then
+    HAS_MOBILE=true
+fi
+if [ -d "$REPO_ROOT/ios" ] || [ -d "$REPO_ROOT/apps/mobile/ios" ] || [ -d "$REPO_ROOT/frontend/ios" ]; then
+    HAS_MOBILE=true
+fi
+
+if [ "$HAS_MOBILE" = false ]; then
+    exit 0
+fi
+
+echo "==> [pre-push] Inspecting mobile app deliverables (APK & iOS app)..."
+
+# Run mobile update
+if [ -x "$REPO_ROOT/pipeline.sh" ]; then
+    "$REPO_ROOT/pipeline.sh" mobile
+elif [ -f "$REPO_ROOT/scripts/pipeline.py" ]; then
+    python3 "$REPO_ROOT/scripts/pipeline.py" mobile
+elif [ -f "/Volumes/Study/Projects/universal-pipeline/scripts/pipeline.py" ]; then
+    python3 "/Volumes/Study/Projects/universal-pipeline/scripts/pipeline.py" mobile
+fi
+
+# Determine candidate paths that exist
+CANDIDATES=""
+for cand in dist/mobile apps/mobile/android apps/mobile/ios android ios frontend/android frontend/ios; do
+    if [ -d "$REPO_ROOT/$cand" ]; then
+        CANDIDATES="$CANDIDATES $cand"
+    fi
+done
+
+MODIFIED=$(git -C "$REPO_ROOT" status --porcelain $CANDIDATES 2>/dev/null | grep -E "(\\.(apk|zip|ipa)$|dist/mobile/)" || true)
+if [ -n "$MODIFIED" ]; then
+    echo "==> [pre-push] Staging updated mobile delivery artifacts..."
+    for cand in dist/mobile apps/mobile/android apps/mobile/ios android ios frontend/android frontend/ios; do
+        if [ -e "$REPO_ROOT/$cand" ]; then
+            git -C "$REPO_ROOT" add -A "$cand" 2>/dev/null || true
+        fi
+    done
+    for apk in "$REPO_ROOT"/dist/*.apk "$REPO_ROOT"/*.apk; do
+        if [ -f "$apk" ]; then
+            git -C "$REPO_ROOT" add "$apk" 2>/dev/null || true
+        fi
+    done
+
+    if ! git -C "$REPO_ROOT" diff-index --quiet HEAD -- 2>/dev/null; then
+        git -C "$REPO_ROOT" commit -m "chore(mobile): update APK and iOS delivery artifacts for release" --no-verify
+        echo "✓ [pre-push] Mobile delivery artifacts committed to HEAD."
+        CURRENT_BRANCH="$(git -C "$REPO_ROOT" rev-parse --abbrev-ref HEAD)"
+        REMOTE="${1:-origin}"
+        echo "==> [pre-push] Re-synchronizing push with updated mobile commit..."
+        git -C "$REPO_ROOT" push "$REMOTE" "$CURRENT_BRANCH" --no-verify
+        exit 1
+    fi
+fi
+
+echo "✓ [pre-push] Mobile delivery artifacts verified and up-to-date."
+exit 0
+"""
 
 
 class TestRunner:
@@ -440,24 +618,6 @@ class TestRunner:
             if (self.root / candidate).is_dir():
                 test_dir = candidate
                 break
-
-        # Auto-sync Capacitor mobile assets before testing if missing
-        if (self.root / "capacitor.config.json").exists():
-            cap_ios_dir = self.root / "ios" / "App" / "App" / "public"
-            cap_android_dir = self.root / "android" / "app" / "src" / "main" / "assets" / "public"
-            dist_dir = self.root / "dist"
-            if dist_dir.exists():
-                for target_dir in [cap_ios_dir, cap_android_dir]:
-                    if not (target_dir / "index.html").exists():
-                        target_dir.mkdir(parents=True, exist_ok=True)
-                        for item in dist_dir.iterdir():
-                            if item.name == "mobile":
-                                continue
-                            dest = target_dir / item.name
-                            if item.is_dir():
-                                shutil.copytree(item, dest, dirs_exist_ok=True)
-                            else:
-                                shutil.copyfile(item, dest)
 
         # Check for custom test runner first
         if (self.root / "run_tests.sh").exists():
@@ -528,11 +688,10 @@ class TestRunner:
         stdout_lines = []
         failures = []
 
-        if proc.stdout is not None:
-            for line in proc.stdout:
-                stdout_lines.append(line)
-                if re.search(r"(FAILED|ERROR|AssertionError|Exception|fail:)", line):
-                    failures.append(line.strip())
+        for line in proc.stdout:
+            stdout_lines.append(line)
+            if re.search(r"(FAILED|ERROR|AssertionError|Exception|fail:)", line):
+                failures.append(line.strip())
 
         proc.wait()
         duration = round(time.time() - t0, 2)
@@ -559,6 +718,228 @@ class TestRunner:
             return exit_code
 
 
+class MobileAppManager:
+    """Detects, synchronizes web assets, builds APKs and iOS apps, and verifies delivery outputs."""
+
+    def __init__(self, root: Path, mobile_info: dict):
+        self.root = root
+        self.info = mobile_info
+
+    def get_env(self) -> dict:
+        env = os.environ.copy()
+        if "JAVA_HOME" not in env:
+            for jvm in ["/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home",
+                        "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home",
+                        "/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home"]:
+                if os.path.isdir(jvm):
+                    env["JAVA_HOME"] = jvm
+                    break
+        if "ANDROID_HOME" not in env:
+            default_sdk = os.path.expanduser("~/Library/Android/sdk")
+            if os.path.isdir(default_sdk):
+                env["ANDROID_HOME"] = default_sdk
+        if "PATH" in env:
+            extra_paths = []
+            if "JAVA_HOME" in env:
+                extra_paths.append(f"{env['JAVA_HOME']}/bin")
+            if "ANDROID_HOME" in env:
+                extra_paths.extend([f"{env['ANDROID_HOME']}/platform-tools", f"{env['ANDROID_HOME']}/cmdline-tools/latest/bin"])
+            env["PATH"] = ":".join(extra_paths) + ":" + env["PATH"]
+        return env
+
+    def sync_web_assets(self) -> bool:
+        """Syncs web build (dist) into Capacitor or native mobile asset folders before compilation."""
+        dist_dir = self.root / "dist"
+        if not dist_dir.exists():
+            if (self.root / "frontend" / "dist").exists():
+                dist_dir = self.root / "frontend" / "dist"
+        if not dist_dir.exists() and (self.root / "index.html").exists():
+            dist_dir = self.root / "dist"
+            dist_dir.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(self.root / "index.html", dist_dir / "index.html")
+
+        if not dist_dir.exists():
+            return False
+
+        synced = False
+        # Sync to Android assets
+        android_targets = [
+            self.root / "android" / "app" / "src" / "main" / "assets" / "public",
+            self.root / "frontend" / "android" / "app" / "src" / "main" / "assets" / "public"
+        ]
+        for at in android_targets:
+            if at.parent.exists():
+                at.mkdir(parents=True, exist_ok=True)
+                for item in dist_dir.iterdir():
+                    if item.name == "mobile" or item.name.endswith((".apk", ".zip", ".ipa", ".map")):
+                        continue
+                    dest = at / item.name
+                    if item.is_dir():
+                        shutil.copytree(item, dest, dirs_exist_ok=True)
+                    else:
+                        shutil.copyfile(item, dest)
+                synced = True
+
+        # Sync to iOS www / public assets
+        ios_targets = [
+            self.root / "ios" / "App" / "App" / "public",
+            self.root / "frontend" / "ios" / "App" / "App" / "public"
+        ]
+        for it in ios_targets:
+            if it.parent.exists():
+                it.mkdir(parents=True, exist_ok=True)
+                for item in dist_dir.iterdir():
+                    if item.name == "mobile" or item.name.endswith((".apk", ".zip", ".ipa", ".map")):
+                        continue
+                    dest = it / item.name
+                    if item.is_dir():
+                        shutil.copytree(item, dest, dirs_exist_ok=True)
+                    else:
+                        shutil.copyfile(item, dest)
+                synced = True
+
+        if synced:
+            log_success("Synchronized web distribution assets into mobile bundles (Android & iOS)")
+        return synced
+
+    def build_android(self) -> int:
+        """Builds Android APK."""
+        if not self.info.get("has_android"):
+            return 0
+
+        cand = self.info.get("android_path")
+        if not cand or not cand.is_dir():
+            return 0
+
+        log_step(f"Compiling Android Native APK in {cand.relative_to(self.root)}...")
+        env = self.get_env()
+
+        # 1. Custom build script (e.g. CricOS build-apk.sh)
+        if (cand / "build-apk.sh").exists():
+            res = subprocess.run(["bash", "build-apk.sh"], cwd=str(cand), env=env, capture_output=True, text=True)
+            if res.returncode == 0:
+                log_success("Android APK build script completed successfully.")
+                return 0
+            else:
+                log_error(f"Android build-apk.sh failed: {res.stderr.strip()[:300]}")
+                return res.returncode
+
+        # 2. Gradle build (gradlew)
+        gradle_cmd = cand / "gradlew"
+        if not gradle_cmd.exists():
+            g_sys = shutil.which("gradle")
+            cmd_args = [g_sys] if g_sys else None
+        else:
+            cmd_args = [f"./{gradle_cmd.name}"]
+
+        if cmd_args and cmd_args[0]:
+            cmd = cmd_args + ["assembleDebug", "--no-daemon", "--console=plain"]
+            res = subprocess.run(cmd, cwd=str(cand), env=env, capture_output=True, text=True)
+            if res.returncode == 0:
+                apk_candidates = list((cand / "app" / "build" / "outputs" / "apk" / "debug").glob("*.apk"))
+                if not apk_candidates:
+                    apk_candidates = list(cand.glob("**/*.apk"))
+                if apk_candidates:
+                    apk_file = apk_candidates[0]
+                    apk_size = apk_file.stat().st_size
+                    mobile_dist = self.root / "dist" / "mobile"
+                    mobile_dist.mkdir(parents=True, exist_ok=True)
+                    target_name = f"{self.root.name.lower()}-android-debug.apk"
+                    dest_apk = mobile_dist / target_name
+                    shutil.copyfile(apk_file, dest_apk)
+                    if self.root.name.lower() in ["astrology", "synodix"]:
+                        shutil.copyfile(apk_file, self.root / "Synodix-debug.apk")
+                    log_success(f"Android APK generated: {dest_apk.relative_to(self.root)} ({apk_size:,} bytes)")
+                else:
+                    log_success("Android assembleDebug completed successfully.")
+                return 0
+            else:
+                log_error(f"Android Gradle build failed: {res.stderr.strip()[:300]}")
+                return res.returncode
+
+        return 0
+
+    def build_ios(self) -> int:
+        """Builds iOS App & Packages Simulator Distribution Archive."""
+        if not self.info.get("has_ios"):
+            return 0
+
+        cand = self.info.get("ios_path")
+        if not cand or not cand.is_dir():
+            return 0
+
+        log_step(f"Building iOS Native Application in {cand.relative_to(self.root)}...")
+
+        # 1. Custom build script (e.g. CricOS build-ios.sh)
+        if (cand / "build-ios.sh").exists():
+            res = subprocess.run(["bash", "build-ios.sh"], cwd=str(cand), capture_output=True, text=True)
+            if res.returncode == 0:
+                log_success("iOS native project synchronization succeeded.")
+                return 0
+            else:
+                log_error(f"iOS build-ios.sh failed: {res.stderr.strip()[:300]}")
+                return res.returncode
+
+        # 2. Xcode build
+        xcode_projects = list(cand.glob("**/*.xcodeproj"))
+        if xcode_projects:
+            proj = xcode_projects[0]
+            scheme = proj.stem
+            derived_data = cand / "build" / "ios_derived"
+            cmd = [
+                "xcodebuild",
+                "-project", str(proj),
+                "-scheme", scheme,
+                "-configuration", "Debug",
+                "-destination", "generic/platform=iOS Simulator",
+                "-derivedDataPath", str(derived_data),
+                "build",
+                "CODE_SIGNING_ALLOWED=NO"
+            ]
+            res = subprocess.run(cmd, cwd=str(cand), capture_output=True, text=True)
+            if res.returncode == 0:
+                app_dir = derived_data / "Build" / "Products" / "Debug-iphonesimulator" / f"{scheme}.app"
+                if not app_dir.exists():
+                    cands = list((derived_data / "Build" / "Products" / "Debug-iphonesimulator").glob("*.app"))
+                    if cands:
+                        app_dir = cands[0]
+                if app_dir.exists():
+                    mobile_dist = self.root / "dist" / "mobile"
+                    mobile_dist.mkdir(parents=True, exist_ok=True)
+                    zip_name = f"{self.root.name.lower()}-ios-simulator.zip"
+                    dest_zip = mobile_dist / zip_name
+                    shutil.make_archive(str(dest_zip.with_suffix("")), "zip", app_dir.parent, app_dir.name)
+                    zip_size = dest_zip.stat().st_size
+                    log_success(f"iOS Simulator App packaged: {dest_zip.relative_to(self.root)} ({zip_size:,} bytes)")
+                else:
+                    log_success("iOS xcodebuild completed successfully.")
+                return 0
+            else:
+                log_error(f"iOS xcodebuild failed: {res.stderr.strip()[:300]}")
+                return res.returncode
+
+        return 0
+
+    def build_all(self) -> int:
+        """Executes full mobile update pipeline: asset sync -> Android APK -> iOS App."""
+        if not self.info.get("is_part_of_plan"):
+            return 0
+
+        print(f"\n{CYAN}{BOLD}📱 Mobile App Delivery Pipeline (APK & iOS){RESET}")
+        self.sync_web_assets()
+
+        rc_android = self.build_android()
+        if rc_android != 0:
+            return rc_android
+
+        rc_ios = self.build_ios()
+        if rc_ios != 0:
+            return rc_ios
+
+        log_success("Mobile delivery targets (APK & iOS app) updated and synchronized.")
+        return 0
+
+
 class PackagingManager:
     """Builds and verifies local distribution bundles based on project context."""
 
@@ -582,47 +963,6 @@ class PackagingManager:
                 shutil.copyfile(source_file, dist_target)
                 size_bytes = dist_target.stat().st_size
                 log_success(f"Synchronized {primary_html} -> dist/index.html ({size_bytes:,} bytes)")
-                synced = True
-
-                # Synchronize auxiliary web assets into dist/
-                aux_files = ["tooltip.css", "tooltip.js", "manifest.json", "sw.js"]
-                for af in aux_files:
-                    p = self.root / af
-                    if p.exists():
-                        shutil.copyfile(p, dist_dir / af)
-
-                # Copy icon images
-                for icon in self.root.glob("icon-*.png"):
-                    shutil.copyfile(icon, dist_dir / icon.name)
-
-                # Copy replica design tokens
-                tokens_src = self.root / "replica" / "design" / "tokens.css"
-                if tokens_src.exists():
-                    (dist_dir / "replica" / "design").mkdir(parents=True, exist_ok=True)
-                    shutil.copyfile(tokens_src, dist_dir / "replica" / "design" / "tokens.css")
-
-                # Copy .well-known
-                wk_dir = self.root / ".well-known"
-                if wk_dir.exists():
-                    shutil.copytree(wk_dir, dist_dir / ".well-known", dirs_exist_ok=True)
-
-        # 1b. Capacitor Mobile Assets Synchronization (iOS & Android)
-        if (self.root / "capacitor.config.json").exists():
-            cap_ios_dir = self.root / "ios" / "App" / "App" / "public"
-            cap_android_dir = self.root / "android" / "app" / "src" / "main" / "assets" / "public"
-            dist_dir = self.root / "dist"
-            if dist_dir.exists():
-                for target_dir in [cap_ios_dir, cap_android_dir]:
-                    target_dir.mkdir(parents=True, exist_ok=True)
-                    for item in dist_dir.iterdir():
-                        if item.name == "mobile":
-                            continue
-                        dest = target_dir / item.name
-                        if item.is_dir():
-                            shutil.copytree(item, dest, dirs_exist_ok=True)
-                        else:
-                            shutil.copyfile(item, dest)
-                log_success("Synchronized Capacitor mobile assets (iOS & Android)")
                 synced = True
 
         # 2. Node / Vite bundling
@@ -663,6 +1003,14 @@ class PackagingManager:
             if res.returncode == 0:
                 log_success("Go binary build completed.")
                 synced = True
+
+        # 6. Mobile Application Packaging (Android APK & iOS App)
+        if self.stack_info.get("mobile", {}).get("is_part_of_plan"):
+            mobile_mgr = MobileAppManager(self.root, self.stack_info["mobile"])
+            mobile_rc = mobile_mgr.build_all()
+            if mobile_rc != 0:
+                return mobile_rc
+            synced = True
 
         if not synced:
             log_warn("No active packaging targets configured or required.")
@@ -766,7 +1114,7 @@ class GitOrchestrator:
             return 0
 
         subprocess.run(["git", "add", "-u"], cwd=str(self.root), check=True)
-        for cand in ["dist", "docs", "tests", ".agents", "README.md", "PROJECT_CONTEXT.md", "PRODUCT.md", "DESIGN.md"]:
+        for cand in ["dist", "docs", "tests", ".agents", "README.md", "PROJECT_CONTEXT.md", "PRODUCT.md", "DESIGN.md", "android", "ios", "apps/mobile", "frontend/android", "frontend/ios", "Synodix-debug.apk"]:
             if (self.root / cand).exists():
                 subprocess.run(["git", "add", cand], cwd=str(self.root), check=False)
 
@@ -792,6 +1140,42 @@ class GitOrchestrator:
         print(f"{GREEN}{BOLD}======================================================{RESET}\n")
         return 0
 
+    def push(self, mobile_mgr: MobileAppManager) -> int:
+        if not (self.root / ".git").is_dir():
+            log_error(f"{self.root} is not a Git repository. Cannot push.")
+            return 1
+
+        if mobile_mgr.info.get("is_part_of_plan"):
+            log_step("Updating mobile delivery artifacts (APK & iOS app) before push...")
+            rc = mobile_mgr.build_all()
+            if rc != 0:
+                log_error("Mobile delivery build failed. Aborting push.")
+                return rc
+
+            # Stage newly generated/refreshed mobile artifacts
+            status = subprocess.run(["git", "status", "--porcelain"], cwd=str(self.root), capture_output=True, text=True)
+            if status.stdout.strip():
+                log_step("Staging refreshed mobile delivery artifacts...")
+                for cand in ["dist", "android", "ios", "apps/mobile", "frontend/android", "frontend/ios", "Synodix-debug.apk"]:
+                    if (self.root / cand).exists():
+                        subprocess.run(["git", "add", cand], cwd=str(self.root), check=False)
+                if subprocess.run(["git", "diff-index", "--quiet", "HEAD", "--"], cwd=str(self.root)).returncode != 0:
+                    commit_msg = f"chore(mobile): auto-update APK and iOS delivery artifacts for release [{time.strftime('%Y-%m-%d %H:%M:%S')}]"
+                    subprocess.run(["git", "commit", "-m", commit_msg], cwd=str(self.root), capture_output=True, text=True)
+                    log_success(f"Committed fresh mobile delivery artifacts: {commit_msg}")
+
+        branch_res = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=str(self.root), capture_output=True, text=True)
+        branch = branch_res.stdout.strip() or "main"
+
+        log_step(f"Pushing to origin/{branch}...")
+        push_res = subprocess.run(["git", "push", "origin", branch], cwd=str(self.root), capture_output=True, text=True)
+        if push_res.returncode == 0:
+            log_success(f"Pushed to origin/{branch} successfully with fresh mobile delivery artifacts.")
+            return 0
+        else:
+            log_error(f"Push failed: {push_res.stderr.strip()}")
+            return push_res.returncode
+
 
 def main():
     root = Path.cwd()
@@ -807,6 +1191,7 @@ def main():
     test_runner = TestRunner(root, stack_info)
     packager = PackagingManager(root, stack_info)
     doc_builder = DocBuilder(root)
+    mobile_mgr = MobileAppManager(root, stack_info.get("mobile", {}))
     git_orchestrator = GitOrchestrator(root)
 
     if cmd in ["doctor", "audit", "check"]:
@@ -870,6 +1255,15 @@ def main():
     elif cmd == "doc":
         return doc_builder.update()
 
+    elif cmd in ["mobile", "apk", "android"]:
+        return mobile_mgr.build_android() if cmd in ["apk", "android"] else mobile_mgr.build_all()
+
+    elif cmd in ["ios", "apple"]:
+        return mobile_mgr.build_ios()
+
+    elif cmd == "push":
+        return git_orchestrator.push(mobile_mgr)
+
     elif cmd == "visual":
         return test_runner.run(["-k", "visual or screenshot or layout or overlap or tooltip"], compact=True)
 
@@ -878,7 +1272,7 @@ def main():
         return git_orchestrator.ship(msg, test_runner, packager, doc_builder)
 
     else:
-        print(f"Unknown command: '{cmd}'. Available: doctor, heal, test, visual, package, doc, ship")
+        print(f"Unknown command: '{cmd}'. Available: doctor, heal, test, visual, package, mobile, apk, ios, push, doc, ship")
         return 1
 
 

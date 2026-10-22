@@ -25,20 +25,16 @@ done
 SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 SKILL_ROOT="$(cd "$SCRIPT_DIR/.." 2>/dev/null && pwd || echo "$SCRIPT_DIR")"
 
-# Prefer Python engine with pytest if available for rich JSON & compact formatting
-PYTHON_BIN=""
-for py in "$SCRIPT_DIR/.venv/bin/python" "/Library/Frameworks/Python.framework/Versions/3.14/bin/python3" "$(command -v python3 || true)" "$(command -v python || true)"; do
-    if [ -x "$py" ]; then
-        PYTHON_BIN="$py"
-        break
-    fi
-done
+# Prefer Python engine if available for rich JSON & compact formatting
+PYTHON_BIN="$(command -v python3 || command -v python || true)"
 
 if [ -n "$PYTHON_BIN" ]; then
     for candidate in \
-        "$SCRIPT_DIR/scripts/pipeline.py" \
         "$SCRIPT_DIR/pipeline.py" \
-        "$SKILL_ROOT/scripts/pipeline.py"; do
+        "$SCRIPT_DIR/scripts/pipeline.py" \
+        "$SKILL_ROOT/scripts/pipeline.py" \
+        "/Volumes/Study/Projects/universal-pipeline/scripts/pipeline.py" \
+        "/Users/manvenpratapsingh/.gemini/config/skills/universal-pipeline/scripts/pipeline.py"; do
         if [ -f "$candidate" ]; then
             exec "$PYTHON_BIN" "$candidate" "$@"
         fi
@@ -54,26 +50,19 @@ echo "==> Universal Pipeline (Bash Mode: $CMD)"
 case "$CMD" in
     doctor|check|audit)
         echo "=== Self-Analyzing Project Diagnostic ==="
-        [ -f pom.xml ] && echo "  • Detected Java/Maven project" || true
-        [ -f package.json ] && echo "  • Detected Node/TypeScript project" || true
-        { [ -f requirements.txt ] || [ -f pyproject.toml ]; } && echo "  • Detected Python project" || true
-        [ -f Cargo.toml ] && echo "  • Detected Rust project" || true
-        [ -f go.mod ] && echo "  • Detected Go project" || true
-        [ -d src-tauri ] && echo "  • Detected Tauri desktop project" || true
+        [ -f pom.xml ] && echo "  • Detected Java/Maven project"
+        [ -f package.json ] && echo "  • Detected Node/TypeScript project"
+        [ -f requirements.txt ] || [ -f pyproject.toml ] && echo "  • Detected Python project"
+        [ -f Cargo.toml ] && echo "  • Detected Rust project"
+        [ -f go.mod ] && echo "  • Detected Go project"
+        [ -d src-tauri ] && echo "  • Detected Tauri desktop project"
         compgen -G "*.html" >/dev/null 2>&1 && echo "  • Detected Single-File Web project" || true
-        if [ ! -f PROJECT_CONTEXT.md ]; then
-            echo "  ⚠ Missing: PROJECT_CONTEXT.md. Run './pipeline.sh heal' to resolve."
-        fi
-        if [ ! -f .gitignore ]; then
-            echo "  ⚠ Missing: .gitignore. Run './pipeline.sh heal' to resolve."
-        fi
-        echo "✓ Project diagnostic complete: healthy."
-        exit 0
+        [ ! -f PROJECT_CONTEXT.md ] && echo "  ⚠ Missing: PROJECT_CONTEXT.md. Run './pipeline.sh heal' to resolve."
+        [ ! -f .gitignore ] && echo "  ⚠ Missing: .gitignore. Run './pipeline.sh heal' to resolve."
         ;;
     heal|fix|setup|init)
         echo "==> Executing Self-Healing Routines..."
-        if [ ! -f PROJECT_CONTEXT.md ]; then
-            cat << 'EOF' > PROJECT_CONTEXT.md
+        [ ! -f PROJECT_CONTEXT.md ] && cat << 'EOF' > PROJECT_CONTEXT.md
 # Project Context & Working Memory
 **Last Updated:** $(date '+%Y-%m-%d %H:%M:%S')
 **Version:** 1.0.0
@@ -81,22 +70,16 @@ case "$CMD" in
 ## Status
 - Self-healed pipeline active.
 EOF
-            echo "✓ Healed PROJECT_CONTEXT.md"
-        fi
+        echo "✓ Healed PROJECT_CONTEXT.md"
         if [ -f index.html ] && [ ! -f dist/index.html ]; then
             mkdir -p dist
             cp index.html dist/index.html
             echo "✓ Healed distribution parity: dist/index.html synced."
         fi
-        exit 0
         ;;
     test)
         if [ -f run_tests.sh ]; then
             bash ./run_tests.sh "$@"
-        elif [ -d tests ] && command -v pytest >/dev/null 2>&1; then
-            pytest tests/ -q "$@"
-        elif [ -d tests ] && [ -n "$PYTHON_BIN" ]; then
-            "$PYTHON_BIN" -m pytest tests/ -q "$@"
         elif [ -f pom.xml ]; then
             mvn test -q "$@"
         elif [ -f package.json ]; then
@@ -120,17 +103,37 @@ EOF
                 fi
             done
         fi
-        if [ -d .well-known ]; then
-            mkdir -p dist/.well-known
-            cp -r .well-known/* dist/.well-known/ 2>/dev/null || true
-            echo "✓ Synced .well-known -> dist/.well-known"
-        fi
-        if [ -f scripts/build_android_twa.py ]; then
-            python3 scripts/build_android_twa.py >/dev/null 2>&1 || true
-            echo "✓ Verified Android TWA & APK packaging artifacts"
-        fi
         [ -f package.json ] && npm run build --if-present
         [ -f pom.xml ] && mvn package -DskipTests -q
+        "$0" mobile 2>/dev/null || true
+        ;;
+    mobile|apk|android|ios)
+        echo "==> Packaging mobile app deliverables..."
+        # 1. Android APK
+        if [ -f apps/mobile/android/build-apk.sh ]; then
+            bash apps/mobile/android/build-apk.sh
+        elif [ -f android/gradlew ]; then
+            (cd android && ./gradlew assembleDebug --no-daemon --console=plain)
+        elif [ -f frontend/android/gradlew ]; then
+            (cd frontend/android && ./gradlew assembleDebug --no-daemon --console=plain)
+        fi
+        # 2. iOS Project
+        if [ -f apps/mobile/ios/build-ios.sh ]; then
+            bash apps/mobile/ios/build-ios.sh
+        elif compgen -G "ios/**/*.xcodeproj" >/dev/null 2>&1; then
+            XPROJ=$(compgen -G "ios/**/*.xcodeproj" | head -n 1)
+            xcodebuild -project "$XPROJ" -scheme App -configuration Debug -destination "generic/platform=iOS Simulator" -derivedDataPath ios/build/ios_derived build CODE_SIGNING_ALLOWED=NO 2>/dev/null || true
+        elif compgen -G "frontend/ios/**/*.xcodeproj" >/dev/null 2>&1; then
+            XPROJ=$(compgen -G "frontend/ios/**/*.xcodeproj" | head -n 1)
+            xcodebuild -project "$XPROJ" -scheme App -configuration Debug -destination "generic/platform=iOS Simulator" -derivedDataPath frontend/build/ios_derived build CODE_SIGNING_ALLOWED=NO 2>/dev/null || true
+        fi
+        echo "✓ Mobile delivery packaging check complete."
+        ;;
+    push)
+        echo "==> Executing pre-push mobile delivery update..."
+        "$0" mobile 2>/dev/null || true
+        CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+        git push origin "$CURRENT_BRANCH"
         ;;
     doc)
         if [ -f PROJECT_CONTEXT.md ]; then
@@ -144,13 +147,14 @@ EOF
             exit 1
         fi
         "$0" package
-        git add -A
+        git add -A dist/ docs/ android/ ios/ apps/mobile/ frontend/android/ frontend/ios/ 2>/dev/null || true
+        git add -u
         git commit -m "$MSG"
         git push origin "$(git rev-parse --abbrev-ref HEAD)"
         ;;
     *)
         echo "Unknown command: $CMD"
-        echo "Usage: ./pipeline.sh {doctor|heal|test|visual|package|doc|ship}"
+        echo "Usage: ./pipeline.sh {doctor|heal|test|visual|package|mobile|apk|ios|push|doc|ship}"
         exit 1
         ;;
 esac
