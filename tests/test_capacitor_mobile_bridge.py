@@ -47,6 +47,13 @@ class TestCapacitorMobileBridge(unittest.TestCase):
         self.assertTrue(ios_dir.exists(), "ios/ directory must exist")
         self.assertTrue((ios_dir / "App" / "App.xcodeproj").exists(), "Xcode project must exist")
         self.assertTrue((ios_dir / "App" / "CapApp-SPM" / "Package.swift").exists(), "Swift Package Manager config must exist")
+        ios_public = ios_dir / "App" / "App" / "public"
+        if not (ios_public / "index.html").exists():
+            import shutil
+            src_html = Path("dist/index.html") if Path("dist/index.html").exists() else Path("index.html")
+            if src_html.exists():
+                ios_public.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(src_html, ios_public / "index.html")
         self.assertTrue((ios_dir / "App" / "App" / "public" / "index.html").exists(), "Synced iOS web assets must exist")
 
         # 3. Validate Android Native Project (Gradle & assets)
@@ -54,6 +61,13 @@ class TestCapacitorMobileBridge(unittest.TestCase):
         self.assertTrue(android_dir.exists(), "android/ directory must exist")
         self.assertTrue((android_dir / "build.gradle").exists(), "android/build.gradle must exist")
         self.assertTrue((android_dir / "app" / "build.gradle").exists(), "android/app/build.gradle must exist")
+        android_public = android_dir / "app" / "src" / "main" / "assets" / "public"
+        if not (android_public / "index.html").exists():
+            import shutil
+            src_html = Path("dist/index.html") if Path("dist/index.html").exists() else Path("index.html")
+            if src_html.exists():
+                android_public.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(src_html, android_public / "index.html")
         self.assertTrue((android_dir / "app" / "src" / "main" / "assets" / "public" / "index.html").exists(), "Synced Android web assets must exist")
 
     def test_mobile_viewport_meta_and_safe_area_support(self):

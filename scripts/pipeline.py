@@ -337,6 +337,24 @@ class SelfHealingEngine:
                     shutil.copyfile(src_path, dist_target)
                     healed_actions.append(f"Healed distribution: Synchronized {primary_html} -> dist/index.html ({dist_target.stat().st_size:,} bytes)")
 
+        # 2b. Heal Capacitor Mobile Assets
+        if (self.root / "capacitor.config.json").exists():
+            cap_ios_dir = self.root / "ios" / "App" / "App" / "public"
+            cap_android_dir = self.root / "android" / "app" / "src" / "main" / "assets" / "public"
+            dist_dir = self.root / "dist"
+            if dist_dir.exists():
+                for target_dir in [cap_ios_dir, cap_android_dir]:
+                    target_dir.mkdir(parents=True, exist_ok=True)
+                    for item in dist_dir.iterdir():
+                        if item.name == "mobile":
+                            continue
+                        dest = target_dir / item.name
+                        if item.is_dir():
+                            shutil.copytree(item, dest, dirs_exist_ok=True)
+                        else:
+                            shutil.copyfile(item, dest)
+                healed_actions.append("Healed mobile assets: Synchronized Capacitor iOS & Android assets")
+
         # 3. Heal .gitignore
         gitignore = self.root / ".gitignore"
         ignore_rules = ["tests/screenshots/", "e2e-tests/screenshots/", "__pycache__/", ".pytest_cache/", ".DS_Store"]
@@ -421,6 +439,24 @@ class TestRunner:
             if (self.root / candidate).is_dir():
                 test_dir = candidate
                 break
+
+        # Auto-sync Capacitor mobile assets before testing if missing
+        if (self.root / "capacitor.config.json").exists():
+            cap_ios_dir = self.root / "ios" / "App" / "App" / "public"
+            cap_android_dir = self.root / "android" / "app" / "src" / "main" / "assets" / "public"
+            dist_dir = self.root / "dist"
+            if dist_dir.exists():
+                for target_dir in [cap_ios_dir, cap_android_dir]:
+                    if not (target_dir / "index.html").exists():
+                        target_dir.mkdir(parents=True, exist_ok=True)
+                        for item in dist_dir.iterdir():
+                            if item.name == "mobile":
+                                continue
+                            dest = target_dir / item.name
+                            if item.is_dir():
+                                shutil.copytree(item, dest, dirs_exist_ok=True)
+                            else:
+                                shutil.copyfile(item, dest)
 
         # Check for custom test runner first
         if (self.root / "run_tests.sh").exists():
@@ -575,13 +611,15 @@ class PackagingManager:
             dist_dir = self.root / "dist"
             if dist_dir.exists():
                 for target_dir in [cap_ios_dir, cap_android_dir]:
-                    if target_dir.exists():
-                        for item in dist_dir.iterdir():
-                            dest = target_dir / item.name
-                            if item.is_dir():
-                                shutil.copytree(item, dest, dirs_exist_ok=True)
-                            else:
-                                shutil.copyfile(item, dest)
+                    target_dir.mkdir(parents=True, exist_ok=True)
+                    for item in dist_dir.iterdir():
+                        if item.name == "mobile":
+                            continue
+                        dest = target_dir / item.name
+                        if item.is_dir():
+                            shutil.copytree(item, dest, dirs_exist_ok=True)
+                        else:
+                            shutil.copyfile(item, dest)
                 log_success("Synchronized Capacitor mobile assets (iOS & Android)")
                 synced = True
 

@@ -7,6 +7,7 @@ import json
 import subprocess
 import unittest
 from pathlib import Path
+# pyrefly: ignore[missing-import]
 from playwright.sync_api import sync_playwright
 
 APP_URL = "file://" + os.path.abspath("index.html")
