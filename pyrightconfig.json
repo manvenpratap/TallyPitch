@@ -3,7 +3,11 @@
     "tests",
     "scripts"
   ],
+  "venvPath": ".",
+  "venv": ".venv",
+  "pythonPath": ".venv/bin/python",
   "extraPaths": [
+    ".venv/lib/python3.14/site-packages",
     "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages"
   ],
   "executionEnvironments": [
@@ -12,6 +16,7 @@
       "pythonVersion": "3.14",
       "pythonPlatform": "Darwin",
       "extraPaths": [
+        ".venv/lib/python3.14/site-packages",
         "/Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/site-packages"
       ]
     }

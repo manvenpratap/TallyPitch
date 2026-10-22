@@ -27,7 +27,7 @@ SKILL_ROOT="$(cd "$SCRIPT_DIR/.." 2>/dev/null && pwd || echo "$SCRIPT_DIR")"
 
 # Prefer Python engine with pytest if available for rich JSON & compact formatting
 PYTHON_BIN=""
-for py in "/Library/Frameworks/Python.framework/Versions/3.14/bin/python3" "$(command -v python3 || true)" "$(command -v python || true)"; do
+for py in "$SCRIPT_DIR/.venv/bin/python" "/Library/Frameworks/Python.framework/Versions/3.14/bin/python3" "$(command -v python3 || true)" "$(command -v python || true)"; do
     if [ -x "$py" ]; then
         PYTHON_BIN="$py"
         break
