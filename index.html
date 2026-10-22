@@ -180,13 +180,22 @@
     }
 
     /* Cards */
-    .card {
+    .card,
+    .screen-card {
       background: var(--color-bg);
       border: 1px solid var(--color-border);
       border-radius: var(--radius-lg);
       padding: 20px;
       box-shadow: var(--shadow-card);
       margin-bottom: 20px;
+    }
+
+    .stat-tile {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      margin: 0;
     }
 
     .card-header {
@@ -261,7 +270,26 @@
     }
 
     .btn-primary:hover {
-      background: #08582d;
+      background: #1d4ed8;
+      color: #ffffff;
+    }
+    @media (prefers-color-scheme: dark) {
+      .btn-primary {
+        background: #2563eb;
+        color: #ffffff;
+      }
+      .btn-primary:hover {
+        background: #1d4ed8;
+        color: #ffffff;
+      }
+    }
+    [data-theme="dark"] .btn-primary {
+      background: #2563eb;
+      color: #ffffff;
+    }
+    [data-theme="dark"] .btn-primary:hover {
+      background: #1d4ed8;
+      color: #ffffff;
     }
 
     .btn-secondary {
@@ -271,7 +299,21 @@
     }
 
     .btn-secondary:hover {
-      background: #e9edf2;
+      background: var(--color-surface-hover, #e2e8f0);
+    }
+    .btn-secondary[style*="#ef4444"]:hover,
+    button[style*="#ef4444"]:hover {
+      color: #991b1b !important;
+    }
+    @media (prefers-color-scheme: dark) {
+      .btn-secondary[style*="#ef4444"]:hover,
+      button[style*="#ef4444"]:hover {
+        color: #fca5a5 !important;
+      }
+    }
+    [data-theme="dark"] .btn-secondary[style*="#ef4444"]:hover,
+    [data-theme="dark"] button[style*="#ef4444"]:hover {
+      color: #fca5a5 !important;
     }
 
     .btn-danger {
@@ -318,12 +360,6 @@
       height: 8px;
       border-radius: 50%;
       background: #4ade80;
-      animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
     }
 
     .score-hero-grid {
@@ -556,7 +592,7 @@
     }
 
     .keypad-btn:hover {
-      background: #e9edf2;
+      background: var(--color-surface-hover, #e2e8f0);
       border-color: var(--color-border-input);
       transform: translateY(-1px);
     }
@@ -568,11 +604,32 @@
     .keypad-btn.primary-run {
       background: #f0fdf4;
       border-color: #bbf7d0;
-      color: var(--color-accent);
+      color: #166534;
     }
 
     .keypad-btn.primary-run:hover {
       background: #dcfce7;
+      color: #14532d;
+    }
+    @media (prefers-color-scheme: dark) {
+      .keypad-btn.primary-run {
+        background: rgba(22, 101, 52, 0.2);
+        border-color: rgba(34, 197, 94, 0.4);
+        color: #86efac;
+      }
+      .keypad-btn.primary-run:hover {
+        background: rgba(22, 101, 52, 0.35);
+        color: #bbf7d0;
+      }
+    }
+    [data-theme="dark"] .keypad-btn.primary-run {
+      background: rgba(22, 101, 52, 0.2);
+      border-color: rgba(34, 197, 94, 0.4);
+      color: #86efac;
+    }
+    [data-theme="dark"] .keypad-btn.primary-run:hover {
+      background: rgba(22, 101, 52, 0.35);
+      color: #bbf7d0;
     }
 
     /* Extras & Actions Bar */
@@ -597,9 +654,21 @@
     }
 
     .extra-btn:hover {
-      border-color: var(--color-warning);
-      color: var(--color-warning);
-      background: #fefce8;
+      border-color: #d97706;
+      color: #78350f;
+      background: #fef3c7;
+    }
+    @media (prefers-color-scheme: dark) {
+      .extra-btn:hover {
+        border-color: #f59e0b;
+        color: #fef08a;
+        background: rgba(245, 158, 11, 0.2);
+      }
+    }
+    [data-theme="dark"] .extra-btn:hover {
+      border-color: #f59e0b;
+      color: #fef08a;
+      background: rgba(245, 158, 11, 0.2);
     }
 
     .primary-actions-grid {
@@ -676,11 +745,20 @@
     }
 
     .dismissal-radio-label:hover {
-      background: var(--color-surface);
+      background: rgba(239, 68, 68, 0.08);
     }
 
     .dismissal-radio-label input:checked + span {
-      color: var(--color-danger);
+      color: #b91c1c;
+      font-weight: 700;
+    }
+    @media (prefers-color-scheme: dark) {
+      .dismissal-radio-label input:checked + span {
+        color: #fca5a5;
+      }
+    }
+    [data-theme="dark"] .dismissal-radio-label input:checked + span {
+      color: #fca5a5;
     }
 
     /* Scorecard Tables */
@@ -730,7 +808,7 @@
       border-radius: 50%;
       background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
       border: 4px solid #eab308;
-      box-shadow: 0 8px 16px rgba(202, 138, 4, 0.35);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -835,7 +913,7 @@
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 14px;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.15);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
       color: #ffffff;
       overflow: hidden;
       animation: obsSlideUp 350ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -870,13 +948,6 @@
       height: 10px;
       border-radius: 50%;
       background: #ef4444;
-      box-shadow: 0 0 8px #ef4444;
-      animation: obsPulse 1.5s infinite;
-    }
-
-    @keyframes obsPulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.25); opacity: 0.6; }
     }
 
     .obs-badge {
@@ -1043,8 +1114,8 @@
     }
 
     .obs-chip.six {
-      background: #7c3aed;
-      border-color: #c084fc;
+      background: #1d4ed8;
+      border-color: #60a5fa;
       color: #ffffff;
     }
 
@@ -1162,7 +1233,7 @@
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #1d4ed8, #7c3aed);
+      background: linear-gradient(135deg, #1d4ed8, #2563eb);
       color: #ffffff;
       font-weight: 900;
       font-size: 14px;
@@ -1170,7 +1241,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 16px rgba(29, 78, 216, 0.45);
+      box-shadow: var(--shadow-elevated);
       border: 2px solid rgba(255, 255, 255, 0.3);
       user-select: none;
       flex-shrink: 0;
@@ -1220,7 +1291,7 @@
     }
     .compare-bar-right {
       height: 100%;
-      background: linear-gradient(90deg, #8b5cf6, #7c3aed);
+      background: linear-gradient(90deg, #d97706, #b45309);
       transition: width 300ms ease;
     }
 
@@ -1243,7 +1314,7 @@
       background: var(--color-accent);
       color: #ffffff;
       border-color: var(--color-accent);
-      box-shadow: 0 2px 6px rgba(29, 78, 216, 0.35);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
     }
 
     .community-filters-row {
@@ -1317,7 +1388,7 @@
     .cat-player { background: #dcfce7; color: #166534; }
     .cat-team { background: #e0f2fe; color: #0369a1; }
     .cat-umpire { background: #fef3c7; color: #92400e; }
-    .cat-ground { background: #f3e8ff; color: #6b21a8; }
+    .cat-ground { background: #ccfbf1; color: #0f766e; }
 
     .community-post-time {
       font-size: 11px;
@@ -1861,7 +1932,7 @@
         font-size: 16px !important;
         font-weight: 800 !important;
         border-radius: 12px;
-        box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+        box-shadow: var(--shadow-card);
       }
 
       .primary-actions-grid #undo-btn {
@@ -2035,7 +2106,7 @@
          SCREEN S03: MATCH SETUP
          ===================================================================== -->
     <div id="screen-S03" class="screen-view">
-      <div class="card">
+      <div class="screen-card">
         <div class="card-header">
           <div>
             <h2 class="card-title">Quick Match Setup (S03)</h2>
@@ -2103,7 +2174,7 @@
          SCREEN S05: THE TOSS
          ===================================================================== -->
     <div id="screen-S05" class="screen-view">
-      <div class="card" style="text-align: center;">
+      <div class="screen-card" style="text-align: center;">
         <div class="card-header" style="justify-content: center; text-align: center;">
           <div>
             <h2 class="card-title">Virtual Toss (S05)</h2>
@@ -2149,7 +2220,7 @@
          SCREEN S06: OPENERS & BOWLER SELECTION
          ===================================================================== -->
     <div id="screen-S06" class="screen-view">
-      <div class="card">
+      <div class="screen-card">
         <div class="card-header">
           <div>
             <h2 class="card-title">Select Opening Batters & Bowler (S06)</h2>
@@ -2185,7 +2256,7 @@
     <div id="screen-S07" class="screen-view active">
 
       <!-- Track 15: Match Disaster Recovery Banner -->
-      <div id="match-disaster-recovery-banner" style="display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; background: #fef3c7; border: 1.5px solid #f59e0b; border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 14px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);" data-tooltip="Ongoing match found in offline IndexedDB vault. Click to restore immediately.">
+      <div id="match-disaster-recovery-banner" style="display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; background: #fef3c7; border: 1.5px solid #f59e0b; border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 14px; box-shadow: var(--shadow-card);" data-tooltip="Ongoing match found in offline IndexedDB vault. Click to restore immediately.">
         <div style="display: flex; align-items: center; gap: 8px;">
           <span style="font-size: 18px;">⚡</span>
           <div style="font-size: 12px; color: #92400e;">
@@ -2232,7 +2303,7 @@
             <button class="btn btn-secondary" id="btn-dls-modal" style="background: rgba(14,165,233,0.25); border: 1px solid rgba(14,165,233,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openDlsModal()" data-tooltip="Duckworth-Lewis-Stern (DLS) rain rule & revised target calculator">
               🌧️ Rain / DLS
             </button>
-            <button class="btn btn-secondary" id="btn-voice-commentary-toggle" style="background: rgba(168,85,247,0.25); border: 1px solid rgba(168,85,247,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="toggleVoiceCommentary()" data-tooltip="Toggle live audio speech synthesis commentary for balls and wickets">
+            <button class="btn btn-secondary" id="btn-voice-commentary-toggle" style="background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="toggleVoiceCommentary()" data-tooltip="Toggle live audio speech synthesis commentary for balls and wickets">
               🔇 Voice: OFF
             </button>
             <button class="btn btn-secondary" id="btn-sfx-toggle" style="background: rgba(245,158,11,0.25); border: 1px solid rgba(245,158,11,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="toggleStadiumSfx()" data-tooltip="Toggle automated stadium sound effects (sirens, crowd roars, and stump crashes)">
@@ -2475,7 +2546,7 @@
          SCREEN S13: DIGITAL SCORECARD & COMMENTARY
          ===================================================================== -->
     <div id="screen-S13" class="screen-view">
-      <div class="card">
+      <div class="screen-card">
         <div class="card-header">
           <div>
             <h2 class="card-title">Match Scorecard (S13)</h2>
@@ -2645,19 +2716,19 @@
 
             <!-- 4 Radial KPI Telemetry Cards -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 14px;">
-              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">👑 Top Sector</div>
                 <div id="wagon-kpi-productive" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-accent);">None (0r)</div>
               </div>
-              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🚀 Lofted Yield</div>
-                <div id="wagon-kpi-lofted" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: #a855f7;">0r (0 Air)</div>
+                <div id="wagon-kpi-lofted" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-accent);">0r (0 Air)</div>
               </div>
-              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🛡️ Ground Control</div>
                 <div id="wagon-kpi-ground" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-success);">0r (0 Ground)</div>
               </div>
-              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🎯 Boundary Hotspot</div>
                 <div id="wagon-kpi-boundary" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: #f59e0b;">None (0 Bdys)</div>
               </div>
@@ -2666,13 +2737,13 @@
             <!-- Dual Column: 360 Turf Canvas & Radial Sector Breakdown Table -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 12px;">
               <!-- Left Column: SVG Ground Turf Canvas -->
-              <div class="card" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
                   <span>360° Turf Wagon Wheel & Lofted Arcs</span>
                   <div style="display: flex; gap: 6px; font-size: 10px;">
-                    <span style="color: #a855f7; font-weight: 700;">🟣 6s (Arc)</span>
+                    <span style="color: var(--color-accent); font-weight: 700;">🔵 6s (Arc)</span>
                     <span style="color: #22c55e; font-weight: 700;">🟢 4s</span>
-                    <span style="color: #38bdf8; font-weight: 700;">🔵 1-3s</span>
+                    <span style="color: #38bdf8; font-weight: 700;">🔷 1-3s</span>
                     <span style="color: #94a3b8; font-weight: 700;">⚪ Dots</span>
                   </div>
                 </div>
@@ -2680,7 +2751,7 @@
               </div>
 
               <!-- Right Column: 8-Sector Spray Distribution Table -->
-              <div class="card" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); overflow-x: auto;">
+              <div class="stat-tile" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); overflow-x: auto;">
                 <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 8px;">
                   8-Sector Radial Spray & Trajectory Split
                 </div>
@@ -2731,7 +2802,7 @@
             <!-- Venue Metrics Grid -->
             <div class="venue-telemetry-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 16px;">
               <!-- Win Ratio Card -->
-              <div class="card" style="padding: 12px; background: var(--color-bg); margin: 0;">
+              <div class="stat-tile" style="padding: 12px; background: var(--color-bg); margin: 0;">
                 <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Toss & Win Expectancy</div>
                 <div style="font-size: 16px; font-weight: 800; margin: 4px 0;" id="venue-win-ratio-txt">Bat 1st: 52% • Chasing: 48%</div>
                 <div style="height: 6px; width: 100%; background: #3b82f6; border-radius: 999px; overflow: hidden; display: flex; margin-top: 6px;">
@@ -2741,7 +2812,7 @@
               </div>
 
               <!-- Innings Benchmarks Card -->
-              <div class="card" style="padding: 12px; background: var(--color-bg); margin: 0;">
+              <div class="stat-tile" style="padding: 12px; background: var(--color-bg); margin: 0;">
                 <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Benchmark Innings Scores</div>
                 <div style="display: flex; justify-content: space-between; margin-top: 6px;">
                   <div>
@@ -2756,7 +2827,7 @@
               </div>
 
               <!-- Pace vs Spin Card -->
-              <div class="card" style="padding: 12px; background: var(--color-bg); margin: 0;">
+              <div class="stat-tile" style="padding: 12px; background: var(--color-bg); margin: 0;">
                 <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Pace vs Spin Breakdown</div>
                 <div style="font-size: 12px; margin-top: 4px;" id="venue-pace-stat">⚡ <strong>Pace:</strong> 6.80 Econ • 70% Wkts</div>
                 <div style="font-size: 12px; margin-top: 2px;" id="venue-spin-stat">🌀 <strong>Spin:</strong> 6.20 Econ • 30% Wkts</div>
@@ -2764,7 +2835,7 @@
             </div>
 
             <!-- Dismissal Breakdown SVG Bar -->
-            <div class="card" style="padding: 14px; background: var(--color-bg); margin: 0;">
+            <div class="stat-tile" style="padding: 14px; background: var(--color-bg); margin: 0;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <span style="font-size: 12px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Historic Venue Dismissal Breakdown</span>
                 <span style="font-size: 11px; color: var(--color-text-muted);" id="venue-boundary-notes">Boundary bias: Open outfield</span>
@@ -2773,13 +2844,13 @@
                 <div id="dis-bar-caught" style="width: 58%; background: #3b82f6;" data-tooltip="Caught: 58%"></div>
                 <div id="dis-bar-bowled" style="width: 24%; background: #ef4444;" data-tooltip="Bowled: 24%"></div>
                 <div id="dis-bar-lbw" style="width: 12%; background: #f59e0b;" data-tooltip="LBW: 12%"></div>
-                <div id="dis-bar-runout" style="width: 6%; background: #8b5cf6;" data-tooltip="Run Out: 6%"></div>
+                <div id="dis-bar-runout" style="width: 6%; background: #d97706;" data-tooltip="Run Out: 6%"></div>
               </div>
               <div style="display: flex; gap: 14px; font-size: 11px; color: var(--color-text-muted); flex-wrap: wrap;">
                 <span><span style="display: inline-block; width: 8px; height: 8px; background: #3b82f6; border-radius: 50%;"></span> Caught (<span id="dis-pct-caught">58%</span>)</span>
                 <span><span style="display: inline-block; width: 8px; height: 8px; background: #ef4444; border-radius: 50%;"></span> Bowled (<span id="dis-pct-bowled">24%</span>)</span>
                 <span><span style="display: inline-block; width: 8px; height: 8px; background: #f59e0b; border-radius: 50%;"></span> LBW (<span id="dis-pct-lbw">12%</span>)</span>
-                <span><span style="display: inline-block; width: 8px; height: 8px; background: #8b5cf6; border-radius: 50%;"></span> Run Out (<span id="dis-pct-runout">6%</span>)</span>
+                <span><span style="display: inline-block; width: 8px; height: 8px; background: #d97706; border-radius: 50%;"></span> Run Out (<span id="dis-pct-runout">6%</span>)</span>
               </div>
             </div>
           </div>
@@ -2806,26 +2877,26 @@
 
             <!-- 4 Telemetry KPI Cards -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 14px;">
-              <div class="card" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid var(--color-accent);">
+              <div class="stat-tile" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border: 1px solid var(--color-border);">
                 <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">👑 Most Productive</div>
                 <div id="shots-kpi-productive" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-text);">Cover Drive (0r)</div>
               </div>
-              <div class="card" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid var(--color-success);">
+              <div class="stat-tile" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border: 1px solid var(--color-border);">
                 <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🚀 Boundary Yield</div>
                 <div id="shots-kpi-boundary" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-success);">0% Boundaries</div>
               </div>
-              <div class="card" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid #f59e0b;">
+              <div class="stat-tile" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border: 1px solid var(--color-border);">
                 <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🛡️ Top Ground Control</div>
                 <div id="shots-kpi-ground" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: #f59e0b;">Straight Drive (0r)</div>
               </div>
-              <div class="card" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid var(--color-danger);">
+              <div class="stat-tile" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border: 1px solid var(--color-border);">
                 <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">⚠️ High Risk Dismissal</div>
                 <div id="shots-kpi-risk" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-danger);">None (0 Wkts)</div>
               </div>
             </div>
 
             <!-- Detailed Shots Breakdown List -->
-            <div class="card" style="padding: 12px; background: var(--color-bg); margin: 0;">
+            <div class="stat-tile" style="padding: 12px; background: var(--color-bg); margin: 0;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">
                 <span>Shot Type Breakdown</span>
                 <span>Runs • SR • Boundaries • Wkts</span>
@@ -2856,26 +2927,26 @@
 
             <!-- 4 Face-Off KPI Cards -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 14px;">
-              <div class="card" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid var(--color-accent);">
+              <div class="stat-tile" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border: 1px solid var(--color-border);">
                 <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">👑 Top Dominant Batter</div>
                 <div id="faceoff-kpi-batter" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-text);">None (0r)</div>
               </div>
-              <div class="card" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid var(--color-danger);">
+              <div class="stat-tile" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border: 1px solid var(--color-border);">
                 <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🎯 Nemesis Bowler</div>
                 <div id="faceoff-kpi-bowler" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-danger);">None (0 Wkts)</div>
               </div>
-              <div class="card" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid #f59e0b;">
+              <div class="stat-tile" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border: 1px solid var(--color-border);">
                 <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🧱 Dot Ball Trap</div>
                 <div id="faceoff-kpi-dots" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: #f59e0b;">0% Dots</div>
               </div>
-              <div class="card" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid var(--color-success);">
+              <div class="stat-tile" style="padding: 10px 12px; background: var(--color-bg); margin: 0; border: 1px solid var(--color-border);">
                 <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">⚡ Top Scoring Duel</div>
                 <div id="faceoff-kpi-duel" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-success);">None (0r)</div>
               </div>
             </div>
 
             <!-- Matrix Grid Container -->
-            <div class="card" style="padding: 12px; background: var(--color-bg); margin: 0 0 14px; overflow-x: auto;">
+            <div class="stat-tile" style="padding: 12px; background: var(--color-bg); margin: 0 0 14px; overflow-x: auto;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <span style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Face-Off Matrix Grid (Tap cell for breakdown)</span>
                 <span style="font-size: 11px; color: var(--color-text-muted);">Rows = Batters • Columns = Bowlers</span>
@@ -2884,7 +2955,7 @@
             </div>
 
             <!-- Spotlight Matchup Inspector -->
-            <div id="faceoff-spotlight-card" class="card" style="padding: 12px; background: var(--color-bg); margin: 0; border: 1px solid var(--color-border);">
+            <div id="faceoff-spotlight-card" class="stat-tile" style="padding: 12px; background: var(--color-bg); margin: 0; border: 1px solid var(--color-border);">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <span style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Selected Matchup Details</span>
                 <span id="faceoff-spotlight-status" class="badge" style="background: rgba(37,99,235,0.15); color: var(--color-accent); font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: var(--radius-pill);">Contested</span>
@@ -2910,19 +2981,19 @@
 
             <!-- 4 Turning Point Telemetry KPI Cards -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 14px;">
-              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🚀 Biggest Over</div>
                 <div id="tp-kpi-biggest" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-accent);">None (0r)</div>
               </div>
-              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🎯 Deadliest Over</div>
                 <div id="tp-kpi-deadliest" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-danger);">None (0 Wkts)</div>
               </div>
-              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🧱 Tightest Over</div>
                 <div id="tp-kpi-tightest" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: #f59e0b;">None (0r)</div>
               </div>
-              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">📈 Top Swing</div>
                 <div id="tp-kpi-swing" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-success);">0% Win Shift</div>
               </div>
@@ -2974,19 +3045,19 @@
 
             <!-- 4 Pitch Map Telemetry KPI Cards -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 14px;">
-              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🎯 Frequent Zone</div>
                 <div id="pitch-kpi-frequent" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-accent);">None (0b)</div>
               </div>
-              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🛡️ Best Economy</div>
                 <div id="pitch-kpi-economical" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-success);">0.00 Eco</div>
               </div>
-              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">⚠️ High Yield Length</div>
                 <div id="pitch-kpi-expensive" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: var(--color-danger);">None (0r)</div>
               </div>
-              <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🎯 Top Wicket Zone</div>
                 <div id="pitch-kpi-wickets" style="font-size: 13px; font-weight: 800; margin-top: 2px; color: #f59e0b;">None (0 Wkts)</div>
               </div>
@@ -2995,7 +3066,7 @@
             <!-- Pitch Visuals & Matrix Grid (Dual Column) -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 14px;">
               <!-- Left: 2D Pitch Turf Heatmap -->
-              <div class="card" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
                   <span>2D Pitch Turf Heatmap (22 Yards)</span>
                   <div style="display: flex; gap: 8px; font-size: 10px;">
@@ -3008,7 +3079,7 @@
               </div>
 
               <!-- Right: Pitch Line & Length Matrix Table -->
-              <div class="card" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); overflow-x: auto;">
+              <div class="stat-tile" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); overflow-x: auto;">
                 <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 8px;">
                   Length × Line Breakdown Table
                 </div>
@@ -3043,19 +3114,19 @@
 
             <!-- Field 4 KPIs Summary Bar -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 14px;">
-              <div class="card" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 10px; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700;">Infield Ring</div>
                 <div id="field-kpi-infield" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: #38bdf8;">9 Fielders</div>
               </div>
-              <div class="card" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 10px; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700;">Boundary Riders</div>
-                <div id="field-kpi-deep" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: #a855f7;">2 Deep</div>
+                <div id="field-kpi-deep" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: var(--color-accent);">2 Deep</div>
               </div>
-              <div class="card" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 10px; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700;">Off / Leg Split</div>
                 <div id="field-kpi-split" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: #34d399;">6 Off / 5 Leg</div>
               </div>
-              <div class="card" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 10px; color: var(--color-text-muted); text-transform: uppercase; font-weight: 700;">Gap Pierce Rate</div>
                 <div id="field-kpi-gaps" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: #f59e0b;">0% (0/0)</div>
               </div>
@@ -3064,12 +3135,12 @@
             <!-- Field 2D Turf Chart + Tactical Breakdown Grid -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 14px;">
               <!-- Left: 2D Field Turf Overlay with Shot Vectors -->
-              <div class="card" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+              <div class="stat-tile" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
                 <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
                   <span>Tactical Turf Ground (2D View)</span>
                   <div style="display: flex; gap: 8px; font-size: 10px;">
                     <span style="color: #38bdf8; font-weight: 700;">● Infield</span>
-                    <span style="color: #a855f7; font-weight: 700;">● Boundary</span>
+                    <span style="color: var(--color-accent); font-weight: 700;">● Boundary</span>
                     <span style="color: #f59e0b; font-weight: 700;">● Bowler/Keeper</span>
                   </div>
                 </div>
@@ -3077,7 +3148,7 @@
               </div>
 
               <!-- Right: Tactical Positions Breakdown Table -->
-              <div class="card" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); overflow-x: auto;">
+              <div class="stat-tile" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); overflow-x: auto;">
                 <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
                   <span>11 Tactical Positions</span>
                   <span id="field-chart-catcher-count" style="font-size: 10px; color: #94a3b8;">1 Catcher(s)</span>
@@ -3126,7 +3197,7 @@
          SCREENS S15-S19: TOURNAMENT WIZARD, FORMAT, FIXTURES, STANDINGS, LEADERS
          ===================================================================== -->
     <div id="screen-tournaments" class="screen-view">
-      <div class="card">
+      <div class="screen-card">
         <div class="card-header">
           <div>
             <h2 class="card-title">Tournament Management Hub (S15–S19)</h2>
@@ -3280,7 +3351,7 @@
           </table>
 
           <!-- Track 14: Dynamic Tournament NRR Qualification Scenario Calculator (Un-paywalled CricHeroes PRO) -->
-          <div id="nrr-calculator-card" style="margin-top: 20px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 18px; box-shadow: 0 4px 14px rgba(0,0,0,0.03);" data-tooltip="Simulate exact victory margins and chase overs needed to qualify on ICC Net Run Rate">
+          <div id="nrr-calculator-card" style="margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--color-border);" data-tooltip="Simulate exact victory margins and chase overs needed to qualify on ICC Net Run Rate">
             <!-- Header -->
             <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
               <div style="display: flex; align-items: center; gap: 8px;">
@@ -3388,7 +3459,7 @@
         </div>
 
         <!-- Track 19: Tournament Boundary Tracker & Boundarometer (tournaments_boundary_tracker) -->
-        <div id="tournament-boundary-tracker-card" style="margin-top: 24px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: 18px; box-shadow: 0 4px 14px rgba(0,0,0,0.03);" data-tooltip="Tournament Boundary Analytics, Boundarometer &amp; Hand Splits">
+        <div id="tournament-boundary-tracker-card" style="margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--color-border);" data-tooltip="Tournament Boundary Analytics, Boundarometer &amp; Hand Splits">
           <!-- Header -->
           <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
             <div style="display: flex; align-items: center; gap: 8px;">
@@ -3396,7 +3467,7 @@
               <div>
                 <h4 style="font-size: 15px; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 6px;">
                   Tournament Boundary Tracker &amp; Boundarometer
-                  <span style="font-size: 10px; background: #fae8ff; color: #86198f; padding: 2px 8px; border-radius: var(--radius-pill); font-weight: 700;">TOURNAMENT INTEL</span>
+                  <span style="font-size: 10px; background: rgba(37,99,235,0.12); color: var(--color-accent); padding: 2px 8px; border-radius: var(--radius-pill); font-weight: 700;">TOURNAMENT INTEL</span>
                 </h4>
                 <p style="font-size: 11px; color: var(--color-text-muted); margin: 2px 0 0;">Reverse-engineered from CricHeroes BoundaryTrackerFragment &amp; tournaments_boundary_tracker. Aggregate 4s, 6s, and efficiency splits.</p>
               </div>
@@ -3410,22 +3481,22 @@
 
           <!-- 4 Boundarometer Hero KPI Telemetry Cards -->
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 16px;">
-            <div class="card" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+            <div class="stat-tile" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
               <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🚀 Total Sixes</div>
-              <div id="bnd-kpi-total-sixes" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: #9333ea;">38 Sixes</div>
+              <div id="bnd-kpi-total-sixes" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: var(--color-accent);">38 Sixes</div>
               <div style="font-size: 10px; color: var(--color-text-muted); margin-top: 2px;">228 runs in sixes</div>
             </div>
-            <div class="card" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+            <div class="stat-tile" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
               <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🎺 Total Fours</div>
               <div id="bnd-kpi-total-fours" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: var(--color-accent);">86 Fours</div>
               <div style="font-size: 10px; color: var(--color-text-muted); margin-top: 2px;">344 runs in fours</div>
             </div>
-            <div class="card" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+            <div class="stat-tile" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
               <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">⚡ Boundary Yield</div>
               <div id="bnd-kpi-runs-pct" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: var(--color-success);">69.3%</div>
               <div style="font-size: 10px; color: var(--color-text-muted); margin-top: 2px;">572 / 825 total runs</div>
             </div>
-            <div class="card" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+            <div class="stat-tile" style="padding: 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
               <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">📏 Frequency</div>
               <div id="bnd-kpi-balls-per-bnd" style="font-size: 16px; font-weight: 800; margin-top: 2px; color: var(--color-text);">1 / 4.3 b</div>
               <div style="font-size: 10px; color: var(--color-text-muted); margin-top: 2px;">124 bnds in 539 balls</div>
@@ -3460,7 +3531,7 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
               <!-- Sixes Leaders -->
               <div style="background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px;">
-                <h5 style="font-size: 13px; font-weight: 800; color: #9333ea; margin: 0 0 10px; display: flex; align-items: center; gap: 6px;">
+                <h5 style="font-size: 13px; font-weight: 800; color: var(--color-accent); margin: 0 0 10px; display: flex; align-items: center; gap: 6px;">
                   <span>🚀</span> Top 5 Six-Hitters
                 </h5>
                 <div id="bnd-podium-sixes" style="display: flex; flex-direction: column; gap: 6px;"></div>
@@ -3503,13 +3574,13 @@
             </div>
 
             <!-- Purple Cap -->
-            <div style="background: linear-gradient(135deg, rgba(192, 132, 252, 0.15) 0%, rgba(233, 213, 255, 0.25) 100%); border: 1px solid #d8b4fe; border-radius: var(--radius-md); padding: 14px; position: relative;" data-tooltip="Purple Cap awarded to the leading wicket taker of the tournament">
+            <div style="background: linear-gradient(135deg, rgba(30, 64, 175, 0.12) 0%, rgba(59, 130, 246, 0.18) 100%); border: 1px solid #93c5fd; border-radius: var(--radius-md); padding: 14px; position: relative;" data-tooltip="Purple Cap awarded to the leading wicket taker of the tournament">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 11px; font-weight: 800; color: #7e22ce; text-transform: uppercase; letter-spacing: 0.5px;">🧢 Purple Cap</span>
-                <span style="font-size: 10px; background: #9333ea; color: #fff; font-weight: 800; padding: 2px 6px; border-radius: var(--radius-pill);">WKTS LEADER</span>
+                <span style="font-size: 11px; font-weight: 800; color: #1e40af; text-transform: uppercase; letter-spacing: 0.5px;">🧢 Purple Cap</span>
+                <span style="font-size: 10px; background: #1d4ed8; color: #fff; font-weight: 800; padding: 2px 6px; border-radius: var(--radius-pill);">WKTS LEADER</span>
               </div>
               <div style="font-size: 18px; font-weight: 800; margin: 8px 0 2px;" id="leader-purple-name">Jasprit Bumrah</div>
-              <div style="font-size: 12px; color: #6b21a8; font-family: var(--font-mono); font-weight: 600;" id="leader-purple-stats">8 wkts • Eco 5.38 • Mumbai Strikers</div>
+              <div style="font-size: 12px; color: #1e3a8a; font-family: var(--font-mono); font-weight: 600;" id="leader-purple-stats">8 wkts • Eco 5.38 • Mumbai Strikers</div>
             </div>
 
             <!-- MVP -->
@@ -3593,7 +3664,7 @@
          SCREENS S20, S21: TEAM ROSTERS & PLAYER CAREER PROFILES
          ===================================================================== -->
     <div id="screen-teams-profiles" class="screen-view">
-      <div class="card">
+      <div class="screen-card">
         <div class="card-header">
           <div>
             <h2 class="card-title">Teams & Player Profiles (S20, S21)</h2>
@@ -3773,22 +3844,22 @@
 
               <!-- 4 Telemetry KPI Cards -->
               <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 14px;">
-                <div class="card" style="padding: 8px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid var(--color-accent);">
+                <div class="stat-tile" style="padding: 8px 12px; background: var(--color-bg); margin: 0; border: 1px solid var(--color-border);">
                   <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Recent Average</div>
                   <div id="form-kpi-avg" style="font-size: 16px; font-weight: 800; font-family: var(--font-mono); margin-top: 2px; color: var(--color-text);">52.4</div>
                   <div id="form-kpi-avg-sub" style="font-size: 10px; color: var(--color-text-muted);">Last 5 Innings</div>
                 </div>
-                <div class="card" style="padding: 8px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid #10b981;">
+                <div class="stat-tile" style="padding: 8px 12px; background: var(--color-bg); margin: 0; border: 1px solid var(--color-border);">
                   <div id="form-kpi-sr-econ-title" style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Strike Rate</div>
                   <div id="form-kpi-sr-econ" style="font-size: 16px; font-weight: 800; font-family: var(--font-mono); margin-top: 2px; color: #10b981;">164.2</div>
                   <div id="form-kpi-sr-econ-sub" style="font-size: 10px; color: var(--color-text-muted);">Runs / 100b</div>
                 </div>
-                <div class="card" style="padding: 8px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid #f59e0b;">
+                <div class="stat-tile" style="padding: 8px 12px; background: var(--color-bg); margin: 0; border: 1px solid var(--color-border);">
                   <div id="form-kpi-bnd-dot-title" style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Boundary %</div>
                   <div id="form-kpi-boundary-dot" style="font-size: 16px; font-weight: 800; font-family: var(--font-mono); margin-top: 2px; color: #f59e0b;">68.4%</div>
                   <div id="form-kpi-bnd-dot-sub" style="font-size: 10px; color: var(--color-text-muted);">In 4s &amp; 6s</div>
                 </div>
-                <div class="card" style="padding: 8px 12px; background: var(--color-bg); margin: 0; border-left: 3px solid #8b5cf6;">
+                <div class="stat-tile" style="padding: 8px 12px; background: var(--color-bg); margin: 0; border: 1px solid var(--color-border);">
                   <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Momentum Trend</div>
                   <div id="form-kpi-trend" style="font-size: 14px; font-weight: 800; margin-top: 2px; color: #10b981;">↗ Surge (+28%)</div>
                   <div id="form-kpi-trend-sub" style="font-size: 10px; color: var(--color-text-muted);">vs 3-Match Baseline</div>
@@ -3837,7 +3908,7 @@
                 <h3 style="font-size: 16px; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 6px;">
                   <span>⚔️</span> Head-to-Head Compare VS Engine
                 </h3>
-                <span class="badge" style="background: linear-gradient(135deg, rgba(29,78,216,0.15), rgba(124,58,237,0.15)); color: var(--color-accent); font-weight: 800; border: 1px solid rgba(29,78,216,0.3); font-size: 10px; text-transform: uppercase; padding: 2px 8px; border-radius: var(--radius-pill);">
+                <span class="badge" style="background: rgba(29, 78, 216, 0.15); color: var(--color-accent); font-weight: 800; border: 1px solid rgba(29, 78, 216, 0.3); font-size: 10px; text-transform: uppercase; padding: 2px 8px; border-radius: var(--radius-pill);">
                   PRO UN-PAYWALLED
                 </span>
               </div>
@@ -3897,17 +3968,17 @@
             <!-- Spotlight Cards Row -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px;">
               <!-- Left Spotlight Card -->
-              <div id="compare-card-p1" class="compare-spotlight-card" style="border-left: 4px solid var(--color-accent);">
+              <div id="compare-card-p1" class="compare-spotlight-card">
                 <!-- Populated dynamically -->
               </div>
               <!-- Right Spotlight Card -->
-              <div id="compare-card-p2" class="compare-spotlight-card" style="border-right: 4px solid #7c3aed; text-align: right;">
+              <div id="compare-card-p2" class="compare-spotlight-card" style="text-align: right;">
                 <!-- Populated dynamically -->
               </div>
             </div>
 
             <!-- Comparative Metric Split Bars Table/Grid -->
-            <div class="card" style="background: var(--color-surface); border: 1px solid var(--color-border); padding: 14px; border-radius: var(--radius-md);">
+            <div class="stat-tile" style="background: var(--color-surface); border: 1px solid var(--color-border); padding: 14px; border-radius: var(--radius-md);">
               <div style="font-size: 12px; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
                 <span>Comparative Telemetry (10 Official Metrics)</span>
                 <span style="font-size: 11px; text-transform: none; font-weight: 600;">Proportional split (10% - 90% clamped)</span>
@@ -3943,12 +4014,12 @@
 
             <!-- Spotlight Cards Row -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px;">
-              <div id="compare-card-t1" class="compare-spotlight-card" style="border-left: 4px solid var(--color-accent);"></div>
-              <div id="compare-card-t2" class="compare-spotlight-card" style="border-right: 4px solid #7c3aed; text-align: right;"></div>
+              <div id="compare-card-t1" class="compare-spotlight-card"></div>
+              <div id="compare-card-t2" class="compare-spotlight-card" style="text-align: right;"></div>
             </div>
 
             <!-- Team Metrics Table/Grid -->
-            <div class="card" style="background: var(--color-surface); border: 1px solid var(--color-border); padding: 14px; border-radius: var(--radius-md);">
+            <div class="stat-tile" style="background: var(--color-surface); border: 1px solid var(--color-border); padding: 14px; border-radius: var(--radius-md);">
               <div style="font-size: 12px; font-weight: 800; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 12px;">
                 Team Benchmark Breakdown
               </div>
@@ -4027,7 +4098,7 @@
          SCREEN S23: COMMUNITY MATCHMAKING BOARD
          ===================================================================== -->
     <div id="screen-community" class="screen-view">
-      <div class="card">
+      <div class="screen-card">
         <div class="card-header">
           <div>
             <h2 class="card-title">🤝 Community Matchmaking Board (S23)</h2>
@@ -4211,7 +4282,7 @@
       </div>
 
       <!-- Super Over Tie-Breaker Launch Button (Track 7 / tbl_MatchSuperOverBallByBall) -->
-      <button type="button" class="btn" id="btn-launch-super-over" style="display: none; width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; padding: 11px 16px; margin-bottom: 12px; justify-content: center; align-items: center; gap: 8px; border-radius: var(--radius-md); box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);" onclick="openSuperOverSetupModal(1)" data-tooltip="Scores are level! Commence official ICC 1-over tie-breaker (Super Over)">
+      <button type="button" class="btn" id="btn-launch-super-over" style="display: none; width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-weight: 800; padding: 11px 16px; margin-bottom: 12px; justify-content: center; align-items: center; gap: 8px; border-radius: var(--radius-md); box-shadow: var(--shadow-card);" onclick="openSuperOverSetupModal(1)" data-tooltip="Scores are level! Commence official ICC 1-over tie-breaker (Super Over)">
         <span>⚡</span> Commence Official Super Over
       </button>
 
@@ -4358,7 +4429,7 @@
       <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: var(--radius-md); padding: 12px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
         <div>
           <strong style="color: #10b981; font-size: 13px; display: flex; align-items: center; gap: 6px;">
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981; animation: obsPulse 1.5s infinite;"></span>
+            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span>
             Dual-Stack Realtime Bridge Active
           </strong>
           <div style="font-size: 12px; color: var(--color-text-muted); margin-top: 3px;">
@@ -4527,7 +4598,7 @@
 
       <!-- Preview container -->
       <div style="text-align: center; margin-bottom: 16px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--color-border);">
-        <img id="social-card-preview-img" alt="Match Graphic Preview" style="max-width: 100%; height: auto; aspect-ratio: 1/1; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); display: inline-block;" />
+        <img id="social-card-preview-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E" alt="Match Graphic Preview" style="max-width: 100%; height: auto; aspect-ratio: 1/1; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); display: inline-block;" />
         <!-- Hidden 1080x1080 rendering canvas -->
         <canvas id="social-card-canvas" width="1080" height="1080" style="display: none;"></canvas>
       </div>
@@ -4651,10 +4722,10 @@
        MODAL 10: ANDROID TWA & NATIVE APK PACKAGING (TRACK 3)
        ======================================================================= -->
   <div id="android-apk-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('android-apk-modal')">
-    <div class="modal-card" style="max-width: 640px; border: 1px solid rgba(59, 130, 246, 0.4); box-shadow: 0 20px 45px rgba(0,0,0,0.6);">
+    <div class="modal-dialog" style="max-width: 640px; border: 1px solid rgba(59, 130, 246, 0.4); box-shadow: 0 20px 45px rgba(0,0,0,0.6);">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-          <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: var(--shadow-card);">
             🤖
           </div>
           <div>
@@ -4688,7 +4759,7 @@
           <div style="font-size: 11px; color: var(--color-text-muted); margin-top: 2px;">Cache-first Service Worker + local state</div>
         </div>
         <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px;">
-          <div style="font-size: 11px; font-weight: 700; color: #a855f7; text-transform: uppercase;">Digital Asset Links</div>
+          <div style="font-size: 11px; font-weight: 700; color: var(--color-accent); text-transform: uppercase;">Digital Asset Links</div>
           <div style="font-size: 13px; font-weight: 700; margin-top: 4px;">Verified Domain Delegation</div>
           <div style="font-size: 11px; color: var(--color-text-muted); margin-top: 2px;">.well-known/assetlinks.json active</div>
         </div>
@@ -4727,10 +4798,10 @@
        MODAL 11: OFFICIAL ICC SUPER OVER SETUP (TRACK 7)
        ======================================================================= -->
   <div id="super-over-modal" class="modal-backdrop" onclick="if(event.target === this) closeModal('super-over-modal')">
-    <div class="modal-card" style="max-width: 580px; border: 1px solid rgba(245, 158, 11, 0.4); box-shadow: 0 20px 45px rgba(0,0,0,0.6);">
+    <div class="modal-dialog" style="max-width: 580px; border: 1px solid rgba(245, 158, 11, 0.4); box-shadow: 0 20px 45px rgba(0,0,0,0.6);">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px;">
         <div style="display: flex; align-items: center; gap: 12px;">
-          <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: var(--shadow-card);">
             ⚡
           </div>
           <div>
@@ -4840,7 +4911,7 @@
       </div>
 
       <!-- Duel Spotlight Card -->
-      <div id="faceoff-modal-duel-card" class="card" style="padding: 14px; background: var(--color-bg); margin: 0 0 14px; border: 1px solid var(--color-border);">
+      <div id="faceoff-modal-duel-card" class="stat-tile" style="padding: 14px; background: var(--color-bg); margin: 0 0 14px; border: 1px solid var(--color-border);">
         <!-- Dynamically rendered by updateFaceOffModal() -->
       </div>
 
@@ -5123,19 +5194,19 @@
 
       <!-- Telemetry KPIs -->
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 14px;">
-        <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+        <div class="stat-tile" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
           <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🏟️ Total Fixtures</div>
           <div id="sched-kpi-total-matches" style="font-size: 14px; font-weight: 800; margin-top: 2px; color: var(--color-accent);">9 Matches</div>
         </div>
-        <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+        <div class="stat-tile" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
           <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">📆 Matchdays</div>
           <div id="sched-kpi-total-days" style="font-size: 14px; font-weight: 800; margin-top: 2px; color: var(--color-text);">5 Days</div>
         </div>
-        <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+        <div class="stat-tile" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
           <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">📍 Venues Used</div>
           <div id="sched-kpi-venues-count" style="font-size: 14px; font-weight: 800; margin-top: 2px; color: var(--color-text);">3 Grounds</div>
         </div>
-        <div class="card" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+        <div class="stat-tile" style="padding: 8px 10px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
           <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🛡️ Clash Check</div>
           <div id="sched-kpi-conflicts" style="font-size: 14px; font-weight: 800; margin-top: 2px; color: var(--color-success);">0 Conflicts ✓</div>
         </div>
@@ -5198,11 +5269,11 @@
       <div id="mc-view-penalty" class="mc-tab-view">
         <!-- Telemetry KPIs -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
-          <div class="card" style="padding: 10px 14px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+          <div class="stat-tile" style="padding: 10px 14px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
             <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">⚡ Current Innings Penalties</div>
             <div id="mc-kpi-inn-penalties" style="font-size: 18px; font-weight: 800; margin-top: 4px; color: #ea580c;">+0 Runs</div>
           </div>
-          <div class="card" style="padding: 10px 14px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+          <div class="stat-tile" style="padding: 10px 14px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
             <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">🛡️ Match Total Incidents</div>
             <div id="mc-kpi-match-penalties" style="font-size: 18px; font-weight: 800; margin-top: 4px; color: var(--color-text);">0 Incidents (+0)</div>
           </div>
@@ -5492,7 +5563,7 @@
       <!-- Main Layout: 2D Turf Ground (Left) + Inspector & Rules (Right) -->
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px; margin-bottom: 14px;">
         <!-- Left: 2D Interactive Turf SVG -->
-        <div class="card" style="margin: 0; padding: 12px; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
+        <div class="stat-tile" style="margin: 0; padding: 12px; background: var(--color-bg); border: 1px solid var(--color-border); text-align: center;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 11px; font-weight: 700; color: var(--color-text-muted);">
             <span>Interactive 2D Turf Ground</span>
             <span>💡 Drag pins or click to inspect</span>
@@ -5506,14 +5577,14 @@
             <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; background: #ea580c; border-radius: 50%;"></span> Wicketkeeper</span>
             <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; background: #dc2626; border-radius: 50%;"></span> Bowler</span>
             <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; background: #0284c7; border-radius: 50%;"></span> Infield (30yd Ring)</span>
-            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; background: #9333ea; border-radius: 50%;"></span> Deep Boundary</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; background: var(--color-accent); border-radius: 50%;"></span> Deep Boundary</span>
           </div>
         </div>
 
         <!-- Right: Selected Fielder Inspector + MCC Compliance Checklist -->
         <div style="display: flex; flex-direction: column; gap: 12px;">
           <!-- Selected Fielder Inspector -->
-          <div class="card" id="field-inspector-card" style="margin: 0; padding: 14px; background: var(--color-bg); border: 1px solid var(--color-border);">
+          <div class="stat-tile" id="field-inspector-card" style="margin: 0; padding: 14px; background: var(--color-bg); border: 1px solid var(--color-border);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid var(--color-border); padding-bottom: 8px;">
               <div style="display: flex; align-items: center; gap: 8px;">
                 <span id="field-inspector-badge" style="width: 26px; height: 26px; border-radius: 50%; background: #0284c7; color: #fff; font-weight: 800; font-size: 11px; display: inline-flex; align-items: center; justify-content: center;">3</span>
@@ -5576,13 +5647,13 @@
               </div>
               <div>
                 <div style="color: var(--color-text-muted); font-size: 10px; font-weight: 700;">COORDINATES</div>
-                <div id="field-inspector-coords" style="font-weight: 800; color: #a855f7; margin-top: 2px;">(180, 250)</div>
+                <div id="field-inspector-coords" style="font-weight: 800; color: var(--color-accent); margin-top: 2px;">(180, 250)</div>
               </div>
             </div>
           </div>
 
           <!-- MCC Law 28.4 & ICC Rules Compliance Checklist -->
-          <div class="card" style="margin: 0; padding: 14px; background: var(--color-bg); border: 1px solid var(--color-border);">
+          <div class="stat-tile" style="margin: 0; padding: 14px; background: var(--color-bg); border: 1px solid var(--color-border);">
             <div style="font-size: 12px; font-weight: 800; color: #fff; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
               <span>Official Compliance Checklist</span>
               <span style="font-size: 10px; color: var(--color-text-muted);">MCC Law 28.4 & ICC Standard</span>
@@ -6526,14 +6597,78 @@
       renderLiveConsole();
     }
 
+    let lastFocusedElementBeforeModal = null;
+
+    function initAccessibleModals() {
+      document.querySelectorAll('.modal-backdrop').forEach(modal => {
+        modal.setAttribute('aria-hidden', 'true');
+        const dialog = modal.querySelector('.modal-dialog') || modal.querySelector('.modal-card') || modal;
+        dialog.setAttribute('role', 'dialog');
+        dialog.setAttribute('aria-modal', 'true');
+        const title = dialog.querySelector('.modal-title') || dialog.querySelector('h2, h3, h4');
+        if (title) {
+          if (!title.id) {
+            title.id = `${modal.id}-title`;
+          }
+          dialog.setAttribute('aria-labelledby', title.id);
+        }
+      });
+
+      // Trap Tab key inside open modal & close on Escape
+      window.addEventListener('keydown', (e) => {
+        const openModalEl = document.querySelector('.modal-backdrop.open');
+        if (!openModalEl) return;
+
+        if (e.key === 'Escape') {
+          closeModal(openModalEl.id);
+          return;
+        }
+
+        if (e.key === 'Tab') {
+          const focusable = openModalEl.querySelectorAll('button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
+          if (!focusable.length) return;
+          const firstFocusable = focusable[0];
+          const lastFocusable = focusable[focusable.length - 1];
+
+          if (e.shiftKey) {
+            if (document.activeElement === firstFocusable || document.activeElement === openModalEl) {
+              e.preventDefault();
+              lastFocusable.focus();
+            }
+          } else {
+            if (document.activeElement === lastFocusable) {
+              e.preventDefault();
+              firstFocusable.focus();
+            }
+          }
+        }
+      });
+    }
+
     function openModal(modalId) {
       const el = document.getElementById(modalId);
-      if (el) el.classList.add('open');
+      if (el) {
+        lastFocusedElementBeforeModal = document.activeElement;
+        el.classList.add('open');
+        el.setAttribute('aria-hidden', 'false');
+        const focusable = el.querySelector('button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
+        if (focusable) {
+          setTimeout(() => focusable.focus(), 50);
+        }
+      }
     }
 
     function closeModal(modalId) {
       const el = document.getElementById(modalId);
-      if (el) el.classList.remove('open');
+      if (el) {
+        el.classList.remove('open');
+        el.setAttribute('aria-hidden', 'true');
+        if (lastFocusedElementBeforeModal && typeof lastFocusedElementBeforeModal.focus === 'function') {
+          try {
+            lastFocusedElementBeforeModal.focus();
+          } catch (_) {}
+        }
+      }
     }
 
     // ------------------------------------------------------------------------
@@ -7861,8 +7996,8 @@
       const btnHud = document.getElementById('btn-voice-commentary-toggle');
       const btnS13 = document.getElementById('btn-voice-commentary-s13');
       const text = isEnabled ? '🔊 Voice: ON' : '🔇 Voice: OFF';
-      const bg = isEnabled ? 'rgba(34, 197, 94, 0.25)' : 'rgba(168, 85, 247, 0.25)';
-      const border = isEnabled ? '1px solid rgba(34, 197, 94, 0.5)' : '1px solid rgba(168, 85, 247, 0.4)';
+      const bg = isEnabled ? 'rgba(34, 197, 94, 0.25)' : 'rgba(37, 99, 235, 0.2)';
+      const border = isEnabled ? '1px solid rgba(34, 197, 94, 0.5)' : '1px solid rgba(37, 99, 235, 0.4)';
 
       if (btnHud) {
         btnHud.textContent = text;
@@ -8164,8 +8299,8 @@
         line.setAttribute('y2', wagonPlacement.y);
         pin.setAttribute('cx', wagonPlacement.x);
         pin.setAttribute('cy', wagonPlacement.y);
-        line.setAttribute('stroke', wagonPlacement.height === 'air' ? '#a855f7' : '#facc15');
-        pin.setAttribute('fill', wagonPlacement.height === 'air' ? '#a855f7' : '#facc15');
+        line.setAttribute('stroke', wagonPlacement.height === 'air' ? '#2563eb' : '#facc15');
+        pin.setAttribute('fill', wagonPlacement.height === 'air' ? '#2563eb' : '#facc15');
       }
     }
 
@@ -8721,7 +8856,7 @@
 
         let color = '#94a3b8';
         if (d.runs === 4) color = '#22c55e';
-        else if (d.runs === 6) color = '#a855f7';
+        else if (d.runs === 6) color = '#1d4ed8';
         else if (d.runs > 0) color = '#38bdf8';
 
         const btrName = d.batterName || "Batter";
@@ -8771,10 +8906,10 @@
               </td>
               <td style="padding: 6px 4px; font-weight: 700;">${s.balls}b</td>
               <td style="padding: 6px 4px; font-size: 10px;">
-                <span style="color: var(--color-success); font-weight: 700;">${s.ground}G</span> / <span style="color: #a855f7; font-weight: 700;">${s.air}A</span>
+                <span style="color: var(--color-success); font-weight: 700;">${s.ground}G</span> / <span style="color: var(--color-accent); font-weight: 700;">${s.air}A</span>
               </td>
               <td style="padding: 6px 6px; font-size: 10px; font-weight: 700;">
-                ${s.fours > 0 ? `<span style="color: var(--color-success);">${s.fours}×4</span>` : '-'} ${s.sixes > 0 ? `<span style="color: #a855f7;">${s.sixes}×6</span>` : ''}
+                ${s.fours > 0 ? `<span style="color: var(--color-success);">${s.fours}×4</span>` : '-'} ${s.sixes > 0 ? `<span style="color: var(--color-accent);">${s.sixes}×6</span>` : ''}
               </td>
             </tr>
           `;
@@ -9027,7 +9162,7 @@
                 <div style="display: flex; align-items: center; gap: 6px;">
                   <span style="font-size: 13px;">${icon}</span>
                   <span style="font-weight: 700; font-size: 13px;">${s.name}</span>
-                  ${s.isAir ? '<span style="font-size: 10px; padding: 1px 6px; border-radius: 4px; background: rgba(168,85,247,0.15); color: #a855f7; font-weight: 700;">Lofted</span>' : '<span style="font-size: 10px; padding: 1px 6px; border-radius: 4px; background: rgba(34,197,94,0.15); color: #22c55e; font-weight: 700;">Ground</span>'}
+                  ${s.isAir ? '<span style="font-size: 10px; padding: 1px 6px; border-radius: 4px; background: rgba(37,99,235,0.12); color: var(--color-accent); font-weight: 700;">Lofted</span>' : '<span style="font-size: 10px; padding: 1px 6px; border-radius: 4px; background: rgba(34,197,94,0.15); color: #22c55e; font-weight: 700;">Ground</span>'}
                 </div>
                 <div style="font-size: 12px; font-weight: 800;">
                   <span style="color: var(--color-accent); font-size: 13px;">${s.runs}r</span>
@@ -9035,7 +9170,7 @@
                 </div>
               </div>
               <div style="height: 6px; background: var(--color-bg); border-radius: 3px; overflow: hidden; margin-bottom: 6px;">
-                <div style="width: ${pctOfMax}%; height: 100%; background: ${s.isAir ? '#a855f7' : 'var(--color-accent)'}; border-radius: 3px; transition: width 0.3s ease;"></div>
+                <div style="width: ${pctOfMax}%; height: 100%; background: ${s.isAir ? 'var(--color-accent)' : 'var(--color-success)'}; border-radius: 3px; transition: width 0.3s ease;"></div>
               </div>
               <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--color-text-muted);">
                 <span>Boundaries: <strong style="color: var(--color-text);">${s.fours}x4</strong>, <strong style="color: var(--color-text);">${s.sixes}x6</strong></span>
@@ -9839,7 +9974,7 @@
           const swingColor = o.winShift > 0 ? 'var(--color-success)' : (o.winShift < 0 ? 'var(--color-danger)' : 'var(--color-text-muted)');
 
           return `
-            <div class="card" style="padding: 12px; margin: 0; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-md);">
+            <div class="card tp-over-row" style="padding: 12px 4px; margin: 0; background: transparent; border: none; border-bottom: 1px solid var(--color-border); border-radius: 0; box-shadow: none;">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 6px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
                   <span style="font-size: 14px; font-weight: 800; color: var(--color-text);">Over ${o.overDisplay}</span>
@@ -10998,8 +11133,8 @@
                 </span>
               </div>
               <div style="height: 12px; background: rgba(0,0,0,0.06); border-radius: var(--radius-pill); overflow: hidden; display: flex;">
-                <div style="width: ${foursPct}%; background: var(--color-accent);" data-tooltip="Fours: ${tData.fours} (${foursRuns} runs, ${foursPct}%)"></div>
-                <div style="width: ${sixesPct}%; background: #9333ea;" data-tooltip="Sixes: ${tData.sixes} (${sixesRuns} runs, ${sixesPct}%)"></div>
+                <div style="width: ${foursPct}%; background: #2563eb;" data-tooltip="Fours: ${tData.fours} (${foursRuns} runs, ${foursPct}%)"></div>
+                <div style="width: ${sixesPct}%; background: #1d4ed8;" data-tooltip="Sixes: ${tData.sixes} (${sixesRuns} runs, ${sixesPct}%)"></div>
                 <div style="flex: 1; background: rgba(0,0,0,0.1);" data-tooltip="Running &amp; Extras: ${otherRuns} runs"></div>
               </div>
               <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--color-text-muted); margin-top: 4px;">
@@ -11063,16 +11198,16 @@
       if (podiumSixes) {
         const topSixes = [...playerStats].sort((a, b) => b.sixes - a.sixes).slice(0, 5);
         podiumSixes.innerHTML = topSixes.map((p, idx) => `
-          <div class="podium-six-row" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-radius: var(--radius-sm); background: ${idx === 0 ? 'rgba(147, 51, 234, 0.1)' : 'var(--color-surface)'}; border: 1px solid var(--color-border);" data-tooltip="#${idx + 1} Sixes: ${p.name}">
+          <div class="podium-six-row" style="display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-radius: var(--radius-sm); background: ${idx === 0 ? 'rgba(37, 99, 235, 0.08)' : 'var(--color-surface)'}; border: 1px solid var(--color-border);" data-tooltip="#${idx + 1} Sixes: ${p.name}">
             <div style="display: flex; align-items: center; gap: 8px;">
-              <span style="font-size: 11px; font-weight: 800; color: #9333ea; width: 14px;">#${idx + 1}</span>
+              <span style="font-size: 11px; font-weight: 800; color: var(--color-accent); width: 14px;">#${idx + 1}</span>
               <div>
                 <div style="font-size: 12px; font-weight: 800;">${p.name}</div>
                 <div style="font-size: 10px; color: var(--color-text-muted);">${p.team}</div>
               </div>
             </div>
             <div style="text-align: right;">
-              <span style="font-size: 13px; font-weight: 800; color: #9333ea;">${p.sixes} 🚀</span>
+              <span style="font-size: 13px; font-weight: 800; color: var(--color-accent);">${p.sixes} 🚀</span>
               <div style="font-size: 10px; color: var(--color-text-muted); font-family: var(--font-mono);">${p.sixes * 6} runs</div>
             </div>
           </div>
@@ -12610,9 +12745,9 @@
         bowlingRanked.slice(0, 5).forEach((p, idx) => {
           const isPurple = idx === 0;
           bowlTbody.innerHTML += `
-            <tr style="${isPurple ? 'background: rgba(168, 85, 247, 0.1); font-weight: 700;' : ''}">
+            <tr style="${isPurple ? 'background: rgba(37, 99, 235, 0.08); font-weight: 700;' : ''}">
               <td class="num">${isPurple ? '🧢 1' : idx + 1}</td>
-              <td><strong>${p.name}</strong> ${isPurple ? '<span style="font-size: 10px; color: #7e22ce; font-weight: 800;">[PURPLE CAP]</span>' : ''}</td>
+              <td><strong>${p.name}</strong> ${isPurple ? '<span style="font-size: 10px; color: var(--color-accent); font-weight: 800;">[PURPLE CAP]</span>' : ''}</td>
               <td><span style="font-size: 11px; color: var(--color-text-muted);">${p.team}</span></td>
               <td class="num"><strong>${p.wickets}</strong></td>
               <td class="num">${p.overs}</td>
@@ -12750,7 +12885,7 @@
       { id: 'centurion', icon: '🎖️', name: 'Centurion', desc: '100+ runs in a single innings', bg: '#fef08a', color: '#854d0e', check: (p, isB) => isB && (p.name.includes('Rohit') || p.name.includes('Virat')) },
       { id: 'half_century', icon: '🏏', name: '5x Fifties', desc: 'Scored 5+ career half-centuries', bg: '#bfdbfe', color: '#1e40af', check: (p, isB) => isB },
       { id: 'fifer', icon: '🔥', name: 'Fifer (5-Wkt)', desc: '5+ wickets in a single match', bg: '#fecaca', color: '#991b1b', check: (p, isB) => !isB && (p.role === 'Bowler' || p.role === 'All-Rounder') },
-      { id: 'hat_trick', icon: '🎯', name: 'Hat-Trick Club', desc: '3 wickets in 3 consecutive deliveries', bg: '#ddd6fe', color: '#5b21b6', check: (p, isB) => !isB && p.name.includes('Bumrah') },
+      { id: 'hat_trick', icon: '🎯', name: 'Hat-Trick Club', desc: '3 wickets in 3 consecutive deliveries', bg: '#e2e8f0', color: '#1e293b', check: (p, isB) => !isB && p.name.includes('Bumrah') },
       { id: 'max_striker', icon: '🚀', name: 'Maximum Striker', desc: 'Career strike rate over 140.0', bg: '#bbf7d0', color: '#166534', check: (p, isB) => isB || p.role === 'All-Rounder' },
       { id: 'maiden_master', icon: '🛡️', name: 'Maiden Master', desc: '2+ maiden overs in a game', bg: '#bae6fd', color: '#0369a1', check: (p, isB) => !isB },
       { id: 'match_mvp', icon: '⭐', name: 'Match MVP', desc: 'Earned Player of the Match honors', bg: '#ffedd5', color: '#c2410c', check: () => true },
@@ -13972,12 +14107,12 @@
               </div>
               <div style="font-size: 11px; color: var(--color-text-muted);">${p2.role} • ${p2.team}</div>
             </div>
-            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #7c3aed, #8b5cf6); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 16px;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #d97706, #f59e0b); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 16px;">
               ${p2.name.charAt(0)}
             </div>
           </div>
           <div style="display: flex; gap: 6px; margin-top: 6px; justify-content: flex-end; flex-wrap: wrap;">
-            <span class="badge" style="background: rgba(124,58,237,0.12); color: #7c3aed; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill);" data-tooltip="CricHeroes official MVP rating">
+            <span class="badge" style="background: rgba(217,119,6,0.12); color: #d97706; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill);" data-tooltip="CricHeroes official MVP rating">
               ⭐ ${p2.mvp} MVP Pts
             </span>
             <span class="badge" style="background: rgba(16,185,129,0.12); color: var(--color-success); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill);" data-tooltip="Career milestone achievements achieved">
@@ -14028,9 +14163,9 @@
           domPill.style.borderColor = 'rgba(29, 78, 216, 0.3)';
         } else if (p2Wins > p1Wins) {
           domPill.textContent = `${p2.name.split(' ')[0]} LEADS ${p2Wins}-${p1Wins}`;
-          domPill.style.background = 'rgba(124, 58, 237, 0.15)';
-          domPill.style.color = '#7c3aed';
-          domPill.style.borderColor = 'rgba(124, 58, 237, 0.3)';
+          domPill.style.background = 'rgba(217, 119, 6, 0.15)';
+          domPill.style.color = '#d97706';
+          domPill.style.borderColor = 'rgba(217, 119, 6, 0.3)';
         } else {
           domPill.textContent = `TIED ${p1Wins}-${p2Wins}`;
           domPill.style.background = 'rgba(100, 116, 139, 0.15)';
@@ -14086,7 +14221,7 @@
                 ${m.format(m.v1)} ${p1Lead ? '👑' : ''}
               </span>
               <span class="compare-metric-name">${m.label}</span>
-              <span style="${p2Lead ? 'font-weight: 800; color: #7c3aed;' : 'color: var(--color-text-muted);'}">
+              <span style="${p2Lead ? 'font-weight: 800; color: #d97706;' : 'color: var(--color-text-muted);'}">
                 ${p2Lead ? '👑 ' : ''}${m.format(m.v2)}
               </span>
             </div>
@@ -14133,12 +14268,12 @@
               <div style="font-weight: 800; font-size: 14px; color: var(--color-text);">${t2.name}</div>
               <div style="font-size: 11px; color: var(--color-text-muted);">Points: ${t2.points} • NRR: ${t2.nrr}</div>
             </div>
-            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #7c3aed, #8b5cf6); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 16px;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #d97706, #f59e0b); color: #fff; font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 16px;">
               ${t2.name.charAt(0)}
             </div>
           </div>
           <div style="display: flex; gap: 6px; margin-top: 6px; justify-content: flex-end;">
-            <span class="badge" style="background: rgba(124,58,237,0.12); color: #7c3aed; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill);">
+            <span class="badge" style="background: rgba(217,119,6,0.12); color: #d97706; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: var(--radius-pill);">
               Record: ${t2.wins}W - ${t2.losses}L (${t2.winPct}%)
             </span>
           </div>
@@ -14171,9 +14306,9 @@
           domPill.style.borderColor = 'rgba(29, 78, 216, 0.3)';
         } else if (t2Wins > t1Wins) {
           domPill.textContent = `${t2.name.split(' ')[0]} LEADS ${t2Wins}-${t1Wins}`;
-          domPill.style.background = 'rgba(124, 58, 237, 0.15)';
-          domPill.style.color = '#7c3aed';
-          domPill.style.borderColor = 'rgba(124, 58, 237, 0.3)';
+          domPill.style.background = 'rgba(217, 119, 6, 0.15)';
+          domPill.style.color = '#d97706';
+          domPill.style.borderColor = 'rgba(217, 119, 6, 0.3)';
         } else {
           domPill.textContent = `TIED ${t1Wins}-${t2Wins}`;
           domPill.style.background = 'rgba(100, 116, 139, 0.15)';
@@ -14201,7 +14336,7 @@
                 ${m.format(m.v1)} ${t1Lead ? '👑' : ''}
               </span>
               <span class="compare-metric-name">${m.label}</span>
-              <span style="${t2Lead ? 'font-weight: 800; color: #7c3aed;' : 'color: var(--color-text-muted);'}">
+              <span style="${t2Lead ? 'font-weight: 800; color: #d97706;' : 'color: var(--color-text-muted);'}">
                 ${t2Lead ? '👑 ' : ''}${m.format(m.v2)}
               </span>
             </div>
@@ -14730,7 +14865,7 @@
       ctx.fillStyle = '#94a3b8';
       ctx.fillText('MATCH IMPACT', startX + ((cardW + gap) * 3) + (cardW / 2), 525);
       ctx.font = 'bold 46px system-ui, sans-serif';
-      ctx.fillStyle = '#a855f7';
+      ctx.fillStyle = '#f59e0b';
       ctx.fillText(`${mvpPts || 84.5}`, startX + ((cardW + gap) * 3) + (cardW / 2), 580);
       ctx.font = '15px system-ui, sans-serif';
       ctx.fillStyle = '#e2e8f0';
@@ -14828,11 +14963,6 @@
       }
     }
 
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        document.querySelectorAll('.modal-backdrop.open').forEach(el => el.classList.remove('open'));
-      }
-    });
 
     // ========================================================================
     // SECTION: DUCKWORTH-LEWIS-STERN (DLS) STANDARD EDITION ENGINE
@@ -15971,7 +16101,7 @@
             <div style="width: ${cPct}%; background: #3b82f6;" data-tooltip="Caught: ${cPct}% (${cCount})"></div>
             <div style="width: ${bPct}%; background: #ef4444;" data-tooltip="Bowled: ${bPct}% (${bCount})"></div>
             <div style="width: ${lPct}%; background: #f59e0b;" data-tooltip="LBW: ${lPct}% (${lCount})"></div>
-            <div style="width: ${rPct}%; background: #8b5cf6;" data-tooltip="Run Out: ${rPct}% (${rCount})"></div>
+            <div style="width: ${rPct}%; background: #d97706;" data-tooltip="Run Out: ${rPct}% (${rCount})"></div>
             <div style="width: ${noPct}%; background: #10b981;" data-tooltip="Not Out: ${noPct}% (${noCount})"></div>
           `;
         }
@@ -15981,7 +16111,7 @@
             <span><span style="display: inline-block; width: 8px; height: 8px; background: #3b82f6; border-radius: 50%;"></span> Caught (${cPct}%)</span>
             <span><span style="display: inline-block; width: 8px; height: 8px; background: #ef4444; border-radius: 50%;"></span> Bowled (${bPct}%)</span>
             <span><span style="display: inline-block; width: 8px; height: 8px; background: #f59e0b; border-radius: 50%;"></span> LBW (${lPct}%)</span>
-            <span><span style="display: inline-block; width: 8px; height: 8px; background: #8b5cf6; border-radius: 50%;"></span> Run Out (${rPct}%)</span>
+            <span><span style="display: inline-block; width: 8px; height: 8px; background: #d97706; border-radius: 50%;"></span> Run Out (${rPct}%)</span>
             <span><span style="display: inline-block; width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></span> Not Out (${noPct}%)</span>
           `;
         }
@@ -16031,7 +16161,7 @@
           }
 
           return `
-            <div class="card" style="margin: 0; padding: 10px 12px; background: var(--color-surface); border: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+            <div class="card form-match-row" style="margin: 0; padding: 10px 4px; background: transparent; border: none; border-bottom: 1px solid var(--color-border); border-radius: 0; box-shadow: none; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
               <div>
                 <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
                   <span style="font-size: 12px; font-weight: 700; color: var(--color-text);">vs ${m.vsTeam}</span>
@@ -16081,19 +16211,19 @@
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px;">
-          <div class="card" style="padding: 8px 12px; background: var(--color-bg); margin: 0;">
+          <div class="stat-tile" style="padding: 8px 12px; background: var(--color-bg); margin: 0;">
             <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Recent Average</div>
             <div style="font-size: 16px; font-weight: 800; font-family: var(--font-mono); margin-top: 2px;">${summary.avgVal}</div>
           </div>
-          <div class="card" style="padding: 8px 12px; background: var(--color-bg); margin: 0;">
+          <div class="stat-tile" style="padding: 8px 12px; background: var(--color-bg); margin: 0;">
             <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">${formType === 'batting' ? 'Strike Rate' : 'Economy Rate'}</div>
             <div style="font-size: 16px; font-weight: 800; font-family: var(--font-mono); margin-top: 2px; color: #10b981;">${summary.rateVal}</div>
           </div>
-          <div class="card" style="padding: 8px 12px; background: var(--color-bg); margin: 0;">
+          <div class="stat-tile" style="padding: 8px 12px; background: var(--color-bg); margin: 0;">
             <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">${formType === 'batting' ? 'Boundary %' : 'Dot Ball %'}</div>
             <div style="font-size: 16px; font-weight: 800; font-family: var(--font-mono); margin-top: 2px; color: #f59e0b;">${summary.bndOrDotVal}%</div>
           </div>
-          <div class="card" style="padding: 8px 12px; background: var(--color-bg); margin: 0;">
+          <div class="stat-tile" style="padding: 8px 12px; background: var(--color-bg); margin: 0;">
             <div style="font-size: 10px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Momentum Trend</div>
             <div style="font-size: 14px; font-weight: 800; margin-top: 2px; color: ${summary.trendColor};">${summary.trendText}</div>
           </div>
@@ -16107,7 +16237,7 @@
         <div style="font-size: 11px; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 6px;">Recent 5 Innings Performance Log</div>
         <div style="display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto;">
           ${matches.map(m => `
-            <div class="card" style="margin: 0; padding: 8px 12px; background: var(--color-surface); border: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center;">
+            <div class="stat-tile" style="margin: 0; padding: 8px 12px; background: var(--color-surface); border: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center;">
               <div>
                 <span style="font-size: 12px; font-weight: 700;">vs ${m.vsTeam}</span>
                 <span class="badge" style="font-size: 9px; padding: 1px 6px; ${m.result === 'W' ? 'background: rgba(16,185,129,0.15); color: #10b981;' : (m.result === 'L' ? 'background: rgba(239,68,68,0.15); color: #ef4444;' : 'background: rgba(245,158,11,0.2); color: #f59e0b;')}">${m.resultLabel}</span>
@@ -16584,8 +16714,8 @@
       if (zonePill) {
         if (isOutside) {
           zonePill.textContent = "Boundary Rider (Deep)";
-          zonePill.style.background = "rgba(168, 85, 247, 0.25)";
-          zonePill.style.color = "#c084fc";
+          zonePill.style.background = "rgba(37, 99, 235, 0.2)";
+          zonePill.style.color = "#60a5fa";
         } else {
           zonePill.textContent = "Infield Ring (30yd)";
           zonePill.style.background = "rgba(56, 189, 248, 0.25)";
@@ -16764,7 +16894,7 @@
         if (p.id === 1 || p.role === 'keeper') fill = "#ea580c"; // Keeper
         else if (p.id === 2 || p.role === 'bowler') fill = "#dc2626"; // Bowler
         else if (p.role === 'catcher') fill = "#f59e0b"; // Slip/Catcher
-        else if (isDeep) fill = "#9333ea"; // Boundary rider
+        else if (isDeep) fill = "#1d4ed8"; // Boundary rider (deep sapphire)
 
         const stroke = isSelected ? "#ffffff" : "rgba(255,255,255,0.7)";
         const strokeWidth = isSelected ? 3 : 1.5;
@@ -17084,6 +17214,7 @@
     // Initialize on load
     window.addEventListener('DOMContentLoaded', () => {
       initApp();
+      initAccessibleModals();
       initNativeMobileApp();
       initFieldPlacementEngine();
       renderTournamentView();

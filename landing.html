@@ -115,14 +115,14 @@
 
     .btn-primary {
       background: var(--color-accent);
-      color: #ffffff;
-      box-shadow: 0 2px 4px rgba(29, 78, 216, 0.2);
+      color: var(--color-on-accent);
+      box-shadow: var(--shadow-card);
     }
 
     .btn-primary:hover {
       background: #1e40af;
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3);
+      box-shadow: var(--shadow-elevated);
     }
 
     .btn-secondary {
@@ -132,31 +132,15 @@
     }
 
     .btn-secondary:hover {
-      background: #e2e8f0;
+      background: var(--color-border);
     }
 
     /* Hero */
     section.hero {
-      padding: 80px 0 60px;
+      padding: 64px 0 60px;
       text-align: center;
-      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+      background: var(--color-surface);
       border-bottom: 1px solid var(--color-border);
-    }
-
-    .hero-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #eff6ff;
-      color: var(--color-accent);
-      padding: 6px 14px;
-      border-radius: var(--radius-pill);
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-bottom: 24px;
-      border: 1px solid #bfdbfe;
     }
 
     .hero h1 {
@@ -170,9 +154,7 @@
     }
 
     .hero h1 span {
-      background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--color-accent);
     }
 
     .hero p.lead {
@@ -218,8 +200,9 @@
     .dot.green { background: #10b981; }
 
     .preview-card {
-      background: linear-gradient(135deg, #1d4ed8 0%, #172554 100%);
-      color: #fff;
+      background: #0f172a;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #f8fafc;
       border-radius: var(--radius-md);
       padding: 28px;
       text-align: left;
@@ -313,8 +296,8 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: #dbeafe;
-      color: var(--color-accent);
+      background: var(--color-accent);
+      color: var(--color-on-accent);
       font-weight: 800;
       display: flex;
       align-items: center;
@@ -511,7 +494,7 @@
 
     .cta-banner p {
       font-size: 18px;
-      color: #bfdbfe;
+      color: #e2e8f0;
       max-width: 600px;
       margin: 0 auto 32px;
     }
@@ -562,7 +545,6 @@
   <!-- Hero Section -->
   <section class="hero">
     <div class="container">
-      <div class="hero-pill">⚡ GRASSROOTS CRICKET • VERIFIED LEAGUE PLATFORM</div>
       <h1>The <span>Transparent</span> Grassroots Cricket Platform</h1>
       <p class="lead">
         Fast ball-by-ball scoring with 0ms rollback, automated ICC Net Run Rate league tables, and broadcast overlays. Zero full-screen ads in the box.
