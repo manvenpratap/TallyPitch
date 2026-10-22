@@ -78,6 +78,8 @@ class TestCapacitorMobileBridge(unittest.TestCase):
         viewport = page.locator('meta[name="viewport"]')
         self.assertTrue(viewport.count() > 0)
         content = viewport.get_attribute("content")
+        self.assertIsNotNone(content)
+        assert content is not None
         self.assertIn("viewport-fit=cover", content)
         self.assertIn("user-scalable=no", content)
 

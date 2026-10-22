@@ -13,6 +13,7 @@ import shutil
 import time
 import hashlib
 from pathlib import Path
+from typing import Any
 
 # ANSI color and style helpers
 GREEN = "\033[92m"
@@ -57,7 +58,7 @@ class StackDetector:
         self.root = root
 
     def detect(self) -> dict:
-        info = {
+        info: dict[str, Any] = {
             "root": str(self.root),
             "is_git": (self.root / ".git").is_dir(),
             "stacks": [],
@@ -527,10 +528,11 @@ class TestRunner:
         stdout_lines = []
         failures = []
 
-        for line in proc.stdout:
-            stdout_lines.append(line)
-            if re.search(r"(FAILED|ERROR|AssertionError|Exception|fail:)", line):
-                failures.append(line.strip())
+        if proc.stdout is not None:
+            for line in proc.stdout:
+                stdout_lines.append(line)
+                if re.search(r"(FAILED|ERROR|AssertionError|Exception|fail:)", line):
+                    failures.append(line.strip())
 
         proc.wait()
         duration = round(time.time() - t0, 2)
