@@ -2477,14 +2477,14 @@
         <div class="brand-title">Tally<span>Pitch</span></div>
       </a>
       <nav class="nav-tabs" aria-label="Workflow Steps">
-        <button class="nav-tab-btn" id="tab-S03" onclick="navigate('S03')">⚙️ Setup</button>
-        <button class="nav-tab-btn" id="tab-S05" onclick="navigate('S05')">🪙 Toss</button>
-        <button class="nav-tab-btn" id="tab-S06" onclick="navigate('S06')">🏏 Openers</button>
-        <button class="nav-tab-btn active" id="tab-S07" onclick="navigate('S07')">⚡ Scoring</button>
-        <button class="nav-tab-btn" id="tab-S13" onclick="navigate('S13')">📊 Scorecard</button>
-        <button class="nav-tab-btn" id="tab-tournaments" onclick="navigate('tournaments')">🏆 Tournaments</button>
-        <button class="nav-tab-btn" id="tab-teams-profiles" onclick="navigate('teams-profiles')">👥 Teams</button>
-        <button class="nav-tab-btn" id="tab-community" onclick="navigate('community')">💬 Community</button>
+        <button class="nav-tab-btn" id="tab-S03" onclick="navigate('S03')" data-tooltip="Configure match parameters, teams, and overs" aria-label="Setup">⚙️ Setup</button>
+        <button class="nav-tab-btn" id="tab-S05" onclick="navigate('S05')" data-tooltip="Perform virtual coin toss and decision" aria-label="Toss">🪙 Toss</button>
+        <button class="nav-tab-btn" id="tab-S06" onclick="navigate('S06')" data-tooltip="Select opening batters and starting bowler" aria-label="Openers">🏏 Openers</button>
+        <button class="nav-tab-btn active" id="tab-S07" onclick="navigate('S07')" data-tooltip="Real-time ball-by-ball match scoring console" aria-label="Scoring">⚡ Scoring</button>
+        <button class="nav-tab-btn" id="tab-S13" onclick="navigate('S13')" data-tooltip="Full digital scorecard, commentary, and charts" aria-label="Scorecard">📊 Scorecard</button>
+        <button class="nav-tab-btn" id="tab-tournaments" onclick="navigate('tournaments')" data-tooltip="Tournament standings, NRR scenarios, and fixtures" aria-label="Tournaments">🏆 Tournaments</button>
+        <button class="nav-tab-btn" id="tab-teams-profiles" onclick="navigate('teams-profiles')" data-tooltip="Squad rosters, player careers, and comparison" aria-label="Teams and Profiles">👥 Teams</button>
+        <button class="nav-tab-btn" id="tab-community" onclick="navigate('community')" data-tooltip="Grassroots community matchmaking board" aria-label="Community">💬 Community</button>
         <a href="landing.html" class="nav-tab-btn" style="text-decoration: none; display: inline-flex; align-items: center; gap: 4px; border: 1px solid var(--color-border);" target="_blank">🌐 Landing ↗</a>
       </nav>
       <div style="display: flex; align-items: center; gap: 8px; margin-left: 8px;">
@@ -2563,7 +2563,7 @@
           </div>
 
           <div class="form-group" style="margin-top: 10px;">
-            <button type="submit" class="btn btn-primary btn-full">Save & Proceed to Toss (S05) →</button>
+            <button type="submit" class="btn btn-primary btn-full" data-tooltip="Save match setup configurations and proceed to virtual toss" aria-label="Save and Proceed to Toss">Save & Proceed to Toss (S05) →</button>
           </div>
         </form>
       </div>
@@ -2586,7 +2586,7 @@
         </div>
 
         <div style="margin-bottom: 20px;">
-          <button type="button" class="btn btn-secondary" onclick="spinCoin()">Spin Virtual Coin</button>
+          <button type="button" class="btn btn-secondary" onclick="spinCoin()" data-tooltip="Flip virtual coin with realistic 3D spin physics" aria-label="Spin Virtual Coin">Spin Virtual Coin</button>
         </div>
 
         <div style="max-width: 400px; margin: 0 auto; text-align: left;">
@@ -2601,8 +2601,8 @@
           <div class="form-group">
             <label class="form-label">Elected to:</label>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-              <button type="button" id="btn-toss-bat" class="btn btn-primary" onclick="setTossChoice('bat')">🏏 Bat First</button>
-              <button type="button" id="btn-toss-bowl" class="btn btn-secondary" onclick="setTossChoice('bowl')">⚾ Bowl First</button>
+              <button type="button" id="btn-toss-bat" class="btn btn-primary" onclick="setTossChoice('bat')" data-tooltip="Toss winner elects to bat first" aria-label="Bat First">🏏 Bat First</button>
+              <button type="button" id="btn-toss-bowl" class="btn btn-secondary" onclick="setTossChoice('bowl')" data-tooltip="Toss winner elects to bowl first" aria-label="Bowl First">⚾ Bowl First</button>
             </div>
           </div>
 
@@ -2610,7 +2610,7 @@
             Mumbai Strikers won the toss and elected to Bat first
           </div>
 
-          <button type="button" class="btn btn-primary btn-full" onclick="confirmTossAndProceed()">Confirm & Select Openers (S06) →</button>
+          <button type="button" class="btn btn-primary btn-full" onclick="confirmTossAndProceed()" data-tooltip="Confirm toss decision and proceed to lineup selection" aria-label="Confirm and Select Openers">Confirm & Select Openers (S06) →</button>
         </div>
       </div>
     </div>
@@ -2643,7 +2643,7 @@
           <select id="opening-bowler-select" class="form-select"></select>
         </div>
 
-        <button type="button" class="btn btn-primary btn-full" onclick="startScoringMatch()" style="margin-top: 10px;">
+        <button type="button" class="btn btn-primary btn-full" onclick="startScoringMatch()" style="margin-top: 10px;" data-tooltip="Begin official ball-by-ball match scoring on Screen S07" aria-label="Start Live Scoring">
           Start Live Scoring (S07) ⚡
         </button>
       </div>
@@ -2681,7 +2681,7 @@
           </div>
           <div style="font-size: 13px; font-weight: 700; color: #cbd5e1; display: flex; align-items: center; gap: 8px;">
             <span>VS <strong id="hero-bowling-team" style="color: #ffffff;">Bangalore Blasters</strong></span>
-            <button type="button" class="btn btn-secondary hero-dock-btn" style="padding: 4px 10px !important; font-size: 11px !important;" onclick="navigate('S13')">
+            <button type="button" class="btn btn-secondary hero-dock-btn" style="padding: 4px 10px !important; font-size: 11px !important;" onclick="navigate('S13')" data-tooltip="View detailed ICC digital match scorecard and telemetry" aria-label="View Scorecard">
               Scorecard ↗
             </button>
           </div>
@@ -2909,20 +2909,20 @@
       <div class="scoring-console-card">
         <!-- 6 Main Run Buttons -->
         <div class="keypad-grid">
-          <button type="button" class="keypad-btn" onclick="recordBall(0)">0 <span class="sub">Dot</span></button>
-          <button type="button" class="keypad-btn" onclick="recordBall(1)">1 <span class="sub">Single</span></button>
-          <button type="button" class="keypad-btn" onclick="recordBall(2)">2 <span class="sub">Double</span></button>
-          <button type="button" class="keypad-btn" onclick="recordBall(3)">3 <span class="sub">Three</span></button>
-          <button type="button" class="keypad-btn primary-run boundary-four-btn" onclick="recordBall(4)">4 <span class="sub">FOUR! 🚀</span></button>
-          <button type="button" class="keypad-btn primary-run boundary-six-btn" onclick="recordBall(6)">6 <span class="sub">SIX! ⚡</span></button>
+          <button type="button" class="keypad-btn" onclick="recordBall(0)" data-tooltip="Record 0 runs (Dot ball)" aria-label="0 Dot ball">0 <span class="sub">Dot</span></button>
+          <button type="button" class="keypad-btn" onclick="recordBall(1)" data-tooltip="Record 1 run (Single) and rotate strike" aria-label="1 Single">1 <span class="sub">Single</span></button>
+          <button type="button" class="keypad-btn" onclick="recordBall(2)" data-tooltip="Record 2 runs (Double)" aria-label="2 Double">2 <span class="sub">Double</span></button>
+          <button type="button" class="keypad-btn" onclick="recordBall(3)" data-tooltip="Record 3 runs (Three) and rotate strike" aria-label="3 Three">3 <span class="sub">Three</span></button>
+          <button type="button" class="keypad-btn primary-run boundary-four-btn" onclick="recordBall(4)" data-tooltip="Record 4 runs (Boundary Four)" aria-label="4 Boundary Four">4 <span class="sub">FOUR! 🚀</span></button>
+          <button type="button" class="keypad-btn primary-run boundary-six-btn" onclick="recordBall(6)" data-tooltip="Record 6 runs (Maximum Six)" aria-label="6 Maximum Six">6 <span class="sub">SIX! ⚡</span></button>
         </div>
 
         <!-- Extras Bar -->
         <div class="extras-grid">
-          <button type="button" class="extra-btn" onclick="recordExtra('wide')">+1 Wide (Wd)</button>
-          <button type="button" class="extra-btn" onclick="recordExtra('no_ball')">+1 No Ball (Nb)</button>
-          <button type="button" class="extra-btn" onclick="recordExtra('bye')">+1 Bye (B)</button>
-          <button type="button" class="extra-btn" onclick="recordExtra('leg_bye')">+1 Leg Bye (Lb)</button>
+          <button type="button" class="extra-btn" onclick="recordExtra('wide')" data-tooltip="Record +1 Wide ball (re-bowl)" aria-label="Plus 1 Wide">+1 Wide (Wd)</button>
+          <button type="button" class="extra-btn" onclick="recordExtra('no_ball')" data-tooltip="Record +1 No Ball (re-bowl & free hit)" aria-label="Plus 1 No Ball">+1 No Ball (Nb)</button>
+          <button type="button" class="extra-btn" onclick="recordExtra('bye')" data-tooltip="Record +1 Bye run" aria-label="Plus 1 Bye">+1 Bye (B)</button>
+          <button type="button" class="extra-btn" onclick="recordExtra('leg_bye')" data-tooltip="Record +1 Leg Bye run" aria-label="Plus 1 Leg Bye">+1 Leg Bye (Lb)</button>
           <button type="button" class="extra-btn" id="btn-extra-penalty" onclick="openMatchControlModal('penalty')" style="background: rgba(249,115,22,0.18); border-color: rgba(249,115,22,0.4); color: #ea580c; font-weight: 700;" data-tooltip="Award ICC Penalty Runs (Law 28.3, 41, 42) to Batting or Bowling team">+5 Penalty (Pen)</button>
         </div>
 
@@ -2964,7 +2964,7 @@
             <button class="btn btn-secondary" id="btn-open-social-s13" onclick="openSocialCardModal('summary')" style="font-size: 13px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 6px;" data-tooltip="Export high-resolution 1080x1080 match graphic for WhatsApp and Instagram">
               📸 Social Card (S16)
             </button>
-            <button class="btn btn-primary" onclick="navigate('S07')" style="font-size: 13px; padding: 6px 12px;">
+            <button class="btn btn-primary" onclick="navigate('S07')" style="font-size: 13px; padding: 6px 12px;" data-tooltip="Navigate back to S07 Live Scoring Console" aria-label="Return to Live Scoring">
               ← Return to Live Scoring
             </button>
           </div>
@@ -3608,7 +3608,7 @@
             <h2 class="card-title">Tournament Management Hub (S15–S19)</h2>
             <p class="card-subtitle">Organize leagues, configure groups, generate fixtures, and view live NRR standings</p>
           </div>
-          <button class="btn btn-secondary" onclick="toggleTournamentSubview()" id="btn-toggle-tournament-mode" style="font-size: 13px;">
+          <button class="btn btn-secondary" onclick="toggleTournamentSubview()" id="btn-toggle-tournament-mode" style="font-size: 13px;" data-tooltip="Toggle create tournament panel (S15)" aria-label="Create New Tournament">
             + Create New Tournament (S15)
           </button>
         </div>
@@ -3650,7 +3650,7 @@
                 <label class="form-label" for="tourn-end-date">End Date</label>
                 <input type="date" id="tourn-end-date" class="form-input" required>
               </div>
-              <button type="submit" class="btn btn-primary" style="height: 42px;">Save Tournament</button>
+              <button type="submit" class="btn btn-primary" style="height: 42px;" data-tooltip="Save tournament and register stages" aria-label="Save Tournament">Save Tournament</button>
             </div>
           </form>
         </div>
@@ -4116,7 +4116,7 @@
                   <option value="WK">Wicket-Keeper (WK)</option>
                 </select>
               </div>
-              <button type="submit" class="btn btn-primary" style="height: 42px;">Add Player</button>
+              <button type="submit" class="btn btn-primary" style="height: 42px;" data-tooltip="Add player to selected team squad roster" aria-label="Add Player">Add Player</button>
             </div>
           </form>
 
@@ -4612,8 +4612,8 @@
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px;">
-        <button type="button" class="btn btn-secondary" onclick="closeModal('wicket-modal')">Cancel</button>
-        <button type="button" class="btn btn-danger" onclick="confirmWicketDismissal()">Confirm Wicket</button>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('wicket-modal')" data-tooltip="Dismiss modal without recording dismissal" aria-label="Cancel Wicket">Cancel</button>
+        <button type="button" class="btn btn-danger" onclick="confirmWicketDismissal()" data-tooltip="Confirm dismissal and bring next batter to the crease" aria-label="Confirm Wicket">Confirm Wicket</button>
       </div>
     </div>
   </div>
@@ -4632,7 +4632,7 @@
         <select id="next-bowler-select" class="form-select"></select>
       </div>
 
-      <button type="button" class="btn btn-primary btn-full" onclick="confirmNextBowler()">Start Next Over →</button>
+      <button type="button" class="btn btn-primary btn-full" onclick="confirmNextBowler()" data-tooltip="Confirm new bowler and commence next over" aria-label="Start Next Over">Start Next Over →</button>
     </div>
   </div>
 
@@ -4665,7 +4665,7 @@
         </div>
       </div>
 
-      <button type="button" class="btn btn-primary btn-full" onclick="startSecondInnings()" style="margin-top: 10px;">
+      <button type="button" class="btn btn-primary btn-full" onclick="startSecondInnings()" style="margin-top: 10px;" data-tooltip="Initialize 2nd innings run chase and commence scoring" aria-label="Begin 2nd Innings Chase">
         Begin 2nd Innings Chase ⚡
       </button>
     </div>
@@ -4692,8 +4692,8 @@
       </button>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
-        <button type="button" class="btn btn-secondary" onclick="closeModal('match-result-modal'); navigate('S13');">View Scorecard</button>
-        <button type="button" class="btn btn-primary" onclick="restartMatch()">New Match</button>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('match-result-modal'); navigate('S13');" data-tooltip="Open complete digital match scorecard" aria-label="View Scorecard">View Scorecard</button>
+        <button type="button" class="btn btn-primary" onclick="restartMatch()" data-tooltip="Reset match state and setup a new cricket match" aria-label="New Match">New Match</button>
       </div>
       <button type="button" class="btn" id="btn-open-social-modal-result" style="width: 100%; background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-weight: 700; padding: 9px 14px; display: flex; justify-content: center; align-items: center; gap: 8px;" onclick="openSocialCardModal('summary')" data-tooltip="Generate and share 1080x1080 match summary graphic">
         <span>📸</span> Share Match Graphic (S16)
@@ -4809,8 +4809,8 @@
 
       <!-- Action buttons -->
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-        <button type="button" class="btn btn-secondary" onclick="closeModal('wagon-wheel-modal')">Skip / Cancel</button>
-        <button type="button" class="btn btn-primary" id="wagon-save-btn" onclick="saveWagonWheelPlacement()">Save Shot Placement</button>
+        <button type="button" class="btn btn-secondary" onclick="closeModal('wagon-wheel-modal')" data-tooltip="Skip trajectory and pitch map recording" aria-label="Skip Wagon Wheel">Skip / Cancel</button>
+        <button type="button" class="btn btn-primary" id="wagon-save-btn" onclick="saveWagonWheelPlacement()" data-tooltip="Save shot placement vector and pitch landing to delivery" aria-label="Save Shot Placement">Save Shot Placement</button>
       </div>
     </div>
   </div>
@@ -4959,7 +4959,7 @@
         </div>
 
         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px;">
-          <button type="button" class="btn btn-secondary" onclick="closeModal('post-listing-modal')">Cancel</button>
+          <button type="button" class="btn btn-secondary" onclick="closeModal('post-listing-modal')" data-tooltip="Dismiss modal without publishing" aria-label="Cancel Posting">Cancel</button>
           <button type="submit" class="btn btn-primary" id="btn-submit-listing" data-tooltip="Publish classified listing to the community board">
             🚀 Publish Classified
           </button>
@@ -5711,7 +5711,7 @@
             <div style="display: flex; gap: 6px; align-items: center;">
               <button type="button" class="btn btn-secondary" onclick="setPenaltyAmountChip(5)" style="font-size: 12px; font-weight: 800; padding: 6px 12px;" data-tooltip="Standard MCC 5 Penalty Runs">+5 Runs (Standard)</button>
               <button type="button" class="btn btn-secondary" onclick="setPenaltyAmountChip(10)" style="font-size: 12px; font-weight: 800; padding: 6px 12px;" data-tooltip="Repeat / Level 2 Offence 10 Runs">+10 Runs</button>
-              <button type="button" class="btn btn-secondary" onclick="setPenaltyAmountChip(1)" style="font-size: 12px; font-weight: 700; padding: 6px 10px;">+1</button>
+              <button type="button" class="btn btn-secondary" onclick="setPenaltyAmountChip(1)" style="font-size: 12px; font-weight: 700; padding: 6px 10px;" data-tooltip="Custom 1 Penalty Run" aria-label="1 Penalty Run">+1</button>
               <input type="number" id="mc-penalty-amount" class="form-input" style="width: 80px; font-size: 13px; font-weight: 800; text-align: center;" value="5" min="1" max="50">
             </div>
           </div>
@@ -5775,10 +5775,10 @@
               <label class="form-label" for="mc-delay-minutes" style="font-size: 11px; font-weight: 700;">Stoppage Duration (Minutes)</label>
               <div style="display: flex; gap: 6px; align-items: center;">
                 <input type="number" id="mc-delay-minutes" class="form-input" style="font-size: 12px; font-weight: 800; width: 80px; text-align: center;" value="20" min="1" max="300" oninput="updateDelayCalculation()">
-                <button type="button" class="btn btn-secondary" onclick="setDelayMinutesChip(15)" style="font-size: 11px; padding: 6px 8px;">15m</button>
-                <button type="button" class="btn btn-secondary" onclick="setDelayMinutesChip(30)" style="font-size: 11px; padding: 6px 8px;">30m</button>
-                <button type="button" class="btn btn-secondary" onclick="setDelayMinutesChip(45)" style="font-size: 11px; padding: 6px 8px;">45m</button>
-                <button type="button" class="btn btn-secondary" onclick="setDelayMinutesChip(60)" style="font-size: 11px; padding: 6px 8px;">60m</button>
+                <button type="button" class="btn btn-secondary" onclick="setDelayMinutesChip(15)" style="font-size: 11px; padding: 6px 8px;" data-tooltip="Set 15 minutes stoppage" aria-label="15 Minutes">15m</button>
+                <button type="button" class="btn btn-secondary" onclick="setDelayMinutesChip(30)" style="font-size: 11px; padding: 6px 8px;" data-tooltip="Set 30 minutes stoppage" aria-label="30 Minutes">30m</button>
+                <button type="button" class="btn btn-secondary" onclick="setDelayMinutesChip(45)" style="font-size: 11px; padding: 6px 8px;" data-tooltip="Set 45 minutes stoppage" aria-label="45 Minutes">45m</button>
+                <button type="button" class="btn btn-secondary" onclick="setDelayMinutesChip(60)" style="font-size: 11px; padding: 6px 8px;" data-tooltip="Set 60 minutes stoppage" aria-label="60 Minutes">60m</button>
               </div>
             </div>
           </div>
@@ -5835,11 +5835,11 @@
 
         <!-- Filter Chips -->
         <div style="display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap;">
-          <button type="button" class="btn btn-secondary mc-diary-filter active" id="btn-diary-filter-all" onclick="filterIncidentDiary('all')" style="font-size: 11px; padding: 3px 10px; font-weight: 700; border-radius: var(--radius-pill); background: var(--color-accent); color: #fff;">All Incidents</button>
-          <button type="button" class="btn btn-secondary mc-diary-filter" id="btn-diary-filter-penalty" onclick="filterIncidentDiary('penalty')" style="font-size: 11px; padding: 3px 10px; border-radius: var(--radius-pill);">⚖️ Penalties</button>
-          <button type="button" class="btn btn-secondary mc-diary-filter" id="btn-diary-filter-delay" onclick="filterIncidentDiary('delay')" style="font-size: 11px; padding: 3px 10px; border-radius: var(--radius-pill);">⏱️ Delays</button>
-          <button type="button" class="btn btn-secondary mc-diary-filter" id="btn-diary-filter-warning" onclick="filterIncidentDiary('warning')" style="font-size: 11px; padding: 3px 10px; border-radius: var(--radius-pill);">⚠️ Warnings</button>
-          <button type="button" class="btn btn-secondary mc-diary-filter" id="btn-diary-filter-general" onclick="filterIncidentDiary('general')" style="font-size: 11px; padding: 3px 10px; border-radius: var(--radius-pill);">📝 General</button>
+          <button type="button" class="btn btn-secondary mc-diary-filter active" id="btn-diary-filter-all" onclick="filterIncidentDiary('all')" style="font-size: 11px; padding: 3px 10px; font-weight: 700; border-radius: var(--radius-pill); background: var(--color-accent); color: #fff;" data-tooltip="Filter to all match incidents" aria-label="All Incidents">All Incidents</button>
+          <button type="button" class="btn btn-secondary mc-diary-filter" id="btn-diary-filter-penalty" onclick="filterIncidentDiary('penalty')" style="font-size: 11px; padding: 3px 10px; border-radius: var(--radius-pill);" data-tooltip="Filter to official penalty awards" aria-label="Penalties">⚖️ Penalties</button>
+          <button type="button" class="btn btn-secondary mc-diary-filter" id="btn-diary-filter-delay" onclick="filterIncidentDiary('delay')" style="font-size: 11px; padding: 3px 10px; border-radius: var(--radius-pill);" data-tooltip="Filter to match delay stoppages" aria-label="Delays">⏱️ Delays</button>
+          <button type="button" class="btn btn-secondary mc-diary-filter" id="btn-diary-filter-warning" onclick="filterIncidentDiary('warning')" style="font-size: 11px; padding: 3px 10px; border-radius: var(--radius-pill);" data-tooltip="Filter to official warnings" aria-label="Warnings">⚠️ Warnings</button>
+          <button type="button" class="btn btn-secondary mc-diary-filter" id="btn-diary-filter-general" onclick="filterIncidentDiary('general')" style="font-size: 11px; padding: 3px 10px; border-radius: var(--radius-pill);" data-tooltip="Filter to general umpire observations" aria-label="General">📝 General</button>
         </div>
 
         <!-- Timeline container -->
@@ -11426,7 +11426,7 @@
         const form = document.getElementById('match-setup-form');
         if (form) form.parentNode.insertBefore(banner, form);
       }
-      banner.innerHTML = `<span>📅 Pre-filled from Scheduled Fixture: <strong>${fix.match}</strong> (${fix.date} @ ${fix.ground})</span><button type="button" onclick="this.parentNode.remove()" style="background: none; border: none; cursor: pointer; color: #1e40af; font-weight: 800; font-size: 14px;">✕</button>`;
+      banner.innerHTML = `<span>📅 Pre-filled from Scheduled Fixture: <strong>${fix.match}</strong> (${fix.date} @ ${fix.ground})</span><button type="button" onclick="this.parentNode.remove()" style="background: none; border: none; cursor: pointer; color: #1e40af; font-weight: 800; font-size: 14px;" data-tooltip="Dismiss scheduled fixture pre-fill banner" aria-label="Dismiss banner">✕</button>`;
 
       showToast(`Match setup loaded for ${fix.match}!`);
     }
@@ -16647,10 +16647,10 @@
             </span>
           </div>
           <div class="btn-group" style="display: inline-flex; background: var(--color-bg); padding: 2px; border-radius: var(--radius-md); border: 1px solid var(--color-border);" role="tablist">
-            <button type="button" class="btn btn-sm ${formType === 'batting' ? 'active' : ''}" onclick="switchPlayerFormType('batting')" style="padding: 3px 10px; font-size: 11px; font-weight: 700;">
+            <button type="button" class="btn btn-sm ${formType === 'batting' ? 'active' : ''}" onclick="switchPlayerFormType('batting')" style="padding: 3px 10px; font-size: 11px; font-weight: 700;" data-tooltip="Inspect recent batting career form" aria-label="Batting Form">
               🏏 Batting
             </button>
-            <button type="button" class="btn btn-sm ${formType === 'bowling' ? 'active' : ''}" onclick="switchPlayerFormType('bowling')" style="padding: 3px 10px; font-size: 11px; font-weight: 700;">
+            <button type="button" class="btn btn-sm ${formType === 'bowling' ? 'active' : ''}" onclick="switchPlayerFormType('bowling')" style="padding: 3px 10px; font-size: 11px; font-weight: 700;" data-tooltip="Inspect recent bowling career form" aria-label="Bowling Form">
               🎯 Bowling
             </button>
           </div>

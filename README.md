@@ -126,8 +126,11 @@ psql "$DATABASE_URL" -f scripts/seed.sql
 End-to-end automated tests for match initialization, live scoring, wicket dismissals, and over completion:
 
 ```bash
-# Run the Playwright test suite:
-python3 -m unittest tests/test_cricket_engine.py
+# Run the complete Playwright E2E test suite (110 tests across 31 modules):
+./pipeline.sh test --summary
+
+# Or run fast smoke tests:
+./pipeline.sh test --smoke
 ```
 
 ### 5. Mobile Applications (Android & iOS)
