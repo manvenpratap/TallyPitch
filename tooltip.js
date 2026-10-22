@@ -97,11 +97,28 @@
   }
 
   function init() {
+    let touchTimeout = null;
+
+    function handleShow(trigger, text, preferredPos) {
+      if (touchTimeout) {
+        clearTimeout(touchTimeout);
+        touchTimeout = null;
+      }
+      show(trigger, text, preferredPos);
+      // On touch devices, automatically dismiss after 2.2 seconds to prevent sticky tooltips
+      if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+        touchTimeout = setTimeout(hide, 2200);
+      }
+    }
+
     // Delegated hover / focus handlers
     document.addEventListener('mouseenter', (e) => {
       const trigger = e.target.closest && e.target.closest('[data-tooltip]');
       if (trigger) {
-        show(trigger, trigger.getAttribute('data-tooltip'));
+        if (trigger.classList.contains('mobile-bottom-nav-item') && (window.innerWidth <= 768 || 'ontouchstart' in window || navigator.maxTouchPoints > 0)) {
+          return;
+        }
+        handleShow(trigger, trigger.getAttribute('data-tooltip'));
       }
     }, true);
 
@@ -115,7 +132,11 @@
     document.addEventListener('focusin', (e) => {
       const trigger = e.target.closest && e.target.closest('[data-tooltip]');
       if (trigger) {
-        show(trigger, trigger.getAttribute('data-tooltip'));
+        // Skip tooltip on mobile bottom nav items on mobile viewports or touch devices to avoid obscuring screen
+        if (trigger.classList.contains('mobile-bottom-nav-item') && (window.innerWidth <= 768 || 'ontouchstart' in window || navigator.maxTouchPoints > 0)) {
+          return;
+        }
+        handleShow(trigger, trigger.getAttribute('data-tooltip'));
       }
     }, true);
 
@@ -132,6 +153,10 @@
         hide();
       }
     });
+
+    // Dismiss on scroll or touch drag
+    window.addEventListener('scroll', hide, { passive: true });
+    document.addEventListener('touchmove', hide, { passive: true });
 
     // Outside click dismiss
     document.addEventListener('pointerdown', (e) => {

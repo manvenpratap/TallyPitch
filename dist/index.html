@@ -2008,26 +2008,52 @@
       font-weight: 800;
     }
 
-    /* Media Query: Tablet & Mobile (< 768px) */
+    /* Media Query: Tablet & Mobile (< 768px) — Mobile Design System & Ergonomics */
     @media (max-width: 768px) {
-      /* Show Mobile Bottom Navigation */
+      /* Show Mobile Bottom Navigation with Safe Area Padding */
       .mobile-bottom-nav {
-        display: flex;
+        display: flex !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        height: 64px !important;
+        padding-bottom: max(6px, env(safe-area-inset-bottom)) !important;
+        background: rgba(15, 23, 42, 0.94) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.45) !important;
+        z-index: 40 !important;
       }
 
-      /* Adjust Main Padding to Clear Safe Area & Bottom Nav */
+      .mobile-bottom-nav-item {
+        flex: 1 !important;
+        min-height: 48px !important;
+        min-width: 48px !important;
+        touch-action: manipulation !important;
+      }
+
+      /* Adjust Main Padding to Clear Safe Area & Bottom Nav Comfortably */
       main.app-main {
-        padding: 12px 12px calc(76px + max(16px, env(safe-area-inset-bottom))) 12px !important;
+        padding: 12px 12px calc(80px + max(20px, env(safe-area-inset-bottom))) 12px !important;
       }
 
-      /* Compact Header */
+      /* Compact Native App Header */
       header.app-header .header-inner {
-        padding: 8px 12px;
+        padding: 8px 14px;
+        padding-top: max(8px, env(safe-area-inset-top));
         gap: 10px;
+        justify-content: space-between;
+      }
+
+      .brand-wrap {
+        gap: 8px;
       }
 
       .brand-title {
-        font-size: 16px;
+        font-size: 17px;
+        font-weight: 900;
       }
 
       .brand-badge {
@@ -2036,99 +2062,240 @@
         font-size: 16px;
       }
 
-      /* Top Nav Tabs as Smooth Pill Strip */
+      /* Hide Desktop Nav Tabs on Mobile to Prevent Crowding (Bottom Nav is Authoritative) */
       .nav-tabs {
-        gap: 4px;
-        scrollbar-width: none;
-      }
-      .nav-tabs::-webkit-scrollbar {
-        display: none;
-      }
-      .nav-tab-btn {
-        padding: 5px 10px;
-        font-size: 11px;
+        display: none !important;
       }
 
       /* Hero Score Card on Mobile */
       .score-hero-card {
-        padding: 16px;
+        padding: 16px 14px;
         margin-bottom: 12px;
+        border-radius: 20px;
       }
 
       .score-hero-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-
-      .hero-big-score {
-        font-size: 38px;
-        letter-spacing: -0.02em;
-        line-height: 1;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important; /* CRITICAL FIX: Left align score & team on mobile */
+        text-align: left !important;
+        gap: 6px !important;
       }
 
       .batting-team-title {
-        font-size: 16px;
+        font-size: 18px !important;
+        font-weight: 800 !important;
+        color: #ffffff !important;
+        margin-bottom: 2px !important;
+      }
+
+      .hero-big-score {
+        font-family: var(--font-mono) !important;
+        font-size: 46px !important;
+        font-weight: 900 !important;
+        letter-spacing: -1.5px !important;
+        line-height: 1 !important;
+        color: #ffffff !important;
+      }
+
+      .hero-overs-stat {
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        color: #93c5fd !important;
+        margin-top: 4px !important;
       }
 
       /* Quick Match Tools Horizontal Strip */
       .hero-tools-cluster {
         display: flex !important;
         text-align: left !important;
-        gap: 8px;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        padding: 6px 2px 8px 2px;
-        margin: 4px -4px 0 -4px;
-        scrollbar-width: none;
+        gap: 8px !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding: 8px 4px 10px 4px !important;
+        margin: 6px -4px 0 -4px !important;
+        scrollbar-width: none !important;
       }
       .hero-tools-cluster::-webkit-scrollbar {
-        display: none;
+        display: none !important;
       }
-      .hero-tools-cluster .btn {
-        flex-shrink: 0;
-        min-height: 40px;
+      .hero-tools-cluster .btn,
+      .hero-tools-cluster .hero-dock-btn {
+        flex-shrink: 0 !important;
+        min-height: 44px !important;
         font-size: 12px !important;
-        padding: 6px 14px !important;
+        font-weight: 700 !important;
+        padding: 8px 14px !important;
         border-radius: var(--radius-pill) !important;
         margin-left: 0 !important;
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        touch-action: manipulation !important;
+      }
+
+      /* Telemetry Strip */
+      .run-rate-row {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        margin-top: 10px !important;
+        padding-top: 10px !important;
+        flex-wrap: wrap !important;
+      }
+      .telemetry-chip {
+        padding: 4px 10px !important;
+        font-size: 12px !important;
+        min-height: 34px !important;
+        border-radius: 8px !important;
+      }
+      .telemetry-chip strong {
+        font-size: 13px !important;
+      }
+
+      /* Field Placement & Telemetry Banners on Mobile */
+      #hero-field-placement-wrap,
+      #hero-dls-par-wrap,
+      #hero-penalty-wrap {
+        padding: 6px 10px !important;
+        font-size: 11px !important;
+        gap: 6px !important;
+      }
+      #hero-field-placement-wrap > div:first-child {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        flex-wrap: wrap !important;
+      }
+
+      /* Win Predictor on Mobile */
+      #win-predictor-wrap {
+        padding: 8px 10px !important;
+        margin-top: 10px !important;
+      }
+      #win-predictor-wrap > div:first-child {
+        flex-wrap: wrap !important;
+        gap: 4px !important;
+        font-size: 10px !important;
+      }
+
+      /* Player Crease Telemetry on Mobile */
+      .player-stats-card {
+        padding: 14px !important;
+        border-radius: 18px !important;
+        margin-bottom: 12px !important;
+      }
+      .player-stat-row {
+        padding: 8px 0 !important;
+      }
+      .player-name {
+        font-size: 14px !important;
+        font-weight: 800 !important;
+      }
+      .player-digits strong {
+        font-size: 16px !important;
+      }
+      .player-stat-row:last-child {
+        margin: 8px -14px -14px -14px !important;
+        padding: 12px 14px !important;
+      }
+
+      /* Live Partnership Card on Mobile */
+      #live-partnership-card {
+        padding: 12px 14px !important;
+        border-radius: 18px !important;
+        margin-top: 12px !important;
+      }
+      #partnership-runs {
+        font-size: 26px !important;
+      }
+      #partnership-batter-a-chip,
+      #partnership-batter-b-chip {
+        font-size: 11px !important;
+      }
+
+      /* Over Reel on Mobile */
+      .over-reel-card {
+        padding: 12px 14px !important;
+        border-radius: 16px !important;
+        margin-bottom: 12px !important;
+      }
+      .delivery-chips-wrap {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding: 4px 0 !important;
+        scrollbar-width: none !important;
+      }
+      .delivery-chips-wrap::-webkit-scrollbar {
+        display: none !important;
+      }
+      .ball-chip {
+        width: 38px !important;
+        height: 38px !important;
+        font-size: 15px !important;
+        font-weight: 800 !important;
+        flex-shrink: 0 !important;
       }
 
       /* Scoring Console & Keypad Ergonomics */
       .scoring-console-card {
-        padding: 14px;
-        border-radius: 18px;
+        padding: 14px !important;
+        border-radius: 20px !important;
+        margin-bottom: 14px !important;
       }
 
       .keypad-grid {
-        gap: 8px;
-        margin-bottom: 10px;
+        gap: 8px !important;
+        margin-bottom: 10px !important;
       }
 
       .keypad-btn {
-        height: 58px;
-        font-size: 24px;
-        border-radius: 12px;
+        height: 60px !important;
+        font-size: 24px !important;
+        border-radius: 14px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 2px !important;
+        touch-action: manipulation !important;
+      }
+
+      .keypad-btn .sub {
+        font-size: 10px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.02em !important;
+      }
+
+      .keypad-btn:active {
+        transform: scale(0.96) !important;
       }
 
       /* 5-Column Extras Bar on Mobile */
       .extras-grid {
         grid-template-columns: repeat(5, 1fr) !important;
-        gap: 6px;
-        margin-bottom: 12px;
+        gap: 6px !important;
+        margin-bottom: 12px !important;
       }
 
       .extra-btn {
-        padding: 10px 2px !important;
+        padding: 6px 2px !important;
         font-size: 11px !important;
-        min-height: 44px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        min-height: 44px !important;
+        border-radius: 10px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        line-height: 1.15 !important;
+        touch-action: manipulation !important;
+      }
+
+      .extra-btn:active {
+        transform: scale(0.95) !important;
       }
 
       /* 2-Tier Primary Actions (Wicket Hero + 4 Equal Secondary Buttons) */
@@ -2142,40 +2309,49 @@
       }
 
       .primary-actions-grid .btn-danger {
-        grid-area: wicket;
-        height: 48px !important;
+        grid-area: wicket !important;
+        height: 50px !important;
         font-size: 16px !important;
         font-weight: 800 !important;
-        border-radius: 12px;
-        box-shadow: var(--shadow-card);
+        border-radius: 14px !important;
+        letter-spacing: 0.04em !important;
+        touch-action: manipulation !important;
       }
 
       .primary-actions-grid #undo-btn {
-        grid-area: undo;
+        grid-area: undo !important;
         min-height: 44px !important;
         font-size: 12px !important;
-        border-radius: 10px;
+        font-weight: 700 !important;
+        border-radius: 10px !important;
+        touch-action: manipulation !important;
       }
 
       .primary-actions-grid button:nth-child(3) {
-        grid-area: strike;
+        grid-area: strike !important;
         min-height: 44px !important;
         font-size: 12px !important;
-        border-radius: 10px;
+        font-weight: 700 !important;
+        border-radius: 10px !important;
+        touch-action: manipulation !important;
       }
 
       .primary-actions-grid #btn-wagon-wheel {
-        grid-area: wagon;
+        grid-area: wagon !important;
         min-height: 44px !important;
         font-size: 12px !important;
-        border-radius: 10px;
+        font-weight: 700 !important;
+        border-radius: 10px !important;
+        touch-action: manipulation !important;
       }
 
       .primary-actions-grid #btn-stream-overlay-keypad {
-        grid-area: stream;
+        grid-area: stream !important;
         min-height: 44px !important;
         font-size: 12px !important;
-        border-radius: 10px;
+        font-weight: 700 !important;
+        border-radius: 10px !important;
+        touch-action: manipulation !important;
       }
 
       /* Native Mobile Bottom Sheet Modals */
@@ -2185,26 +2361,29 @@
         background: rgba(15, 23, 42, 0.78) !important;
         backdrop-filter: blur(8px) !important;
         -webkit-backdrop-filter: blur(8px) !important;
+        z-index: 2000 !important;
       }
 
       .modal-dialog {
         width: 100% !important;
         max-width: 100% !important;
-        max-height: 85vh !important;
+        max-height: 88vh !important;
         border-radius: 24px 24px 0 0 !important;
         border-bottom: none !important;
         padding: 16px 18px max(24px, calc(env(safe-area-inset-bottom) + 16px)) 18px !important;
         box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.5) !important;
         animation: modalSheetSlideUp 260ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
       }
 
       .modal-dialog::before {
         content: '';
         display: block;
-        width: 40px;
-        height: 4px;
-        background: rgba(255, 255, 255, 0.25);
-        border-radius: 2px;
+        width: 44px;
+        height: 5px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 3px;
         margin: 0 auto 14px auto;
       }
 
@@ -2222,7 +2401,7 @@
       /* Touch-Friendly Form Inputs (Prevent iOS Safari Auto-Zoom) */
       input, select, textarea {
         font-size: 16px !important;
-        min-height: 46px !important;
+        min-height: 48px !important;
       }
 
       .card {
@@ -2240,15 +2419,16 @@
       /* Touch-Scrollable Tables with Sticky First Column */
       .scorecard-table-wrap,
       .table-responsive {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        width: 100% !important;
       }
 
       .scorecard-table {
-        display: block;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        width: 100%;
+        display: block !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        width: 100% !important;
       }
 
       .scorecard-table th, .scorecard-table td {
@@ -2259,29 +2439,30 @@
       /* Soundboard Grid on Mobile */
       .soundboard-grid {
         grid-template-columns: 1fr !important;
-        gap: 8px;
+        gap: 8px !important;
       }
       .soundboard-card-btn {
-        min-height: 48px;
+        min-height: 48px !important;
       }
 
       /* Chart Tabs on Mobile */
       .chart-tabs {
-        display: flex;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        gap: 6px;
-        padding-bottom: 4px;
-        scrollbar-width: none;
+        display: flex !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        gap: 6px !important;
+        padding-bottom: 4px !important;
+        scrollbar-width: none !important;
       }
       .chart-tabs::-webkit-scrollbar {
-        display: none;
+        display: none !important;
       }
       .chart-tab-btn {
-        flex-shrink: 0;
-        min-height: 38px;
-        padding: 6px 12px;
-        font-size: 12px;
+        flex-shrink: 0 !important;
+        min-height: 42px !important;
+        padding: 6px 14px !important;
+        font-size: 12px !important;
+        border-radius: var(--radius-pill) !important;
       }
     }
   </style>
@@ -6381,6 +6562,8 @@
       }
       const bottomTab = document.getElementById(bottomTabId);
       if (bottomTab) bottomTab.classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'instant' });
 
       if (typeof triggerNativeHaptic === 'function') {
         triggerNativeHaptic('tap');
