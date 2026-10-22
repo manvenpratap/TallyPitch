@@ -2493,9 +2493,17 @@
 
       <!-- Hero Scorecard -->
       <div class="score-hero-card">
-        <div class="match-status-pill">
-          <span class="match-status-dot"></span>
-          <span id="hero-match-status">LIVE MATCH • 1ST INNINGS</span>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+          <div class="match-status-pill">
+            <span class="match-status-dot"></span>
+            <span id="hero-match-status">LIVE MATCH • 1ST INNINGS</span>
+          </div>
+          <div style="font-size: 13px; font-weight: 700; color: #cbd5e1; display: flex; align-items: center; gap: 8px;">
+            <span>VS <strong id="hero-bowling-team" style="color: #ffffff;">Bangalore Blasters</strong></span>
+            <button type="button" class="btn btn-secondary hero-dock-btn" style="padding: 4px 10px !important; font-size: 11px !important;" onclick="navigate('S13')">
+              Scorecard ↗
+            </button>
+          </div>
         </div>
 
         <div class="score-hero-grid">
@@ -2504,45 +2512,43 @@
             <div class="hero-big-score" id="hero-score">0/0</div>
             <div class="hero-overs-stat" id="hero-overs">Overs: 0.0 / 20</div>
           </div>
-          <div class="hero-tools-cluster" style="text-align: right;">
-            <div style="font-size: 13px; opacity: 0.85; margin-bottom: 4px;">VS <span id="hero-bowling-team">Bangalore Blasters</span></div>
-            <button class="btn btn-secondary" style="background: rgba(255,255,255,0.18); border: none; color: #fff; padding: 6px 12px; font-size: 12px;" onclick="navigate('S13')">
-              Full Scorecard ↗
-            </button>
-            <button class="btn btn-secondary" id="btn-open-match-vault" style="background: rgba(234,179,8,0.25); border: 1px solid rgba(234,179,8,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openMatchVaultModal()" data-tooltip="Offline Match Vault, Disaster Recovery, and JSON Export/Import">
-              💾 Match Vault
-            </button>
-            <button class="btn btn-secondary" id="btn-stream-overlay" style="background: rgba(56,189,248,0.25); border: 1px solid rgba(56,189,248,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openBroadcastModal()" data-tooltip="Live streaming OBS overlay & CricHeroes MQTT bridge">
-              📡 OBS Stream
-            </button>
-            <button class="btn btn-secondary" id="btn-social-card-s07" style="background: rgba(16,185,129,0.25); border: 1px solid rgba(16,185,129,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openSocialCardModal('summary')" data-tooltip="Export 1080x1080 social match card for WhatsApp and Instagram">
-              📸 Match Card
-            </button>
-            <button class="btn btn-secondary" id="btn-dls-modal" style="background: rgba(14,165,233,0.25); border: 1px solid rgba(14,165,233,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openDlsModal()" data-tooltip="Duckworth-Lewis-Stern (DLS) rain rule & revised target calculator">
-              🌧️ Rain / DLS
-            </button>
-            <button class="btn btn-secondary" id="btn-voice-commentary-toggle" style="background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="toggleVoiceCommentary()" data-tooltip="Toggle live audio speech synthesis commentary for balls and wickets">
-              🔇 Voice: OFF
-            </button>
-            <button class="btn btn-secondary" id="btn-sfx-toggle" style="background: rgba(245,158,11,0.25); border: 1px solid rgba(245,158,11,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="toggleStadiumSfx()" data-tooltip="Toggle automated stadium sound effects (sirens, crowd roars, and stump crashes)">
-              🔊 SFX: ON
-            </button>
-            <button class="btn btn-secondary" id="btn-open-soundboard" style="background: rgba(239,68,68,0.25); border: 1px solid rgba(239,68,68,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openSoundboardModal()" data-tooltip="Open interactive Stadium Audio Soundboard & Umpire SFX console">
-              🎛️ Soundboard
-            </button>
-            <button class="btn btn-secondary" id="btn-open-match-control" style="background: rgba(249,115,22,0.25); border: 1px solid rgba(249,115,22,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openMatchControlModal()" data-tooltip="ICC Penalty Runs (Law 28.3, 41, 42), Match Delay/Stoppage Calculator & Official Incident Log Diary">
-              ⚖️ Match Control
-            </button>
-            <button class="btn btn-secondary" id="btn-open-field-map" style="background: rgba(16,185,129,0.25); border: 1px solid rgba(16,185,129,0.4); color: #fff; padding: 6px 12px; font-size: 12px; margin-left: 6px;" onclick="openFieldPlacementModal()" data-tooltip="Open 2D Tactical Field Placement Ground & ICC/MCC Compliance Inspector (Track 22)">
-              🗺️ Field Setup
-            </button>
-          </div>
+        </div>
+
+        <!-- Quick Match Tools Ribbon -->
+        <div class="hero-tools-dock hero-tools-cluster" aria-label="Quick Match Tools">
+          <button type="button" class="btn btn-secondary hero-dock-btn" id="btn-open-match-vault" style="background: rgba(234,179,8,0.2) !important; border-color: rgba(234,179,8,0.4) !important;" onclick="openMatchVaultModal()" data-tooltip="Offline Match Vault, Disaster Recovery, and JSON Export/Import">
+            💾 Match Vault
+          </button>
+          <button type="button" class="btn btn-secondary hero-dock-btn" id="btn-stream-overlay" style="background: rgba(56,189,248,0.2) !important; border-color: rgba(56,189,248,0.4) !important;" onclick="openBroadcastModal()" data-tooltip="Live streaming OBS overlay & CricHeroes MQTT bridge">
+            📡 OBS Stream
+          </button>
+          <button type="button" class="btn btn-secondary hero-dock-btn" id="btn-social-card-s07" style="background: rgba(16,185,129,0.2) !important; border-color: rgba(16,185,129,0.4) !important;" onclick="openSocialCardModal('summary')" data-tooltip="Export 1080x1080 social match card for WhatsApp and Instagram">
+            📸 Match Card
+          </button>
+          <button type="button" class="btn btn-secondary hero-dock-btn" id="btn-dls-modal" style="background: rgba(14,165,233,0.2) !important; border-color: rgba(14,165,233,0.4) !important;" onclick="openDlsModal()" data-tooltip="Duckworth-Lewis-Stern (DLS) rain rule & revised target calculator">
+            🌧️ Rain / DLS
+          </button>
+          <button type="button" class="btn btn-secondary hero-dock-btn" id="btn-voice-commentary-toggle" style="background: rgba(37,99,235,0.2) !important; border-color: rgba(37,99,235,0.4) !important;" onclick="toggleVoiceCommentary()" data-tooltip="Toggle live audio speech synthesis commentary for balls and wickets">
+            🔇 Voice: OFF
+          </button>
+          <button type="button" class="btn btn-secondary hero-dock-btn" id="btn-sfx-toggle" style="background: rgba(245,158,11,0.2) !important; border-color: rgba(245,158,11,0.4) !important;" onclick="toggleStadiumSfx()" data-tooltip="Toggle automated stadium sound effects (sirens, crowd roars, and stump crashes)">
+            🔊 SFX: ON
+          </button>
+          <button type="button" class="btn btn-secondary hero-dock-btn" id="btn-open-soundboard" style="background: rgba(239,68,68,0.2) !important; border-color: rgba(239,68,68,0.4) !important;" onclick="openSoundboardModal()" data-tooltip="Open interactive Stadium Audio Soundboard & Umpire SFX console">
+            🎛️ Soundboard
+          </button>
+          <button type="button" class="btn btn-secondary hero-dock-btn" id="btn-open-match-control" style="background: rgba(249,115,22,0.2) !important; border-color: rgba(249,115,22,0.4) !important;" onclick="openMatchControlModal()" data-tooltip="ICC Penalty Runs (Law 28.3, 41, 42), Match Delay/Stoppage Calculator & Official Incident Log Diary">
+            ⚖️ Match Control
+          </button>
+          <button type="button" class="btn btn-secondary hero-dock-btn" id="btn-open-field-map" style="background: rgba(16,185,129,0.2) !important; border-color: rgba(16,185,129,0.4) !important;" onclick="openFieldPlacementModal()" data-tooltip="Open 2D Tactical Field Placement Ground & ICC/MCC Compliance Inspector (Track 22)">
+            🗺️ Field Setup
+          </button>
         </div>
 
         <div class="run-rate-row">
-          <div>CRR: <strong id="hero-crr">0.00</strong></div>
-          <div id="hero-target-wrap" style="display: none;">Target: <strong id="hero-target">0</strong></div>
-          <div id="hero-rrr-wrap" style="display: none;">RRR: <strong id="hero-rrr">0.00</strong></div>
+          <div class="telemetry-chip">CRR: <strong id="hero-crr">0.00</strong></div>
+          <div id="hero-target-wrap" class="telemetry-chip" style="display: none;">Target: <strong id="hero-target">0</strong></div>
+          <div id="hero-rrr-wrap" class="telemetry-chip" style="display: none;">RRR: <strong id="hero-rrr">0.00</strong></div>
         </div>
 
         <!-- DLS Par Score Live Status (Innings 2) -->
@@ -2586,10 +2592,10 @@
         </div>
 
         <!-- Live Win Predictor (Un-Paywalled CricInsights PRO) -->
-        <div id="win-predictor-wrap" style="margin-top: 10px; background: rgba(15, 23, 42, 0.4); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.1);" data-tooltip="Live match win probability calculated from CRR, RRR, wickets in hand, and venue historical benchmarks (Zero Ads, No Paywall)">
+        <div id="win-predictor-wrap" style="margin-top: 10px; background: rgba(15, 23, 42, 0.6); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.12);" data-tooltip="Live match win probability calculated from CRR, RRR, wickets in hand, and venue historical benchmarks (Zero Ads, No Paywall)">
           <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 5px; font-weight: 700; color: #fff;">
             <span id="win-pred-team-a">Mumbai Strikers 52%</span>
-            <span style="color: rgba(255,255,255,0.6); font-size: 10px; font-weight: 500;">⚡ CricInsights Win Predictor</span>
+            <span style="color: rgba(255,255,255,0.7); font-size: 10px; font-weight: 600;">⚡ CricInsights Win Predictor</span>
             <span id="win-pred-team-b">Bangalore Blasters 48%</span>
           </div>
           <div class="win-pred-bar-container">
@@ -2618,89 +2624,89 @@
         <!-- Striker Row -->
         <div class="player-stat-row">
           <div class="player-identity">
-            <div class="strike-indicator">🏏</div>
+            <div class="strike-indicator" data-tooltip="Batter currently on strike">🏏</div>
             <div>
               <div class="player-name on-strike" id="active-striker-name">Rohit Sharma *</div>
-              <div style="font-size: 11px; color: var(--color-text-muted);" id="active-striker-sub">4s: 0 • 6s: 0</div>
+              <div style="font-size: 12px; color: var(--color-text-muted);" id="active-striker-sub">4s: 0 • 6s: 0</div>
             </div>
           </div>
           <div class="player-digits">
-            <strong id="active-striker-runs">0</strong> (<span id="active-striker-balls">0</span>b)
-            <div style="font-size: 11px; color: var(--color-text-muted);">SR: <span id="active-striker-sr">0.0</span></div>
+            <strong id="active-striker-runs" style="color: var(--color-text);">0</strong> (<span id="active-striker-balls">0</span>b)
+            <div style="font-size: 12px; color: var(--color-text-muted);">SR: <span id="active-striker-sr">0.0</span></div>
           </div>
         </div>
 
         <!-- Non-Striker Row -->
         <div class="player-stat-row">
           <div class="player-identity">
-            <div style="width: 18px;"></div>
+            <div style="width: 22px;"></div>
             <div>
               <div class="player-name" id="active-non-striker-name">Virat Kohli</div>
-              <div style="font-size: 11px; color: var(--color-text-muted);" id="active-non-striker-sub">4s: 0 • 6s: 0</div>
+              <div style="font-size: 12px; color: var(--color-text-muted);" id="active-non-striker-sub">4s: 0 • 6s: 0</div>
             </div>
           </div>
           <div class="player-digits">
-            <strong id="active-non-striker-runs">0</strong> (<span id="active-non-striker-balls">0</span>b)
-            <div style="font-size: 11px; color: var(--color-text-muted);">SR: <span id="active-non-striker-sr">0.0</span></div>
+            <strong id="active-non-striker-runs" style="color: var(--color-text);">0</strong> (<span id="active-non-striker-balls">0</span>b)
+            <div style="font-size: 12px; color: var(--color-text-muted);">SR: <span id="active-non-striker-sr">0.0</span></div>
           </div>
         </div>
 
         <!-- Bowler Row -->
-        <div class="player-stat-row" style="background: var(--color-surface); margin: 8px -16px -16px; padding: 12px 16px; border-radius: 0 0 var(--radius-lg) var(--radius-lg);">
+        <div class="player-stat-row" style="background: var(--color-surface-hover); margin: 8px -20px -18px; padding: 14px 20px; border-radius: 0 0 var(--radius-xl) var(--radius-xl); border-top: 1px solid var(--color-border);">
           <div class="player-identity">
-            <span style="font-size: 16px;">⚾</span>
+            <span class="cricket-ball-badge" data-tooltip="Active Bowler">🔴</span>
             <div>
               <div style="display: flex; align-items: center; gap: 8px;">
                 <div class="player-name" id="active-bowler-name">Jasprit Bumrah</div>
-                <button type="button" class="btn btn-secondary" id="btn-faceoff-hud" onclick="openFaceOffModal()" style="font-size: 10px; padding: 2px 7px; border-radius: var(--radius-pill); font-weight: 700; background: rgba(37,99,235,0.15); color: var(--color-accent); border: 1px solid rgba(37,99,235,0.3); display: inline-flex; align-items: center; gap: 4px;" data-tooltip="View live Striker vs Bowler head-to-head match-up metrics">⚔️ Face-Off</button>
+                <button type="button" class="btn btn-secondary" id="btn-faceoff-hud" onclick="openFaceOffModal()" style="font-size: 10px; padding: 2px 8px; border-radius: var(--radius-pill); font-weight: 700; background: rgba(56,189,248,0.18); color: var(--color-accent); border: 1px solid rgba(56,189,248,0.35); display: inline-flex; align-items: center; gap: 4px;" data-tooltip="View live Striker vs Bowler head-to-head match-up metrics">⚔️ Face-Off</button>
               </div>
-              <div style="font-size: 11px; color: var(--color-text-muted);" id="active-bowler-sub">Right-arm fast</div>
+              <div style="font-size: 12px; color: var(--color-text-muted);" id="active-bowler-sub">Right-arm fast</div>
             </div>
           </div>
           <div class="player-digits">
-            <span id="active-bowler-overs">0.0</span>-<span id="active-bowler-maidens">0</span>-<span id="active-bowler-runs">0</span>-<strong id="active-bowler-wickets">0</strong>
-            <div style="font-size: 11px; color: var(--color-text-muted);">Eco: <span id="active-bowler-eco">0.00</span></div>
+            <span id="active-bowler-overs">0.0</span>-<span id="active-bowler-maidens">0</span>-<span id="active-bowler-runs">0</span>-<strong id="active-bowler-wickets" style="color: var(--color-danger);">0</strong>
+            <div style="font-size: 12px; color: var(--color-text-muted);">Eco: <span id="active-bowler-eco">0.00</span></div>
           </div>
         </div>
       </div>
 
       <!-- S07: Live Batting Partnership HUD (Track 6 / tbl_Partnership) -->
-      <div id="live-partnership-card" class="player-stats-card" style="margin-top: 12px; padding: 12px 16px; background: rgba(30, 41, 59, 0.75); border: 1px solid rgba(255, 255, 255, 0.1);" data-tooltip="Live batting partnership between active crease batters (Runs, Balls, Run Rate, and individual contribution split)">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-          <div style="display: flex; align-items: center; gap: 6px;">
-            <span style="font-size: 13px;">🤝</span>
-            <span id="partnership-wicket-label" style="font-size: 12px; font-weight: 800; color: #f59e0b; text-transform: uppercase; letter-spacing: 0.5px;">1st Wicket Partnership</span>
+      <div id="live-partnership-card" class="player-stats-card" style="margin-top: 14px; padding: 14px 18px; background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.85) 100%); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: var(--radius-xl); box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4);" data-tooltip="Live batting partnership between active crease batters (Runs, Balls, Run Rate, and individual contribution split)">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <div style="display: flex; align-items: center; gap: 7px;">
+            <span style="font-size: 14px;">🤝</span>
+            <span id="partnership-wicket-label" style="font-size: 12px; font-weight: 800; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.6px;">1st Wicket Partnership</span>
           </div>
-          <div style="font-size: 12px; color: var(--color-text-muted);">
-            RR: <strong id="partnership-rr" style="color: #fff;">0.00</strong>
+          <div style="font-size: 12px; color: #cbd5e1; font-weight: 600;">
+            RR: <strong id="partnership-rr" style="color: #38bdf8; font-weight: 800;">0.00</strong>
           </div>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
           <div>
-            <span id="partnership-runs" style="font-size: 20px; font-weight: 900; color: #fff;">0</span>
-            <span style="font-size: 13px; color: var(--color-text-muted);"> runs (<span id="partnership-balls">0</span> balls)</span>
+            <span id="partnership-runs" style="font-size: 24px; font-weight: 900; color: #ffffff; text-shadow: 0 0 12px rgba(255,255,255,0.3);">0</span>
+            <span style="font-size: 13px; color: #cbd5e1; font-weight: 600;"> runs (<span id="partnership-balls" style="color: #ffffff; font-weight: 700;">0</span> balls)</span>
           </div>
-          <div style="font-size: 11px; color: var(--color-text-muted);">
-            4s: <strong id="partnership-4s" style="color: #fff;">0</strong> • 6s: <strong id="partnership-6s" style="color: #fff;">0</strong>
+          <div style="font-size: 12px; color: #cbd5e1; font-weight: 600;">
+            4s: <strong id="partnership-4s" style="color: #10b981; font-weight: 800;">0</strong> • 6s: <strong id="partnership-6s" style="color: #38bdf8; font-weight: 800;">0</strong>
           </div>
         </div>
 
         <!-- Visual Contribution Split Bar -->
-        <div style="display: flex; height: 6px; border-radius: var(--radius-pill); overflow: hidden; background: rgba(255,255,255,0.1); margin-bottom: 8px;">
-          <div id="partnership-bar-a" style="background: #3b82f6; width: 50%; transition: width 0.3s ease;"></div>
-          <div id="partnership-bar-b" style="background: #10b981; width: 50%; transition: width 0.3s ease;"></div>
+        <div style="display: flex; height: 8px; border-radius: var(--radius-pill); overflow: hidden; background: rgba(255,255,255,0.12); margin-bottom: 10px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.4);">
+          <div id="partnership-bar-a" style="background: linear-gradient(90deg, #2563eb, #38bdf8); width: 50%; transition: width 0.3s ease;"></div>
+          <div id="partnership-bar-b" style="background: linear-gradient(90deg, #059669, #10b981); width: 50%; transition: width 0.3s ease;"></div>
         </div>
 
         <!-- Batter Contribution Summary Chips -->
-        <div style="display: flex; justify-content: space-between; font-size: 11px;">
-          <div id="partnership-batter-a-chip" style="display: flex; align-items: center; gap: 4px; color: #93c5fd;">
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6;"></span>
-            <span id="partnership-batter-a-name">Rohit Sharma</span>: <strong id="partnership-batter-a-runs">0</strong> (<span id="partnership-batter-a-balls">0</span>b)
+        <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600;">
+          <div id="partnership-batter-a-chip" style="display: flex; align-items: center; gap: 6px; color: #93c5fd;">
+            <span style="display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 6px #38bdf8;"></span>
+            <span id="partnership-batter-a-name">Rohit Sharma</span>: <strong id="partnership-batter-a-runs" style="color: #ffffff; font-weight: 800;">0</strong> (<span id="partnership-batter-a-balls" style="color: #cbd5e1;">0</span>b)
           </div>
-          <div id="partnership-batter-b-chip" style="display: flex; align-items: center; gap: 4px; color: #6ee7b7;">
-            <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span>
-            <span id="partnership-batter-b-name">Virat Kohli</span>: <strong id="partnership-batter-b-runs">0</strong> (<span id="partnership-batter-b-balls">0</span>b)
+          <div id="partnership-batter-b-chip" style="display: flex; align-items: center; gap: 6px; color: #6ee7b7;">
+            <span style="display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #10b981; box-shadow: 0 0 6px #10b981;"></span>
+            <span id="partnership-batter-b-name">Virat Kohli</span>: <strong id="partnership-batter-b-runs" style="color: #ffffff; font-weight: 800;">0</strong> (<span id="partnership-batter-b-balls" style="color: #cbd5e1;">0</span>b)
           </div>
         </div>
       </div>
@@ -2726,8 +2732,8 @@
           <button type="button" class="keypad-btn" onclick="recordBall(1)">1 <span class="sub">Single</span></button>
           <button type="button" class="keypad-btn" onclick="recordBall(2)">2 <span class="sub">Double</span></button>
           <button type="button" class="keypad-btn" onclick="recordBall(3)">3 <span class="sub">Three</span></button>
-          <button type="button" class="keypad-btn primary-run" onclick="recordBall(4)">4 <span class="sub">FOUR!</span></button>
-          <button type="button" class="keypad-btn primary-run" onclick="recordBall(6)">6 <span class="sub">SIX!</span></button>
+          <button type="button" class="keypad-btn primary-run boundary-four-btn" onclick="recordBall(4)">4 <span class="sub">FOUR! 🚀</span></button>
+          <button type="button" class="keypad-btn primary-run boundary-six-btn" onclick="recordBall(6)">6 <span class="sub">SIX! ⚡</span></button>
         </div>
 
         <!-- Extras Bar -->
@@ -6014,6 +6020,45 @@
        ENGINE & VERTICAL SLICE STATE MACHINE SCRIPT
        ======================================================================= -->
   <script>
+    // ------------------------------------------------------------------------
+    // Stadium Broadcast Pro — Day/Night Theme Engine
+    // ------------------------------------------------------------------------
+    function initTheme() {
+      const savedTheme = localStorage.getItem('tallypitch_theme') || 'dark';
+      setTheme(savedTheme);
+    }
+
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      try {
+        localStorage.setItem('tallypitch_theme', theme);
+      } catch (e) {}
+      const toggleBtn = document.getElementById('btn-theme-toggle');
+      if (toggleBtn) {
+        if (theme === 'dark') {
+          toggleBtn.innerHTML = '🌙 Stadium Lights';
+          toggleBtn.setAttribute('data-tooltip', 'Current theme: Stadium Lights (Night). Click to switch to Day Ground');
+        } else {
+          toggleBtn.innerHTML = '☀️ Day Ground';
+          toggleBtn.setAttribute('data-tooltip', 'Current theme: Day Ground. Click to switch to Stadium Lights');
+        }
+      }
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      if (metaTheme) {
+        metaTheme.setAttribute('content', theme === 'dark' ? '#090e1a' : '#f1f5f9');
+      }
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      setTheme(next);
+      if (typeof triggerNativeHaptic === 'function') triggerNativeHaptic('tap');
+    }
+
+    // Immediate theme bootstrap
+    initTheme();
+
     // ------------------------------------------------------------------------
     // Cricket Data Model & State
     // ------------------------------------------------------------------------
@@ -17431,6 +17476,7 @@
 
     // Initialize on load
     window.addEventListener('DOMContentLoaded', () => {
+      initTheme();
       initApp();
       initAccessibleModals();
       initNativeMobileApp();

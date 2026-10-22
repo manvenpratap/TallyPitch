@@ -26,7 +26,13 @@ SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 SKILL_ROOT="$(cd "$SCRIPT_DIR/.." 2>/dev/null && pwd || echo "$SCRIPT_DIR")"
 
 # Prefer Python engine if available for rich JSON & compact formatting
-PYTHON_BIN="$(command -v python3 || command -v python || true)"
+PYTHON_BIN=""
+for py in "/Library/Frameworks/Python.framework/Versions/3.14/bin/python3" "$(command -v python3 || true)" "$(command -v python || true)"; do
+    if [ -n "$py" ] && [ -x "$py" ]; then
+        PYTHON_BIN="$py"
+        break
+    fi
+done
 
 if [ -n "$PYTHON_BIN" ]; then
     for candidate in \
