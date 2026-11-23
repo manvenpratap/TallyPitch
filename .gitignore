@@ -80,10 +80,18 @@ htmlcov/
 *.xapk
 *.apk
 *.ipa
-dist/mobile/
 .gradle/
 android/.gradle/
 android/app/build/
+android/local.properties
+.android-sdk/
+
+# Keep shippable mobile delivery artifacts in dist/mobile/
+!dist/mobile/
+!dist/mobile/**
+!dist/mobile/*.apk
+!dist/mobile/*.ipa
+!dist/mobile/*.zip
 
 # Graphify Cache
 graphify-out/cache/

@@ -30,10 +30,11 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/) speci
 - `chore(pipeline): update CI test matrix`
 
 ### Optional: Local Git Hooks
-Enable pre-commit verification checks:
+Enable pre-commit verification and the mobile delivery pre-push guard:
 ```bash
 git config core.hooksPath .githooks
 ```
+`./pipeline.sh heal` also installs `.githooks/pre-push` into `.git/hooks/pre-push` so every `git push` refreshes Android/iOS artifacts.
 
 ---
 

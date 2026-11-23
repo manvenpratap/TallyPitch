@@ -1,0 +1,70 @@
+#!/bin/sh
+# ==============================================================================
+# universal-pipeline pre-push hook
+# Enforces: Mobile apps (APK and iOS app), if present in delivery plan,
+# must be updated with every git push.
+# Enable locally: git config core.hooksPath .githooks
+# ==============================================================================
+
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)"
+[ -z "$REPO_ROOT" ] && REPO_ROOT="$(pwd)"
+
+# Detect if mobile apps are part of the delivery plan
+HAS_MOBILE=false
+if [ -d "$REPO_ROOT/android" ] || [ -d "$REPO_ROOT/apps/mobile/android" ] || [ -d "$REPO_ROOT/frontend/android" ] || [ -f "$REPO_ROOT/capacitor.config.json" ] || [ -f "$REPO_ROOT/frontend/capacitor.config.ts" ]; then
+    HAS_MOBILE=true
+fi
+if [ -d "$REPO_ROOT/ios" ] || [ -d "$REPO_ROOT/apps/mobile/ios" ] || [ -d "$REPO_ROOT/frontend/ios" ]; then
+    HAS_MOBILE=true
+fi
+
+if [ "$HAS_MOBILE" = false ]; then
+    exit 0
+fi
+
+echo "==> [pre-push] Inspecting mobile app deliverables (APK & iOS app)..."
+
+# Run mobile update
+if [ -x "$REPO_ROOT/pipeline.sh" ]; then
+    "$REPO_ROOT/pipeline.sh" mobile
+elif [ -f "$REPO_ROOT/scripts/pipeline.py" ]; then
+    python3 "$REPO_ROOT/scripts/pipeline.py" mobile
+elif [ -f "/Volumes/Study/Projects/universal-pipeline/scripts/pipeline.py" ]; then
+    python3 "/Volumes/Study/Projects/universal-pipeline/scripts/pipeline.py" mobile
+fi
+
+# Determine candidate paths that exist
+CANDIDATES=""
+for cand in dist/mobile apps/mobile/android apps/mobile/ios android ios frontend/android frontend/ios; do
+    if [ -d "$REPO_ROOT/$cand" ]; then
+        CANDIDATES="$CANDIDATES $cand"
+    fi
+done
+
+MODIFIED=$(git -C "$REPO_ROOT" status --porcelain $CANDIDATES 2>/dev/null | grep -E "(\\.(apk|zip|ipa)$|dist/mobile/)" || true)
+if [ -n "$MODIFIED" ]; then
+    echo "==> [pre-push] Staging updated mobile delivery artifacts..."
+    for cand in dist/mobile apps/mobile/android apps/mobile/ios android ios frontend/android frontend/ios; do
+        if [ -e "$REPO_ROOT/$cand" ]; then
+            git -C "$REPO_ROOT" add -A "$cand" 2>/dev/null || true
+        fi
+    done
+    for apk in "$REPO_ROOT"/dist/*.apk "$REPO_ROOT"/*.apk; do
+        if [ -f "$apk" ]; then
+            git -C "$REPO_ROOT" add "$apk" 2>/dev/null || true
+        fi
+    done
+
+    if ! git -C "$REPO_ROOT" diff-index --quiet HEAD -- 2>/dev/null; then
+        git -C "$REPO_ROOT" commit -m "chore(mobile): update APK and iOS delivery artifacts for release" --no-verify
+        echo "✓ [pre-push] Mobile delivery artifacts committed to HEAD."
+        CURRENT_BRANCH="$(git -C "$REPO_ROOT" rev-parse --abbrev-ref HEAD)"
+        REMOTE="${1:-origin}"
+        echo "==> [pre-push] Re-synchronizing push with updated mobile commit..."
+        git -C "$REPO_ROOT" push "$REMOTE" "$CURRENT_BRANCH" --no-verify
+        exit 1
+    fi
+fi
+
+echo "✓ [pre-push] Mobile delivery artifacts verified and up-to-date."
+exit 0

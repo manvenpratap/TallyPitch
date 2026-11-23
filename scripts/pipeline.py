@@ -368,7 +368,18 @@ class ProjectDoctor:
         if mobile_info.get("is_part_of_plan"):
             if self.stack_info["is_git"]:
                 pre_push = self.root / ".git" / "hooks" / "pre-push"
-                if not pre_push.exists():
+                versioned_hook = self.root / ".githooks" / "pre-push"
+                hook_ok = False
+                for hook_path in (pre_push, versioned_hook):
+                    if hook_path.exists():
+                        try:
+                            hook_text = hook_path.read_text(encoding="utf-8", errors="ignore")
+                        except Exception:
+                            hook_text = ""
+                        if "universal-pipeline pre-push hook" in hook_text:
+                            hook_ok = True
+                            break
+                if not hook_ok:
                     diagnosis["discrepancies"].append({
                         "category": "mobile-delivery",
                         "issue": "Missing pre-push git hook (.git/hooks/pre-push) to ensure mobile apps update with every git push.",
@@ -504,8 +515,17 @@ class SelfHealingEngine:
 
         # 7. Heal Mobile Delivery Infrastructure & Git Pre-Push Hook
         if self.stack_info.get("mobile", {}).get("is_part_of_plan") and self.stack_info["is_git"]:
-            pre_push_hook = self.root / ".git" / "hooks" / "pre-push"
             hook_content = self.get_pre_push_hook_script()
+            versioned_hook = self.root / ".githooks" / "pre-push"
+            versioned_hook.parent.mkdir(parents=True, exist_ok=True)
+            if (not versioned_hook.exists()) or ("universal-pipeline pre-push hook" not in versioned_hook.read_text(encoding="utf-8", errors="ignore")):
+                versioned_hook.write_text(hook_content, encoding="utf-8")
+                versioned_hook.chmod(0o755)
+                healed_actions.append("Healed git hooks: Wrote versioned mobile delivery pre-push guard (.githooks/pre-push)")
+            else:
+                versioned_hook.chmod(0o755)
+
+            pre_push_hook = self.root / ".git" / "hooks" / "pre-push"
             needs_install = False
             if not pre_push_hook.exists():
                 needs_install = True
@@ -533,6 +553,14 @@ class SelfHealingEngine:
         return healed_actions
 
     def get_pre_push_hook_script(self) -> str:
+        versioned = self.root / ".githooks" / "pre-push"
+        if versioned.exists():
+            try:
+                text = versioned.read_text(encoding="utf-8")
+                if "universal-pipeline pre-push hook" in text:
+                    return text
+            except Exception:
+                pass
         return """#!/bin/sh
 # ==============================================================================
 # universal-pipeline pre-push hook
@@ -727,17 +755,33 @@ class MobileAppManager:
 
     def get_env(self) -> dict:
         env = os.environ.copy()
-        if "JAVA_HOME" not in env:
-            for jvm in ["/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home",
-                        "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home",
-                        "/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home"]:
+        current_java = env.get("JAVA_HOME", "")
+        java_ok = os.path.isdir(current_java) and any(v in current_java for v in ("17", "21"))
+        if not java_ok:
+            for jvm in [
+                "/usr/lib/jvm/temurin-17-jdk-amd64",
+                "/usr/lib/jvm/java-17-openjdk-amd64",
+                "/usr/lib/jvm/java-1.17.0-openjdk-amd64",
+                "/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home",
+                "/Library/Java/JavaVirtualMachines/jdk-17.0.2.jdk/Contents/Home",
+                "/Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home",
+                "/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home",
+            ]:
                 if os.path.isdir(jvm):
                     env["JAVA_HOME"] = jvm
                     break
-        if "ANDROID_HOME" not in env:
-            default_sdk = os.path.expanduser("~/Library/Android/sdk")
-            if os.path.isdir(default_sdk):
-                env["ANDROID_HOME"] = default_sdk
+        if "ANDROID_HOME" not in env or not os.path.isdir(env.get("ANDROID_HOME", "")):
+            for sdk in [
+                str(self.root / ".android-sdk"),
+                os.path.expanduser("~/Android/Sdk"),
+                os.path.expanduser("~/Library/Android/sdk"),
+                "/usr/lib/android-sdk",
+                os.environ.get("ANDROID_SDK_ROOT", ""),
+            ]:
+                if sdk and os.path.isdir(sdk):
+                    env["ANDROID_HOME"] = sdk
+                    env.setdefault("ANDROID_SDK_ROOT", sdk)
+                    break
         if "PATH" in env:
             extra_paths = []
             if "JAVA_HOME" in env:
